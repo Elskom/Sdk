@@ -1,0 +1,48 @@
+[submodule "BlowFish"]
+	path = BlowFish
+	url = https://github.com/Elskom/BlowFish.git
+	branch = master
+[submodule "GenericPluginLoader"]
+	path = GenericPluginLoader
+	url = https://github.com/Elskom/GenericPluginLoader.git
+	branch = master
+[submodule "MessageManager"]
+	path = MessageManager
+	url = https://github.com/Elskom/MessageManager.git
+	branch = master
+[submodule "MiniDump"]
+	path = MiniDump
+	url = https://github.com/Elskom/MiniDump.git
+	branch = master
+[submodule "PluginFramework"]
+	path = PluginFramework
+	url = https://github.com/Elskom/PluginFramework.git
+	branch = master
+[submodule "PluginUpdateCheck"]
+	path = PluginUpdateCheck
+	url = https://github.com/Elskom/PluginUpdateCheck.git
+	branch = master
+[submodule "ReleasePackaging"]
+	path = ReleasePackaging
+	url = https://github.com/Elskom/ReleasePackaging.git
+	branch = master
+[submodule "SettingsFile"]
+	path = SettingsFile
+	url = https://github.com/Elskom/SettingsFile.git
+	branch = master
+[submodule "XmlAbstraction"]
+	path = XmlAbstraction
+	url = https://github.com/AraHaan/XmlAbstraction.git
+	branch = master
+[submodule "ZipAssembly"]
+	path = ZipAssembly
+	url = https://github.com/Elskom/ZipAssembly.git
+	branch = master
+[submodule "newsmake"]
+	path = newsmake
+	url = https://github.com/Elskom/newsmake.git
+	branch = master
+[submodule "zlib.managed"]
+	path = zlib.managed
+	url = https://github.com/Elskom/zlib.managed.git
+	branch = master
