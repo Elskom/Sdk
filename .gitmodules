@@ -46,3 +46,11 @@
 	path = zlib.managed
 	url = https://github.com/Elskom/zlib.managed.git
 	branch = master
+[submodule "GitBuildInfo"]
+	path = GitBuildInfo
+	url = https://github.com/AraHaan/GitBuildInfo.git
+	branch = master
+[submodule "GitInformation"]
+	path = GitInformation
+	url = https://github.com/AraHaan/GitInformation.git
+	branch = master
