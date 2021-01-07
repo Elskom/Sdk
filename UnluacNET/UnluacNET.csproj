@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <TargetFrameworks>net40;net45;net451;net452;net46;net461;net47;net471;net472;net48;net5.0;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <AssemblyTitle>Unluac .NET</AssemblyTitle>
+    <Product>Unluac .NET</Product>
+    <Description>Lua 5.1 decompiler based on 'unluac' by tehtmi.</Description>
+    <Copyright>Copyright © 2014 Mark Ludwig, tehtmi</Copyright>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\$(Configuration)\UnluacNET.xml</DocumentationFile>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <NoWarn>1591, 0659</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Backup1\**" />
+    <Compile Remove="Backup\**" />
+    <Compile Remove="Test\**" />
+    <EmbeddedResource Remove="Backup1\**" />
+    <EmbeddedResource Remove="Backup\**" />
+    <EmbeddedResource Remove="Test\**" />
+    <None Remove="Backup1\**" />
+    <None Remove="Backup\**" />
+    <None Remove="Test\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.DataSetExtensions" Condition="!$(TargetFramework.StartsWith('net5')) AND !$(TargetFramework.StartsWith('netstandard')) AND !$(TargetFramework.StartsWith('netcoreapp'))" />
+    <Reference Include="Microsoft.CSharp" Condition="!$(TargetFramework.StartsWith('net5')) AND !$(TargetFramework.StartsWith('netstandard')) AND !$(TargetFramework.StartsWith('netcoreapp'))" />
+  </ItemGroup>
+</Project>
