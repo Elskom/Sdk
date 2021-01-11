@@ -1,0 +1,115 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1;net5.0;netstandard2.0;netstandard2.1;net45;net451;net452;net46;net461;net462;net47;net471;net472;net48</TargetFrameworks>
+    <AssemblyName>GenericPluginLoader</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <LangVersion>latest</LangVersion>
+    <Company>Els_kom org.</Company>
+    <Authors>Els_kom org.</Authors>
+    <PackageTags>GenericPluginLoader</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Elskom/Sdk/</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Elskom/Sdk/</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Copyright (c) 2018-2021</Copyright>
+    <Description>A c# generc plugin loader.</Description>
+    <PackageReleaseNotes>Added reference assemblies.</PackageReleaseNotes>
+    <Version>1.0.2</Version>
+    <IsPackable>false</IsPackable>
+    <Version Condition="'$(GITHUB_ACTIONS)' == 'true' AND !$(GITHUB_REF.StartsWith('refs/tags/'))">$(Version)-preview-$(GITHUB_RUN_ID)</Version>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <NoWarn>$(NoWarn);NU5104;NU5118</NoWarn>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>preview</AnalysisLevel>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <!-- <PackageOutputPath Condition="'$(SolutionName)' == 'build_all_packages'">$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath> -->
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <!-- <PublishRepositoryUrl>true</PublishRepositoryUrl> -->
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <!-- <EmbedUntrackedSources>true</EmbedUntrackedSources> -->
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <!-- <IncludeSymbols>true</IncludeSymbols> -->
+    <!-- Optional: Include source code in the symbol package (.snupkg) -->
+    <!-- <IncludeSource>true</IncludeSource> -->
+    <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
+    <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>bin\Any CPU\Debug\</OutputPath>
+    <DocumentationFile>bin\Any CPU\Debug\GenericPluginLoader.xml</DocumentationFile>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\Any CPU\Release\</OutputPath>
+    <DocumentationFile>bin\Any CPU\Release\GenericPluginLoader.xml</DocumentationFile>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove=".git" />
+    <None Remove=".gitignore" />
+    <None Remove="appveyor.yml" />
+    <None Remove="azure-pipelines.yml" />
+    <None Remove="LICENSE" />
+    <None Remove="readme.md" />
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GitBuildInfo" Version="0.25.0-preview-99680043">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SecurityCodeScan" Version="3.5.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.16.0.25740">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="IDisposableAnalyzers" Version="3.4.8">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <Reference Include="System.IO.Compression" Condition="$(TargetFramework.StartsWith('net4'))" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-21055-03" PrivateAssets="All" />
+    <PackageReference Condition="!$(TargetFramework.StartsWith('netcoreapp')) AND !$(TargetFramework.StartsWith('netstandard')) AND '$(TargetFramework)' != 'net5.0'" Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('../ZipAssembly/ZipAssembly.csproj')">
+    <ProjectReference Include="../ZipAssembly/ZipAssembly.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj')">
+    <ProjectReference Include="..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <Target Name="GitBuildInfo" BeforeTargets="PrepareForBuild">
+    <GitBuildInfoGenericTask OutputPath="$(ProjectDir)\GitAssemblyInfo.cs" AssemblyType="Elskom.Generic.Libs.GenericPluginLoader" />
+  </Target>
+</Project>

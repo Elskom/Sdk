@@ -1,0 +1,14 @@
+<!--
+  This file is automatically imported by NuGet into a user's project
+  when it targets a single framework, or in classic (pre 2017) csproj projects.
+-->
+<Project TreatAsLocalProperty="TaskAssembly">
+  <PropertyGroup>
+    <TaskFolder Condition=" '$(MSBuildRuntimeType)' == 'Core' ">netstandard2.0</TaskFolder>
+    <TaskFolder Condition=" '$(MSBuildRuntimeType)' != 'Core' ">net472</TaskFolder>
+    <TaskAssembly>$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll</TaskAssembly>
+  </PropertyGroup>
+
+  <UsingTask TaskName="GitBuildInfo.GitBuildInfoTask" AssemblyFile="$(TaskAssembly)" />
+  <UsingTask TaskName="GitBuildInfo.GitBuildInfoGenericTask" AssemblyFile="$(TaskAssembly)" />
+</Project>
