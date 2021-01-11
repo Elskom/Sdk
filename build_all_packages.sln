@@ -30,6 +30,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AraHaan.GitInformation", "G
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitBuildInfo", "GitBuildInfo\GitBuildInfo.csproj", "{A06598FB-9F37-44F9-8C6B-15ED1F2D43A7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnluacNET", "UnluacNET\UnluacNET.csproj", "{C5C9F3DB-3617-4785-8852-36F1E6827D85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elskom.Sdk", "Elskom.Sdk\Elskom.Sdk.csproj", "{5F4ED6F1-47DE-475E-A491-798CEDC35369}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +96,14 @@ Global
 		{A06598FB-9F37-44F9-8C6B-15ED1F2D43A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A06598FB-9F37-44F9-8C6B-15ED1F2D43A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A06598FB-9F37-44F9-8C6B-15ED1F2D43A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5C9F3DB-3617-4785-8852-36F1E6827D85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5C9F3DB-3617-4785-8852-36F1E6827D85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5C9F3DB-3617-4785-8852-36F1E6827D85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C9F3DB-3617-4785-8852-36F1E6827D85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F4ED6F1-47DE-475E-A491-798CEDC35369}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F4ED6F1-47DE-475E-A491-798CEDC35369}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F4ED6F1-47DE-475E-A491-798CEDC35369}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F4ED6F1-47DE-475E-A491-798CEDC35369}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

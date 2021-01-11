@@ -30,10 +30,6 @@
 	path = SettingsFile
 	url = https://github.com/Elskom/SettingsFile.git
 	branch = master
-[submodule "XmlAbstraction"]
-	path = XmlAbstraction
-	url = https://github.com/AraHaan/XmlAbstraction.git
-	branch = master
 [submodule "ZipAssembly"]
 	path = ZipAssembly
 	url = https://github.com/Elskom/ZipAssembly.git

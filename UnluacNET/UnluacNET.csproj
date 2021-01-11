@@ -1,17 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFrameworks>net40;net45;net451;net452;net46;net461;net47;net471;net472;net48;net5.0;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net40;net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;net5.0;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1;netstandard2.0;netstandard2.1</TargetFrameworks>
     <AssemblyTitle>Unluac .NET</AssemblyTitle>
     <Product>Unluac .NET</Product>
     <Description>Lua 5.1 decompiler based on 'unluac' by tehtmi.</Description>
     <Copyright>Copyright © 2014 Mark Ludwig, tehtmi</Copyright>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>bin\$(Configuration)\UnluacNET.xml</DocumentationFile>
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IsPackable>false</IsPackable>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Elskom/Sdk/</RepositoryUrl>
+    <PackageTags>Unluac</PackageTags>
+    <Authors>Els_kom org.</Authors>
+    <PackageProjectUrl>https://github.com/Elskom/Sdk/</PackageProjectUrl>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>preview</AnalysisLevel>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>portable</DebugType>
@@ -24,14 +36,8 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Backup1\**" />
-    <Compile Remove="Backup\**" />
     <Compile Remove="Test\**" />
-    <EmbeddedResource Remove="Backup1\**" />
-    <EmbeddedResource Remove="Backup\**" />
     <EmbeddedResource Remove="Test\**" />
-    <None Remove="Backup1\**" />
-    <None Remove="Backup\**" />
     <None Remove="Test\**" />
   </ItemGroup>
   <ItemGroup>

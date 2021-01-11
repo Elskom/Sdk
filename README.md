@@ -1,2 +1,2 @@
-# MyPackages
-This holds all of my nuget packages as submodules for a single solution file to build all of them at once.
+# Sdk
+All of the project files to help with building plugins for Els_kom as well as for Els_kom itself.

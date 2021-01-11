@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PackageId>Elskom.Sdk</PackageId>
+    <Authors>Els_kom org.</Authors>
+    <Company>Els_kom org.</Company>
+    <Description>Elskom SDK for development of Els_kom plugins and for Els_kom itself. Also contains libs that can be used for project as well.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Copyright (c) 2018-2021</Copyright>
+    <PackageTags>XML;GitBuildInformation;SettingsFile;zlib;BlowFish;Unluac;ZipAssembly;ReleasePackaging;MessageManager;GenericPluginLoader;MiniDump;PluginFramework;PluginUpdateCheck</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/Elskom/Sdk/</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Elskom/Sdk/</PackageProjectUrl>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath>
+    <!-- Ensure build output does not get added to the package. -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <PublishBuildOutput>false</PublishBuildOutput>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NuspecFile>Elskom.Sdk.dbg.nuspec</NuspecFile>
+    <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NuspecFile>Elskom.Sdk.rel.nuspec</NuspecFile>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Condition="!$(TargetFramework.StartsWith('netcoreapp')) AND !$(TargetFramework.StartsWith('netstandard')) AND '$(TargetFramework)' != 'net5.0'" Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+    <!-- To ensure this builds package last after these projects build. -->
+    <ProjectReference Include="..\BlowFish\BlowFish.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\GenericPluginLoader\GenericPluginLoader.csproj" Condition="'$(TargetFramework)' != 'net40'">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\MessageManager\MessageManager.csproj" Condition="'$(TargetFramework)' != 'netcoreapp2.0' AND '$(TargetFramework)' != 'netcoreapp2.1' AND '$(TargetFramework)' != 'netcoreapp2.2' AND '$(TargetFramework)' != 'netstandard2.0' AND '$(TargetFramework)' != 'netstandard2.1'">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\MiniDump\MiniDump.csproj" Condition="'$(TargetFramework)' != 'net40'">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\PluginFramework\PluginFramework.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\PluginUpdateCheck\PluginUpdateCheck.csproj" Condition="'$(TargetFramework)' != 'net40'">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\ReleasePackaging\ReleasePackaging.csproj" Condition="'$(TargetFramework)' != 'net40'">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\SettingsFile\SettingsFile.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\UnluacNET\UnluacNET.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\XmlAbstraction\src\XmlAbstraction\src\XmlAbstraction.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\ZipAssembly\ZipAssembly.csproj" Condition="'$(TargetFramework)' != 'net40'">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\zlib.managed\zlib.managed.csproj">
+      <PrivateAssets>All</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>
