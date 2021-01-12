@@ -1,7 +1,3 @@
-[submodule "newsmake"]
-	path = newsmake
-	url = https://github.com/Elskom/newsmake.git
-	branch = master
 [submodule "zlib.managed"]
 	path = zlib.managed
 	url = https://github.com/Elskom/zlib.managed.git
