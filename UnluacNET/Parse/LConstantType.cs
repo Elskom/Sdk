@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.IO;
+
     public class LConstantType : BObjectType<LObject>
     {
         private static readonly string[] m_constantTypes = {
@@ -19,13 +21,11 @@ namespace UnluacNET
         public override LObject Parse(Stream stream, BHeader header)
         {
             var type = stream.ReadByte();
-
             if (header.Debug)
             {
                 if (type < m_constantTypes.Length)
                 {
                     var cType = m_constantTypes[type];
-
                     Console.WriteLine("-- parsing <constant>, type is {0}",
                         (type != 2) ? cType : "illegal " + type);
                 }

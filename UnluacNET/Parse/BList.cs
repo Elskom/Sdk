@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class BList<T> : BObject
         where T : BObject
     {
@@ -12,20 +15,15 @@ namespace UnluacNET
         
         public BInteger Length { get; private set; }
 
-        public T this[int index]
-        {
-            get { return m_values[index]; }
-        }
+        public T this[int index] => this.m_values[index];
 
         public T[] AsArray()
-        {
-            return m_values.AsParallel().ToArray();
-        }
+            => this.m_values.AsParallel().ToArray();
 
         public BList(BInteger length, List<T> values)
         {
-            Length = length;
-            m_values = values;
+            this.Length = length;
+            this.m_values = values;
         }
     }
 }

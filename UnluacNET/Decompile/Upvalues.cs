@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class Upvalues
     {
@@ -11,20 +11,16 @@ namespace UnluacNET
 
         public string GetName(int idx)
         {
-            if (idx < m_upvalues.Length && m_upvalues[idx].Name != null)
-                return m_upvalues[idx].Name;
+            if (idx < this.m_upvalues.Length && this.m_upvalues[idx].Name != null)
+                return this.m_upvalues[idx].Name;
 
             return string.Format("_UPVALUE{0}_", idx);
         }
 
         public UpvalueExpression GetExpression(int index)
-        {
-            return new UpvalueExpression(GetName(index));
-        }
+            => new UpvalueExpression(this.GetName(index));
 
         public Upvalues(LUpvalue[] upvalues)
-        {
-            m_upvalues = upvalues;
-        }
+            => this.m_upvalues = upvalues;
     }
 }

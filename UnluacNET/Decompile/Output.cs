@@ -1,76 +1,70 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.IO;
+
     public class Output
     {
         private TextWriter m_writer;
-
         private int m_indentationLevel = 0;
         private int m_position = 0;
 
         public int IndentationLevel
         {
-            get { return m_indentationLevel; }
-            set { m_indentationLevel = value; }
+            get => this.m_indentationLevel;
+            set => this.m_indentationLevel = value;
         }
 
-        public int Position
-        {
-            get { return m_position; }
-        }
+        public int Position => this.m_position;
 
         public void IncreaseIndent()
-        {
-            m_indentationLevel += 2;
-        }
+            => this.m_indentationLevel += 2;
 
         public void DecreaseIndent()
-        {
-            m_indentationLevel -= 2;
-        }
+            => this.m_indentationLevel -= 2;
 
         private void Start()
         {
-            if (m_position == 0)
+            if (this.m_position == 0)
             {
-                for (var i = m_indentationLevel; i != 0; i--)
+                for (var i = this.m_indentationLevel; i != 0; i--)
                 {
-                    m_writer.Write(" ");
-                    m_position++;
+                    this.m_writer.Write(" ");
+                    this.m_position++;
                 }
             }
         }
 
         public void Print(string str)
         {
-            Start();
-            m_writer.Write(str);
-            m_position += str.Length;
+            this.Start();
+            this.m_writer.Write(str);
+            this.m_position += str.Length;
         }
 
         public void PrintLine()
         {
-            Start();
-            m_writer.WriteLine();
-            m_position = 0;
+            this.Start();
+            this.m_writer.WriteLine();
+            this.m_position = 0;
         }
 
         public void PrintLine(string str)
         {
-            Start();
-            m_writer.WriteLine(str);
-            m_position = 0;
+            this.Start();
+            this.m_writer.WriteLine(str);
+            this.m_position = 0;
         }
 
-        public Output() : this(Console.Out) { }
+        public Output()
+            : this(Console.Out) { }
+        
         public Output(TextWriter writer)
-        {
-            m_writer = writer;
-        }
+            => this.m_writer = writer;
     }
 }

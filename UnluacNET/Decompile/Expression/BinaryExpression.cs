@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+
     public class BinaryExpression : Expression
     {
         private readonly string m_op;
@@ -13,58 +15,37 @@ namespace UnluacNET
         private readonly int m_associativity;
 
         protected bool LeftGroup
-        {
-            get
-            {
-                return (Precedence > m_left.Precedence) ||
-                    (Precedence == m_left.Precedence && m_associativity == ASSOCIATIVITY_RIGHT);
-            }
-        }
+            => (this.Precedence > this.m_left.Precedence) ||
+               (this.Precedence == this.m_left.Precedence && this.m_associativity == ASSOCIATIVITY_RIGHT);
 
         protected bool RightGroup
-        {
-            get
-            {
-                return (Precedence > m_right.Precedence) ||
-                    (Precedence == m_right.Precedence && m_associativity == ASSOCIATIVITY_LEFT);
-            }
-        }
+            => (this.Precedence > this.m_right.Precedence) ||
+               (this.Precedence == this.m_right.Precedence && this.m_associativity == ASSOCIATIVITY_LEFT);
 
         public override int ConstantIndex
-        {
-            get
-            {
-                return Math.Max(m_left.ConstantIndex, m_right.ConstantIndex);
-            }
-        }
+            => Math.Max(this.m_left.ConstantIndex, this.m_right.ConstantIndex);
 
         public override bool BeginsWithParen
-        {
-            get { return LeftGroup || m_left.BeginsWithParen; }
-        }
+            => this.LeftGroup || this.m_left.BeginsWithParen;
 
         public override void Print(Output output)
         {
-            var leftGroup = LeftGroup;
-            var rightGroup = RightGroup;
-
+            var leftGroup = this.LeftGroup;
+            var rightGroup = this.RightGroup;
             if (leftGroup)
                 output.Print("(");
 
-            m_left.Print(output);
-
+            this.m_left.Print(output);
             if (leftGroup)
                 output.Print(")");
 
             output.Print(" ");
-            output.Print(m_op);
+            output.Print(this.m_op);
             output.Print(" ");
-
             if (rightGroup)
                 output.Print("(");
 
-            m_right.Print(output);
-
+            this.m_right.Print(output);
             if (rightGroup)
                 output.Print(")");
         }
@@ -72,10 +53,10 @@ namespace UnluacNET
         public BinaryExpression(string op, Expression left, Expression right, int precedence, int associativity)
             : base(precedence)
         {
-            m_op = op;
-            m_left = left;
-            m_right = right;
-            m_associativity = associativity;
+            this.m_op = op;
+            this.m_left = left;
+            this.m_right = right;
+            this.m_associativity = associativity;
         }
     }
 }

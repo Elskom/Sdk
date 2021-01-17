@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.Collections.Generic;
+
     public class Registers
     {
         public int NumRegisters { get; private set; }
@@ -14,59 +17,52 @@ namespace UnluacNET
         private readonly Function m_func;
         private readonly int[,] m_updated;
         private readonly Expression[,] m_values;
-
         private bool[] m_startedLines;
 
         public bool IsAssignable(int register, int line)
-        {
-            return IsLocal(register, line) &&
-                !GetDeclaration(register, line).ForLoop;
-        }
+            => this.IsLocal(register, line) &&
+               !this.GetDeclaration(register, line).ForLoop;
 
         public bool IsLocal(int register, int line)
         {
             if (register < 0)
                 return false;
 
-            return GetDeclaration(register, line) != null;
+            return this.GetDeclaration(register, line) != null;
         }
 
         public bool IsNewLocal(int register, int line)
         {
-            var decl = GetDeclaration(register, line);
-
+            var decl = this.GetDeclaration(register, line);
             return decl != null && decl.Begin == line && !decl.ForLoop;
         }
 
         public Declaration GetDeclaration(int register, int line)
-        {
-            return m_decls[register, line];
-        }
+            => this.m_decls[register, line];
 
         public Expression GetExpression(int register, int line)
         {
-            if (IsLocal(register, line - 1))
-                return new LocalVariable(GetDeclaration(register, line - 1));
+            if (this.IsLocal(register, line - 1))
+                return new LocalVariable(this.GetDeclaration(register, line - 1));
             else
-                return GetValue(register, line);
+                return this.GetValue(register, line);
         }
 
         public Expression GetKExpression(int register, int line)
         {
             if ((register & 0x100) != 0)
-                return m_func.GetConstantExpression(register & 0xFF);
+                return this.m_func.GetConstantExpression(register & 0xFF);
             else
-                return GetExpression(register, line);
+                return this.GetExpression(register, line);
         }
 
         public List<Declaration> GetNewLocals(int line)
         {
-            var locals = new List<Declaration>(NumRegisters);
-
-            for (var register = 0; register < NumRegisters; register++)
+            var locals = new List<Declaration>(this.NumRegisters);
+            for (var register = 0; register < this.NumRegisters; register++)
             {
-                if (IsNewLocal(register, line))
-                    locals.Add(GetDeclaration(register, line));
+                if (this.IsNewLocal(register, line))
+                    locals.Add(this.GetDeclaration(register, line));
             }
 
             return locals;
@@ -74,44 +70,38 @@ namespace UnluacNET
 
         public Target GetTarget(int register, int line)
         {
-            if (!IsLocal(register, line))
+            if (!this.IsLocal(register, line))
                 throw new InvalidOperationException("No declaration exists in register" + register + " at line " + line);
 
-            return new VariableTarget(GetDeclaration(register, line));
+            return new VariableTarget(this.GetDeclaration(register, line));
         }
 
         public int GetUpdated(int register, int line)
-        {
-            return m_updated[register, line];
-        }
+            => this.m_updated[register, line];
 
         public Expression GetValue(int register, int line)
-        {
-            return m_values[register, line - 1];
-        }
+            => this.m_values[register, line - 1];
 
         private void NewDeclaration(Declaration decl, int register, int begin, int end)
         {
             for (var line = begin; line <= end; line++)
-                m_decls[register, line] = decl;
+                this.m_decls[register, line] = decl;
         }
 
         public void SetValue(int register, int line, Expression expression)
         {
-            m_values[register, line] = expression;
-            m_updated[register, line] = line;
+            this.m_values[register, line] = expression;
+            this.m_updated[register, line] = line;
         }
 
         public void SetInternalLoopVariable(int register, int begin, int end)
         {
-            var decl = GetDeclaration(register, begin);
-
+            var decl = this.GetDeclaration(register, begin);
             if (decl == null)
             {
                 decl = new Declaration("_FOR_", begin, end);
                 decl.Register = register;
-
-                NewDeclaration(decl, register, begin, end);
+                this.NewDeclaration(decl, register, begin, end);
             }
 
             decl.ForLoop = true;
@@ -119,14 +109,12 @@ namespace UnluacNET
 
         public void SetExplicitLoopVariable(int register, int begin, int end)
         {
-            var decl = GetDeclaration(register, begin);
-
+            var decl = this.GetDeclaration(register, begin);
             if (decl == null)
             {
-                decl = new Declaration("_FORV_" +register + "_", begin, end);
+                decl = new Declaration("_FORV_" + register + "_", begin, end);
                 decl.Register = register;
-
-                NewDeclaration(decl, register, begin, end);
+                this.NewDeclaration(decl, register, begin, end);
             }
 
             decl.ForLoopExplicit = true;
@@ -134,46 +122,38 @@ namespace UnluacNET
 
         public void StartLine(int line)
         {
-            m_startedLines[line] = true;
-
-            for (var register = 0; register < NumRegisters; register++)
+            this.m_startedLines[line] = true;
+            for (var register = 0; register < this.NumRegisters; register++)
             {
-                m_values[register, line] = m_values[register, line - 1];
-                m_updated[register, line] = m_updated[register, line - 1];
+                this.m_values[register, line] = this.m_values[register, line - 1];
+                this.m_updated[register, line] = this.m_updated[register, line - 1];
             }
         }
 
         public Registers(int registers, int length, Declaration[] declList, Function func)
         {
-            NumRegisters = registers;
-            Length = length;
-
-            m_decls = new Declaration[registers, length + 1];
-
+            this.NumRegisters = registers;
+            this.Length = length;
+            this.m_decls = new Declaration[registers, length + 1];
             for (var i = 0; i < declList.Length; i++)
             {
                 var decl = declList[i];
-
                 var register = 0;
-
-                while (m_decls[register, decl.Begin] != null)
+                while (this.m_decls[register, decl.Begin] != null)
                     register++;
 
                 decl.Register = register;
-
                 for (var line = decl.Begin; line <= decl.End; line++)
-                    m_decls[register, line] = decl;
+                    this.m_decls[register, line] = decl;
             }
 
-            m_values = new Expression[registers, length + 1];
-
+            this.m_values = new Expression[registers, length + 1];
             for (var register = 0; register < registers; register++)
-                m_values[register, 0] = Expression.NIL;
+                this.m_values[register, 0] = Expression.NIL;
 
-            m_updated = new int[registers, length + 1];
-            m_startedLines = new bool[length + 1];
-
-            m_func = func;
+            this.m_updated = new int[registers, length + 1];
+            this.m_startedLines = new bool[length + 1];
+            this.m_func = func;
         }
     }
 }

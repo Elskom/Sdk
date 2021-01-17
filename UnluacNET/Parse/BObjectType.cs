@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Collections.Generic;
+    using System.IO;
+
     public abstract class BObjectType<T> : BObject
         where T : BObject
     {
@@ -16,7 +18,8 @@ namespace UnluacNET
             var length = header.Integer.Parse(stream, header);
             var values = new List<T>();
 
-            length.Iterate(() => {
+            length.Iterate(() =>
+            {
                 values.Add(Parse(stream, header));
             });
 

@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.IO;
+
     public class BSizeTType : BObjectType<BSizeT>
     {
         private BIntegerType m_integerType;
@@ -14,7 +16,7 @@ namespace UnluacNET
 
         public override BSizeT Parse(Stream stream, BHeader header)
         {
-            var value = new BSizeT(m_integerType.RawParse(stream, header));
+            var value = new BSizeT(this.m_integerType.RawParse(stream, header));
 
             if (header.Debug)
                 Console.WriteLine("-- parsed <size_t> " + value.AsInteger());
@@ -24,8 +26,8 @@ namespace UnluacNET
 
         public BSizeTType(int sizeTSize)
         {
-            SizeTSize = sizeTSize;
-            m_integerType = new BIntegerType(sizeTSize);
+            this.SizeTSize = sizeTSize;
+            this.m_integerType = new BIntegerType(sizeTSize);
         }
     }
 }

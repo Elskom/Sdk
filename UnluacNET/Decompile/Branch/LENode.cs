@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class LENode : Branch
     {
@@ -14,34 +14,26 @@ namespace UnluacNET
         public override Expression AsExpression(Registers registers)
         {
             var transpose = false;
-
-            var leftExpr = registers.GetKExpression(m_left, Line);
-            var rightExpr = registers.GetKExpression(m_right, Line);
-
-            if (((m_left | m_right) & 256) == 0)
-                transpose = registers.GetUpdated(m_left, Line) > registers.GetUpdated(m_right, Line);
+            var leftExpr = registers.GetKExpression(this.m_left, this.Line);
+            var rightExpr = registers.GetKExpression(this.m_right, this.Line);
+            if (((this.m_left | this.m_right) & 256) == 0)
+                transpose = registers.GetUpdated(this.m_left, this.Line) > registers.GetUpdated(this.m_right, this.Line);
             else
                 transpose = rightExpr.ConstantIndex < leftExpr.ConstantIndex;
 
             var op = !transpose ? "<=" : ">=";
-
             Expression rtn = new BinaryExpression(op, !transpose ? leftExpr : rightExpr, !transpose ? rightExpr : leftExpr, Expression.PRECEDENCE_COMPARE, Expression.ASSOCIATIVITY_LEFT);
-
-            if (m_invert)
+            if (this.m_invert)
                 rtn = Expression.MakeNOT(rtn);
 
             return rtn;
         }
 
         public override int GetRegister()
-        {
-            return -1;
-        }
+            => -1;
 
         public override Branch Invert()
-        {
-            return new LENode(m_left, m_right, !m_invert, Line, End, Begin);
-        }
+            => new LENode(this.m_left, this.m_right, !this.m_invert, this.Line, this.End, this.Begin);
 
         public override void UseExpression(Expression expression)
         {
@@ -52,9 +44,9 @@ namespace UnluacNET
         public LENode(int left, int right, bool invert, int line, int begin, int end)
             : base(line, begin, end)
         {
-            m_left = left;
-            m_right = right;
-            m_invert = invert;
+            this.m_left = left;
+            this.m_right = right;
+            this.m_invert = invert;
         }
     }
 }

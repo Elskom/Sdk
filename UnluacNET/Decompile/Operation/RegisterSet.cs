@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class RegisterSet : Operation
     {
@@ -12,10 +12,9 @@ namespace UnluacNET
 
         public override Statement Process(Registers r, Block block)
         {
-            r.SetValue(Register, Line, Value);
-
-            if (r.IsAssignable(Register, Line))
-                return new Assignment(r.GetTarget(Register, Line), Value);
+            r.SetValue(this.Register, this.Line, this.Value);
+            if (r.IsAssignable(this.Register, this.Line))
+                return new Assignment(r.GetTarget(this.Register, this.Line), this.Value);
             else
                 return null;
         }
@@ -23,8 +22,8 @@ namespace UnluacNET
         public RegisterSet(int line, int register, Expression value)
             : base(line)
         {
-            Register = register;
-            Value = value;
+            this.Register = register;
+            this.Value = value;
         }
     }
 }

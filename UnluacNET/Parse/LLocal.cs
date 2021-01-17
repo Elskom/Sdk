@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class LLocal : BObject
     {
         public LString Name { get; private set; }
-        
+
         public int Start { get; private set; }
         public int End { get; private set; }
 
@@ -16,16 +16,14 @@ namespace UnluacNET
         internal bool ForLoop { get; set; }
 
         public override string ToString()
-        {
-            return Name.DeRef();
-        }
+            => this.Name.DeRef();
 
         public LLocal(LString name, BInteger start, BInteger end)
         {
-            Name = name;
+            this.Name = name;
 
-            Start = start.AsInteger();
-            End = end.AsInteger();
+            this.Start = start.AsInteger();
+            this.End = end.AsInteger();
         }
     }
 }

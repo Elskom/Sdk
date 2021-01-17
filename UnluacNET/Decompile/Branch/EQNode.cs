@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class EQNode : Branch
     {
@@ -12,23 +12,18 @@ namespace UnluacNET
         private readonly bool m_invert;
 
         public override Branch Invert()
-        {
-            return new EQNode(m_left, m_right, !m_invert, Line, End, Begin);
-        }
+            => new EQNode(this.m_left, this.m_right, !this.m_invert, this.Line, this.End, this.Begin);
 
         public override int GetRegister()
-        {
-            return -1;
-        }
+            => -1;
 
         public override Expression AsExpression(Registers registers)
         {
             var transpose = false;
-            var op = (m_invert) ? "~=" : "==";
-
+            var op = (this.m_invert) ? "~=" : "==";
             return new BinaryExpression(op,
-                registers.GetKExpression(!transpose ? m_left : m_right, Line),
-                registers.GetKExpression(!transpose ? m_right : m_left, Line),
+                registers.GetKExpression(!transpose ? this.m_left : this.m_right, this.Line),
+                registers.GetKExpression(!transpose ? this.m_right : this.m_left, this.Line),
                 Expression.PRECEDENCE_COMPARE,
                 Expression.ASSOCIATIVITY_LEFT);
         }
@@ -42,9 +37,9 @@ namespace UnluacNET
         public EQNode(int left, int right, bool invert, int line, int begin, int end)
             : base(line, begin, end)
         {
-            m_left = left;
-            m_right = right;
-            m_invert = invert;
+            this.m_left = left;
+            this.m_right = right;
+            this.m_invert = invert;
         }
     }
 }

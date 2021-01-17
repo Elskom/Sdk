@@ -1,53 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+
     public class TableReference : Expression
     {
         private readonly Expression m_table;
         private readonly Expression m_index;
 
-        public override int ConstantIndex
-        {
-            get { return Math.Max(m_table.ConstantIndex, m_index.ConstantIndex); }
-        }
+        public override int ConstantIndex => Math.Max(this.m_table.ConstantIndex, this.m_index.ConstantIndex);
 
-        public override bool IsDotChain
-        {
-            get { return m_index.IsIdentifier && m_table.IsDotChain; }
-        }
+        public override bool IsDotChain => this.m_index.IsIdentifier && this.m_table.IsDotChain;
 
-        public override bool IsMemberAccess
-        {
-            get { return m_index.IsIdentifier; }
-        }
+        public override bool IsMemberAccess => this.m_index.IsIdentifier;
 
-        public override string GetField()
-        {
-            return m_index.AsName();
-        }
+        public override string GetField() => this.m_index.AsName();
 
-        public override Expression GetTable()
-        {
-            return m_table;
-        }
+        public override Expression GetTable() => this.m_table;
 
         public override void Print(Output output)
         {
-            m_table.Print(output);
-
-            if (m_index.IsIdentifier)
+            this.m_table.Print(output);
+            if (this.m_index.IsIdentifier)
             {
                 output.Print(".");
-                output.Print(m_index.AsName());
+                output.Print(this.m_index.AsName());
             }
             else
             {
                 output.Print("[");
-                m_index.Print(output);
+                this.m_index.Print(output);
                 output.Print("]");
             }
         }
@@ -55,8 +41,8 @@ namespace UnluacNET
         public TableReference(Expression table, Expression index)
             : base(PRECEDENCE_ATOMIC)
         {
-            m_table = table;
-            m_index = index;
+            this.m_table = table;
+            this.m_index = index;
         }
     }
 }

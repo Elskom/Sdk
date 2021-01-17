@@ -1,54 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.Collections.Generic;
+
     public class DoEndBlock : Block
     {
         private readonly List<Statement> m_statements;
 
-        public override bool Breakable
-        {
-            get { return false; }
-        }
+        public override bool Breakable => false;
 
-        public override bool IsContainer
-        {
-            get { return true; }
-        }
+        public override bool IsContainer => true;
 
-        public override bool IsUnprotected
-        {
-            get { return false; }
-        }
+        public override bool IsUnprotected => false;
 
         public override void AddStatement(Statement statement)
-        {
-            m_statements.Add(statement);
-        }
+            => this.m_statements.Add(statement);
 
-        public override int GetLoopback()
-        {
-            throw new InvalidOperationException();
-        }
+        public override int GetLoopback() => throw new InvalidOperationException();
 
         public override void Print(Output output)
         {
             output.PrintLine("do");
             output.IncreaseIndent();
-
-            Statement.PrintSequence(output, m_statements);
-
+            Statement.PrintSequence(output, this.m_statements);
             output.DecreaseIndent();
             output.Print("end");
         }
 
         public DoEndBlock(LFunction function, int begin, int end)
             : base(function, begin, end)
-        {
-            m_statements = new List<Statement>(end - begin + 1);
-        }
+            => this.m_statements = new List<Statement>(end - begin + 1);
     }
 }

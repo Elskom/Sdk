@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Collections.Generic;
+    
     public class Return : Statement
     {
         private Expression[] values;
@@ -12,21 +14,18 @@ namespace UnluacNET
         public override void Print(Output output)
         {
             output.Print("do ");
-            PrintTail(output);
+            this.PrintTail(output);
             output.Print(" end");
         }
 
         public override void PrintTail(Output output)
         {
             output.Print("return");
-
-            if (values.Length > 0)
+            if (this.values.Length > 0)
             {
                 output.Print(" ");
-
-                var rtns = new List<Expression>(values.Length);
-
-                foreach (var value in values)
+                var rtns = new List<Expression>(this.values.Length);
+                foreach (var value in this.values)
                     rtns.Add(value);
 
                 Expression.PrintSequence(output, rtns, false, true);
@@ -34,20 +33,15 @@ namespace UnluacNET
         }
 
         public Return()
-        {
-            values = new Expression[0];
-        }
+            => values = new Expression[0];
 
         public Return(Expression value)
-        {
-            values = new Expression[1] {
+            => values = new Expression[1]
+            {
                 value
             };
-        }
 
         public Return(Expression[] values)
-        {
-            this.values = values;
-        }
+            => this.values = values;
     }
 }

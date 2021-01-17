@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public enum OpMode
     {
@@ -65,14 +65,10 @@ namespace UnluacNET
         private const int MAXARG_C    = (1 << SIZE_C) - 1;
 
         private static int MASK1(int n, int p)
-        {
-            return (~(~0 << n)) << p;
-        }
+            => (~(~0 << n)) << p;
 
         private static int MASK0(int n, int p)
-        {
-            return ~MASK1(n, p);
-        }
+            => ~MASK1(n, p);
 
         /*
          ** Macros to operate RK indices
@@ -83,16 +79,10 @@ namespace UnluacNET
         private const int MAXINDEXRK  = (BITRK - 1);
 
         /* test whether value is a constant */
-        private static bool ISK(int x)
-        {
-            return ((x & BITRK) == 1);
-        }
+        private static bool ISK(int x) => ((x & BITRK) == 1);
 
         /* gets the index of the constant */
-        private static int INDEXK(int r)
-        {
-            return (r & ~BITRK);
-        }
+        private static int INDEXK(int r) => (r & ~BITRK);
 
         private static readonly int MASK_GETOPCODE  = MASK1(SIZE_OP, 0);
         private static readonly int MASK_SETOPCODE  = MASK1(SIZE_OP, POS_OP);
@@ -112,128 +102,89 @@ namespace UnluacNET
         private int m_value;
 
         public static implicit operator LInstruction(int value)
-        {
-            return new LInstruction(value);
-        }
+            => new LInstruction(value);
 
         public static implicit operator int(LInstruction value)
-        {
-            return value.m_value;
-        }
+            => value.m_value;
 
         public static LInstruction CreateABC(Op op, int a, int b, int c)
-        {
-            return new LInstruction(op, a, b, c);
-        }
+            => new LInstruction(op, a, b, c);
 
         public static LInstruction CreateABx(Op op, int a, int bx)
-        {
-            return new LInstruction(op, a, bx);
-        }
+            => new LInstruction(op, a, bx);
 
         public static int GetOpCode(int codePoint)
-        {
-            return (codePoint >> POS_OP) & MASK_GETOPCODE;
-        }
+            => (codePoint >> POS_OP) & MASK_GETOPCODE;
 
         public static int GetArgA(int codePoint)
-        {
-            return (codePoint >> POS_A) & MASK_GETA;
-        }
+            => (codePoint >> POS_A) & MASK_GETA;
 
         public static int GetArgB(int codePoint)
-        {
-            return (codePoint >> POS_B) & MASK_GETB;
-        }
+            => (codePoint >> POS_B) & MASK_GETB;
 
         public static int GetArgC(int codePoint)
-        {
-            return (codePoint >> POS_C) & MASK_GETC;
-        }
+            => (codePoint >> POS_C) & MASK_GETC;
 
         public static int GetArgBx(int codePoint)
-        {
-            return (codePoint >> POS_Bx) & MASK_GETBx;
-        }
+            => (codePoint >> POS_Bx) & MASK_GETBx;
 
         public static int GetArgsBX(int codePoint)
-        {
-            return GetArgBx(codePoint) - MAXARG_sBx;
-        }
+            => GetArgBx(codePoint) - MAXARG_sBx;
 
         public Op Op
         {
-            get { return (Op)GetOpCode(m_value); }
-            set
-            {
-                m_value = ((m_value & ~MASK_SETOPCODE) |
-                    (((int)value << POS_OP) & MASK_SETOPCODE));
-            }
+            get => (Op)GetOpCode(this.m_value);
+            set =>
+                this.m_value = ((this.m_value & ~MASK_SETOPCODE) |
+                                (((int)value << POS_OP) & MASK_SETOPCODE));
         }
 
         public int A
         {
-            get { return GetArgA(m_value); }
-            set
-            {
-                m_value = ((m_value & ~MASK_SETA) |
-                    ((value << POS_A) & MASK_SETA));
-            }
+            get => GetArgA(this.m_value);
+            set =>
+                this.m_value = ((this.m_value & ~MASK_SETA) |
+                                ((value << POS_A) & MASK_SETA));
         }
 
         public int B
         {
-            get { return GetArgB(m_value); }
-            set
-            {
-                m_value = ((m_value & ~MASK_SETB) |
-                    ((value << POS_B) & MASK_SETB));
-            }
+            get => GetArgB(this.m_value);
+            set =>
+                this.m_value = ((this.m_value & ~MASK_SETB) |
+                                ((value << POS_B) & MASK_SETB));
         }
 
         public int C
         {
-            get { return GetArgC(m_value); }
-            set
-            {
-                m_value = ((m_value & ~MASK_SETC) |
-                    ((value << POS_C) & MASK_SETC));
-            }
+            get => GetArgC(this.m_value);
+            set =>
+                this.m_value = ((this.m_value & ~MASK_SETC) |
+                                ((value << POS_C) & MASK_SETC));
         }
 
         public int Bx
         {
-            get { return GetArgBx(m_value); }
-            set
-            {
-                m_value = ((m_value & ~MASK_SETBx) |
-                    ((value << POS_Bx) & MASK_SETBx));
-            }
+            get => GetArgBx(this.m_value);
+            set =>
+                this.m_value = ((this.m_value & ~MASK_SETBx) |
+                                ((value << POS_Bx) & MASK_SETBx));
         }
 
         public int sBx
         {
-            get { return GetArgsBX(m_value); }
-            set
-            {
-                Bx = value + MAXARG_sBx;
-            }
+            get => GetArgsBX(this.m_value);
+            set => this.Bx = value + MAXARG_sBx;
         }
 
         public LInstruction(int value)
-        {
-            m_value = value;
-        }
+            => this.m_value = value;
 
         public LInstruction(Op op, int a, int bx)
-        {
-            m_value = (((int)op << POS_OP) | (a << POS_A) | (bx << POS_Bx));
-        }
+            => this.m_value = (((int)op << POS_OP) | (a << POS_A) | (bx << POS_Bx));
 
         public LInstruction(Op op, int a, int b, int c)
-        {
-            m_value = (((int)op << POS_OP) | (a << POS_A) | (b << POS_B) | (c << POS_C));
-        }
+            => this.m_value = (((int)op << POS_OP) | (a << POS_A) | (b << POS_B) | (c << POS_C));
     }
 
     public class Code
@@ -269,14 +220,10 @@ namespace UnluacNET
         private static readonly int MAXARG_C    = (1 << SIZE_C) - 1;
         
         private static int MASK1(int n, int p)
-        {
-            return (~(~0 << n)) << p;
-        }
+            => (~(~0 << n)) << p;
 
         private static int MASK0(int n, int p)
-        {
-            return ~MASK1(n, p);
-        }
+            => ~MASK1(n, p);
 
         /*
          ** Macros to operate RK indices
@@ -288,15 +235,11 @@ namespace UnluacNET
 
         /* test whether value is a constant */
         private static bool ISK(int x)
-        {
-            return ((x & BITRK) == 1);
-        }
+            => ((x & BITRK) == 1);
 
         /* gets the index of the constant */
         private static int INDEXK(int r)
-        {
-            return (r & ~BITRK);
-        }
+            => (r & ~BITRK);
 
         private static readonly int MASK_OPCODE = MASK1(SIZE_OP, 0);
         private static readonly int MASK_A      = MASK1(SIZE_A, 0);
@@ -307,99 +250,63 @@ namespace UnluacNET
         //----------------------------------------------------\\
 
         public static int GetOpCode(int codePoint)
-        {
-            return (codePoint >> POS_OP) & MASK_OPCODE;
-        }
+            => (codePoint >> POS_OP) & MASK_OPCODE;
 
         public static int GetArgA(int codePoint)
-        {
-            return (codePoint >> POS_A) & MASK_A;
-        }
+            => (codePoint >> POS_A) & MASK_A;
 
         public static int GetArgB(int codePoint)
-        {
-            return (codePoint >> POS_B) & MASK_B;
-        }
+            => (codePoint >> POS_B) & MASK_B;
 
         public static int GetArgC(int codePoint)
-        {
-            return (codePoint >> POS_C) & MASK_C;
-        }
+            => (codePoint >> POS_C) & MASK_C;
 
         public static int GetArgBx(int codePoint)
-        {
-            return (codePoint >> POS_Bx) & MASK_Bx;
-        }
+            => (codePoint >> POS_Bx) & MASK_Bx;
 
         public static int GetArgsBX(int codePoint)
-        {
-            return GetArgBx(codePoint) - MAXARG_sBx;
-        }
+            => GetArgBx(codePoint) - MAXARG_sBx;
 
         public Op Op(int line)
-        {
-            return map.GetOp(GetOpCode(CodePoint(line)));
-        }
+            => this.map.GetOp(GetOpCode(this.CodePoint(line)));
 
         public int A(int line)
-        {
-            return GetArgA(CodePoint(line));
-        }
+            => GetArgA(this.CodePoint(line));
 
         public int C(int line)
-        {
-            return GetArgC(CodePoint(line));
-        }
+            => GetArgC(this.CodePoint(line));
 
         public int B(int line)
-        {
-            return GetArgB(CodePoint(line));
-        }
+            => GetArgB(this.CodePoint(line));
 
         public int Bx(int line)
-        {
-            return GetArgBx(CodePoint(line));
-        }
+            => GetArgBx(this.CodePoint(line));
 
         public int sBx(int line)
-        {
-            return GetArgsBX(CodePoint(line));
-        }
+            => GetArgsBX(this.CodePoint(line));
 
         public OpMode OpMode(int line)
-        {
-            return map.GetOpMode((int)Op(line));
-        }
+            => this.map.GetOpMode((int)this.Op(line));
 
         public OpArgMask BMode(int line)
-        {
-            return map.GetBMode((int)Op(line));
-        }
+            => this.map.GetBMode((int)this.Op(line));
 
         public OpArgMask CMode(int line)
-        {
-            return map.GetCMode((int)Op(line));
-        }
+            => this.map.GetCMode((int)this.Op(line));
 
         public bool TestA(int line)
-        {
-            return map.TestAMode((int)Op(line));
-        }
+            => this.map.TestAMode((int)this.Op(line));
 
         public bool TestT(int line)
-        {
-            return map.TestTMode((int)Op(line));
-        }
+            => this.map.TestTMode((int)this.Op(line));
 
         public int CodePoint(int line)
-        {
-            return code[line - 1];
-        }
+            => this.code[line - 1];
 
         public Code(LFunction function)
         {
-            code = function.Code;
-            map  = function.Header.Version.GetOpcodeMap();
+            this.code = function.Code;
+            this.map  = function.Header.Version.GetOpcodeMap();
         }   
     }
 }

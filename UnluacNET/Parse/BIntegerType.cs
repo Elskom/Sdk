@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-using UnluacNET.IO;
-
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.IO;
+    using IO;
+    
     public class BIntegerType : BObjectType<BInteger>
     {
         public int IntSize { get; private set; }
 
         public override BInteger Parse(Stream stream, BHeader header)
         {
-            var value = RawParse(stream, header);
-
+            var value = this.RawParse(stream, header);
             if (header.Debug)
+            {
                 Console.WriteLine("-- parsed <integer> " + value.AsInteger());
+            }
 
             return value;
         }
@@ -26,10 +28,8 @@ namespace UnluacNET
         {
             // HACK HACK HACK
             var bigEndian = header.BigEndian;
-
             BInteger value = null;
-
-            switch (IntSize)
+            switch (this.IntSize)
             {
             case 0:
                 value = new BInteger(0);
@@ -66,8 +66,6 @@ namespace UnluacNET
         }
 
         public BIntegerType(int intSize)
-        {
-            IntSize = intSize;
-        }
+            => this.IntSize = intSize;
     }
 }

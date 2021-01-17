@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    
     public class BInteger : BObject
     {
         // TODO: Why not just use a 'long' to hold both sizes? Doesn't make much of a difference IMO
@@ -17,27 +18,27 @@ namespace UnluacNET
 
         public int AsInteger()
         {
-            if (m_big == 0)
-                return m_number;
-            else if (m_big.CompareTo(MAX_INT) > 0 || m_big.CompareTo(MIN_INT) < 0)
+            if (this.m_big == 0)
+                return this.m_number;
+            else if (this.m_big.CompareTo(MAX_INT) > 0 || this.m_big.CompareTo(MIN_INT) < 0)
                 throw new InvalidOperationException("The size of an integer is outside the range that unluac can handle.");
             else
-                return (int)m_big;
+                return (int)this.m_big;
         }
 
         public void Iterate(Action thunk)
         {
             // so what even is the difference between these two? they look exactly the same..
-            if (m_big == 0)
+            if (this.m_big == 0)
             {
-                var i = m_number;
+                var i = this.m_number;
 
                 while (i-- != 0)
                     thunk.Invoke();
             }
             else
             {
-                var i = m_big;
+                var i = this.m_big;
 
                 while (i > 0)
                 {
@@ -49,20 +50,20 @@ namespace UnluacNET
 
         public BInteger(BInteger b)
         {
-            m_big    = b.m_big;
-            m_number = b.m_number;
+            this.m_big    = b.m_big;
+            this.m_number = b.m_number;
         }
 
         public BInteger(int number)
         {
-            m_big    = 0L;
-            m_number = number;
+            this.m_big    = 0L;
+            this.m_number = number;
         }
 
         public BInteger(long big)
         {
-            m_big    = big;
-            m_number = 0;
+            this.m_big    = big;
+            this.m_number = 0;
         }
     }
 }

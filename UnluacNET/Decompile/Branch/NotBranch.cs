@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class NotBranch : Branch
     {
         private readonly Branch m_branch;
 
         public override Expression AsExpression(Registers registers)
-        {
-            return Expression.MakeNOT(m_branch.AsExpression(registers));
-        }
+            => Expression.MakeNOT(this.m_branch.AsExpression(registers));
 
         public override int GetRegister()
-        {
-            return m_branch.GetRegister();
-        }
+            => this.m_branch.GetRegister();
 
         public override Branch Invert()
-        {
-            return m_branch;
-        }
+            => this.m_branch;
 
         public override void UseExpression(Expression expression)
         {
@@ -32,8 +26,6 @@ namespace UnluacNET
 
         public NotBranch(Branch branch)
             : base(branch.Line, branch.Begin, branch.End)
-        {
-            m_branch = branch;
-        }
+            => this.m_branch = branch;
     }
 }

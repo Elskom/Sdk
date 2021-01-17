@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class TrueNode : Branch
     {
@@ -11,19 +11,13 @@ namespace UnluacNET
         public bool Inverted { get; private set; }
 
         public override Expression AsExpression(Registers registers)
-        {
-            return new ConstantExpression(new Constant(Inverted ? LBoolean.LTRUE : LBoolean.LFALSE), -1);
-        }
+            => new ConstantExpression(new Constant(this.Inverted ? LBoolean.LTRUE : LBoolean.LFALSE), -1);
 
         public override int GetRegister()
-        {
-            return Register;
-        }
+            => this.Register;
 
         public override Branch Invert()
-        {
-            return new TrueNode(Register, !Inverted, Line, End, Begin);
-        }
+            => new TrueNode(this.Register, !this.Inverted, this.Line, this.End, this.Begin);
 
         public override void UseExpression(Expression expression)
         {
@@ -32,18 +26,15 @@ namespace UnluacNET
         }
 
         public override string ToString()
-        {
-            return string.Format("TrueNode[register={0};inverted={1};line={2};begin={3};end={4}]",
-                Register, Inverted, Line, Begin, End);
-        }
+            => string.Format("TrueNode[register={0};inverted={1};line={2};begin={3};end={4}]",
+                this.Register, this.Inverted, this.Line, this.Begin, this.End);
 
         public TrueNode(int register, bool inverted, int line, int begin, int end)
             : base(line, begin, end)
         {
-            Register = register;
-            Inverted = inverted;
-            SetTarget = register;
-            
+            this.Register = register;
+            this.Inverted = inverted;
+            this.SetTarget = register;
             //???
             //IsTest = true;
         }

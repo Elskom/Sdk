@@ -1,38 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+
     public class AssignNode : Branch
     {
         private Expression m_expression;
 
         public override Expression AsExpression(Registers registers)
-        {
-            return m_expression;
-        }
+            => this.m_expression;
 
         public override int GetRegister()
-        {
-            throw new InvalidOperationException();
-        }
+            => throw new InvalidOperationException();
 
         public override Branch Invert()
-        {
-            throw new InvalidOperationException();
-        }
+            => throw new InvalidOperationException();
 
         public override void UseExpression(Expression expression)
-        {
-            m_expression = expression;
-        }
+            => this.m_expression = expression;
 
         public AssignNode(int line, int begin, int end)
             : base(line, begin, end)
         {
-
         }
     }
 }

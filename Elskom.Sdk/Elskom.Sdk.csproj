@@ -11,7 +11,7 @@
     <Description>Elskom SDK for development of Els_kom plugins and for Els_kom itself. Also contains libs that can be used for project as well.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Copyright (c) 2018-2021</Copyright>
-    <PackageTags>XML;GitBuildInformation;SettingsFile;zlib;BlowFish;Unluac;ZipAssembly;ReleasePackaging;MessageManager;GenericPluginLoader;MiniDump;PluginFramework;PluginUpdateCheck</PackageTags>
+    <PackageTags>XML;GitBuildInformation;SettingsFile;zlib;BlowFish;Unluac;ZipAssembly;ReleasePackaging;MessageManager;GenericPluginLoader;MiniDump;PluginFramework;PluginUpdateCheck;GitBuildInfo</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/Elskom/Sdk/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Elskom/Sdk/</PackageProjectUrl>
@@ -37,6 +37,9 @@
   <ItemGroup>
     <PackageReference Condition="!$(TargetFramework.StartsWith('netcoreapp')) AND !$(TargetFramework.StartsWith('netstandard')) AND '$(TargetFramework)' != 'net5.0'" Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
     <!-- To ensure this builds package last after these projects build. -->
+    <ProjectReference Include="../GitBuildInfo/GitBuildInfo.csproj">
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
     <ProjectReference Include="..\BlowFish\BlowFish.csproj">
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>

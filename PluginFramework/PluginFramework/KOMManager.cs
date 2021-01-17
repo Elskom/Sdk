@@ -383,8 +383,9 @@ namespace Elskom.Generic.Libs
                                 File.WriteAllBytes($"{outpath}{Path.DirectorySeparatorChar}{entry.Name}", entryData.GetBuffer());
                             }
                         }
-                        else // is particle or any other file.
+                        else
                         {
+                            // is particle or any other file.
                             File.WriteAllBytes($"{outpath}{Path.DirectorySeparatorChar}{entry.Name}", entryData.GetBuffer());
                         }
                     }

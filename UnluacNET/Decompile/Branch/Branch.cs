@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public abstract class Branch
     {
@@ -20,8 +20,8 @@ namespace UnluacNET
 
         public int SetTarget
         {
-            get { return m_setTarget; }
-            set { m_setTarget = value; }
+            get => this.m_setTarget;
+            set => this.m_setTarget = value;
         }
 
         public abstract Branch Invert();
@@ -31,9 +31,9 @@ namespace UnluacNET
 
         public Branch(int line, int begin, int end)
         {
-            Line = line;
-            Begin = begin;
-            End = end;
+            this.Line = line;
+            this.Begin = begin;
+            this.End = end;
         }
     }
 }

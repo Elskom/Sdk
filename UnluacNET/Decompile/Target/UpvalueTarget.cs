@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    
     public class UpvalueTarget : Target
     {
         private readonly string m_name;
 
         public override void Print(Output output)
-        {
-            output.Print(m_name);
-        }
+            => output.Print(this.m_name);
 
         public override void PrintMethod(Output output)
-        {
-            throw new InvalidOperationException();
-        }
+            => throw new InvalidOperationException();
 
         public UpvalueTarget(string name)
-        {
-            m_name = name;
-        }
+            => this.m_name = name;
     }
 }

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class TestNode : Branch
     {
@@ -12,21 +12,17 @@ namespace UnluacNET
 
         public override Expression AsExpression(Registers registers)
         {
-            if (Inverted)
-                return new NotBranch(Invert()).AsExpression(registers);
+            if (this.Inverted)
+                return new NotBranch(this.Invert()).AsExpression(registers);
 
-            return registers.GetExpression(Test, Line);
+            return registers.GetExpression(this.Test, this.Line);
         }
 
         public override int GetRegister()
-        {
-            return Test;
-        }
+            => this.Test;
 
         public override Branch Invert()
-        {
-            return new TestNode(Test, !Inverted, Line, End, Begin);
-        }
+            => new TestNode(this.Test, !this.Inverted, this.Line, this.End, this.Begin);
 
         public override void UseExpression(Expression expression)
         {
@@ -35,18 +31,15 @@ namespace UnluacNET
         }
 
         public override string ToString()
-        {
-            return string.Format("TestNode[test={0};inverted={1};line={2};begin={3};end={4}]",
-                Test, Inverted, Line, Begin, End);
-        }
+            => string.Format("TestNode[test={0};inverted={1};line={2};begin={3};end={4}]",
+                this.Test, this.Inverted, this.Line, this.Begin, this.End);
 
         public TestNode(int test, bool inverted, int line, int begin, int end)
             : base(line, begin, end)
         {
-            Test = test;
-            Inverted = inverted;
-
-            IsTest = true;
+            this.Test = test;
+            this.Inverted = inverted;
+            this.IsTest = true;
         }
     }
 }

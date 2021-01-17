@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.Collections.Generic;
+    
     public class Constant
     {
         public const int CONST_NIL    = 0;
@@ -44,27 +47,22 @@ namespace UnluacNET
         private readonly LNumber m_number;
         private readonly string m_string;
 
-        public bool IsBoolean
-        {
-            get { return (m_type == CONST_BOOL); }
-        }
+        public bool IsBoolean => (this.m_type == CONST_BOOL);
 
         public bool IsIdentifier
         {
             get
             {
-                if (!IsString || m_string.Length == 0 || m_reservedWords.Contains(m_string))
+                if (!this.IsString || this.m_string.Length == 0 || m_reservedWords.Contains(this.m_string))
                     return false;
                 
-                var start = (char)m_string[0];
-
+                var start = (char)this.m_string[0];
                 if (start != '_' && !char.IsLetter(start))
                     return false;
 
-                for (var i = 1; i < m_string.Length; i++)
+                for (var i = 1; i < this.m_string.Length; i++)
                 {
-                    var next = (char)m_string[i];
-
+                    var next = (char)this.m_string[i];
                     if (char.IsLetterOrDigit(next) || next == '_')
                         continue;
 
@@ -79,62 +77,49 @@ namespace UnluacNET
         {
             get
             {
-                var value = m_number.Value;
-
+                var value = this.m_number.Value;
                 return value == Math.Round(value);
             }
         }
 
-        public bool IsNil
-        {
-            get { return (m_type == CONST_NIL); }
-        }
-
-        public bool IsNumber
-        {
-            get { return (m_type == CONST_NUMBER); }
-        }
-
-        public bool IsString
-        {
-            get { return (m_type == CONST_STRING); }
-        }
+        public bool IsNil => (this.m_type == CONST_NIL);
+        public bool IsNumber => (this.m_type == CONST_NUMBER);
+        public bool IsString => (this.m_type == CONST_STRING);
 
         public int AsInteger()
         {
-            if (!IsInteger)
+            if (!this.IsInteger)
                 throw new InvalidOperationException();
 
-            return (int)m_number.Value;
+            return (int)this.m_number.Value;
         }
 
         public string AsName()
         {
-            if (!IsString)
+            if (!this.IsString)
                 throw new InvalidOperationException();
 
-            return m_string;
+            return this.m_string;
         }
 
         public void Print(Output output)
         {
-            switch (m_type)
+            switch (this.m_type)
             {
             case CONST_NIL:
                 output.Print("nil");
                 break;
             case CONST_BOOL:
-                output.Print(m_bool ? "true" : "false");
+                output.Print(this.m_bool ? "true" : "false");
                 break;
             case CONST_NUMBER:
-                output.Print(m_number.ToString());
+                output.Print(this.m_number.ToString());
                 break;
             case CONST_STRING:
                 {
                     var newLines = 0;
                     var unprinttable = 0;
-
-                    foreach (var c in m_string)
+                    foreach (var c in this.m_string)
                     {
                         if (c == '\n')
                             newLines++;
@@ -142,19 +127,16 @@ namespace UnluacNET
                             unprinttable++;
                     }
 
-                    if (unprinttable == 0 && !m_string.Contains("[[") &&
-                        (newLines > 1 || newLines == 1 && m_string.IndexOf('\n') != m_string.Length - 1))
+                    if (unprinttable == 0 && !this.m_string.Contains("[[") &&
+                        (newLines > 1 || newLines == 1 && this.m_string.IndexOf('\n') != this.m_string.Length - 1))
                     {
                         var pipe = 0;
                         var pipeString = "]]";
-
-                        while (m_string.IndexOf(pipeString) >= 0)
+                        while (this.m_string.IndexOf(pipeString) >= 0)
                         {
                             pipe++;
                             pipeString = "]";
-
                             var i = pipe;
-
                             while (i-- > 0)
                                 pipeString += "=";
 
@@ -162,26 +144,20 @@ namespace UnluacNET
                         }
 
                         output.Print("[");
-
                         while (pipe-- > 0)
                             output.Print("=");
-
+                        
                         output.Print("[");
-
                         var indent = output.IndentationLevel;
-
                         output.IndentationLevel = 0;
-
                         output.PrintLine();
-                        output.Print(m_string);
+                        output.Print(this.m_string);
                         output.Print(pipeString);
-
                         output.IndentationLevel = indent;
                     }
                     else
                     {
                         output.Print("\"");
-
                         var chars = new[] {
                                     "\\a",
                                     "\\b",
@@ -191,8 +167,7 @@ namespace UnluacNET
                                     "\\f",
                                     "\\r",
                                 };
-
-                        foreach (var c in m_string)
+                        foreach (var c in this.m_string)
                         {
                             if (c <= 31 || c >= 127)
                             {
@@ -210,9 +185,7 @@ namespace UnluacNET
                                 //    output.Print("\\t");
                                 //else if (c == 11)
                                 //    output.Print("\\v");
-
                                 var cx = ((int)c);
-
                                 if (cx >= 7 && cx <= 13)
                                 {
                                     output.Print(chars[cx - 7]);
@@ -221,9 +194,7 @@ namespace UnluacNET
                                 {
                                     var dec = cx.ToString();
                                     var len = dec.Length;
-
                                     output.Print("\\");
-
                                     while (len++ < 3)
                                         output.Print("0");
 
@@ -248,41 +219,41 @@ namespace UnluacNET
 
         public Constant(int constant)
         {
-            m_type   = 2;
-            m_bool   = false;
-            m_number = LNumber.MakeInteger(constant);
-            m_string = null;
+            this.m_type   = 2;
+            this.m_bool   = false;
+            this.m_number = LNumber.MakeInteger(constant);
+            this.m_string = null;
         }
 
         public Constant(LObject constant)
         {
             if (constant is LNil)
             {
-                m_type   = 0;
-                m_bool   = false;
-                m_number = null;
-                m_string = null;
+                this.m_type   = 0;
+                this.m_bool   = false;
+                this.m_number = null;
+                this.m_string = null;
             }
             else if (constant is LBoolean)
             {
-                m_type   = 1;
-                m_bool   = (constant == LBoolean.LTRUE);
-                m_number = null;
-                m_string = null;
+                this.m_type   = 1;
+                this.m_bool   = (constant == LBoolean.LTRUE);
+                this.m_number = null;
+                this.m_string = null;
             }
             else if (constant is LNumber)
             {
-                m_type   = 2;
-                m_bool   = false;
-                m_number = (LNumber)constant;
-                m_string = null;
+                this.m_type   = 2;
+                this.m_bool   = false;
+                this.m_number = (LNumber)constant;
+                this.m_string = null;
             }
             else if (constant is LString)
             {
-                m_type   = 3;
-                m_bool   = false;
-                m_number = null;
-                m_string = ((LString)constant).DeRef();
+                this.m_type   = 3;
+                this.m_bool   = false;
+                this.m_number = null;
+                this.m_string = ((LString)constant).DeRef();
             }
             else
             {

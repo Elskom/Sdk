@@ -1,31 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    
     public abstract class Target
     {
-        public virtual bool IsFunctionName
-        {
-            get { return true; }
-        }
+        public virtual bool IsFunctionName => true;
 
-        public virtual bool IsLocal
-        {
-            get { return false; }
-        }
+        public virtual bool IsLocal => false;
 
         public virtual int GetIndex()
-        {
-            throw new InvalidOperationException();
-        }
+            => throw new InvalidOperationException();
 
         public virtual bool IsDeclaration(Declaration decl)
-        {
-            return false;
-        }
+            => false;
 
         public abstract void Print(Output output);
         public abstract void PrintMethod(Output output);

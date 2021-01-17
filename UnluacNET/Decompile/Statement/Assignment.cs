@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Collections.Generic;
+
     public class Assignment : Statement
     {
         private readonly List<Target> m_targets     = new List<Target>(5);
@@ -16,38 +18,34 @@ namespace UnluacNET
 
         public void AddFirst(Target target, Expression value)
         {
-            m_targets.Insert(0, target);
-            m_values.Insert(0, value);
-
-            m_allNil = m_allNil && value.IsNil;
+            this.m_targets.Insert(0, target);
+            this.m_values.Insert(0, value);
+            this.m_allNil = this.m_allNil && value.IsNil;
         }
 
         public void AddLast(Target target, Expression value)
         {
-            if (m_targets.Contains(target))
+            if (this.m_targets.Contains(target))
             {
-                var index = m_targets.IndexOf(target);
-                value = m_values[index];
-                
-                m_targets.RemoveAt(index);
-                m_values.RemoveAt(index);
+                var index = this.m_targets.IndexOf(target);
+                value = this.m_values[index];
+                this.m_targets.RemoveAt(index);
+                this.m_values.RemoveAt(index);
             }
 
-            m_targets.Add(target);
-            m_values.Add(value);
-
-            m_allNil = m_allNil && value.IsNil;
+            this.m_targets.Add(target);
+            this.m_values.Add(value);
+            this.m_allNil = this.m_allNil && value.IsNil;
         }
 
         public bool AssignListEquals(List<Declaration> decls)
         {
-            if (decls.Count != m_targets.Count)
+            if (decls.Count != this.m_targets.Count)
                 return false;
 
-            foreach (var target in m_targets)
+            foreach (var target in this.m_targets)
             {
                 var found = false;
-
                 foreach (var decl in decls)
                 {
                     if (target.IsDeclaration(decl))
@@ -66,7 +64,7 @@ namespace UnluacNET
 
         public bool AssignsTarget(Declaration decl)
         {
-            foreach (var target in m_targets)
+            foreach (var target in this.m_targets)
                 if (target.IsDeclaration(decl))
                     return true;
 
@@ -75,43 +73,35 @@ namespace UnluacNET
 
         public void Declare(int declareStart)
         {
-            m_declare = true;
-            m_declareStart = declareStart;
+            this.m_declare = true;
+            this.m_declareStart = declareStart;
         }
 
         public int GetArity()
-        {
-            return m_targets.Count;
-        }
+            => this.m_targets.Count;
 
         public Target GetFirstTarget()
-        {
-            return m_targets[0];
-        }
+            => this.m_targets[0];
 
         public Expression GetFirstValue()
-        {
-            return m_values[0];
-        }
+            => this.m_values[0];
 
         public override void Print(Output output)
         {
-            if (m_targets.Count > 0)
+            if (this.m_targets.Count > 0)
             {
-                if (m_declare)
+                if (this.m_declare)
                     output.Print("local ");
 
                 var functionSugar = false;
-
-                var value = m_values[0];
-                var target = m_targets[0];
-
-                if (m_targets.Count == 1 && m_values.Count == 1)
+                var value = this.m_values[0];
+                var target = this.m_targets[0];
+                if (this.m_targets.Count == 1 && this.m_values.Count == 1)
                 {
                     if (value.IsClosure && target.IsFunctionName)
                     {
                         //This check only works in Lua version 0x51
-                        if (!m_declare || m_declareStart >= value.ClosureUpvalueLine)
+                        if (!this.m_declare || this.m_declareStart >= value.ClosureUpvalueLine)
                             functionSugar = true;
                         if (target.IsLocal && value.IsUpvalueOf(target.GetIndex()))
                             functionSugar = true;
@@ -121,17 +111,16 @@ namespace UnluacNET
                 if (!functionSugar)
                 {
                     target.Print(output);
-
-                    for (var i = 1; i < m_targets.Count; i++)
+                    for (var i = 1; i < this.m_targets.Count; i++)
                     {
                         output.Print(", ");
-                        m_targets[i].Print(output);
+                        this.m_targets[i].Print(output);
                     }
 
-                    if (!m_declare || !m_allNil)
+                    if (!this.m_declare || !this.m_allNil)
                     {
                         output.Print(" = ");
-                        Expression.PrintSequence(output, m_values, false, false);
+                        Expression.PrintSequence(output, this.m_values, false, false);
                     }
                 }
                 else
@@ -139,22 +128,23 @@ namespace UnluacNET
                     value.PrintClosure(output, target);
                 }
 
-                if (Comment != null)
+                if (this.Comment != null)
                 {
                     output.Print(" -- ");
-                    output.Print(Comment);
+                    output.Print(this.Comment);
                 }
             }
         }
 
-        public Assignment() { }
+        public Assignment()
+        {
+        }
 
         public Assignment(Target target, Expression value)
         {
-            m_targets.Add(target);
-            m_values.Add(value);
-
-            m_allNil = m_allNil && value.IsNil;
+            this.m_targets.Add(target);
+            this.m_values.Add(value);
+            this.m_allNil = this.m_allNil && value.IsNil;
         }
     }
 }

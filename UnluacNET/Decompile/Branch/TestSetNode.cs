@@ -1,37 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class TestSetNode : TestNode
     {
         public override Expression AsExpression(Registers registers)
-        {
-            return registers.GetExpression(Test, Line);
-        }
+            => registers.GetExpression(this.Test, this.Line);
 
         public override int GetRegister()
-        {
-            return SetTarget;
-        }
+            => this.SetTarget;
 
         public override Branch Invert()
-        {
-            return new TestSetNode(SetTarget, Test, !Inverted, Line, End, Begin);
-        }
+            => new TestSetNode(this.SetTarget, this.Test, !this.Inverted, this.Line, this.End, this.Begin);
 
         public override string ToString()
-        {
-            return string.Format("TestSetNode[target={0};test={1};inverted={2};line={3};begin={4};end={5}]",
-                Test, Inverted, Line, Begin, End);
-        }
+            => string.Format("TestSetNode[target={0};test={1};inverted={2};line={3};begin={4};end={5}]",
+                this.Test, this.Inverted, this.Line, this.Begin, this.End);
 
         public TestSetNode(int target, int test, bool inverted, int line, int begin, int end)
             : base(test, inverted, line, begin, end)
-        {
-            SetTarget = target;
-        }
+            => SetTarget = target;
     }
 }

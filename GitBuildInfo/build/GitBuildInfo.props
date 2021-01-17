@@ -6,7 +6,9 @@
   <PropertyGroup>
     <TaskFolder Condition=" '$(MSBuildRuntimeType)' == 'Core' ">netstandard2.0</TaskFolder>
     <TaskFolder Condition=" '$(MSBuildRuntimeType)' != 'Core' ">net472</TaskFolder>
-    <TaskAssembly>$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll</TaskAssembly>
+    <TaskAssembly Condition="Exists('$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll')">$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll</TaskAssembly>
+    <TaskAssembly Condition="!Exists('$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll')">$(MSBuildThisFileDirectory)..\bin\Any CPU\$(Configuration)\$(TaskFolder)\GitBuildInfo.dll</TaskAssembly>
+    <error Condition="!Exists('$(TaskAssembly)')">Task Assembly does not exist.</error>
   </PropertyGroup>
 
   <UsingTask TaskName="GitBuildInfo.GitBuildInfoTask" AssemblyFile="$(TaskAssembly)" />

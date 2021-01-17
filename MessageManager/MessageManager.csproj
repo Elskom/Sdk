@@ -36,13 +36,14 @@
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <!-- <PublishRepositoryUrl>true</PublishRepositoryUrl> -->
     <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
-    <!-- <EmbedUntrackedSources>true</EmbedUntrackedSources> -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
     <!-- <IncludeSymbols>true</IncludeSymbols> -->
     <!-- Optional: Include source code in the symbol package (.snupkg) -->
     <!-- <IncludeSource>true</IncludeSource> -->
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -69,10 +70,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitBuildInfo" Version="0.25.0-preview-99680043">
+    <ProjectReference Include="../GitBuildInfo/GitBuildInfo.csproj" ReferenceOutputAssembly="false">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    </ProjectReference>
+    <ProjectReference Include="..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj" />
     <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -109,9 +111,7 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup Condition="Exists('..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj')">
-    <ProjectReference Include="..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj" />
-  </ItemGroup>
+  <Import Project="../GitBuildInfo/buildMultiTargeting/GitBuildInfo.props" />
 
   <Target Name="GitBuildInfo" BeforeTargets="PrepareForBuild">
     <GitBuildInfoTask OutputPath="$(ProjectDir)\GitAssemblyInfo.cs" AssemblyType="Elskom.Generic.Libs.MessageManager" />

@@ -11,13 +11,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: snickerbockers/submodules-init@v4
+      with:
+        # we need the submodule to zlib.managed.
+        submodules: recursive
     - name: .NET core build
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.100
+        dotnet-version: 5.0.102
+    # we must build the msbuild task 1st in order to prevent build failures
+    # due to ProjectReferencing it.
     - name: Build with dotnet
-      run: dotnet build --configuration Release
+      run: |
+        cd GitBuildInfo
+        dotnet build --configuration Release
+        cd ..
+        dotnet build --configuration Release
     # - name: Publish Pre-release
     #   id: publish_nuget
     #   uses: rohith/publish-nuget@v2

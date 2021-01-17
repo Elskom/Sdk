@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-using UnluacNET.IO;
-
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.IO;
+    using IO;
+
     public class BHeader
     {
         private static readonly int m_signature = 0x61754C1B; // '\x1B\Lua'
@@ -17,11 +18,8 @@ namespace UnluacNET
         };
 
         public bool Debug { get; set; }
-
         public bool BigEndian { get; set; }
-
         public Version Version { get; set; }
-
         public BIntegerType Integer { get; set; }
         public BSizeTType SizeT { get; set; }
         public LBooleanType Bool { get; set; }
@@ -40,14 +38,13 @@ namespace UnluacNET
 
             // 1-byte Lua version
             var version = stream.ReadByte();
-
             switch (version)
             {
             case 0x51:
-                Version = Version.LUA51;
+                this.Version = Version.LUA51;
                 break;
             case 0x52:
-                Version = Version.LUA52;
+                this.Version = Version.LUA52;
                 break;
             default:
                 {
@@ -60,80 +57,69 @@ namespace UnluacNET
                     throw new InvalidOperationException(error);
                 }
             }
-
-            if (Debug)
+            
+            if (this.Debug)
                 Console.WriteLine("-- version: 0x{0:X}", version);
 
             // 1-byte Lua "format"
             var format = stream.ReadByte();
-
             if (format != 0)
                 throw new InvalidOperationException("The input chunk reports a non-standard lua format: " + format);
 
-            if (Debug)
+            if (this.Debug)
                 Console.WriteLine("-- format: {0}", format);
 
             // 1-byte endianness
             var endianness = stream.ReadByte();
-
             if (endianness > 1)
                 throw new InvalidOperationException("The input chunk reports an invalid endianness: " + endianness);
 
-            BigEndian = (endianness == 0);
-
-            if (Debug)
-                Console.WriteLine("-- endianness: {0}", (BigEndian) ? "0 (big)" : "1 (little)");
+            this.BigEndian = (endianness == 0);
+            if (this.Debug)
+                Console.WriteLine("-- endianness: {0}", (this.BigEndian) ? "0 (big)" : "1 (little)");
 
             // 1-byte int size
             var intSize = stream.ReadByte();
-
-            if (Debug)
+            if (this.Debug)
                 Console.WriteLine("-- int size: {0}", intSize);
 
-            Integer = new BIntegerType(intSize);
-
+            this.Integer = new BIntegerType(intSize);
+            
             // 1-byte sizeT size
             var sizeTSize = stream.ReadByte();
-
-            if (Debug)
+            if (this.Debug)
                 Console.WriteLine("-- size_t size: {0}", sizeTSize);
 
-            SizeT = new BSizeTType(sizeTSize);
+            this.SizeT = new BSizeTType(sizeTSize);
 
             // 1-byte instruction size
             var instructionSize = stream.ReadByte();
-
-            if (Debug)
+            if (this.Debug)
                 Console.WriteLine("-- instruction size: {0}", instructionSize);
 
             if (instructionSize != 4)
                 throw new InvalidOperationException("The input chunk reports an unsupported instruction size: " + instructionSize + " bytes");
 
             var lNumberSize = stream.ReadByte();
-
-            if (Debug)
+            if (this.Debug)
                 Console.WriteLine("-- Lua number size: {0}", lNumberSize);
 
             var lNumberIntegralCode = stream.ReadByte();
-
-            if (Debug)
+            if (this.Debug)
                 Console.WriteLine("-- Lua number integral code: {0}", lNumberIntegralCode);
 
             if (lNumberIntegralCode > 1)
                 throw new InvalidOperationException("The input chunk reports an invalid code for lua number integralness: " + lNumberIntegralCode);
 
             var lNumberIntegral = (lNumberIntegralCode == 1);
-            
-            Number   = new LNumberType(lNumberSize, lNumberIntegral);
-            Bool     = new LBooleanType();
-            String   = new LStringType();
-            Constant = new LConstantType();
-            Local    = new LLocalType();
-            UpValue  = new LUpvalueType();
-
-            Function = Version.GetLFunctionType();
-
-            if (Version.HasHeaderTail)
+            this.Number   = new LNumberType(lNumberSize, lNumberIntegral);
+            this.Bool     = new LBooleanType();
+            this.String   = new LStringType();
+            this.Constant = new LConstantType();
+            this.Local    = new LLocalType();
+            this.UpValue  = new LUpvalueType();
+            this.Function = this.Version.GetLFunctionType();
+            if (this.Version.HasHeaderTail)
             {
                 for (var i = 0; i < m_luacTail.Length; i++)
                     if (stream.ReadByte() != m_luacTail[i])

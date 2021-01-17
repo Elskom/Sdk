@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+
     public class SetBlock : Block
     {
         private Assignment m_assign;
@@ -15,48 +17,34 @@ namespace UnluacNET
         public int Target { get; private set; }
         public Branch Branch { get; private set; }
 
-        public override bool Breakable
-        {
-            get { return false; }
-        }
+        public override bool Breakable => false;
 
-        public override bool IsContainer
-        {
-            get { return false; }
-        }
+        public override bool IsContainer => false;
 
-        public override bool IsUnprotected
-        {
-            get { return false; }
-        }
+        public override bool IsUnprotected => false;
 
         public override void AddStatement(Statement statement)
         {
-            if (!m_finalize && statement is Assignment)
-                m_assign = statement as Assignment;
+            if (!this.m_finalize && statement is Assignment)
+                this.m_assign = statement as Assignment;
             else if (statement is BooleanIndicator)
-                m_finalize = true;
+                this.m_finalize = true;
         }
 
         public override int GetLoopback()
-        {
-            throw new InvalidOperationException();
-        }
+            => throw new InvalidOperationException();
 
         public Expression GetValue()
-        {
-            return Branch.AsExpression(m_r);
-        }
+            => this.Branch.AsExpression(this.m_r);
 
         public override void Print(Output output)
         {
-            if (m_assign != null)
+            if (this.m_assign != null)
             {
-                var target = m_assign.GetFirstTarget();
-
+                var target = this.m_assign.GetFirstTarget();
                 if (target != null)
                 {
-                    new Assignment(target, GetValue()).Print(output);
+                    new Assignment(target, this.GetValue()).Print(output);
                 }
                 else
                 {
@@ -68,76 +56,68 @@ namespace UnluacNET
 
         public override Operation Process(Decompiler d)
         {
-            if (m_empty)
+            if (this.m_empty)
             {
-                var expr = m_r.GetExpression(Branch.SetTarget, End);
-                Branch.UseExpression(expr);
-
-                return new RegisterSet(End - 1, Branch.SetTarget, Branch.AsExpression(m_r));
+                var expr = this.m_r.GetExpression(this.Branch.SetTarget, this.End);
+                this.Branch.UseExpression(expr);
+                return new RegisterSet(this.End - 1, this.Branch.SetTarget, this.Branch.AsExpression(this.m_r));
             }
-            else if (m_assign != null)
+            else if (this.m_assign != null)
             {
-                Branch.UseExpression(m_assign.GetFirstValue());
-
-                var target = m_assign.GetFirstTarget();
-                var value = GetValue();
-
-                return new LambdaOperation(End - 1, (r, block) => {
+                this.Branch.UseExpression(this.m_assign.GetFirstValue());
+                var target = this.m_assign.GetFirstTarget();
+                var value = this.GetValue();
+                return new LambdaOperation(this.End - 1, (r, block) => {
                     return new Assignment(target, value);
                 });
             }
             else
             {
-                return new LambdaOperation(End - 1, (r, block) => {
+                return new LambdaOperation(this.End - 1, (r, block) => {
                     Expression expr = null;
-
                     var register = 0;
-
                     for (; register < r.NumRegisters; register++)
                     {
-                        if (r.GetUpdated(register, Branch.End - 1) == Branch.End - 1)
+                        if (r.GetUpdated(register, this.Branch.End - 1) == this.Branch.End - 1)
                         {
-                            expr = r.GetValue(register, Branch.End);
+                            expr = r.GetValue(register, this.Branch.End);
                             break;
                         }
                     }
 
-                    if (d.Code.Op(Branch.End - 2) == Op.LOADBOOL &&
-                        d.Code.C(Branch.End - 2) != 0)
+                    if (d.Code.Op(this.Branch.End - 2) == Op.LOADBOOL &&
+                        d.Code.C(this.Branch.End - 2) != 0)
                     {
-                        var target = d.Code.A(Branch.End - 2);
-
-                        if (d.Code.Op(Branch.End - 3) == Op.JMP &&
-                            d.Code.sBx(Branch.End - 3) == 2)
+                        var target = d.Code.A(this.Branch.End - 2);
+                        if (d.Code.Op(this.Branch.End - 3) == Op.JMP &&
+                            d.Code.sBx(this.Branch.End - 3) == 2)
                         {
-                            expr = r.GetValue(target, Branch.End - 2);
+                            expr = r.GetValue(target, this.Branch.End - 2);
                         }
                         else
                         {
-                            expr = r.GetValue(target, Branch.Begin);
+                            expr = r.GetValue(target, this.Branch.Begin);
                         }
 
-                        Branch.UseExpression(expr);
+                        this.Branch.UseExpression(expr);
+                        if (r.IsLocal(target, this.Branch.End - 1))
+                            return new Assignment(r.GetTarget(target, this.Branch.End - 1), this.Branch.AsExpression(r));
 
-                        if (r.IsLocal(target, Branch.End - 1))
-                            return new Assignment(r.GetTarget(target, Branch.End - 1), Branch.AsExpression(r));
-
-                        r.SetValue(target, Branch.End - 1, Branch.AsExpression(r));
+                        r.SetValue(target, this.Branch.End - 1, this.Branch.AsExpression(r));
                     }
-                    else if (expr != null && Target >= 0)
+                    else if (expr != null && this.Target >= 0)
                     {
-                        Branch.UseExpression(expr);
+                        this.Branch.UseExpression(expr);
+                        if (r.IsLocal(this.Target, this.Branch.End - 1))
+                            return new Assignment(r.GetTarget(this.Target, this.Branch.End - 1), this.Branch.AsExpression(r));
 
-                        if (r.IsLocal(Target, Branch.End - 1))
-                            return new Assignment(r.GetTarget(Target, Branch.End - 1), Branch.AsExpression(r));
-
-                        r.SetValue(Target, Branch.End - 1, Branch.AsExpression(r));
+                        r.SetValue(this.Target, this.Branch.End - 1, this.Branch.AsExpression(r));
                     }
                     else
                     {
-                        Console.WriteLine("-- fail " + (Branch.End - 1));
+                        Console.WriteLine("-- fail " + (this.Branch.End - 1));
                         Console.WriteLine(expr);
-                        Console.WriteLine(Target);
+                        Console.WriteLine(this.Target);
                     }
 
                     return null;
@@ -147,22 +127,20 @@ namespace UnluacNET
 
         public void UseAssignment(Assignment assignment)
         {
-            m_assign = assignment;
-            Branch.UseExpression(assignment.GetFirstValue());
+            this.m_assign = assignment;
+            this.Branch.UseExpression(assignment.GetFirstValue());
         }
 
         public SetBlock(LFunction function, Branch branch, int target, int line, int begin, int end, bool empty, Registers r)
             : base(function, begin, end)
         {
-            m_empty = empty;
-
+            this.m_empty = empty;
             if (begin == end)
-                Begin -= 1;
+                this.Begin -= 1;
 
-            Target = target;
-            Branch = branch;
-
-            m_r = r;
+            this.Target = target;
+            this.Branch = branch;
+            this.m_r = r;
         }
     }
 }

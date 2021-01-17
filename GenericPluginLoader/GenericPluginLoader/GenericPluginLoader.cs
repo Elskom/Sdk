@@ -32,10 +32,18 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Loads plugins with the specified plugin interface type.
         /// </summary>
-        /// <param name="path">The path to look for plugins to load.</param>
-        /// <param name="saveToZip">Tells this function to see if the plugin was saved to a zip file and it's pdb file as well.</param>
-        /// <param name="loadPDBFile">Tells the method to load the plugins pdb file or not. Ignored and loaded anyway when a debugger is attached.</param>
-        /// <returns>A list of plugins loaded that derive from the specified type.</returns>
+        /// <param name="path">
+        /// The path to look for plugins to load.
+        /// </param>
+        /// <param name="saveToZip">
+        /// Tells this function to see if the plugin was saved to a zip file and it's pdb file as well.
+        /// </param>
+        /// <param name="loadPDBFile">
+        /// Tells the method to load the plugins pdb file or not. Ignored and loaded anyway when a debugger is attached.
+        /// </param>
+        /// <returns>
+        /// A list of plugins loaded that derive from the specified type.
+        /// </returns>
         public ICollection<T> LoadPlugins(string path, bool saveToZip = false, bool loadPDBFile = false)
         {
             string[] dllFileNames = null;
@@ -63,9 +71,11 @@ namespace Elskom.Generic.Libs
                             try
                             {
 #if NETSTANDARD2_1 || NETCOREAPP2_1 || NETCOREAPP2_2 || NETCOREAPP3_0 || NETCOREAPP3_1 || NET5_0
-                                var pdbFile = loadPDB ? File.ReadAllBytes(dllFile.Replace("dll", "pdb", StringComparison.Ordinal)) : null;
+                                var pdbFile = loadPDB ? File.ReadAllBytes(
+                                    dllFile.Replace("dll", "pdb", StringComparison.Ordinal)) : null;
 #else
-                                var pdbFile = loadPDB ? File.ReadAllBytes(dllFile.Replace("dll", "pdb")) : null;
+                                var pdbFile = loadPDB ? File.ReadAllBytes(
+                                dllFile.Replace("dll", "pdb")) : null;
 #endif
                                 var assembly = loadPDB ?
                                     Assembly.Load(asmFile, pdbFile) :

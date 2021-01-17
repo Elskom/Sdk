@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class TableSet : Operation
     {
@@ -18,14 +18,14 @@ namespace UnluacNET
         {
             // .isTableLiteral() is sufficient when there is debugging info
             // TODO: Fix the commented out section screwing up tables
-            if(m_table.IsTableLiteral /*&& (m_value.IsMultiple || m_table.IsNewEntryAllowed)*/)
+            if(this.m_table.IsTableLiteral /*&& (m_value.IsMultiple || m_table.IsNewEntryAllowed)*/)
             {
-                m_table.AddEntry(new TableLiteral.Entry(m_index, m_value, !m_isTable, m_timestamp));
+                this.m_table.AddEntry(new TableLiteral.Entry(this.m_index, this.m_value, !this.m_isTable, this.m_timestamp));
                 return null;
             }
             else
             {
-                return new Assignment(new TableTarget(m_table, m_index), m_value);
+                return new Assignment(new TableTarget(this.m_table, this.m_index), this.m_value);
             }
         }
 
@@ -34,14 +34,14 @@ namespace UnluacNET
             Expression index,
             Expression value,
             bool isTable,
-            int timestamp) : base(line)
+            int timestamp)
+            : base(line)
         {
-            m_table = table;
-            m_index = index;
-            m_value = value;
-
-            m_isTable = isTable;
-            m_timestamp = timestamp;
+            this.m_table = table;
+            this.m_index = index;
+            this.m_value = value;
+            this.m_isTable = isTable;
+            this.m_timestamp = timestamp;
         }
     }
 }

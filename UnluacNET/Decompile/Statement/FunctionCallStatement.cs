@@ -1,27 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class FunctionCallStatement : Statement
     {
         private FunctionCall m_call;
 
-        public override bool BeginsWithParen
-        {
-            get { return m_call.BeginsWithParen; }
-        }
+        public override bool BeginsWithParen => this.m_call.BeginsWithParen;
 
         public override void Print(Output output)
-        {
-            m_call.Print(output);
-        }
+            => this.m_call.Print(output);
 
         public FunctionCallStatement(FunctionCall call)
-        {
-            m_call = call;
-        }
+            => this.m_call = call;
     }
 }

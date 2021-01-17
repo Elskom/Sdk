@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-using UnluacNET.IO;
-
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.IO;
+    using IO;
+    
     public class LFunctionType : BObjectType<LFunction>
     {
         public static readonly LFunctionType TYPE51 = new LFunctionType();
@@ -16,7 +17,6 @@ namespace UnluacNET
         protected sealed class LFunctionParseState
         {
             public LString Name { get; set; }
-            
             public int LineBegin { get; set; }
             public int LineEnd { get; set; }
             public int LenUpvalues { get; set; }
@@ -24,14 +24,11 @@ namespace UnluacNET
             public int VarArg { get; set; }
             public int MaximumStackSize { get; set; }
             public int Length { get; set; }
-
             public int[] Code { get; set; }
-            
             public BList<LObject> Constants { get; set; }
             public BList<LFunction> Functions { get; set; }
             public BList<BInteger> Lines { get; set; }
             public BList<LLocal> Locals { get; set; }
-            
             public LUpvalue[] Upvalues { get; set; }
         }
 
@@ -44,9 +41,7 @@ namespace UnluacNET
             }
 
             var s = new LFunctionParseState();
-
-            ParseMain(stream, header, s);
-
+            this.ParseMain(stream, header, s);
             return new LFunction(header,
                 s.Code,
                 s.Locals.AsArray(),
@@ -66,14 +61,11 @@ namespace UnluacNET
 
             // HACK HACK HACK
             var bigEndian = header.BigEndian;
-
             s.Length = header.Integer.Parse(stream, header).AsInteger();
             s.Code   = new int[s.Length];
-
             for (var i = 0; i < s.Length; i++)
             {
                 s.Code[i] = stream.ReadInt32(bigEndian);
-
                 if (header.Debug)
                     Console.WriteLine("-- parsed codepoint 0x{0:X}" + s.Code[i]);
             }
@@ -85,7 +77,6 @@ namespace UnluacNET
                 Console.WriteLine("-- beginning to parse constants list");
 
             s.Constants = header.Constant.ParseList(stream, header);
-
             if (header.Debug)
                 Console.WriteLine("-- beginning to parse functions list");
 
@@ -98,18 +89,15 @@ namespace UnluacNET
                 Console.WriteLine("-- beginning to parse source lines list");
 
             s.Lines = header.Integer.ParseList(stream, header);
-
             if (header.Debug)
                 Console.WriteLine("-- beginning to parse locals list");
 
             s.Locals = header.Local.ParseList(stream, header);
-
             if (header.Debug)
                 Console.WriteLine("-- beginning to parse upvalues list");
 
             var upvalNames = header.String.ParseList(stream, header);
             var count = upvalNames.Length.AsInteger();
-
             for (var i = 0; i < count; i++)
                 s.Upvalues[i].Name = upvalNames[i].DeRef();
         }
@@ -117,25 +105,21 @@ namespace UnluacNET
         protected virtual void ParseMain(Stream stream, BHeader header, LFunctionParseState s)
         {
             s.Name = header.String.Parse(stream, header);
-
             s.LineBegin = header.Integer.Parse(stream, header).AsInteger();
             s.LineEnd   = header.Integer.Parse(stream, header).AsInteger();
-
             s.LenUpvalues      = stream.ReadByte();
             s.LenParameter     = stream.ReadByte();
             s.VarArg           = stream.ReadByte();
             s.MaximumStackSize = stream.ReadByte();
-
-            ParseCode(stream, header, s);
-            ParseConstants(stream, header, s);
-            ParseUpvalues(stream, header, s);
-            ParseDebug(stream, header, s);
+            this.ParseCode(stream, header, s);
+            this.ParseConstants(stream, header, s);
+            this.ParseUpvalues(stream, header, s);
+            this.ParseDebug(stream, header, s);
         }
 
         protected virtual void ParseUpvalues(Stream stream, BHeader header, LFunctionParseState s)
         {
             s.Upvalues = new LUpvalue[s.LenUpvalues];
-
             for (var i = 0; i < s.LenUpvalues; i++)
                 s.Upvalues[i] = new LUpvalue();
         }
@@ -146,7 +130,6 @@ namespace UnluacNET
         protected override void ParseDebug(Stream stream, BHeader header, LFunctionParseState s)
         {
             s.Name = header.String.Parse(stream, header);
-
             base.ParseDebug(stream, header, s);
         }
 
@@ -154,21 +137,18 @@ namespace UnluacNET
         {
             s.LineBegin = header.Integer.Parse(stream, header).AsInteger();
             s.LineEnd = header.Integer.Parse(stream, header).AsInteger();
-
             s.LenParameter     = stream.ReadByte();
             s.VarArg           = stream.ReadByte();
             s.MaximumStackSize = stream.ReadByte();
-
-            ParseCode(stream, header, s);
-            ParseConstants(stream, header, s);
-            ParseUpvalues(stream, header, s);
-            ParseDebug(stream, header, s);
+            this.ParseCode(stream, header, s);
+            this.ParseConstants(stream, header, s);
+            this.ParseUpvalues(stream, header, s);
+            this.ParseDebug(stream, header, s);
         }
 
         protected override void ParseUpvalues(Stream stream, BHeader header, LFunctionParseState s)
         {
             var upvalues = header.UpValue.ParseList(stream, header);
-
             s.LenUpvalues = upvalues.Length.AsInteger();
             s.Upvalues    = upvalues.AsArray();
         }

@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+
     public abstract class LNumber : LObject
     {
-        public static LNumber MakeInteger(int number)
-        {
-            return new LIntNumber(number);
-        }
+        public static LNumber MakeInteger(int number) => new LIntNumber(number);
 
         public override bool Equals(object obj)
         {
             if (obj is LNumber)
-                return Value == ((LNumber)obj).Value;
+                return this.Value == ((LNumber)obj).Value;
 
             return false;
         }
@@ -28,117 +27,93 @@ namespace UnluacNET
     {
         public float Number { get; private set; }
 
-        public override double Value
-        {
-            get { return Number; }
-        }
+        public override double Value => this.Number;
 
         public override bool Equals(object obj)
         {
             if (obj is LFloatNumber)
-                return Number == ((LFloatNumber)obj).Number;
+                return this.Number == ((LFloatNumber)obj).Number;
 
             return base.Equals(obj);
         }
 
         public override string ToString()
         {
-            if (Number == (float)Math.Round(Number))
-                return ((int)Number).ToString();
+            if (this.Number == (float)Math.Round(this.Number))
+                return ((int)this.Number).ToString();
             else
-                return Number.ToString();
+                return this.Number.ToString();
         }
 
         public LFloatNumber(float number)
-        {
-            Number = number;
-        }
+            => this.Number = number;
     }
 
     public class LDoubleNumber : LNumber
     {
         public double Number { get; private set; }
 
-        public override double Value
-        {
-            get { return Number; }
-        }
+        public override double Value => this.Number;
 
         public override bool Equals(object obj)
         {
             if (obj is LDoubleNumber)
-                return Number == ((LDoubleNumber)obj).Number;
+                return this.Number == ((LDoubleNumber)obj).Number;
 
             return base.Equals(obj);
         }
 
         public override string ToString()
         {
-            if (Number == Math.Round(Number))
-                return ((long)Number).ToString();
+            if (this.Number == Math.Round(this.Number))
+                return ((long)this.Number).ToString();
             else
-                return Number.ToString();
+                return this.Number.ToString();
         }
 
         public LDoubleNumber(double number)
-        {
-            Number = number;
-        }
+            => this.Number = number;
     }
 
     public class LIntNumber : LNumber
     {
         public int Number { get; private set; }
 
-        public override double Value
-        {
-            get { return Number; }
-        }
+        public override double Value => this.Number;
 
         public override bool Equals(object obj)
         {
             if (obj is LIntNumber)
-                return Number == ((LIntNumber)obj).Number;
+                return this.Number == ((LIntNumber)obj).Number;
             
             return base.Equals(obj);
         }
 
         public override string ToString()
-        {
-            return Number.ToString();
-        }
+            => this.Number.ToString();
 
         public LIntNumber(int number)
-        {
-            Number = number;
-        }
+            => this.Number = number;
     }
 
     public class LLongNumber : LNumber
     {
         public long Number { get; private set; }
 
-        public override double Value
-        {
-            get { return Number; }
-        }
+        public override double Value => this.Number;
 
         public override bool Equals(object obj)
         {
             if (obj is LLongNumber)
-                return Number == ((LLongNumber)obj).Number;
+                return this.Number == ((LLongNumber)obj).Number;
 
             return base.Equals(obj);
         }
 
         public override string ToString()
-        {
-            return Number.ToString();
-        }
+            => this.Number.ToString();
 
         public LLongNumber(long number)
-        {
-            Number = number;
-        }
+            => this.Number = number;
     }
 }

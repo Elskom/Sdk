@@ -1,62 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.Collections.Generic;
+
     public class OuterBlock : Block
     {
         private readonly List<Statement> m_statements;
 
-        public override bool Breakable
-        {
-            get { return false; }
-        }
+        public override bool Breakable => false;
 
-        public override bool IsContainer
-        {
-            get { return true; }
-        }
+        public override bool IsContainer => true;
 
-        public override bool IsUnprotected
-        {
-            get { return false; }
-        }
+        public override bool IsUnprotected => false;
 
-        public override int ScopeEnd
-        {
-            get { return (End - 1) + Function.Header.Version.OuterBlockScopeAdjustment; }
-        }
+        public override int ScopeEnd => (this.End - 1) + this.Function.Header.Version.OuterBlockScopeAdjustment;
 
         public override void AddStatement(Statement statement)
-        {
-            m_statements.Add(statement);
-        }
+            => this.m_statements.Add(statement);
 
         public override int GetLoopback()
-        {
-            throw new InvalidOperationException();
-        }
+            => throw new InvalidOperationException();
 
         public override void Print(Output output)
         {
             /* extra return statement */
-            var last = m_statements.Count - 1;
-
-            if (last < 0 || !(m_statements[last] is Return))
-                throw new InvalidOperationException(m_statements[last].ToString());
+            var last = this.m_statements.Count - 1;
+            if (last < 0 || !(this.m_statements[last] is Return))
+                throw new InvalidOperationException(this.m_statements[last].ToString());
 
             // this doesn't seem like appropriate behavior???
-            m_statements.RemoveAt(last);
-
-            Statement.PrintSequence(output, m_statements);
+            this.m_statements.RemoveAt(last);
+            Statement.PrintSequence(output, this.m_statements);
         }
 
         public OuterBlock(LFunction function, int length)
             : base(function, 0, length + 1)
-        {
-            m_statements = new List<Statement>(length);
-        }
+            => this.m_statements = new List<Statement>(length);
     }
 }

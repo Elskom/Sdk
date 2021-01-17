@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class Function
     {
@@ -11,25 +11,18 @@ namespace UnluacNET
 
         public Function(LFunction function)
         {
-            m_constants = new Constant[function.Constants.Length];
-
-            for (var i = 0; i < m_constants.Length; i++)
-                m_constants[i] = new Constant(function.Constants[i]);
+            this.m_constants = new Constant[function.Constants.Length];
+            for (var i = 0; i < this.m_constants.Length; i++)
+                this.m_constants[i] = new Constant(function.Constants[i]);
         }
 
         public string GetGlobalName(int constantIndex)
-        {
-            return m_constants[constantIndex].AsName();
-        }
+            => this.m_constants[constantIndex].AsName();
 
         public ConstantExpression GetConstantExpression(int constantIndex)
-        {
-            return new ConstantExpression(m_constants[constantIndex], constantIndex);
-        }
+            => new ConstantExpression(this.m_constants[constantIndex], constantIndex);
 
         public GlobalExpression GetGlobalExpression(int constantIndex)
-        {
-            return new GlobalExpression(GetGlobalName(constantIndex), constantIndex);
-        }
+            => new GlobalExpression(this.GetGlobalName(constantIndex), constantIndex);
     }
 }

@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.Collections.Generic;
+
     public class FunctionCall : Expression
     {
         private readonly Expression m_function;
         private readonly Expression[] m_arguments;
-        
         private readonly bool m_multiple;
 
         private bool IsMethodCall
-        {
-            get
-            {
-                return m_function.IsMemberAccess &&
-                    m_arguments.Length > 0 &&
-                    (m_function.GetTable() == m_arguments[0]);
-            }
-        }
+            => this.m_function.IsMemberAccess &&
+               this.m_arguments.Length > 0 &&
+               (this.m_function.GetTable() == this.m_arguments[0]);
 
         public override bool BeginsWithParen
         {
             get
             {
-                var obj = (IsMethodCall) ? m_function.GetTable() : m_function;
-
+                var obj = (this.IsMethodCall) ? this.m_function.GetTable() : this.m_function;
                 return obj.IsClosure || obj.IsConstant || obj.BeginsWithParen;
             }
         }
@@ -36,26 +32,20 @@ namespace UnluacNET
         {
             get
             {
-                var index = m_function.ConstantIndex;
-
-                foreach (var argument in m_arguments)
+                var index = this.m_function.ConstantIndex;
+                foreach (var argument in this.m_arguments)
                     index = Math.Max(argument.ConstantIndex, index);
 
                 return index;
             }
         }
 
-        public override bool IsMultiple
-        {
-            get { return m_multiple; }
-        }
+        public override bool IsMultiple => this.m_multiple;
 
         public override void Print(Output output)
         {
-            var args = new List<Expression>(m_arguments.Length);
-
-            var obj = (IsMethodCall) ? m_function.GetTable() : m_function;
-
+            var args = new List<Expression>(this.m_arguments.Length);
+            var obj = (this.IsMethodCall) ? this.m_function.GetTable() : this.m_function;
             if (obj.IsClosure || obj.IsConstant)
             {
                 output.Print("(");
@@ -67,14 +57,14 @@ namespace UnluacNET
                 obj.Print(output);
             }
 
-            if (IsMethodCall)
+            if (this.IsMethodCall)
             {
                 output.Print(":");
-                output.Print(m_function.GetField());
+                output.Print(this.m_function.GetField());
             }
 
-            for (var i = (IsMethodCall) ? 1 : 0; i < m_arguments.Length; i++)
-                args.Add(m_arguments[i]);
+            for (var i = (this.IsMethodCall) ? 1 : 0; i < this.m_arguments.Length; i++)
+                args.Add(this.m_arguments[i]);
 
             output.Print("(");
             Expression.PrintSequence(output, args, false, true);
@@ -83,22 +73,20 @@ namespace UnluacNET
 
         public override void PrintMultiple(Output output)
         {
-            if (!m_multiple)
+            if (!this.m_multiple)
                 output.Print("(");
 
-            Print(output);
-
-            if (!m_multiple)
+            this.Print(output);
+            if (!this.m_multiple)
                 output.Print(")");
         }
 
         public FunctionCall(Expression function, Expression[] arguments, bool multiple)
             : base(PRECEDENCE_ATOMIC)
         {
-            m_function = function;
-            m_arguments = arguments;
-
-            m_multiple = multiple;
+            this.m_function = function;
+            this.m_arguments = arguments;
+            this.m_multiple = multiple;
         }
     }
 }

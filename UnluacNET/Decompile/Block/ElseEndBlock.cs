@@ -1,43 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.Collections.Generic;
+
     public class ElseEndBlock : Block
     {
         private readonly List<Statement> m_statements;
 
         public IfThenElseBlock Partner { get; set; }
 
-        public override bool Breakable
-        {
-            get { return false; }
-        }
+        public override bool Breakable => false;
 
-        public override bool IsContainer
-        {
-            get { return true; }
-        }
+        public override bool IsContainer => true;
 
-        public override bool IsUnprotected
-        {
-            get { return false; }
-        }
+        public override bool IsUnprotected => false;
 
         public override void AddStatement(Statement statement)
-        {
-            m_statements.Add(statement);
-        }
+            => this.m_statements.Add(statement);
 
         public override int CompareTo(Block block)
         {
-            if (block == Partner)
+            if (block == this.Partner)
                 return 1;
 
             var result = base.CompareTo(block);
-
             //if (result == 0 && block is ElseEndBlock)
             //    Console.WriteLine("HEY HEY HEY");
 
@@ -45,41 +36,32 @@ namespace UnluacNET
         }
 
         public override int GetLoopback()
-        {
-            throw new InvalidOperationException();
-        }
+            => throw new InvalidOperationException();
 
         public override void Print(Output output)
         {
             output.Print("else");
-
-            if (m_statements.Count == 1 && m_statements[0] is IfThenEndBlock)
+            if (this.m_statements.Count == 1 && this.m_statements[0] is IfThenEndBlock)
             {    
-                m_statements[0].Print(output);
+                this.m_statements[0].Print(output);
             }
-            else if (m_statements.Count == 2 && m_statements[0] is IfThenElseBlock && m_statements[1] is ElseEndBlock)
+            else if (this.m_statements.Count == 2 && this.m_statements[0] is IfThenElseBlock && this.m_statements[1] is ElseEndBlock)
             {
-                m_statements[0].Print(output);
-                m_statements[1].Print(output);
+                this.m_statements[0].Print(output);
+                this.m_statements[1].Print(output);
             }
             else
             {
                 output.PrintLine();
-
                 output.IncreaseIndent();
-
-                Statement.PrintSequence(output, m_statements);
-
+                Statement.PrintSequence(output, this.m_statements);
                 output.DecreaseIndent();
-                
                 output.Print("end");
             }
         }
 
         public ElseEndBlock(LFunction function, int begin, int end)
             : base(function, begin, end)
-        {
-            m_statements = new List<Statement>(end - begin + 1);
-        }
+            => this.m_statements = new List<Statement>(end - begin + 1);
     }
 }

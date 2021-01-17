@@ -1,5 +1,11 @@
-﻿namespace GitBuildInfo
+﻿// Copyright (c) 2018-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: MIT, see LICENSE for more details.
+
+namespace GitBuildInfo
 {
+#if !NOTASKS
     /// <summary>
     /// A MSBuild task that generates the msbuild information for an assembly.
     ///
@@ -10,8 +16,9 @@
         /// <inheritdoc/>
         public override bool Execute()
         {
-            this.isGeneric = true;
+            this.SetGeneric(true);
             return base.Execute();
         }
     }
+#endif
 }

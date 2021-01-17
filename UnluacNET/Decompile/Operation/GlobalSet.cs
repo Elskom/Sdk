@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class GlobalSet : Operation
     {
@@ -11,15 +11,13 @@ namespace UnluacNET
         private Expression m_value;
 
         public override Statement Process(Registers r, Block block)
-        {
-            return new Assignment(new GlobalTarget(m_global), m_value);
-        }
+            => new Assignment(new GlobalTarget(this.m_global), this.m_value);
 
         public GlobalSet(int line, string global, Expression value)
             : base(line)
         {
-            m_global = global;
-            m_value = value;
+            this.m_global = global;
+            this.m_value = value;
         }
     }
 }

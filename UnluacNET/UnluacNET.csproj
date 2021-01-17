@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <TargetFrameworks>net40;net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;net5.0;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1;netstandard2.0;netstandard2.1</TargetFrameworks>
     <AssemblyTitle>Unluac .NET</AssemblyTitle>
     <Product>Unluac .NET</Product>
     <Description>Lua 5.1 decompiler based on 'unluac' by tehtmi.</Description>
-    <Copyright>Copyright © 2014 Mark Ludwig, tehtmi</Copyright>
+    <Copyright>Original UnluacNET Copyright © 2014 Mark Ludwig, tehtmi, Copyright © 2020-2021</Copyright>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>bin\$(Configuration)\UnluacNET.xml</DocumentationFile>
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -24,24 +25,69 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>preview</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <NoWarn>1591, 0659</NoWarn>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Test\**" />
     <EmbeddedResource Remove="Test\**" />
     <None Remove="Test\**" />
+    <None Remove="stylecop.json" />
   </ItemGroup>
+
   <ItemGroup>
+    <ProjectReference Include="../GitBuildInfo/GitBuildInfo.csproj" ReferenceOutputAssembly="false">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj" />
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SecurityCodeScan" Version="3.5.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.16.0.25740">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="IDisposableAnalyzers" Version="3.4.8">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-21061-02" PrivateAssets="All" />
+    <PackageReference Condition="!$(TargetFramework.StartsWith('netcoreapp')) AND !$(TargetFramework.StartsWith('netstandard')) AND '$(TargetFramework)' != 'net5.0'" Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
     <Reference Include="System.Data.DataSetExtensions" Condition="!$(TargetFramework.StartsWith('net5')) AND !$(TargetFramework.StartsWith('netstandard')) AND !$(TargetFramework.StartsWith('netcoreapp'))" />
     <Reference Include="Microsoft.CSharp" Condition="!$(TargetFramework.StartsWith('net5')) AND !$(TargetFramework.StartsWith('netstandard')) AND !$(TargetFramework.StartsWith('netcoreapp'))" />
   </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <Import Project="../GitBuildInfo/buildMultiTargeting/GitBuildInfo.props" />
+
+  <Target Name="GitBuildInfo" BeforeTargets="PrepareForBuild">
+    <GitBuildInfoTask OutputPath="$(ProjectDir)\GitAssemblyInfo.cs" AssemblyType="Elskom.Generic.Libs.UnluacNET.Decompiler" />
+  </Target>
+
 </Project>

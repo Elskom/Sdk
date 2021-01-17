@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class LFunction : BObject
     {
@@ -13,7 +13,6 @@ namespace UnluacNET
         public LObject[] Constants { get; set; }
         public LUpvalue[] UpValues { get; set; }
         public LFunction[] Functions { get; set; }
-        
         public int MaxStackSize { get; set; }
         public int NumUpValues { get; set; }
         public int NumParams { get; set; }
@@ -23,16 +22,16 @@ namespace UnluacNET
             LObject[] constants, LUpvalue[] upvalues, LFunction[] functions,
             int maximumStackSize, int numUpValues, int numParams, int vararg)
         {
-            Header          = header;
-            Code            = code;
-            Locals          = locals;
-            Constants       = constants;
-            UpValues        = upvalues;
-            Functions       = functions;
-            MaxStackSize    = maximumStackSize;
-            NumUpValues     = numUpValues;
-            NumParams       = numParams;
-            VarArg          = vararg;
+            this.Header          = header;
+            this.Code            = code;
+            this.Locals          = locals;
+            this.Constants       = constants;
+            this.UpValues        = upvalues;
+            this.Functions       = functions;
+            this.MaxStackSize    = maximumStackSize;
+            this.NumUpValues     = numUpValues;
+            this.NumParams       = numParams;
+            this.VarArg          = vararg;
         }
     }
 }

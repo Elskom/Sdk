@@ -1,54 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+
     public class Break : Block
     {
         public int Target { get; private set; }
 
-        public override bool Breakable
-        {
-            get { return false; }
-        }
+        public override bool Breakable => false;
 
-        public override bool IsContainer
-        {
-            get { return false; }
-        }
+        public override bool IsContainer => false;
 
-        public override bool IsUnprotected
-        {
+        public override bool IsUnprotected =>
             //Actually, it is unprotected, but not really a block
-            get { return false; }
-        }
+            false;
 
         public override void AddStatement(Statement statement)
-        {
-            throw new InvalidOperationException();
-        }
+            => throw new InvalidOperationException();
 
         public override int GetLoopback()
-        {
-            throw new InvalidOperationException();
-        }
+            => throw new InvalidOperationException();
 
         public override void Print(Output output)
-        {
-            output.Print("do return end");
-        }
+            => output.Print("do return end");
 
         public override void PrintTail(Output output)
-        {
-            output.Print("break");
-        }
+            => output.Print("break");
 
         public Break(LFunction function, int line, int target)
             : base(function, line, line)
-        {
-            Target = target;
-        }
+            => this.Target = target;
     }
 }

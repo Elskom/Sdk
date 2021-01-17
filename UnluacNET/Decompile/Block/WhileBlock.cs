@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Collections.Generic;
+
     public class WhileBlock : Block
     {
         private readonly Branch m_branch;
@@ -12,62 +14,39 @@ namespace UnluacNET
         private readonly Registers m_registers;
         private readonly List<Statement> m_statements;
 
-        public override int ScopeEnd
-        {
-            get { return End - 2; }
-        }
+        public override int ScopeEnd => this.End - 2;
 
-        public override bool Breakable
-        {
-            get { return true; }
-        }
+        public override bool Breakable => true;
 
-        public override bool IsContainer
-        {
-            get { return true; }
-        }
+        public override bool IsContainer => true;
 
-        public override bool IsUnprotected
-        {
-            get { return true; }
-        }
+        public override bool IsUnprotected => true;
 
         public override void AddStatement(Statement statement)
-        {
-            m_statements.Add(statement);
-        }
+            => this.m_statements.Add(statement);
 
         public override int GetLoopback()
-        {
-            return m_loopback;
-        }
+            => this.m_loopback;
 
         public override void Print(Output output)
         {
             output.Print("while ");
-            
-            m_branch.AsExpression(m_registers).Print(output);
-
+            this.m_branch.AsExpression(this.m_registers).Print(output);
             output.Print(" do");
             output.PrintLine();
-
             output.IncreaseIndent();
-
-            Statement.PrintSequence(output, m_statements);
-            
+            Statement.PrintSequence(output, this.m_statements);
             output.DecreaseIndent();
-
             output.Print("end");
         }
 
         public WhileBlock(LFunction function, Branch branch, int loopback, Registers registers)
             : base(function, branch.Begin, branch.End)
         {
-            m_branch = branch;
-            m_loopback = loopback;
-            m_registers = registers;
-
-            m_statements = new List<Statement>(branch.End - branch.Begin + 1);
+            this.m_branch = branch;
+            this.m_loopback = loopback;
+            this.m_registers = registers;
+            this.m_statements = new List<Statement>(branch.End - branch.Begin + 1);
         }
     }
 }

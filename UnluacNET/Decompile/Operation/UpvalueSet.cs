@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class UpvalueSet : Operation
     {
@@ -11,15 +11,13 @@ namespace UnluacNET
         private Expression m_value;
 
         public override Statement Process(Registers r, Block block)
-        {
-            return new Assignment(m_target, m_value);
-        }
+            => new Assignment(this.m_target, this.m_value);
 
         public UpvalueSet(int line, string upvalue, Expression value)
             : base(line)
         {
-            m_target = new UpvalueTarget(upvalue);
-            m_value = value;
+            this.m_target = new UpvalueTarget(upvalue);
+            this.m_value = value;
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class AndBranch : Branch
     {
@@ -11,34 +11,29 @@ namespace UnluacNET
         private readonly Branch m_right;
 
         public override Expression AsExpression(Registers registers)
-        {
-            return Expression.MakeAND(m_left.AsExpression(registers), m_right.AsExpression(registers));
-        }
+            => Expression.MakeAND(this.m_left.AsExpression(registers), this.m_right.AsExpression(registers));
 
         public override int GetRegister()
         {
-            var rLeft = m_left.GetRegister();
-            var rRight = m_right.GetRegister();
-
+            var rLeft = this.m_left.GetRegister();
+            var rRight = this.m_right.GetRegister();
             return (rLeft == rRight) ? rLeft : -1;
         }
 
         public override Branch Invert()
-        {
-            return new OrBranch(m_left.Invert(), m_right.Invert());
-        }
+            => new OrBranch(this.m_left.Invert(), this.m_right.Invert());
 
         public override void UseExpression(Expression expression)
         {
-            m_left.UseExpression(expression);
-            m_right.UseExpression(expression);
+            this.m_left.UseExpression(expression);
+            this.m_right.UseExpression(expression);
         }
 
         public AndBranch(Branch left, Branch right)
             : base(right.Line, right.Begin, right.End)
         {
-            m_left = left;
-            m_right = right;
+            this.m_left = left;
+            this.m_right = right;
         }
     }
 }

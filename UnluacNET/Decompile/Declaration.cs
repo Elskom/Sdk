@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class Declaration
     {
         public string Name { get; private set; }
-        
         public int Begin { get; private set; }
         public int End { get; private set; }
-
         public int Register { get; set; }
 
         //Whether this is an invisible for-loop book-keeping variable.
@@ -22,16 +20,16 @@ namespace UnluacNET
 
         public Declaration(LLocal local)
         {
-            Name = local.ToString();
-            Begin = local.Start;
-            End = local.End;
+            this.Name = local.ToString();
+            this.Begin = local.Start;
+            this.End = local.End;
         }
 
         public Declaration(string name, int begin, int end)
         {
-            Name = name;
-            Begin = begin;
-            End = end;
+            this.Name = name;
+            this.Begin = begin;
+            this.End = end;
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    
     public class OpcodeMap
     {
         /*
@@ -15,11 +17,7 @@ namespace UnluacNET
         ** bit 6: instruction set register A
         ** bit 7: operator is a test
         */
-        private static int opmode(byte T, byte A, OpArgMask B, OpArgMask C, OpMode M)
-        {
-            return (((T) << 7) | ((A) << 6) | (((byte)B) << 4) | (((byte)C) << 2) | ((byte)M));
-        }
-
+        private static int opmode(byte T, byte A, OpArgMask B, OpArgMask C, OpMode M) => (((T) << 7) | ((A) << 6) | (((byte)B) << 4) | (((byte)C) << 2) | ((byte)M));
         private readonly int[] luaP_opmodes = {
           /*       T  A    B                 C                 mode             opcode       */
             opmode(0, 1, OpArgMask.OpArgR, OpArgMask.OpArgN, OpMode.iABC)    /* OP_MOVE */
@@ -63,17 +61,13 @@ namespace UnluacNET
         };
         
         private Op[] m_map;
-
-        public Op this[int opcode]
-        {
-            get { return GetOp(opcode); }
-        }
+        public Op this[int opcode] => this.GetOp(opcode);
 
         public Op GetOp(int opcode)
         {
-            if (opcode >= 0 && opcode < m_map.Length)
+            if (opcode >= 0 && opcode < this.m_map.Length)
             {
-                return m_map[opcode];
+                return this.m_map[opcode];
             }
             else
             {
@@ -83,35 +77,25 @@ namespace UnluacNET
         }
 
         public OpMode GetOpMode(int m)
-        {
-            return (OpMode)(luaP_opmodes[m] & 3);
-        }
+            => (OpMode)(this.luaP_opmodes[m] & 3);
 
         public OpArgMask GetBMode(int m)
-        {
-            return (OpArgMask)((luaP_opmodes[m] >> 4) & 3);
-        }
+            => (OpArgMask)((this.luaP_opmodes[m] >> 4) & 3);
 
         public OpArgMask GetCMode(int m)
-        {
-            return (OpArgMask)((luaP_opmodes[m] >> 2) & 3);
-        }
+            => (OpArgMask)((this.luaP_opmodes[m] >> 2) & 3);
 
         public bool TestAMode(int m)
-        {
-            return (luaP_opmodes[m] & (1 << 6)) == 1;
-        }
+            => (this.luaP_opmodes[m] & (1 << 6)) == 1;
 
         public bool TestTMode(int m)
-        {
-            return (luaP_opmodes[m] & (1 << 7)) == 1;
-        }
+            => (this.luaP_opmodes[m] & (1 << 7)) == 1;
 
         public OpcodeMap(int version)
         {
             if (version == 0x51)
             {
-                m_map = new Op[38] {
+                this.m_map = new Op[38] {
                     Op.MOVE,
                     Op.LOADK,
                     Op.LOADBOOL,
@@ -154,7 +138,7 @@ namespace UnluacNET
             }
             else
             {
-                m_map = new Op[40] {
+                this.m_map = new Op[40] {
                     Op.MOVE,
                     Op.LOADK,
                     Op.LOADKX,

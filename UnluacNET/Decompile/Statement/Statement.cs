@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Collections.Generic;
+    
     public abstract class Statement
     {
         public string Comment { get; set; }
 
-        public virtual bool BeginsWithParen
-        {
-            get { return false; }
-        }
+        public virtual bool BeginsWithParen => false;
 
         public abstract void Print(Output output);
 
         public static void PrintSequence(Output output, List<Statement> statements)
         {
             var count = statements.Count;
-
             for (var i = 0; i < count; i++)
             {
                 var last = (i + 1 == count);
-
                 var statement = statements[i];
                 var next = last ? null : statements[i + 1];
-
                 if (last)
                     statement.PrintTail(output);
                 else
@@ -41,8 +37,6 @@ namespace UnluacNET
         }
 
         public virtual void PrintTail(Output output)
-        {
-            Print(output);
-        }
+            => this.Print(output);
     }
 }

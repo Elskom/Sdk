@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-using UnluacNET.IO;
-
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.IO;
+    using IO;
+    
     public class LNumberType : BObjectType<LNumber>
     {
         public int Size { get; private set; }
@@ -17,12 +18,10 @@ namespace UnluacNET
         {
             // HACK HACK HACK
             var bigEndian = header.BigEndian;
-
             LNumber value = null;
-
-            if (Integral)
+            if (this.Integral)
             {
-                switch (Size)
+                switch (this.Size)
                 {
                 case 4:
                     value = new LIntNumber(stream.ReadInt32(bigEndian));
@@ -34,7 +33,7 @@ namespace UnluacNET
             }
             else
             {
-                switch (Size)
+                switch (this.Size)
                 {
                 case 4:
                     value = new LFloatNumber(stream.ReadSingle(bigEndian));
@@ -56,9 +55,8 @@ namespace UnluacNET
 
         public LNumberType(int size, bool integral)
         {
-            Size = size;
-            Integral = integral;
-
+            this.Size = size;
+            this.Integral = integral;
             if (!(size == 4 || size == 8))
                 throw new InvalidOperationException("The input chunk has an unsupported Lua number size: " + size);
         }

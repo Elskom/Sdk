@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class LString : LObject
     {
@@ -11,27 +11,23 @@ namespace UnluacNET
         public string Value { get; private set; }
 
         public override string DeRef()
-        {
-            return Value;
-        }
+            => this.Value;
 
         public override bool Equals(object obj)
         {
             if (obj is LString)
-                return Value == ((LString)obj).Value;
+                return this.Value == ((LString)obj).Value;
 
             return false;
         }
 
         public override string ToString()
-        {
-            return string.Format("\"{0}\"", Value);
-        }
+            => string.Format("\"{0}\"", this.Value);
 
         public LString(BSizeT size, string value)
         {
-            Size = size;
-            Value = (value.Length == 0) ? string.Empty : value.Substring(0, value.Length - 1);
+            this.Size = size;
+            this.Value = (value.Length == 0) ? string.Empty : value.Substring(0, value.Length - 1);
         }
     }
 }

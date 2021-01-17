@@ -1,75 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class ConstantExpression : Expression
     {
         private readonly Constant m_constant;
         private readonly int m_index;
 
-        public override int ConstantIndex
-        {
-            get { return m_index; }
-        }
+        public override int ConstantIndex => this.m_index;
 
-        public override bool IsConstant
-        {
-            get { return true; }
-        }
+        public override bool IsConstant => true;
 
-        public override bool IsBoolean
-        {
-            get { return m_constant.IsBoolean; }
-        }
+        public override bool IsBoolean => this.m_constant.IsBoolean;
 
-        public override bool IsBrief
-        {
-            get { return !m_constant.IsString || m_constant.AsName().Length <= 10; }
-        }
+        public override bool IsBrief => !this.m_constant.IsString || this.m_constant.AsName().Length <= 10;
 
-        public override bool IsIdentifier
-        {
-            get { return m_constant.IsIdentifier; }
-        }
+        public override bool IsIdentifier => this.m_constant.IsIdentifier;
 
-        public override bool IsInteger
-        {
-            get { return m_constant.IsInteger; }
-        }
+        public override bool IsInteger => this.m_constant.IsInteger;
 
-        public override bool IsString
-        {
-            get { return m_constant.IsString; }
-        }
+        public override bool IsString => this.m_constant.IsString;
 
-        public override bool IsNil
-        {
-            get { return m_constant.IsNil; }
-        }
+        public override bool IsNil => this.m_constant.IsNil;
 
         public override int AsInteger()
-        {
-            return m_constant.AsInteger();
-        }
+            => this.m_constant.AsInteger();
 
         public override string AsName()
-        {
-            return m_constant.AsName();
-        }
+            => this.m_constant.AsName();
 
         public override void Print(Output output)
-        {
-            m_constant.Print(output);
-        }
+            => this.m_constant.Print(output);
 
         public ConstantExpression(Constant constant, int index)
             : base(PRECEDENCE_ATOMIC)
         {
-            m_constant = constant;
-            m_index = index;
+            this.m_constant = constant;
+            this.m_index = index;
         }
     }
 }

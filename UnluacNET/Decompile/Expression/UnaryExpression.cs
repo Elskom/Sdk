@@ -1,31 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class UnaryExpression : Expression
     {
         private readonly string m_op;
         private readonly Expression m_expression;
 
-        public override int ConstantIndex
-        {
-            get { return m_expression.ConstantIndex; }
-        }
+        public override int ConstantIndex => this.m_expression.ConstantIndex;
 
         public override void Print(Output output)
         {
-            var precedence = (Precedence > m_expression.Precedence);
-            
-            output.Print(m_op);
-
+            var precedence = (this.Precedence > this.m_expression.Precedence);
+            output.Print(this.m_op);
             if (precedence)
                 output.Print("(");
 
-            m_expression.Print(output);
-
+            this.m_expression.Print(output);
             if (precedence)
                 output.Print(")");
         }
@@ -33,8 +27,8 @@ namespace UnluacNET
         public UnaryExpression(string op, Expression expression, int precedence)
             : base(precedence)
         {
-            m_op = op;
-            m_expression = expression;
+            this.m_op = op;
+            this.m_expression = expression;
         }
     }
 }

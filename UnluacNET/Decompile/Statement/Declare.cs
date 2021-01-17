@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Collections.Generic;
+    
     public class Declare : Statement
     {
         private readonly List<Declaration> m_decls;
@@ -12,18 +14,15 @@ namespace UnluacNET
         public override void Print(Output output)
         {
             output.Print("local ");
-            output.Print(m_decls[0].Name);
-
-            for (var i = 1; i < m_decls.Count; i++)
+            output.Print(this.m_decls[0].Name);
+            for (var i = 1; i < this.m_decls.Count; i++)
             {
                 output.Print(", ");
-                output.Print(m_decls[i].Name);
+                output.Print(this.m_decls[i].Name);
             }
         }
 
         public Declare(List<Declaration> decls)
-        {
-            m_decls = decls;
-        }
+            => this.m_decls = decls;
     }
 }

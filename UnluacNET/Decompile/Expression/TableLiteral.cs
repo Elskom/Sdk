@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System;
+    using System.Collections.Generic;
+
     public class TableLiteral : Expression
     {
         public sealed class Entry : IComparable<Entry>
@@ -16,16 +19,14 @@ namespace UnluacNET
             public int Timestamp { get; private set; }
 
             public int CompareTo(Entry e)
-            {
-                return Timestamp.CompareTo(e.Timestamp);
-            }
+                => this.Timestamp.CompareTo(e.Timestamp);
 
             public Entry(Expression key, Expression value, bool isList, int timestamp)
             {
-                Key = key;
-                Value = value;
-                IsList = isList;
-                Timestamp = timestamp;
+                this.Key = key;
+                this.Value = value;
+                this.IsList = isList;
+                this.Timestamp = timestamp;
             }
         }
 
@@ -38,28 +39,24 @@ namespace UnluacNET
 
         private void PrintEntry(int index, Output output)
         {
-            var entry = m_entries[index];
-            
+            var entry = this.m_entries[index];
             var key = entry.Key;
             var value = entry.Value;
-
             var isList = entry.IsList;
-            var multiple = (index + 1 >= m_entries.Count) || value.IsMultiple;
-
-            if (isList && key.IsInteger && m_listLength == key.AsInteger())
+            var multiple = (index + 1 >= this.m_entries.Count) || value.IsMultiple;
+            if (isList && key.IsInteger && this.m_listLength == key.AsInteger())
             {
                 if (multiple)
                     value.PrintMultiple(output);
                 else
                     value.Print(output);
 
-                m_listLength++;
+                this.m_listLength++;
             }
-            else if (m_isObject && key.IsIdentifier)
+            else if (this.m_isObject && key.IsIdentifier)
             {
                 output.Print(key.AsName());
                 output.Print(" = ");
-
                 value.Print(output);
             }
             else
@@ -76,8 +73,7 @@ namespace UnluacNET
             get
             {
                 var index = -1;
-
-                foreach (var entry in m_entries)
+                foreach (var entry in this.m_entries)
                 {
                     index = Math.Max(entry.Key.ConstantIndex, index);
                     index = Math.Max(entry.Value.ConstantIndex, index);
@@ -87,50 +83,37 @@ namespace UnluacNET
             }
         }
 
-        public override bool IsBrief
-        {
-            get { return false; }
-        }
+        public override bool IsBrief => false;
 
-        public override bool IsNewEntryAllowed
-        {
-            get { return m_entries.Count < m_capacity; }
-        }
+        public override bool IsNewEntryAllowed => this.m_entries.Count < this.m_capacity;
 
-        public override bool IsTableLiteral
-        {
-            get { return true; }
-        }
+        public override bool IsTableLiteral => true;
 
         public override void AddEntry(Entry entry)
         {
-            m_entries.Add(entry);
-
-            m_isObject  = m_isObject && (entry.IsList || entry.Key.IsIdentifier);
-            m_isList    = m_isList && entry.IsList;
+            this.m_entries.Add(entry);
+            this.m_isObject  = this.m_isObject && (entry.IsList || entry.Key.IsIdentifier);
+            this.m_isList    = this.m_isList && entry.IsList;
         }
 
         public override void Print(Output output)
         {
-            m_entries.Sort();
-            m_listLength = 1;
-
-            if (m_entries.Count == 0)
+            this.m_entries.Sort();
+            this.m_listLength = 1;
+            if (this.m_entries.Count == 0)
             {
                 output.Print("{}");
             }
             else
             {
-                var lineBreak = (m_isList && m_entries.Count > 5) ||
-                                (m_isObject && m_entries.Count > 2) ||
-                                (!m_isObject);
-
+                var lineBreak = (this.m_isList && this.m_entries.Count > 5) ||
+                                (this.m_isObject && this.m_entries.Count > 2) ||
+                                (!this.m_isObject);
                 if (!lineBreak)
                 {
-                    foreach (var entry in m_entries)
+                    foreach (var entry in this.m_entries)
                     {
                         var value = entry.Value;
-
                         if (!value.IsBrief)
                         {
                             lineBreak = true;
@@ -140,29 +123,25 @@ namespace UnluacNET
                 }
 
                 output.Print("{");
-
                 if (lineBreak)
                 {
                     output.PrintLine();
                     output.IncreaseIndent();
                 }
 
-                PrintEntry(0, output);
-
-                if (!m_entries[0].Value.IsMultiple)
+                this.PrintEntry(0, output);
+                if (!this.m_entries[0].Value.IsMultiple)
                 {
-                    for (var i = 1; i < m_entries.Count; i++)
+                    for (var i = 1; i < this.m_entries.Count; i++)
                     {
                         output.Print(",");
-
                         if (lineBreak)
                             output.PrintLine();
                         else
                             output.Print(" ");
 
-                        PrintEntry(i, output);
-
-                        if (m_entries[i].Value.IsMultiple)
+                        this.PrintEntry(i, output);
+                        if (this.m_entries[i].Value.IsMultiple)
                             break;
                     }
                 }
@@ -180,8 +159,8 @@ namespace UnluacNET
         public TableLiteral(int arraySize, int hashSize)
             : base(PRECEDENCE_ATOMIC)
         {
-            m_capacity = arraySize + hashSize;
-            m_entries = new List<Entry>(m_capacity);
+            this.m_capacity = arraySize + hashSize;
+            this.m_entries = new List<Entry>(this.m_capacity);
         }
     }
 }

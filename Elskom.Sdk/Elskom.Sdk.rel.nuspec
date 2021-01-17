@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/Elskom/Sdk/</projectUrl>
     <description>Elskom SDK for development of Els_kom plugins and for Els_kom itself. Also contains libs that can be used for project as well.</description>
     <copyright>Copyright (c) 2018-2021</copyright>
-    <tags>XML GitBuildInformation SettingsFile zlib BlowFish Unluac ZipAssembly ReleasePackaging MessageManager GenericPluginLoader MiniDump PluginFramework PluginUpdateCheck</tags>
+    <tags>XML GitBuildInformation SettingsFile zlib BlowFish Unluac ZipAssembly ReleasePackaging MessageManager GenericPluginLoader MiniDump PluginFramework PluginUpdateCheck GitBuildInfo</tags>
     <repository type="git" url="https://github.com/Elskom/Sdk/" />
     <dependencies>
       <group targetFramework=".NETFramework4.0" />
@@ -168,6 +168,27 @@
     </frameworkAssemblies>
   </metadata>
   <files>
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net40\GitBuildInfo.dll" target="tasks\net40\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net45\GitBuildInfo.dll" target="tasks\net45\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net451\GitBuildInfo.dll" target="tasks\net451\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net452\GitBuildInfo.dll" target="tasks\net452\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net46\GitBuildInfo.dll" target="tasks\net46\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net461\GitBuildInfo.dll" target="tasks\net461\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net462\GitBuildInfo.dll" target="tasks\net462\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net47\GitBuildInfo.dll" target="tasks\net47\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net471\GitBuildInfo.dll" target="tasks\net471\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net472\GitBuildInfo.dll" target="tasks\net472\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net48\GitBuildInfo.dll" target="tasks\net48\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\net5.0\GitBuildInfo.dll" target="tasks\net5.0\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\netcoreapp2.0\GitBuildInfo.dll" target="tasks\netcoreapp2.0\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\netcoreapp2.1\GitBuildInfo.dll" target="tasks\netcoreapp2.1\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\netcoreapp2.2\GitBuildInfo.dll" target="tasks\netcoreapp2.2\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\netcoreapp3.0\GitBuildInfo.dll" target="tasks\netcoreapp3.0\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\netcoreapp3.1\GitBuildInfo.dll" target="tasks\netcoreapp3.1\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\netstandard2.0\GitBuildInfo.dll" target="tasks\netstandard2.0\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\Release\netstandard2.1\GitBuildInfo.dll" target="tasks\netstandard2.1\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\build\GitBuildInfo.props" target="build\GitBuildInfo.props" />
+    <file src="..\GitBuildInfo\buildMultiTargeting\GitBuildInfo.props" target="buildMultiTargeting\GitBuildInfo.props" />
     <file src="..\GitInformation\src\GitInformation\bin\Any CPU\Release\net40\AraHaan.GitInformation.dll" target="lib\net40\AraHaan.GitInformation.dll" />
     <file src="..\GitInformation\src\GitInformation\bin\Any CPU\Release\net40\AraHaan.GitInformation.xml" target="lib\net40\AraHaan.GitInformation.xml" />
     <file src="..\GitInformation\src\GitInformation\bin\Any CPU\Release\net40\AraHaan.GitInformation.xml" target="ref\net40\AraHaan.GitInformation.xml" />

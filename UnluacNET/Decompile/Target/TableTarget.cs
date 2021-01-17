@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
-namespace UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET
 {
     public class TableTarget : Target
     {
@@ -14,9 +14,9 @@ namespace UnluacNET
         {
             get
             {
-                if (!m_index.IsIdentifier)
+                if (!this.m_index.IsIdentifier)
                     return false;
-                if (!m_table.IsDotChain)
+                if (!this.m_table.IsDotChain)
                     return false;
 
                 return true;
@@ -24,21 +24,19 @@ namespace UnluacNET
         }
 
         public override void Print(Output output)
-        {
-            new TableReference(m_table, m_index).Print(output);
-        }
+            => new TableReference(this.m_table, this.m_index).Print(output);
 
         public override void PrintMethod(Output output)
         {
-            m_table.Print(output);
+            this.m_table.Print(output);
             output.Print(":");
-            output.Print(m_index.AsName());
+            output.Print(this.m_index.AsName());
         }
 
         public TableTarget(Expression table, Expression index)
         {
-            m_table = table;
-            m_index = index;
+            this.m_table = table;
+            this.m_index = index;
         }
     }
 }
