@@ -6,10 +6,17 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class AlwaysLoop : Block
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly List<Statement> m_statements;
+
+        public AlwaysLoop(LFunction function, int begin, int end)
+            : base(function, begin, end)
+            => this.m_statements = new List<Statement>();
 
         public override bool Breakable => true;
 
@@ -29,13 +36,9 @@ namespace Elskom.Generic.Libs.UnluacNET
         {
             output.PrintLine("while true do");
             output.IncreaseIndent();
-            Statement.PrintSequence(output, this.m_statements);
+            PrintSequence(output, this.m_statements);
             output.DecreaseIndent();
             output.Print("end");
         }
-
-        public AlwaysLoop(LFunction function, int begin, int end)
-            : base(function, begin, end)
-            => this.m_statements = new List<Statement>();
     }
 }

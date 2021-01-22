@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2020, AraHaan.
+// Copyright (c) 2018-2021, AraHaan.
 // https://github.com/AraHaan/
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
@@ -105,7 +105,7 @@ namespace XmlAbstraction
                     throw new DirectoryNotFoundException(Resources.XmlObject_Directory_Not_Found);
                 }
 
-#if NET40 || NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48 || NETCOREAPP2_0 || NETSTANDARD2_0
+#if !NETCOREAPP2_1 && !NETCOREAPP2_2 && !NETCOREAPP3_0 && !NETCOREAPP3_1 && !NETSTANDARD2_1 && !NET5_0
                 if (!xmlfilename.Contains(Directory.GetCurrentDirectory()) &&
 #else
                 if (!xmlfilename.Contains(Directory.GetCurrentDirectory(), StringComparison.Ordinal) &&
@@ -116,7 +116,7 @@ namespace XmlAbstraction
                 }
             }
 
-#if NET40 || NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48 || NETCOREAPP2_0 || NETSTANDARD2_0
+#if !NETCOREAPP2_1 && !NETCOREAPP2_2 && !NETCOREAPP3_0 && !NETCOREAPP3_1 && !NETSTANDARD2_1 && !NET5_0
             if (!fallbackxmlcontent.Contains("<?xml version=\"1.0\" encoding=\"utf-8\" ?>"))
 #else
             if (!fallbackxmlcontent.Contains("<?xml version=\"1.0\" encoding=\"utf-8\" ?>", StringComparison.Ordinal))
@@ -175,7 +175,6 @@ namespace XmlAbstraction
 
         // Summary:
         //   Gets a value indicating whether the XML file was externally edited.
-        [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "The member is wrapped in a using block and is never checked against null.", Scope = "member")]
         private bool HasChangedExternally
         {
             get
@@ -234,7 +233,7 @@ namespace XmlAbstraction
         /// </summary>
         /// <param name="elementname">The name of the element to create.</param>
         /// <param name="value">The value for the element.</param>
-        /// <exception cref="Exception">
+        /// <exception cref="ArgumentException">
         /// Thrown if the element already exists in the <see cref="XmlObject"/>.
         /// </exception>
         /// <exception cref="InvalidOperationException">
@@ -250,7 +249,7 @@ namespace XmlAbstraction
             var elem = this.Doc.Root.Element(elementname);
             if (elem != null)
             {
-                throw new Exception(Resources.XmlObject_Element_Already_Exists);
+                throw new ArgumentException(Resources.XmlObject_Element_Already_Exists);
             }
             else
             {
@@ -281,12 +280,12 @@ namespace XmlAbstraction
         /// empty value as well as making the attribute as if the Element was
         /// pre-added before calling this function.
         /// </summary>
-        /// <exception cref="Exception">Attribute already exists in the xml file.</exception>
+        /// <exception cref="ArgumentException">Attribute already exists in the xml file.</exception>
         /// <exception cref="InvalidOperationException">When called from a read-only instance.</exception>
         /// <param name="elementname">The name of the element to add a attribute to.</param>
         /// <param name="attributename">The name of the attribute to add.</param>
         /// <param name="attributevalue">The value of the attribute.</param>
-        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Attribute is removed if the input value is null.", Scope = "member")]
+        [SuppressMessage("Major Code Smell", "S2589:Boolean expressions should not be gratuitous", Justification = "ttributevalue can be null.")]
         public void AddAttribute(string elementname, string attributename, object attributevalue)
         {
             if (this.CachedXmlfilename.Equals(":memory", StringComparison.Ordinal))
@@ -357,9 +356,9 @@ namespace XmlAbstraction
             {
                 if (attributevalue != null)
                 {
-                    if (elem.Attribute(attributename) != null)
+                    if (elem?.Attribute(attributename) != null)
                     {
-                        throw new Exception(Resources.XmlObject_Attribute_Already_Exists);
+                        throw new ArgumentException(Resources.XmlObject_Attribute_Already_Exists);
                     }
                     else
                     {
@@ -393,6 +392,7 @@ namespace XmlAbstraction
         /// <exception cref="InvalidOperationException">When called from a read-only instance.</exception>
         /// <param name="elementname">The name of the element to write to or create.</param>
         /// <param name="value">The value for the element.</param>
+        [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "Impossible to unnest.")]
         public void Write(string elementname, string value)
         {
             if (this.CachedXmlfilename.Equals(":memory", StringComparison.Ordinal))
@@ -535,6 +535,7 @@ namespace XmlAbstraction
         /// <exception cref="ArgumentException">When the element trying to be read does not exist.</exception>
         /// <param name="elementname">The element name to read the value from.</param>
         /// <returns>The value of the input element or <see cref="string.Empty"/>.</returns>
+        [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "Impossible to unnest.")]
         public string Read(string elementname)
         {
             var elem = this.Doc.Root.Element(elementname);
@@ -564,21 +565,13 @@ namespace XmlAbstraction
         /// <param name="elementname">The element name to get the value of a attribute.</param>
         /// <param name="attributename">The name of the attribute to get the value of.</param>
         /// <returns>The value of the input element or <see cref="string.Empty"/>.</returns>
-        [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "elem can be null if it does not exist.", Scope = "member")]
+        [SuppressMessage("Major Code Smell", "S2589:Boolean expressions should not be gratuitous", Justification = "elem can be null and not null.")]
         public string Read(string elementname, string attributename)
         {
             var elem = this.Doc.Root.Element(elementname);
             if (elem == null)
             {
                 throw new ArgumentException(Resources.XmlObject_Element_Does_Not_Exist);
-            }
-            else if (elem != null)
-            {
-                var attribute = elem.Attribute(attributename);
-                if (attribute != null)
-                {
-                    return attribute.Value;
-                }
             }
             else if (this.ElementsAdded.ContainsKey(elementname))
             {
@@ -600,6 +593,14 @@ namespace XmlAbstraction
                     }
                 }
             }
+            else if (elem != null)
+            {
+                var attribute = elem.Attribute(attributename);
+                if (attribute != null)
+                {
+                    return attribute.Value;
+                }
+            }
 
             return string.Empty;
         }
@@ -617,6 +618,7 @@ namespace XmlAbstraction
         /// A array of values or a empty array of strings if
         /// there is no subelements to this element.
         /// </returns>
+        [SuppressMessage("Blocker Code Smell", "S3427:Method overloads with default parameter values should not overlap ", Justification = "Stupid analyzer.")]
         public string[] Read(string parentelementname, string elementname, object unused = null)
         {
             UnreferencedParameter(unused);
@@ -729,6 +731,7 @@ namespace XmlAbstraction
         /// A array of values or a empty array of strings if
         /// there is no subelements to this element.
         /// </returns>
+        [SuppressMessage("Blocker Code Smell", "S3427:Method overloads with default parameter values should not overlap ", Justification = "Stupid analyzer.")]
         public string[] TryRead(string parentelementname, string elementname, object unused = null)
         {
             try
@@ -944,6 +947,7 @@ namespace XmlAbstraction
         {
             if (t == null)
             {
+                // suppresses a build warning with an unreferenced parameter.
             }
         }
 

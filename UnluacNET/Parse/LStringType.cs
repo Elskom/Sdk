@@ -6,10 +6,12 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Text;
-    using IO;
+    using Elskom.Generic.Libs.UnluacNET.IO;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class LStringType : BObjectType<LString>
     {
         public override LString Parse(Stream stream, BHeader header)
@@ -22,7 +24,9 @@ namespace Elskom.Generic.Libs.UnluacNET
             });
             var str = sb.ToString();
             if (header.Debug)
+            {
                 Console.WriteLine("-- parsed <string> \"" + str + "\"");
+            }
 
             return new LString(sizeT, str);
         }

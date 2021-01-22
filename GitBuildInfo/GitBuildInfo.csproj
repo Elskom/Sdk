@@ -40,8 +40,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>bin\Any CPU\Debug\</OutputPath>
   </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' != 'net5.0' AND '$(TargetFramework)' != 'netstandard2.0' AND '$(TargetFramework)' != 'net472'">
+
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net5.0' AND '$(TargetFramework)' != 'netstandard2.1' AND '$(TargetFramework)' != 'net472'">
     <DefineConstants>$(DefineConstants);NOTASKS</DefineConstants>
   </PropertyGroup>
 
@@ -59,26 +59,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'" Include="Microsoft.Build.Framework" Version="16.8.0" PrivateAssets="All" />
-    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'" Include="Microsoft.Build.Utilities.Core" Version="16.8.0" PrivateAssets="All" />
-    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'" Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'net472'" Include="Microsoft.Build.Framework" Version="16.8.0" PrivateAssets="All" />
+    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'net472'" Include="Microsoft.Build.Utilities.Core" Version="16.8.0" PrivateAssets="All" />
+    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'net472'" Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Condition="!$(TargetFramework.StartsWith('netcoreapp')) AND !$(TargetFramework.StartsWith('netstandard')) AND '$(TargetFramework)' != 'net5.0'" Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
-    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'" Include="SecurityCodeScan" Version="3.5.3">
+    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'net472'" Include="SecurityCodeScan" Version="3.5.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'" Include="SonarAnalyzer.CSharp" Version="8.16.0.25740">
+    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'net472'" Include="SonarAnalyzer.CSharp" Version="8.16.0.25740">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'" Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
+    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'net472'" Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'" Include="IDisposableAnalyzers" Version="3.4.8">
+    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'net472'" Include="IDisposableAnalyzers" Version="3.4.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

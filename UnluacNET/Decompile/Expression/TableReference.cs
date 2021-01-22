@@ -6,11 +6,22 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class TableReference : Expression
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly Expression m_table;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly Expression m_index;
+
+        public TableReference(Expression table, Expression index)
+            : base(PRECEDENCE_ATOMIC)
+        {
+            this.m_table = table;
+            this.m_index = index;
+        }
 
         public override int ConstantIndex => Math.Max(this.m_table.ConstantIndex, this.m_index.ConstantIndex);
 
@@ -18,9 +29,11 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public override bool IsMemberAccess => this.m_index.IsIdentifier;
 
-        public override string GetField() => this.m_index.AsName();
+        public override string GetField()
+            => this.m_index.AsName();
 
-        public override Expression GetTable() => this.m_table;
+        public override Expression GetTable()
+            => this.m_table;
 
         public override void Print(Output output)
         {
@@ -36,13 +49,6 @@ namespace Elskom.Generic.Libs.UnluacNET
                 this.m_index.Print(output);
                 output.Print("]");
             }
-        }
-
-        public TableReference(Expression table, Expression index)
-            : base(PRECEDENCE_ATOMIC)
-        {
-            this.m_table = table;
-            this.m_index = index;
         }
     }
 }

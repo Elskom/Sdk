@@ -6,7 +6,9 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
-    
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public abstract class Target
     {
         public virtual bool IsFunctionName => true;
@@ -20,6 +22,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             => false;
 
         public abstract void Print(Output output);
+
         public abstract void PrintMethod(Output output);
     }
 }

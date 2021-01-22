@@ -5,19 +5,11 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class Declaration
     {
-        public string Name { get; private set; }
-        public int Begin { get; private set; }
-        public int End { get; private set; }
-        public int Register { get; set; }
-
-        //Whether this is an invisible for-loop book-keeping variable.
-        internal bool ForLoop { get; set; }
-
-        //Whether this is an explicit for-loop declared variable.
-        internal bool ForLoopExplicit { get; set; }
-
         public Declaration(LLocal local)
         {
             this.Name = local.ToString();
@@ -31,5 +23,19 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.Begin = begin;
             this.End = end;
         }
+
+        public string Name { get; private set; }
+
+        public int Begin { get; private set; }
+
+        public int End { get; private set; }
+
+        public int Register { get; set; }
+
+        // Whether this is an invisible for-loop book-keeping variable.
+        internal bool ForLoop { get; set; }
+
+        // Whether this is an explicit for-loop declared variable.
+        internal bool ForLoopExplicit { get; set; }
     }
 }

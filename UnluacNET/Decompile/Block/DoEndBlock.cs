@@ -7,10 +7,17 @@ namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class DoEndBlock : Block
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly List<Statement> m_statements;
+
+        public DoEndBlock(LFunction function, int begin, int end)
+            : base(function, begin, end)
+            => this.m_statements = new List<Statement>(end - begin + 1);
 
         public override bool Breakable => false;
 
@@ -21,19 +28,16 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override void AddStatement(Statement statement)
             => this.m_statements.Add(statement);
 
-        public override int GetLoopback() => throw new InvalidOperationException();
+        public override int GetLoopback()
+            => throw new InvalidOperationException();
 
         public override void Print(Output output)
         {
             output.PrintLine("do");
             output.IncreaseIndent();
-            Statement.PrintSequence(output, this.m_statements);
+            PrintSequence(output, this.m_statements);
             output.DecreaseIndent();
             output.Print("end");
         }
-
-        public DoEndBlock(LFunction function, int begin, int end)
-            : base(function, begin, end)
-            => this.m_statements = new List<Statement>(end - begin + 1);
     }
 }

@@ -7,13 +7,33 @@ namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class IfThenEndBlock : Block
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly Branch m_branch;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly Stack<Branch> m_stack;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly Registers m_r;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly List<Statement> m_statements;
+
+        public IfThenEndBlock(LFunction function, Branch branch, Registers r)
+            : this(function, branch, null, r)
+        {
+        }
+
+        public IfThenEndBlock(LFunction function, Branch branch, Stack<Branch> stack, Registers r)
+            : base(function, branch.Begin == branch.End ? branch.Begin - 1 : branch.Begin, branch.Begin == branch.End ? branch.Begin - 1 : branch.End)
+        {
+            this.m_branch = branch;
+            this.m_stack = stack;
+            this.m_r = r;
+            this.m_statements = new List<Statement>(branch.End - branch.Begin + 1);
+        }
 
         public override bool Breakable => false;
 
@@ -24,7 +44,8 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override void AddStatement(Statement statement)
             => this.m_statements.Add(statement);
 
-        public override int GetLoopback() => throw new InvalidOperationException();
+        public override int GetLoopback()
+            => throw new InvalidOperationException();
 
         public override void Print(Output output)
         {
@@ -33,7 +54,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             output.Print(" then");
             output.PrintLine();
             output.IncreaseIndent();
-            Statement.PrintSequence(output, this.m_statements);
+            PrintSequence(output, this.m_statements);
             output.DecreaseIndent();
             output.Print("end");
         }
@@ -46,23 +67,21 @@ namespace Elskom.Generic.Libs.UnluacNET
                 if (statement is Assignment)
                 {
                     var assignment = statement as Assignment;
-                    if (assignment.GetArity() == 1)
+                    if (assignment.GetArity() == 1 && this.m_branch is TestNode)
                     {
-                        if (this.m_branch is TestNode)
+                        var node = this.m_branch as TestNode;
+                        var decl = this.m_r.GetDeclaration(node.Test, node.Line);
+                        if (assignment.GetFirstTarget().IsDeclaration(decl))
                         {
-                            var node = this.m_branch as TestNode;
-                            var decl = this.m_r.GetDeclaration(node.Test, node.Line);
-                            if (assignment.GetFirstTarget().IsDeclaration(decl))
+                            var left = new LocalVariable(decl);
+                            var right = assignment.GetFirstValue();
+                            var expr = node.Inverted
+                                ? Expression.MakeOR(left, right)
+                                : Expression.MakeAND(left, right);
+                            return new LambdaOperation(this.End - 1, (r, block) =>
                             {
-                                var left = new LocalVariable(decl);
-                                var right = assignment.GetFirstValue();
-                                var expr = (node.Inverted)
-                                    ? Expression.MakeOR(left, right)
-                                    : Expression.MakeAND(left, right);
-                                return new LambdaOperation(this.End - 1, (r, block) => {
-                                    return new Assignment(assignment.GetFirstTarget(), expr);
-                                });
-                            }
+                                return new Assignment(assignment.GetFirstTarget(), expr);
+                            });
                         }
                     }
                 }
@@ -87,39 +106,21 @@ namespace Elskom.Generic.Libs.UnluacNET
                     }
                 }
 
-                if (test >= 0)
+                if (test >= 0 && this.m_r.GetUpdated(test, this.m_branch.End - 1) >= this.m_branch.Begin)
                 {
-                    if (this.m_r.GetUpdated(test, this.m_branch.End - 1) >= this.m_branch.Begin)
+                    var right = this.m_r.GetValue(test, this.m_branch.End);
+                    var setb = d.PopSetCondition(this.m_stack, this.m_stack.Peek().End, test);
+                    setb.UseExpression(right);
+                    var testReg = test;
+                    return new LambdaOperation(this.End - 1, (r, block) =>
                     {
-                        var right = this.m_r.GetValue(test, this.m_branch.End);
-                        var setb = d.PopSetCondition(this.m_stack, this.m_stack.Peek().End, test);
-                        setb.UseExpression(right);
-                        var testReg = test;
-                        return new LambdaOperation(this.End - 1, (r, block) => {
-                            r.SetValue(testReg, this.m_branch.End - 1, setb.AsExpression(r));
-                            return null;
-                        });
-                    }
+                        r.SetValue(testReg, this.m_branch.End - 1, setb.AsExpression(r));
+                        return null;
+                    });
                 }
             }
 
             return base.Process(d);
-        }
-
-        public IfThenEndBlock(LFunction function, Branch branch, Registers r)
-            : this(function, branch, null, r)
-        {
-        }
-
-        public IfThenEndBlock(LFunction function, Branch branch, Stack<Branch> stack, Registers r)
-            : base(function,
-            branch.Begin == branch.End ? branch.Begin - 1 : branch.Begin,
-            branch.Begin == branch.End ? branch.Begin - 1 : branch.End)
-        {
-            this.m_branch = branch;
-            this.m_stack = stack;
-            this.m_r = r;
-            this.m_statements = new List<Statement>(branch.End - branch.Begin + 1);
         }
     }
 }

@@ -6,6 +6,7 @@
 namespace Elskom.Generic.Libs
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
 
     /// <summary>
@@ -23,6 +24,7 @@ namespace Elskom.Generic.Libs
         }
 
         [DllImport("dbghelp.dll", EntryPoint = "MiniDumpWriteDump", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
+        [SuppressMessage("Usage", "PC003:Native API not available in UWP", Justification = "Fuck off UWP.")]
         private static extern bool MiniDumpWriteDump_internal(IntPtr hProcess, int ProcessId, SafeHandle hFile, MinidumpTypes DumpType, ref MINIDUMP_EXCEPTION_INFORMATION ExceptionParam, IntPtr UserStreamParam, IntPtr CallackParam);
     }
 }

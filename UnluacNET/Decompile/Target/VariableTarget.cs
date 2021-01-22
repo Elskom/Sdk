@@ -6,9 +6,14 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
-    
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class VariableTarget : Target
     {
+        public VariableTarget(Declaration decl)
+            => this.Declaration = decl;
+
         public Declaration Declaration { get; private set; }
 
         public override bool IsLocal => true;
@@ -17,12 +22,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             => this.Declaration == decl;
 
         public override bool Equals(object obj)
-        {
-            if (obj is VariableTarget)
-                return this.Declaration == ((VariableTarget)obj).Declaration;
-            else
-                return false;
-        }
+            => obj is VariableTarget target && this.Declaration == target.Declaration;
 
         public override int GetIndex()
             => this.Declaration.Register;
@@ -33,7 +33,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override void PrintMethod(Output output)
             => throw new InvalidOperationException();
 
-        public VariableTarget(Declaration decl)
-            => this.Declaration = decl;
+        public override int GetHashCode()
+            => throw new NotImplementedException();
     }
 }

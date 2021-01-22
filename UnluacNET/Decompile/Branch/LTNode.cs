@@ -1,27 +1,43 @@
-﻿
+﻿// Copyright (c) 2020-2021, Els_kom org.
+// https://github.com/Elskom/
+// All rights reserved.
+// license: see LICENSE for more details.
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class LTNode : Branch
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_left;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_right;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly bool m_invert;
+
+        public LTNode(int left, int right, bool invert, int line, int begin, int end)
+            : base(line, begin, end)
+        {
+            this.m_left = left;
+            this.m_right = right;
+            this.m_invert = invert;
+        }
 
         public override Expression AsExpression(Registers registers)
         {
-            var transpose = false;
             var leftExpr = registers.GetKExpression(this.m_left, this.Line);
             var rightExpr = registers.GetKExpression(this.m_right, this.Line);
-            if (((this.m_left | this.m_right) & 256) == 0)
-                transpose = registers.GetUpdated(this.m_left, this.Line) > registers.GetUpdated(this.m_right, this.Line);
-            else
-                transpose = rightExpr.ConstantIndex < leftExpr.ConstantIndex;
-
+            var transpose = ((this.m_left | this.m_right) & 256) == 0
+                ? registers.GetUpdated(this.m_left, this.Line) > registers.GetUpdated(this.m_right, this.Line)
+                : rightExpr.ConstantIndex < leftExpr.ConstantIndex;
             var op = !transpose ? "<" : ">";
             Expression rtn = new BinaryExpression(op, !transpose ? leftExpr : rightExpr, !transpose ? rightExpr : leftExpr, Expression.PRECEDENCE_COMPARE, Expression.ASSOCIATIVITY_LEFT);
             if (this.m_invert)
+            {
                 rtn = Expression.MakeNOT(rtn);
+            }
 
             return rtn;
         }
@@ -35,15 +51,6 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override void UseExpression(Expression expression)
         {
             // Do nothing
-            return;
-        }
-
-        public LTNode(int left, int right, bool invert, int line, int begin, int end)
-            : base(line, begin, end)
-        {
-            this.m_left = left;
-            this.m_right = right;
-            this.m_invert = invert;
         }
     }
 }

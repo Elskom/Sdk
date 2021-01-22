@@ -7,65 +7,27 @@ namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class TableLiteral : Expression
     {
-        public sealed class Entry : IComparable<Entry>
-        {
-            public Expression Key { get; private set; }
-            public Expression Value { get; private set; }
-
-            public bool IsList { get; private set; }
-            public int Timestamp { get; private set; }
-
-            public int CompareTo(Entry e)
-                => this.Timestamp.CompareTo(e.Timestamp);
-
-            public Entry(Expression key, Expression value, bool isList, int timestamp)
-            {
-                this.Key = key;
-                this.Value = value;
-                this.IsList = isList;
-                this.Timestamp = timestamp;
-            }
-        }
-
-        private List<Entry> m_entries;
-
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private readonly List<Entry> m_entries;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private readonly int m_capacity;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private bool m_isObject = true;
-        private bool m_isList   = true;
-        private int m_listLength  = 1;
-        private int m_capacity;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private bool m_isList = true;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private int m_listLength = 1;
 
-        private void PrintEntry(int index, Output output)
+        public TableLiteral(int arraySize, int hashSize)
+            : base(PRECEDENCE_ATOMIC)
         {
-            var entry = this.m_entries[index];
-            var key = entry.Key;
-            var value = entry.Value;
-            var isList = entry.IsList;
-            var multiple = (index + 1 >= this.m_entries.Count) || value.IsMultiple;
-            if (isList && key.IsInteger && this.m_listLength == key.AsInteger())
-            {
-                if (multiple)
-                    value.PrintMultiple(output);
-                else
-                    value.Print(output);
-
-                this.m_listLength++;
-            }
-            else if (this.m_isObject && key.IsIdentifier)
-            {
-                output.Print(key.AsName());
-                output.Print(" = ");
-                value.Print(output);
-            }
-            else
-            {
-                output.Print("[");
-                key.Print(output);
-                output.Print("] = ");
-                value.Print(output);
-            }
+            this.m_capacity = arraySize + hashSize;
+            this.m_entries = new List<Entry>(this.m_capacity);
         }
 
         public override int ConstantIndex
@@ -92,8 +54,8 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override void AddEntry(Entry entry)
         {
             this.m_entries.Add(entry);
-            this.m_isObject  = this.m_isObject && (entry.IsList || entry.Key.IsIdentifier);
-            this.m_isList    = this.m_isList && entry.IsList;
+            this.m_isObject = this.m_isObject && (entry.IsList || entry.Key.IsIdentifier);
+            this.m_isList = this.m_isList && entry.IsList;
         }
 
         public override void Print(Output output)
@@ -136,13 +98,19 @@ namespace Elskom.Generic.Libs.UnluacNET
                     {
                         output.Print(",");
                         if (lineBreak)
+                        {
                             output.PrintLine();
+                        }
                         else
+                        {
                             output.Print(" ");
+                        }
 
                         this.PrintEntry(i, output);
                         if (this.m_entries[i].Value.IsMultiple)
+                        {
                             break;
+                        }
                     }
                 }
 
@@ -156,11 +124,85 @@ namespace Elskom.Generic.Libs.UnluacNET
             }
         }
 
-        public TableLiteral(int arraySize, int hashSize)
-            : base(PRECEDENCE_ATOMIC)
+        private void PrintEntry(int index, Output output)
         {
-            this.m_capacity = arraySize + hashSize;
-            this.m_entries = new List<Entry>(this.m_capacity);
+            var entry = this.m_entries[index];
+            var key = entry.Key;
+            var value = entry.Value;
+            var isList = entry.IsList;
+            var multiple = (index + 1 >= this.m_entries.Count) || value.IsMultiple;
+            if (isList && key.IsInteger && this.m_listLength == key.AsInteger())
+            {
+                if (multiple)
+                {
+                    value.PrintMultiple(output);
+                }
+                else
+                {
+                    value.Print(output);
+                }
+
+                this.m_listLength++;
+            }
+            else if (this.m_isObject && key.IsIdentifier)
+            {
+                output.Print(key.AsName());
+                output.Print(" = ");
+                value.Print(output);
+            }
+            else
+            {
+                output.Print("[");
+                key.Print(output);
+                output.Print("] = ");
+                value.Print(output);
+            }
+        }
+
+        public sealed class Entry : IComparable<Entry>
+        {
+            public Entry(Expression key, Expression value, bool isList, int timestamp)
+            {
+                this.Key = key;
+                this.Value = value;
+                this.IsList = isList;
+                this.Timestamp = timestamp;
+            }
+
+            public Expression Key { get; private set; }
+
+            public Expression Value { get; private set; }
+
+            public bool IsList { get; private set; }
+
+            public int Timestamp { get; private set; }
+
+            public static bool operator ==(Entry left, Entry right)
+                => left is null ? right is null : left.Equals(right);
+
+            public static bool operator !=(Entry left, Entry right)
+                => !(left == right);
+
+            public static bool operator <(Entry left, Entry right)
+                => left is null ? right is null : left.CompareTo(right) < 0;
+
+            public static bool operator <=(Entry left, Entry right)
+                => left is null || left.CompareTo(right) <= 0;
+
+            public static bool operator >(Entry left, Entry right)
+                => left is object && left.CompareTo(right) > 0;
+
+            public static bool operator >=(Entry left, Entry right)
+                => left is null ? right is null : left.CompareTo(right) >= 0;
+
+            public int CompareTo(Entry other)
+                => this.Timestamp.CompareTo(other.Timestamp);
+
+            public override bool Equals(object obj)
+                => ReferenceEquals(this, obj) && obj is object && this.CompareTo((Entry)obj) == 0;
+
+            public override int GetHashCode()
+                => throw new NotImplementedException();
         }
     }
 }

@@ -28,6 +28,7 @@ namespace Elskom.Generic.Libs
         /// Initializes a new instance of the <see cref="MessageManager"/> class.
         /// </summary>
         [SuppressMessage("Major Code Smell", "S3010:Static fields should not be updated in constructors", Justification = "Needed here.")]
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP007:Don't dispose injected.", Justification = "To not leak the old notify icon.")]
         public MessageManager()
         {
             notifyIcon?.Dispose();
@@ -43,6 +44,7 @@ namespace Elskom.Generic.Libs
         /// <see cref="NotifyIcon"/> control.
         /// </param>
         [SuppressMessage("Major Code Smell", "S3010:Static fields should not be updated in constructors", Justification = "Needed here.")]
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP007:Don't dispose injected.", Justification = "To not leak the old notify icon.")]
         public MessageManager(IContainer container)
         {
             notifyIcon?.Dispose();

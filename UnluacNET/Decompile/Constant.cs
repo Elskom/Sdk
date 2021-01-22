@@ -7,16 +7,25 @@ namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Diagnostics.CodeAnalysis;
+    using System.Text;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class Constant
     {
-        public const int CONST_NIL    = 0;
-        public const int CONST_BOOL   = 1;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
+        public const int CONST_NIL = 0;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
+        public const int CONST_BOOL = 1;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         public const int CONST_NUMBER = 2;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         public const int CONST_STRING = 3;
-
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1311:Static readonly fields should begin with upper-case letter", Justification = "Don't care for now.")]
         private static readonly HashSet<string> m_reservedWords =
-            new HashSet<string>() {
+            new HashSet<string>()
+            {
                 "and",
                 "and",
                 "break",
@@ -41,30 +50,83 @@ namespace Elskom.Generic.Libs.UnluacNET
                 "while",
             };
 
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_type;
-
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly bool m_bool;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly LNumber m_number;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly string m_string;
 
-        public bool IsBoolean => (this.m_type == CONST_BOOL);
+        public Constant(int constant)
+        {
+            this.m_type = 2;
+            this.m_bool = false;
+            this.m_number = LNumber.MakeInteger(constant);
+            this.m_string = null;
+        }
+
+        public Constant(LObject constant)
+        {
+            if (constant is LNil)
+            {
+                this.m_type = 0;
+                this.m_bool = false;
+                this.m_number = null;
+                this.m_string = null;
+            }
+            else if (constant is LBoolean lboolean)
+            {
+                this.m_type = 1;
+                this.m_bool = lboolean == LBoolean.LTRUE;
+                this.m_number = null;
+                this.m_string = null;
+            }
+            else if (constant is LNumber number)
+            {
+                this.m_type = 2;
+                this.m_bool = false;
+                this.m_number = number;
+                this.m_string = null;
+            }
+            else if (constant is LString lstring)
+            {
+                this.m_type = 3;
+                this.m_bool = false;
+                this.m_number = null;
+                this.m_string = lstring.DeRef();
+            }
+            else
+            {
+                throw new ArgumentException("Illegal constant type: " + constant.ToString());
+            }
+        }
+
+        public bool IsBoolean => this.m_type == CONST_BOOL;
 
         public bool IsIdentifier
         {
             get
             {
                 if (!this.IsString || this.m_string.Length == 0 || m_reservedWords.Contains(this.m_string))
+                {
                     return false;
-                
-                var start = (char)this.m_string[0];
+                }
+
+                var start = this.m_string[0];
                 if (start != '_' && !char.IsLetter(start))
+                {
                     return false;
+                }
 
                 for (var i = 1; i < this.m_string.Length; i++)
                 {
-                    var next = (char)this.m_string[i];
+                    var next = this.m_string[i];
                     if (char.IsLetterOrDigit(next) || next == '_')
+                    {
                         continue;
+                    }
 
                     return false;
                 }
@@ -82,110 +144,112 @@ namespace Elskom.Generic.Libs.UnluacNET
             }
         }
 
-        public bool IsNil => (this.m_type == CONST_NIL);
-        public bool IsNumber => (this.m_type == CONST_NUMBER);
-        public bool IsString => (this.m_type == CONST_STRING);
+        public bool IsNil => this.m_type == CONST_NIL;
+
+        public bool IsNumber => this.m_type == CONST_NUMBER;
+
+        public bool IsString => this.m_type == CONST_STRING;
 
         public int AsInteger()
-        {
-            if (!this.IsInteger)
-                throw new InvalidOperationException();
-
-            return (int)this.m_number.Value;
-        }
+            => !this.IsInteger ? throw new InvalidOperationException() : (int)this.m_number.Value;
 
         public string AsName()
-        {
-            if (!this.IsString)
-                throw new InvalidOperationException();
-
-            return this.m_string;
-        }
+            => !this.IsString ? throw new InvalidOperationException() : this.m_string;
 
         public void Print(Output output)
         {
             switch (this.m_type)
             {
-            case CONST_NIL:
-                output.Print("nil");
-                break;
-            case CONST_BOOL:
-                output.Print(this.m_bool ? "true" : "false");
-                break;
-            case CONST_NUMBER:
-                output.Print(this.m_number.ToString());
-                break;
-            case CONST_STRING:
+                case CONST_NIL:
+                {
+                    output.Print("nil");
+                    break;
+                }
+
+                case CONST_BOOL:
+                {
+                    output.Print(this.m_bool ? "true" : "false");
+                    break;
+                }
+
+                case CONST_NUMBER:
+                {
+                    output.Print(this.m_number.ToString());
+                    break;
+                }
+
+                case CONST_STRING:
                 {
                     var newLines = 0;
                     var unprinttable = 0;
                     foreach (var c in this.m_string)
                     {
                         if (c == '\n')
+                        {
                             newLines++;
-                        else if ((c <= 31 && c != '\t' || c >= 127))
+                        }
+                        else if ((c <= 31 && c != '\t') || c >= 127)
+                        {
                             unprinttable++;
+                        }
                     }
 
                     if (unprinttable == 0 && !this.m_string.Contains("[[") &&
-                        (newLines > 1 || newLines == 1 && this.m_string.IndexOf('\n') != this.m_string.Length - 1))
+                        (newLines > 1 || newLines == 1) && this.m_string.IndexOf('\n') != this.m_string.Length - 1)
                     {
                         var pipe = 0;
-                        var pipeString = "]]";
-                        while (this.m_string.IndexOf(pipeString) >= 0)
+                        var pipeString = new StringBuilder();
+                        pipeString.Append("]]");
+#if !NETFRAMEWORK && !NETCOREAPP2_0 && !NETSTANDARD2_0
+                        while (this.m_string.Contains(pipeString.ToString(), StringComparison.InvariantCulture))
+#else
+                        while (this.m_string.Contains(pipeString.ToString()))
+#endif
                         {
                             pipe++;
-                            pipeString = "]";
+                            pipeString.Clear();
+                            pipeString.Append(']');
                             var i = pipe;
                             while (i-- > 0)
-                                pipeString += "=";
+                            {
+                                pipeString.Append('=');
+                            }
 
-                            pipeString += "]";
+                            pipeString.Append(']');
                         }
 
                         output.Print("[");
                         while (pipe-- > 0)
+                        {
                             output.Print("=");
-                        
+                        }
+
                         output.Print("[");
                         var indent = output.IndentationLevel;
                         output.IndentationLevel = 0;
                         output.PrintLine();
                         output.Print(this.m_string);
-                        output.Print(pipeString);
+                        output.Print(pipeString.ToString());
                         output.IndentationLevel = indent;
                     }
                     else
                     {
                         output.Print("\"");
-                        var chars = new[] {
-                                    "\\a",
-                                    "\\b",
-                                    "\\t",
-                                    "\\n",
-                                    "\\v",
-                                    "\\f",
-                                    "\\r",
-                                };
+                        var chars = new[]
+                        {
+                            "\\a",
+                            "\\b",
+                            "\\t",
+                            "\\n",
+                            "\\v",
+                            "\\f",
+                            "\\r",
+                        };
                         foreach (var c in this.m_string)
                         {
                             if (c <= 31 || c >= 127)
                             {
-                                //if (c == 7)
-                                //    output.Print("\\a");
-                                //else if (c == 8)
-                                //    output.Print("\\b");
-                                //else if (c == 12)
-                                //    output.Print("\\f");
-                                //else if (c == 10)
-                                //    output.Print("\\n");
-                                //else if (c == 13)
-                                //    output.Print("\\r");
-                                //else if (c == 9)
-                                //    output.Print("\\t");
-                                //else if (c == 11)
-                                //    output.Print("\\v");
-                                var cx = ((int)c);
+                                var cx = (int)c;
                                 if (cx >= 7 && cx <= 13)
                                 {
                                     output.Print(chars[cx - 7]);
@@ -196,68 +260,35 @@ namespace Elskom.Generic.Libs.UnluacNET
                                     var len = dec.Length;
                                     output.Print("\\");
                                     while (len++ < 3)
+                                    {
                                         output.Print("0");
+                                    }
 
                                     output.Print(dec);
                                 }
                             }
                             else if (c == 34)
+                            {
                                 output.Print("\\\"");
+                            }
                             else if (c == 92)
+                            {
                                 output.Print("\\\\");
+                            }
                             else
+                            {
                                 output.Print(c.ToString());
+                            }
                         }
 
                         output.Print("\"");
                     }
-                } break;
-            default:
-                throw new InvalidOperationException();
-            }
-        }
 
-        public Constant(int constant)
-        {
-            this.m_type   = 2;
-            this.m_bool   = false;
-            this.m_number = LNumber.MakeInteger(constant);
-            this.m_string = null;
-        }
+                    break;
+                }
 
-        public Constant(LObject constant)
-        {
-            if (constant is LNil)
-            {
-                this.m_type   = 0;
-                this.m_bool   = false;
-                this.m_number = null;
-                this.m_string = null;
-            }
-            else if (constant is LBoolean)
-            {
-                this.m_type   = 1;
-                this.m_bool   = (constant == LBoolean.LTRUE);
-                this.m_number = null;
-                this.m_string = null;
-            }
-            else if (constant is LNumber)
-            {
-                this.m_type   = 2;
-                this.m_bool   = false;
-                this.m_number = (LNumber)constant;
-                this.m_string = null;
-            }
-            else if (constant is LString)
-            {
-                this.m_type   = 3;
-                this.m_bool   = false;
-                this.m_number = null;
-                this.m_string = ((LString)constant).DeRef();
-            }
-            else
-            {
-                throw new ArgumentException("Illegal constant type: " + constant.ToString());
+                default:
+                    throw new InvalidOperationException();
             }
         }
     }

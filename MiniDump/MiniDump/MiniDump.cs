@@ -7,6 +7,8 @@ namespace Elskom.Generic.Libs
 {
     using System;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.IO;
     using System.Messaging;
     using System.Runtime.InteropServices;
@@ -22,13 +24,7 @@ namespace Elskom.Generic.Libs
         /// </summary>
         public static event EventHandler<MessageEventArgs> DumpMessage;
 
-        /*
-        /// <summary>
-        /// Occurs when a mini-dump fails with any sort of error code.
-        /// </summary>
-        public static event EventHandler<MessageEventArgs> DumpFailed;
-        */
-
+        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Cannot be null.")]
         internal static void ExceptionEventHandlerCode(Exception e, bool threadException)
         {
             var exceptionData = $"{e.GetType()}: {e.Message}{Environment.NewLine}{e.StackTrace}{Environment.NewLine}";
@@ -61,11 +57,16 @@ namespace Elskom.Generic.Libs
                     }
 
                     MiniDumpToFile(MiniDumpAttribute.CurrentInstance.DumpFileName, MiniDumpAttribute.CurrentInstance.DumpType);
-                    DumpMessage?.Invoke(typeof(MiniDump), new MessageEventArgs(string.Format(MiniDumpAttribute.CurrentInstance.Text, MiniDumpAttribute.CurrentInstance.DumpLogFileName), threadException ? MiniDumpAttribute.CurrentInstance.ThreadExceptionTitle : MiniDumpAttribute.CurrentInstance.ExceptionTitle, ErrorLevel.Error));
+#if WITH_WINFORMS
+                    DumpMessage?.Invoke(typeof(MiniDump), new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, MiniDumpAttribute.CurrentInstance.Text, MiniDumpAttribute.CurrentInstance.DumpLogFileName), threadException ? MiniDumpAttribute.CurrentInstance.ThreadExceptionTitle : MiniDumpAttribute.CurrentInstance.ExceptionTitle, ErrorLevel.Error));
+#else
+                    DumpMessage?.Invoke(typeof(MiniDump), new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, MiniDumpAttribute.CurrentInstance.Text, MiniDumpAttribute.CurrentInstance.DumpLogFileName), MiniDumpAttribute.CurrentInstance.ExceptionTitle, ErrorLevel.Error));
+#endif
                 }
             }
         }
 
+        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Cannot be null.")]
         private static void MiniDumpToFile(string fileToDump, MinidumpTypes dumpType)
         {
             using (var fsToDump = File.Open(fileToDump, FileMode.Create, FileAccess.ReadWrite, FileShare.Write))

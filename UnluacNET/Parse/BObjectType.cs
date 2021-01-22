@@ -6,8 +6,10 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public abstract class BObjectType<T> : BObject
         where T : BObject
     {
@@ -17,12 +19,10 @@ namespace Elskom.Generic.Libs.UnluacNET
         {
             var length = header.Integer.Parse(stream, header);
             var values = new List<T>();
-
             length.Iterate(() =>
             {
-                values.Add(Parse(stream, header));
+                values.Add(this.Parse(stream, header));
             });
-
             return new BList<T>(length, values);
         }
     }

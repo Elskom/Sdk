@@ -5,13 +5,15 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class UpvalueSet : Operation
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private UpvalueTarget m_target;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private Expression m_value;
-
-        public override Statement Process(Registers r, Block block)
-            => new Assignment(this.m_target, this.m_value);
 
         public UpvalueSet(int line, string upvalue, Expression value)
             : base(line)
@@ -19,5 +21,8 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.m_target = new UpvalueTarget(upvalue);
             this.m_value = value;
         }
+
+        public override Statement Process(Registers r, Block block)
+            => new Assignment(this.m_target, this.m_value);
     }
 }

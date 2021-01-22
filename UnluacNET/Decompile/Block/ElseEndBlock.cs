@@ -7,10 +7,17 @@ namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class ElseEndBlock : Block
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly List<Statement> m_statements;
+
+        public ElseEndBlock(LFunction function, int begin, int end)
+            : base(function, begin, end)
+            => this.m_statements = new List<Statement>(end - begin + 1);
 
         public IfThenElseBlock Partner { get; set; }
 
@@ -23,17 +30,8 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override void AddStatement(Statement statement)
             => this.m_statements.Add(statement);
 
-        public override int CompareTo(Block block)
-        {
-            if (block == this.Partner)
-                return 1;
-
-            var result = base.CompareTo(block);
-            //if (result == 0 && block is ElseEndBlock)
-            //    Console.WriteLine("HEY HEY HEY");
-
-            return result;
-        }
+        public override int CompareTo(Block other)
+            => other == this.Partner ? 1 : base.CompareTo(other);
 
         public override int GetLoopback()
             => throw new InvalidOperationException();
@@ -42,7 +40,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         {
             output.Print("else");
             if (this.m_statements.Count == 1 && this.m_statements[0] is IfThenEndBlock)
-            {    
+            {
                 this.m_statements[0].Print(output);
             }
             else if (this.m_statements.Count == 2 && this.m_statements[0] is IfThenElseBlock && this.m_statements[1] is ElseEndBlock)
@@ -54,14 +52,10 @@ namespace Elskom.Generic.Libs.UnluacNET
             {
                 output.PrintLine();
                 output.IncreaseIndent();
-                Statement.PrintSequence(output, this.m_statements);
+                PrintSequence(output, this.m_statements);
                 output.DecreaseIndent();
                 output.Print("end");
             }
         }
-
-        public ElseEndBlock(LFunction function, int begin, int end)
-            : base(function, begin, end)
-            => this.m_statements = new List<Statement>(end - begin + 1);
     }
 }

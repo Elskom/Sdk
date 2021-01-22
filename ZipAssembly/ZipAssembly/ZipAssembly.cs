@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2020, Els_kom org.
+// Copyright (c) 2018-2021, Els_kom org.
 // https://github.com/Elskom/
 // All rights reserved.
 // license: see LICENSE for more details.
@@ -137,10 +137,8 @@ namespace Elskom.Generic.Libs
 
                 if ((loadPDBFile || Debugger.IsAttached) && pdbbytes != null)
                 {
-                    using (var pdbfs = File.Create($"{tmpDir}{pdbAssemblyName}"))
-                    {
-                        pdbfs.Write(pdbbytes, 0, pdbbytes.Length);
-                    }
+                    using var pdbfs = File.Create($"{tmpDir}{pdbAssemblyName}");
+                    pdbfs.Write(pdbbytes, 0, pdbbytes.Length);
                 }
 
                 var zipassembly = (ZipAssembly)(Assembly)LoadFrom($"{tmpDir}{zipAssemblyName}");

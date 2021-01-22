@@ -5,8 +5,15 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class TestSetNode : TestNode
     {
+        public TestSetNode(int target, int test, bool inverted, int line, int begin, int end)
+            : base(test, inverted, line, begin, end)
+            => this.SetTarget = target;
+
         public override Expression AsExpression(Registers registers)
             => registers.GetExpression(this.Test, this.Line);
 
@@ -17,11 +24,6 @@ namespace Elskom.Generic.Libs.UnluacNET
             => new TestSetNode(this.SetTarget, this.Test, !this.Inverted, this.Line, this.End, this.Begin);
 
         public override string ToString()
-            => string.Format("TestSetNode[target={0};test={1};inverted={2};line={3};begin={4};end={5}]",
-                this.Test, this.Inverted, this.Line, this.Begin, this.End);
-
-        public TestSetNode(int target, int test, bool inverted, int line, int begin, int end)
-            : base(test, inverted, line, begin, end)
-            => SetTarget = target;
+            => $"TestSetNode[target={this.SetTarget};test={this.Test};inverted={this.Inverted};line={this.Line};begin={this.Begin};end={this.End}]";
     }
 }

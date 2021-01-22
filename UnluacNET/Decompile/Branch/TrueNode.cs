@@ -5,9 +5,21 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class TrueNode : Branch
     {
+        public TrueNode(int register, bool inverted, int line, int begin, int end)
+            : base(line, begin, end)
+        {
+            this.Register = register;
+            this.Inverted = inverted;
+            this.SetTarget = register;
+        }
+
         public int Register { get; private set; }
+
         public bool Inverted { get; private set; }
 
         public override Expression AsExpression(Registers registers)
@@ -22,21 +34,9 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override void UseExpression(Expression expression)
         {
             // Do nothing
-            return;
         }
 
         public override string ToString()
-            => string.Format("TrueNode[register={0};inverted={1};line={2};begin={3};end={4}]",
-                this.Register, this.Inverted, this.Line, this.Begin, this.End);
-
-        public TrueNode(int register, bool inverted, int line, int begin, int end)
-            : base(line, begin, end)
-        {
-            this.Register = register;
-            this.Inverted = inverted;
-            this.SetTarget = register;
-            //???
-            //IsTest = true;
-        }
+            => string.Format("TrueNode[register={0};inverted={1};line={2};begin={3};end={4}]", this.Register, this.Inverted, this.Line, this.Begin, this.End);
     }
 }

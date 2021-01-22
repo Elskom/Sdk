@@ -5,15 +5,21 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class Function
     {
-        private Constant[] m_constants;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private readonly Constant[] m_constants;
 
         public Function(LFunction function)
         {
             this.m_constants = new Constant[function.Constants.Length];
             for (var i = 0; i < this.m_constants.Length; i++)
+            {
                 this.m_constants[i] = new Constant(function.Constants[i]);
+            }
         }
 
         public string GetGlobalName(int constantIndex)

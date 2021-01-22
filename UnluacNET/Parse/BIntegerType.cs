@@ -6,11 +6,16 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using IO;
-    
+    using Elskom.Generic.Libs.UnluacNET.IO;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class BIntegerType : BObjectType<BInteger>
     {
+        public BIntegerType(int intSize)
+            => this.IntSize = intSize;
+
         public int IntSize { get; private set; }
 
         public override BInteger Parse(Stream stream, BHeader header)
@@ -31,41 +36,41 @@ namespace Elskom.Generic.Libs.UnluacNET
             BInteger value = null;
             switch (this.IntSize)
             {
-            case 0:
-                value = new BInteger(0);
-                break;
-            case 1:
-                value = new BInteger(stream.ReadByte());
-                break;
-            case 2:
-                value = new BInteger(stream.ReadInt16(bigEndian));
-                break;
-            case 4:
-                value = new BInteger(stream.ReadInt32(bigEndian));
-                break;
-            case 8:
-                value = new BInteger(stream.ReadInt64(bigEndian));
-                break;
-            default:
-                throw new InvalidOperationException("Bad IntSize, cannot parse data");
-            //default:
-            //    {
-            //        var bytes = new byte[IntSize];
-            //
-            //        var start = 0;
-            //        var delta = 1;
-            //
-            //        for (int i = start; i >= 0 && i < IntSize; i += delta)
-            //            bytes[i] = (byte)stream.ReadByte();
-            //
-            //        value = new BInteger(BitConverter.ToInt64(bytes, 0));
-            //    } break;
+                case 0:
+                {
+                    value = new BInteger(0);
+                    break;
+                }
+
+                case 1:
+                {
+                    value = new BInteger(stream.ReadByte());
+                    break;
+                }
+
+                case 2:
+                {
+                    value = new BInteger(stream.ReadInt16(bigEndian));
+                    break;
+                }
+
+                case 4:
+                {
+                    value = new BInteger(stream.ReadInt32(bigEndian));
+                    break;
+                }
+
+                case 8:
+                {
+                    value = new BInteger(stream.ReadInt64(bigEndian));
+                    break;
+                }
+
+                default:
+                    throw new InvalidOperationException("Bad IntSize, cannot parse data");
             }
 
             return value;
         }
-
-        public BIntegerType(int intSize)
-            => this.IntSize = intSize;
     }
 }

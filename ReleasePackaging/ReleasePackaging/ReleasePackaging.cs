@@ -55,20 +55,18 @@ namespace Elskom.Generic.Libs
                     File.Delete(args[1]);
                 }
 
-                using (var zipFile = ZipFile.Open(args[1], ZipArchiveMode.Update))
+                using var zipFile = ZipFile.Open(args[1], ZipArchiveMode.Update);
+                var di1 = new DirectoryInfo(Directory.GetCurrentDirectory());
+                foreach (var fi1 in GetAllFilesWithExtensions(di1, new string[] { "*.exe", "*.dll", "*.xml", "*.txt", "*.pdb" }, new string[] { ".CodeAnalysisLog.xml" }))
                 {
-                    var di1 = new DirectoryInfo(Directory.GetCurrentDirectory());
-                    foreach (var fi1 in GetAllFilesWithExtensions(di1, new string[] { "*.exe", "*.dll", "*.xml", "*.txt", "*.pdb" }, new string[] { ".CodeAnalysisLog.xml" }))
-                    {
-                        _ = zipFile.CreateEntryFromFile(fi1.Name, fi1.Name);
-                    }
+                    _ = zipFile.CreateEntryFromFile(fi1.Name, fi1.Name);
+                }
 
-                    foreach (var di2 in di1.GetDirectories())
+                foreach (var di2 in di1.GetDirectories())
+                {
+                    foreach (var fi2 in GetAllFilesWithExtensions(di2, new string[] { "*.pdb", "*.dll", "*.xml", "*.txt" }, new string[] { ".CodeAnalysisLog.xml" }))
                     {
-                        foreach (var fi2 in GetAllFilesWithExtensions(di2, new string[] { "*.pdb", "*.dll", "*.xml", "*.txt" }, new string[] { ".CodeAnalysisLog.xml" }))
-                        {
-                            _ = zipFile.CreateEntryFromFile($"{di2.Name}{Path.DirectorySeparatorChar}{fi2.Name}", $"{di2.Name}{Path.DirectorySeparatorChar}{fi2.Name}");
-                        }
+                        _ = zipFile.CreateEntryFromFile($"{di2.Name}{Path.DirectorySeparatorChar}{fi2.Name}", $"{di2.Name}{Path.DirectorySeparatorChar}{fi2.Name}");
                     }
                 }
             }
@@ -103,12 +101,13 @@ namespace Elskom.Generic.Libs
         }
 
         private static string ReplaceStr(string str1, string str2, string str3, StringComparison comp)
-#if NETSTANDARD2_1 || NETCOREAPP2_1 || NETCOREAPP2_2 || NETCOREAPP3_0 || NETCOREAPP3_1 || NET5_0
+#if NETSTANDARD2_1 || NETCOREAPP || NET5_0
             => str1.Replace(str2, str3, comp);
 #else
         {
             if (comp == StringComparison.OrdinalIgnoreCase)
             {
+                // to suppress warnings with unused parameter.
             }
 
             return str1.Replace(str2, str3);

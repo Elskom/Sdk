@@ -6,15 +6,32 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class Assignment : Statement
     {
-        private readonly List<Target> m_targets     = new List<Target>(5);
-        private readonly List<Expression> m_values  = new List<Expression>(5);
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private readonly List<Target> m_targets = new List<Target>(5);
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private readonly List<Expression> m_values = new List<Expression>(5);
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private bool m_allNil = true;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private bool m_declare = false;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private int m_declareStart = 0;
 
-        private bool m_allNil       = true;
-        private bool m_declare      = false;
-        private int m_declareStart  = 0;
+        public Assignment()
+        {
+        }
+
+        public Assignment(Target target, Expression value)
+        {
+            this.m_targets.Add(target);
+            this.m_values.Add(value);
+            this.m_allNil = this.m_allNil && value.IsNil;
+        }
 
         public void AddFirst(Target target, Expression value)
         {
@@ -41,7 +58,9 @@ namespace Elskom.Generic.Libs.UnluacNET
         public bool AssignListEquals(List<Declaration> decls)
         {
             if (decls.Count != this.m_targets.Count)
+            {
                 return false;
+            }
 
             foreach (var target in this.m_targets)
             {
@@ -56,7 +75,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                 }
 
                 if (!found)
+                {
                     return false;
+                }
             }
 
             return true;
@@ -65,8 +86,12 @@ namespace Elskom.Generic.Libs.UnluacNET
         public bool AssignsTarget(Declaration decl)
         {
             foreach (var target in this.m_targets)
+            {
                 if (target.IsDeclaration(decl))
+                {
                     return true;
+                }
+            }
 
             return false;
         }
@@ -91,20 +116,24 @@ namespace Elskom.Generic.Libs.UnluacNET
             if (this.m_targets.Count > 0)
             {
                 if (this.m_declare)
+                {
                     output.Print("local ");
+                }
 
                 var functionSugar = false;
                 var value = this.m_values[0];
                 var target = this.m_targets[0];
-                if (this.m_targets.Count == 1 && this.m_values.Count == 1)
+                if (this.m_targets.Count == 1 && this.m_values.Count == 1 && value.IsClosure && target.IsFunctionName)
                 {
-                    if (value.IsClosure && target.IsFunctionName)
+                    // This check only works in Lua version 0x51
+                    if (!this.m_declare || this.m_declareStart >= value.ClosureUpvalueLine)
                     {
-                        //This check only works in Lua version 0x51
-                        if (!this.m_declare || this.m_declareStart >= value.ClosureUpvalueLine)
-                            functionSugar = true;
-                        if (target.IsLocal && value.IsUpvalueOf(target.GetIndex()))
-                            functionSugar = true;
+                        functionSugar = true;
+                    }
+
+                    if (target.IsLocal && value.IsUpvalueOf(target.GetIndex()))
+                    {
+                        functionSugar = true;
                     }
                 }
 
@@ -134,17 +163,6 @@ namespace Elskom.Generic.Libs.UnluacNET
                     output.Print(this.Comment);
                 }
             }
-        }
-
-        public Assignment()
-        {
-        }
-
-        public Assignment(Target target, Expression value)
-        {
-            this.m_targets.Add(target);
-            this.m_values.Add(value);
-            this.m_allNil = this.m_allNil && value.IsNil;
         }
     }
 }

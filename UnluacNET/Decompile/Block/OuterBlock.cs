@@ -7,10 +7,17 @@ namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class OuterBlock : Block
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly List<Statement> m_statements;
+
+        public OuterBlock(LFunction function, int length)
+            : base(function, 0, length + 1)
+            => this.m_statements = new List<Statement>(length);
 
         public override bool Breakable => false;
 
@@ -31,15 +38,13 @@ namespace Elskom.Generic.Libs.UnluacNET
             /* extra return statement */
             var last = this.m_statements.Count - 1;
             if (last < 0 || !(this.m_statements[last] is Return))
+            {
                 throw new InvalidOperationException(this.m_statements[last].ToString());
+            }
 
             // this doesn't seem like appropriate behavior???
             this.m_statements.RemoveAt(last);
-            Statement.PrintSequence(output, this.m_statements);
+            PrintSequence(output, this.m_statements);
         }
-
-        public OuterBlock(LFunction function, int length)
-            : base(function, 0, length + 1)
-            => this.m_statements = new List<Statement>(length);
     }
 }

@@ -7,13 +7,28 @@ namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class TForBlock : Block
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_register;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_length;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly Registers m_r;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly List<Statement> m_statements;
+
+        public TForBlock(LFunction function, int begin, int end, int register, int length, Registers r)
+            : base(function, begin, end)
+        {
+            this.m_register = register;
+            this.m_length = length;
+            this.m_r = r;
+            this.m_statements = new List<Statement>(end - begin + 1);
+        }
 
         public override bool Breakable => true;
 
@@ -41,39 +56,28 @@ namespace Elskom.Generic.Libs.UnluacNET
             }
 
             output.Print(" in ");
-            Expression value = null;
-            value = this.m_r.GetValue(this.m_register, this.Begin - 1);
-            value.Print(output);
 
             // TODO: Optimize code
-            if (!value.IsMultiple)
-            {
-                output.Print(", ");
-                value = this.m_r.GetValue(this.m_register + 1, this.Begin - 1);
-                value.Print(output);
-                if (!value.IsMultiple)
-                {
-                    output.Print(", ");
-                    value = this.m_r.GetValue(this.m_register + 2, this.Begin - 1);
-                    value.Print(output);
-                }
-            }
-
+            this.PrintRecurse(this.m_r.GetValue(this.m_register, this.Begin - 1), output, 1);
             output.Print(" do");
             output.PrintLine();
             output.IncreaseIndent();
-            Statement.PrintSequence(output, this.m_statements);
+            PrintSequence(output, this.m_statements);
             output.DecreaseIndent();
             output.Print("end");
         }
 
-        public TForBlock(LFunction function, int begin, int end, int register, int length, Registers r)
-            : base(function, begin, end)
+        private void PrintRecurse(Expression expression, Output output, int regincrem)
         {
-            this.m_register = register;
-            this.m_length = length;
-            this.m_r = r;
-            this.m_statements = new List<Statement>(end - begin + 1);
+            expression.Print(output);
+            if (!expression.IsMultiple)
+            {
+                output.Print(", ");
+                this.PrintRecurse(
+                    this.m_r.GetValue(this.m_register + regincrem, this.Begin - 1),
+                    output,
+                    regincrem + 1);
+            }
         }
     }
 }

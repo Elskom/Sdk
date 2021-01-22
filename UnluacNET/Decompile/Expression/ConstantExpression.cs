@@ -5,10 +5,22 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class ConstantExpression : Expression
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly Constant m_constant;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_index;
+
+        public ConstantExpression(Constant constant, int index)
+            : base(PRECEDENCE_ATOMIC)
+        {
+            this.m_constant = constant;
+            this.m_index = index;
+        }
 
         public override int ConstantIndex => this.m_index;
 
@@ -34,12 +46,5 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public override void Print(Output output)
             => this.m_constant.Print(output);
-
-        public ConstantExpression(Constant constant, int index)
-            : base(PRECEDENCE_ATOMIC)
-        {
-            this.m_constant = constant;
-            this.m_index = index;
-        }
     }
 }

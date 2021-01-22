@@ -7,16 +7,18 @@ namespace Elskom.Generic.Libs
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Messaging;
     using System.Text;
     using System.Xml.Linq;
     using Elskom.Generic.Libs.Properties;
-    using UnluacNET;
+    using Elskom.Generic.Libs.UnluacNET;
 
     /// <summary>
     /// Class that allows managing kom Files.
     /// </summary>
+    [SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase", Justification = "Part of public API.")]
     public static class KOMManager
     {
         private static List<IKomPlugin> komplugins;
@@ -110,19 +112,16 @@ namespace Elskom.Generic.Libs
                 throw new ArgumentNullException(nameof(destFileDir));
             }
 
-            if (File.Exists($"{origFileDir}{fileName}"))
+            if (File.Exists($"{origFileDir}{fileName}") && Directory.Exists(destFileDir))
             {
-                if (Directory.Exists(destFileDir))
+                MoveOriginalKomFiles(fileName, destFileDir, $"{destFileDir}{Path.DirectorySeparatorChar}backup");
+                if (!destFileDir.EndsWith($"{Path.DirectorySeparatorChar}", StringComparison.Ordinal))
                 {
-                    MoveOriginalKomFiles(fileName, destFileDir, $"{destFileDir}{Path.DirectorySeparatorChar}backup");
-                    File.Copy(origFileDir + fileName, destFileDir + fileName);
-                    if (!destFileDir.EndsWith($"{Path.DirectorySeparatorChar}", StringComparison.Ordinal))
-                    {
-                        // we must add this before copying the file to the target location.
-                        destFileDir += Path.DirectorySeparatorChar;
-                    }
-
+                    // we must add this before copying the file to the target location.
+                    destFileDir += Path.DirectorySeparatorChar;
                 }
+
+                File.Copy($"{origFileDir}{fileName}", $"{destFileDir}{fileName}");
             }
         }
 
@@ -196,6 +195,7 @@ namespace Elskom.Generic.Libs
                             {
                                 using (File.Create($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms{Path.DirectorySeparatorChar}{kom_data_folder}{Path.DirectorySeparatorChar}KOMVERSION.{kom_ver}"))
                                 {
+                                    // just need to create the dummy file.
                                 }
                             }
                             catch (DirectoryNotFoundException)
@@ -261,6 +261,7 @@ namespace Elskom.Generic.Libs
                                 // do not delete kom data folder.
                                 using (File.Create($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms{Path.DirectorySeparatorChar}{kom_data_folder}{Path.DirectorySeparatorChar}\\KOMVERSION.{komplugin.SupportedKOMVersion}"))
                                 {
+                                    // just need to create the dummy file.
                                 }
 
                                 InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs("Packing an folder to an KOM file failed.", Resources.Error, ErrorLevel.Error));
@@ -269,6 +270,7 @@ namespace Elskom.Generic.Libs
                             {
                                 using (File.Create($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms{Path.DirectorySeparatorChar}{kom_data_folder}{Path.DirectorySeparatorChar}KOMVERSION.{komplugin.SupportedKOMVersion}"))
                                 {
+                                    // just need to create the dummy file.
                                 }
 
                                 InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs($"The KOM V{komplugin.SupportedKOMVersion} plugin does not implement an packer function yet. Although it should.", Resources.Error, ErrorLevel.Error));
@@ -320,7 +322,7 @@ namespace Elskom.Generic.Libs
                 var xmldatabuffer = Encoding.ASCII.GetBytes(xmldata);
                 if (!File.Exists($"{outpath}{Path.DirectorySeparatorChar}crc.xml"))
                 {
-                    using (var fs = File.Create(outpath + Path.DirectorySeparatorChar + "crc.xml"))
+                    using (var fs = File.Create($"{outpath}{Path.DirectorySeparatorChar}crc.xml"))
                     {
                         fs.Write(xmldatabuffer, 0, xmldatabuffer.Length);
                     }
@@ -334,7 +336,6 @@ namespace Elskom.Generic.Libs
                     {
                         try
                         {
-                            int i = 0;
                             MemoryZlib.Decompress(entrydata, entryData);
                         }
                         catch (ArgumentException ex)
@@ -346,15 +347,12 @@ namespace Elskom.Generic.Libs
                             throw new NotUnpackableException("decompression failed...", ex);
                         }
 
-                        if (entry.Name.EndsWith(".lua", StringComparison.OrdinalIgnoreCase) || entry.Name.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
+                        // the particles and the lua files seem to share the same encryption in alg 0.
+                        // Decrypt the data from a encryption plugin.
+                        if ((entry.Name.EndsWith(".lua", StringComparison.OrdinalIgnoreCase) || entry.Name.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)) && Encryptionplugins != null && Encryptionplugins.Count > 0)
                         {
-                            // the particles and the lua files seem to share the same encryption in alg 0.
-                            // Decrypt the data from a encryption plugin.
-                            if (Encryptionplugins != null && Encryptionplugins.Count > 0)
-                            {
-                                // only use the first encryption/decryption plugin.
-                                Encryptionplugins[0].DecryptEntry(entryData, GetFileBaseName(kOMFileName), entry.Algorithm);
-                            }
+                            // only use the first encryption/decryption plugin.
+                            Encryptionplugins[0].DecryptEntry(entryData, GetFileBaseName(kOMFileName), entry.Algorithm);
                         }
 
                         if (entry.Name.EndsWith(".lua", StringComparison.OrdinalIgnoreCase))
@@ -590,6 +588,11 @@ namespace Elskom.Generic.Libs
             }
         }
 
+        /// <summary>
+        /// Gets the base file name of the KOM File.
+        /// </summary>
+        /// <param name="fileName">The input kom file.</param>
+        /// <returns>The base file name of the KOM File.</returns>
         public static string GetFileBaseName(string fileName)
         {
             var fi = new FileInfo(fileName);
@@ -603,6 +606,7 @@ namespace Elskom.Generic.Libs
         /// <returns>The version of the crc.xml file.</returns>
         internal static int GetCRCVersion(string xmldata)
         {
+            var result = 0;
             var xml = XElement.Parse(xmldata);
             if (xml.Element("File") != null)
             {
@@ -610,17 +614,18 @@ namespace Elskom.Generic.Libs
                 foreach (var fileElement in xml.Elements("File"))
                 {
                     var mappedIDAttribute = fileElement.Attribute("MappedID");
-                    return mappedIDAttribute != null ? 4 : 3;
+                    result = mappedIDAttribute != null ? 4 : 3;
                 }
             }
             else
             {
-                return 2;
+                result = 2;
             }
 
-            return 0;
+            return result;
         }
 
+        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         internal static void InvokeMessageEvent(object sender, MessageEventArgs e)
             => MessageEvent?.Invoke(sender, e);
 
@@ -643,7 +648,7 @@ namespace Elskom.Generic.Libs
                     _ = Directory.CreateDirectory(destFileDir);
                 }
 
-                if (!File.Exists($"{destFileDir}{fileName}"))
+                if (File.Exists($"{destFileDir}{fileName}"))
                 {
                     File.Delete($"{destFileDir}{fileName}");
                 }

@@ -6,35 +6,45 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System.Collections.Generic;
-    
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public abstract class Statement
     {
         public string Comment { get; set; }
 
         public virtual bool BeginsWithParen => false;
 
-        public abstract void Print(Output output);
-
         public static void PrintSequence(Output output, List<Statement> statements)
         {
             var count = statements.Count;
             for (var i = 0; i < count; i++)
             {
-                var last = (i + 1 == count);
+                var last = i + 1 == count;
                 var statement = statements[i];
                 var next = last ? null : statements[i + 1];
                 if (last)
+                {
                     statement.PrintTail(output);
+                }
                 else
+                {
                     statement.Print(output);
+                }
 
                 if (next != null && statement is FunctionCallStatement && next.BeginsWithParen)
+                {
                     output.Print(";");
-                
+                }
+
                 if (!(statement is IfThenElseBlock))
+                {
                     output.PrintLine();
+                }
             }
         }
+
+        public abstract void Print(Output output);
 
         public virtual void PrintTail(Output output)
             => this.Print(output);

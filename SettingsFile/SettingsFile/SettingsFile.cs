@@ -41,7 +41,7 @@ namespace Elskom.Generic.Libs
         ///
         /// Creates the folder if needed.
         /// </value>
-        public static string Path
+        public static string SettingsPath
             => PrivatePathResolver(".xml");
 
         /// <summary>
@@ -67,26 +67,26 @@ namespace Elskom.Generic.Libs
             var localPath = Environment.GetFolderPath(
                 Environment.SpecialFolder.LocalApplicationData);
             using var thisProcess = Process.GetCurrentProcess();
-            localPath += $"{System.IO.Path.DirectorySeparatorChar}{thisProcess.ProcessName}";
+            localPath += $"{Path.DirectorySeparatorChar}{thisProcess.ProcessName}";
+            if (!Directory.Exists(localPath))
+            {
+                _ = Directory.CreateDirectory(localPath);
+            }
+
             if (fileExtension.Equals(".xml", StringComparison.Ordinal))
             {
-                if (!Directory.Exists(localPath))
-                {
-                    _ = Directory.CreateDirectory(localPath);
-                }
-
                 // do not create the settings file, just pass this path to XmlObject.
                 // if we create it ourselves the new optimized class will fail
                 // to work right if it is empty.
-                localPath += $"{System.IO.Path.DirectorySeparatorChar}Settings.xml";
+                localPath += $"{Path.DirectorySeparatorChar}Settings.xml";
             }
             else if (fileExtension.Equals(".log", StringComparison.Ordinal))
             {
-                localPath += $"{System.IO.Path.DirectorySeparatorChar}{thisProcess.ProcessName}-{thisProcess.Id}.log";
+                localPath += $"{Path.DirectorySeparatorChar}{thisProcess.ProcessName}-{thisProcess.Id}.log";
             }
             else if (fileExtension.Equals(".mdmp", StringComparison.Ordinal))
             {
-                localPath += $"{System.IO.Path.DirectorySeparatorChar}{thisProcess.ProcessName}-{thisProcess.Id}.mdmp";
+                localPath += $"{Path.DirectorySeparatorChar}{thisProcess.ProcessName}-{thisProcess.Id}.mdmp";
             }
 
             return localPath;

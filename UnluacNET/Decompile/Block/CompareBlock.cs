@@ -6,10 +6,20 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class CompareBlock : Block
     {
+        public CompareBlock(LFunction function, int begin, int end, int target, Branch branch)
+            : base(function, begin, end)
+        {
+            this.Target = target;
+            this.Branch = branch;
+        }
+
         public int Target { get; set; }
+
         public Branch Branch { get; set; }
 
         public override bool Breakable => false;
@@ -21,7 +31,6 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override void AddStatement(Statement statement)
         {
             // Do nothing
-            return;
         }
 
         public override int GetLoopback()
@@ -35,12 +44,5 @@ namespace Elskom.Generic.Libs.UnluacNET
             {
                 return new RegisterSet(this.End - 1, this.Target, this.Branch.AsExpression(r)).Process(r, block);
             });
-
-        public CompareBlock(LFunction function, int begin, int end, int target, Branch branch)
-            : base(function, begin, end)
-        {
-            this.Target = target;
-            this.Branch = branch;
-        }
     }
 }

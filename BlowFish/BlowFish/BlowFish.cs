@@ -6,9 +6,10 @@
 namespace Elskom.Generic.Libs
 {
     using System;
-    using System.IO;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
@@ -26,16 +27,11 @@ namespace Elskom.Generic.Libs
         private uint[] bfS1;
         private uint[] bfS2;
         private uint[] bfS3;
-
         private uint[] bfP;
-
-        // KEY
-        private byte[] key;
 
         // HALF-BLOCKS
         private uint xlPar;
         private uint xrPar;
-
         private byte[] initVector;
         private bool iVSet;
 
@@ -95,7 +91,7 @@ namespace Elskom.Generic.Libs
                 }
                 else
                 {
-                    throw new Exception(Resources.BlowFish_Invalid_IV_Size);
+                    throw new InvalidOperationException(Resources.BlowFish_Invalid_IV_Size);
                 }
             }
         }
@@ -145,13 +141,13 @@ namespace Elskom.Generic.Libs
 
             if (block is MemoryStream ms)
             {
-                var _block = new byte[ms.Length];
-                Array.Copy(ms.GetBuffer(), _block, ms.GetBuffer().LongLength);
-                XorBlock(ref _block, iv);
+                var block1 = new byte[ms.Length];
+                Array.Copy(ms.GetBuffer(), block1, ms.GetBuffer().LongLength);
+                XorBlock(ref block1, iv);
 
                 // clear the old data then copy the new data to the stream.
-                Array.Clear(ms.GetBuffer(), 0, _block.Length);
-                Array.Copy(_block, 0, ms.GetBuffer(), 0, _block.Length);
+                Array.Clear(ms.GetBuffer(), 0, block1.Length);
+                Array.Copy(block1, 0, ms.GetBuffer(), 0, block1.Length);
             }
         }
 
@@ -171,6 +167,15 @@ namespace Elskom.Generic.Libs
         }
 
         /// <summary>
+        /// Encrypts a byte array in CBC mode.
+        /// IV must be created and saved manually.
+        /// </summary>
+        /// <param name="pt">Plaintext data to encrypt.</param>
+        /// <returns>Ciphertext.</returns>
+        public byte[] EncryptCBC(byte[] pt)
+            => pt == null ? throw new ArgumentNullException(nameof(pt)) : this.Crypt_CBC(pt, false);
+
+        /// <summary>
         /// Decrypts a string in CBC mode.
         /// </summary>
         /// <param name="ct">Ciphertext with IV appended to front.</param>
@@ -183,7 +188,7 @@ namespace Elskom.Generic.Libs
             }
 
             this.IV = HexToByte(ct.Substring(0, 16));
-#if NETCOREAPP
+#if NETCOREAPP || NETSTANDARD2_1 || NET5_0
             return Encoding.ASCII.GetString(this.DecryptCBC(HexToByte(ct.Substring(16)))).Replace("\0", string.Empty, StringComparison.Ordinal);
 #else
             return Encoding.ASCII.GetString(this.DecryptCBC(HexToByte(ct.Substring(16)))).Replace("\0", string.Empty);
@@ -197,30 +202,7 @@ namespace Elskom.Generic.Libs
         /// <param name="ct">Ciphertext data to decrypt.</param>
         /// <returns>Plaintext.</returns>
         public byte[] DecryptCBC(byte[] ct)
-        {
-            if (ct == null)
-            {
-                throw new ArgumentNullException(nameof(ct));
-            }
-
-            return this.Crypt_CBC(ct, true);
-        }
-
-        /// <summary>
-        /// Encrypts a byte array in CBC mode.
-        /// IV must be created and saved manually.
-        /// </summary>
-        /// <param name="pt">Plaintext data to encrypt.</param>
-        /// <returns>Ciphertext.</returns>
-        public byte[] EncryptCBC(byte[] pt)
-        {
-            if (pt == null)
-            {
-                throw new ArgumentNullException(nameof(pt));
-            }
-
-            return this.Crypt_CBC(pt, false);
-        }
+            => ct == null ? throw new ArgumentNullException(nameof(ct)) : this.Crypt_CBC(ct, true);
 
         /// <summary>
         /// Encrypt a string in ECB mode.
@@ -229,6 +211,14 @@ namespace Elskom.Generic.Libs
         /// <returns>hex value of encrypted data.</returns>
         public string EncryptECB(string pt)
             => ByteToHex(this.EncryptECB(Encoding.ASCII.GetBytes(pt)));
+
+        /// <summary>
+        /// Encrypts a byte array in ECB mode.
+        /// </summary>
+        /// <param name="pt">Plaintext data.</param>
+        /// <returns>Ciphertext bytes.</returns>
+        public byte[] EncryptECB(byte[] pt)
+            => pt == null ? throw new ArgumentNullException(nameof(pt)) : this.Crypt_ECB(pt, false);
 
         /// <summary>
         /// Decrypts a string (ECB).
@@ -242,26 +232,11 @@ namespace Elskom.Generic.Libs
                 throw new ArgumentNullException(nameof(ct));
             }
 
-#if NETCOREAPP
+#if NETCOREAPP || NETSTANDARD2_1 || NET5_0
             return Encoding.ASCII.GetString(this.Decrypt_ECB(HexToByte(ct))).Replace("\0", string.Empty, StringComparison.Ordinal);
 #else
             return Encoding.ASCII.GetString(this.Decrypt_ECB(HexToByte(ct))).Replace("\0", string.Empty);
 #endif
-        }
-
-        /// <summary>
-        /// Encrypts a byte array in ECB mode.
-        /// </summary>
-        /// <param name="pt">Plaintext data.</param>
-        /// <returns>Ciphertext bytes.</returns>
-        public byte[] EncryptECB(byte[] pt)
-        {
-            if (pt == null)
-            {
-                throw new ArgumentNullException(nameof(pt));
-            }
-
-            return this.Crypt_ECB(pt, false);
         }
 
         /// <summary>
@@ -270,6 +245,9 @@ namespace Elskom.Generic.Libs
         /// <param name="cipherText">Ciphertext byte array.</param>
         /// <param name="mode">Cipher mode.</param>
         /// <returns>Plaintext or null if mode is not CipherMode.ECB.</returns>
+        [SuppressMessage("Security", "SCS0011:CBC mode is weak", Justification = "Needed for Blowfish.")]
+        [SuppressMessage("Security", "SCS0012:ECB mode is weak", Justification = "Needed for Blowfish.")]
+        [SuppressMessage("Security", "SCS0013:Weak cipher mode", Justification = "Needed for Blowfish.")]
         public byte[] Decrypt(byte[] cipherText, CipherMode mode)
             => mode switch
             {
@@ -575,7 +553,8 @@ namespace Elskom.Generic.Libs
         /// </summary>
         /// <param name="ct">Ciphertext byte array.</param>
         /// <returns>Plaintext.</returns>
-        private byte[] Decrypt_ECB(byte[] ct) => this.Crypt_ECB(ct, true);
+        private byte[] Decrypt_ECB(byte[] ct)
+            => this.Crypt_ECB(ct, true);
 
         /// <summary>
         /// Sets up the S-blocks and the key.
@@ -591,17 +570,17 @@ namespace Elskom.Generic.Libs
             this.bfS2 = SetupS2();
             this.bfS3 = SetupS3();
 
-            this.key = new byte[cipherKey.Length]; // 448 bits
+            var key = new byte[cipherKey.Length]; // 448 bits
             if (cipherKey.Length > 56)
             {
-                throw new Exception(Resources.BlowFish_Key_Too_Long);
+                throw new InvalidOperationException(Resources.BlowFish_Key_Too_Long);
             }
 
-            Buffer.BlockCopy(cipherKey, 0, this.key, 0, cipherKey.Length);
+            Buffer.BlockCopy(cipherKey, 0, key, 0, cipherKey.Length);
             var j = 0;
             for (var i = 0; i < 18; i++)
             {
-                var d = (uint)((((((this.key[j % cipherKey.Length] * 256) + this.key[(j + 1) % cipherKey.Length]) * 256) + this.key[(j + 2) % cipherKey.Length]) * 256) + this.key[(j + 3) % cipherKey.Length]);
+                var d = (uint)((((((key[j % cipherKey.Length] * 256) + key[(j + 1) % cipherKey.Length]) * 256) + key[(j + 2) % cipherKey.Length]) * 256) + key[(j + 3) % cipherKey.Length]);
                 this.bfP[i] ^= d;
                 j = (j + 4) % cipherKey.Length;
             }
@@ -684,7 +663,7 @@ namespace Elskom.Generic.Libs
         {
             if (!this.iVSet)
             {
-                throw new Exception(Resources.BlowFish_IV_Not_Set);
+                throw new InvalidOperationException(Resources.BlowFish_IV_Not_Set);
             }
 
             var paddedLen = text.Length % 8 == 0 ? text.Length : text.Length + 8 - (text.Length % 8);

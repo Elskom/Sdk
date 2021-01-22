@@ -6,13 +6,14 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class BooleanIndicator : Block
     {
-        public override void AddStatement(Statement statement)
+        public BooleanIndicator(LFunction function, int line)
+            : base(function, line, line)
         {
-            // Do nothing
-            return;
         }
 
         public override bool Breakable => false;
@@ -21,15 +22,15 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public override bool IsUnprotected => false;
 
+        public override void AddStatement(Statement statement)
+        {
+            // Do nothing
+        }
+
         public override int GetLoopback()
             => throw new InvalidOperationException();
 
         public override void Print(Output output)
             => output.Print("-- unhandled boolean indicator");
-
-        public BooleanIndicator(LFunction function, int line)
-            : base(function, line, line)
-        {
-        }
     }
 }

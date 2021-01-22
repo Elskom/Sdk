@@ -6,8 +6,10 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class LLocalType : BObjectType<LLocal>
     {
         public override LLocal Parse(Stream stream, BHeader header)
@@ -17,8 +19,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             var end = header.Integer.Parse(stream, header);
             if (header.Debug)
             {
-                Console.WriteLine("-- parsing local, name: {0} from {1} to {2}",
-                    name, start.AsInteger(), end.AsInteger());
+                Console.WriteLine("-- parsing local, name: {0} from {1} to {2}", name, start.AsInteger(), end.AsInteger());
             }
 
             return new LLocal(name, start, end);

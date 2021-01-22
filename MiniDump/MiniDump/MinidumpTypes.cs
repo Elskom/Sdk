@@ -6,11 +6,13 @@
 namespace Elskom.Generic.Libs
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// The flags for the type of mini-dumps to generate.
     /// </summary>
     [Flags]
+    [SuppressMessage("Critical Code Smell", "S2346:Flags enumerations zero-value members should be named \"None\"", Justification = "To match the native flag names to pass into MiniDumpWriteDump.")]
     public enum MinidumpTypes
     {
         /// <summary>

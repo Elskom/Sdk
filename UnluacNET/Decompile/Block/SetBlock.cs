@@ -6,15 +6,36 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class SetBlock : Block
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private readonly bool m_empty;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private readonly Registers m_r;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private Assignment m_assign;
-        private bool m_empty;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private bool m_finalize;
-        private Registers m_r;
+
+        public SetBlock(LFunction function, Branch branch, int target, int line, int begin, int end, bool empty, Registers r)
+            : base(function, begin, end)
+        {
+            this.m_empty = empty;
+            if (begin == end)
+            {
+                this.Begin -= 1;
+            }
+
+            this.Target = target;
+            this.Branch = branch;
+            this.m_r = r;
+        }
 
         public int Target { get; private set; }
+
         public Branch Branch { get; private set; }
 
         public override bool Breakable => false;
@@ -26,9 +47,13 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override void AddStatement(Statement statement)
         {
             if (!this.m_finalize && statement is Assignment)
+            {
                 this.m_assign = statement as Assignment;
+            }
             else if (statement is BooleanIndicator)
+            {
                 this.m_finalize = true;
+            }
         }
 
         public override int GetLoopback()
@@ -67,13 +92,15 @@ namespace Elskom.Generic.Libs.UnluacNET
                 this.Branch.UseExpression(this.m_assign.GetFirstValue());
                 var target = this.m_assign.GetFirstTarget();
                 var value = this.GetValue();
-                return new LambdaOperation(this.End - 1, (r, block) => {
+                return new LambdaOperation(this.End - 1, (r, block) =>
+                {
                     return new Assignment(target, value);
                 });
             }
             else
             {
-                return new LambdaOperation(this.End - 1, (r, block) => {
+                return new LambdaOperation(this.End - 1, (r, block) =>
+                {
                     Expression expr = null;
                     var register = 0;
                     for (; register < r.NumRegisters; register++)
@@ -89,19 +116,15 @@ namespace Elskom.Generic.Libs.UnluacNET
                         d.Code.C(this.Branch.End - 2) != 0)
                     {
                         var target = d.Code.A(this.Branch.End - 2);
-                        if (d.Code.Op(this.Branch.End - 3) == Op.JMP &&
-                            d.Code.sBx(this.Branch.End - 3) == 2)
-                        {
-                            expr = r.GetValue(target, this.Branch.End - 2);
-                        }
-                        else
-                        {
-                            expr = r.GetValue(target, this.Branch.Begin);
-                        }
-
+                        expr = d.Code.Op(this.Branch.End - 3) == Op.JMP &&
+                            d.Code.sBx(this.Branch.End - 3) == 2
+                            ? r.GetValue(target, this.Branch.End - 2)
+                            : r.GetValue(target, this.Branch.Begin);
                         this.Branch.UseExpression(expr);
                         if (r.IsLocal(target, this.Branch.End - 1))
+                        {
                             return new Assignment(r.GetTarget(target, this.Branch.End - 1), this.Branch.AsExpression(r));
+                        }
 
                         r.SetValue(target, this.Branch.End - 1, this.Branch.AsExpression(r));
                     }
@@ -109,7 +132,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                     {
                         this.Branch.UseExpression(expr);
                         if (r.IsLocal(this.Target, this.Branch.End - 1))
+                        {
                             return new Assignment(r.GetTarget(this.Target, this.Branch.End - 1), this.Branch.AsExpression(r));
+                        }
 
                         r.SetValue(this.Target, this.Branch.End - 1, this.Branch.AsExpression(r));
                     }
@@ -129,18 +154,6 @@ namespace Elskom.Generic.Libs.UnluacNET
         {
             this.m_assign = assignment;
             this.Branch.UseExpression(assignment.GetFirstValue());
-        }
-
-        public SetBlock(LFunction function, Branch branch, int target, int line, int begin, int end, bool empty, Registers r)
-            : base(function, begin, end)
-        {
-            this.m_empty = empty;
-            if (begin == end)
-                this.Begin -= 1;
-
-            this.Target = target;
-            this.Branch = branch;
-            this.m_r = r;
         }
     }
 }

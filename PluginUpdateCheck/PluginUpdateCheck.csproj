@@ -21,6 +21,7 @@
     <Version Condition="'$(GITHUB_ACTIONS)' == 'true' AND !$(GITHUB_REF.StartsWith('refs/tags/'))">$(Version)-preview-$(GITHUB_RUN_ID)</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);NU5104;NU5118</NoWarn>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
@@ -125,6 +126,7 @@
     <Reference Include="System.IO.Compression.FileSystem" Condition="$(TargetFramework.StartsWith('net4'))" />
     <Reference Include="System.Xml" Condition="$(TargetFramework.StartsWith('net4'))" />
     <Reference Include="System.Xml.Linq" Condition="$(TargetFramework.StartsWith('net4'))" />
+    <Reference Include="System.Net.Http" Condition="$(TargetFramework.StartsWith('net4'))" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-21061-02" PrivateAssets="All" />
     <PackageReference Condition="!$(TargetFramework.StartsWith('netcoreapp')) AND !$(TargetFramework.StartsWith('netstandard')) AND '$(TargetFramework)' != 'net5.0'" Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
   </ItemGroup>

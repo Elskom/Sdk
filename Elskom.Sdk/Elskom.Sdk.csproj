@@ -1,37 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.Build.NoTargets/2.0.1">
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PackageId>Elskom.Sdk</PackageId>
-    <Authors>Els_kom org.</Authors>
-    <Company>Els_kom org.</Company>
-    <Description>Elskom SDK for development of Els_kom plugins and for Els_kom itself. Also contains libs that can be used for project as well.</Description>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Copyright>Copyright (c) 2018-2021</Copyright>
-    <PackageTags>XML;GitBuildInformation;SettingsFile;zlib;BlowFish;Unluac;ZipAssembly;ReleasePackaging;MessageManager;GenericPluginLoader;MiniDump;PluginFramework;PluginUpdateCheck;GitBuildInfo</PackageTags>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/Elskom/Sdk/</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/Elskom/Sdk/</PackageProjectUrl>
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath>
-    <!-- Ensure build output does not get added to the package. -->
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <PublishBuildOutput>false</PublishBuildOutput>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NuspecFile>Elskom.Sdk.dbg.nuspec</NuspecFile>
-    <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NuspecFile>Elskom.Sdk.rel.nuspec</NuspecFile>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
+    <NuspecFile>Elskom.Sdk.nuspec</NuspecFile>
+    <NuspecProperties>configuration=$(Configuration)</NuspecProperties>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
 
   <ItemGroup>

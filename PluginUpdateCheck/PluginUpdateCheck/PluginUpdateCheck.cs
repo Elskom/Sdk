@@ -7,17 +7,20 @@ namespace Elskom.Generic.Libs
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
     using System.Messaging;
-    using System.Net;
+    using System.Net.Http;
     using System.Xml.Linq;
     using Elskom.Generic.Libs.Properties;
 
     /// <summary>
     /// A generic plugin update checker.
     /// </summary>
+    [SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly", Justification = "Possible bug in analyzer?")]
     public class PluginUpdateCheck : IDisposable
     {
         private bool disposedValue;
@@ -41,13 +44,14 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Gets a value indicating whether there are any pending updates and displays a message if there is.
         /// </summary>
+        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         public bool ShowMessage
         {
             get
             {
                 if (!string.Equals(this.InstalledVersion, this.CurrentVersion, StringComparison.Ordinal) && !string.IsNullOrEmpty(this.InstalledVersion))
                 {
-                    MessageEvent?.Invoke(this, new MessageEventArgs(string.Format(Resources.PluginUpdateCheck_ShowMessage_Update_for_plugin_is_availible, this.CurrentVersion, this.PluginName), Resources.PluginUpdateCheck_ShowMessage_New_plugin_update, ErrorLevel.Info));
+                    MessageEvent?.Invoke(this, new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_ShowMessage_Update_for_plugin_is_availible, this.CurrentVersion, this.PluginName), Resources.PluginUpdateCheck_ShowMessage_New_plugin_update, ErrorLevel.Info));
                     return true;
                 }
 
@@ -80,7 +84,7 @@ namespace Elskom.Generic.Libs
         /// </summary>
         public List<string> DownloadFiles { get; private protected set; }
 
-        internal static WebClient WebClient { get; private protected set; }
+        internal static HttpClient HttpClient { get; private protected set; } = new HttpClient();
 
         /// <summary>
         /// Checks for plugin updates from the provided plugin source urls.
@@ -89,6 +93,7 @@ namespace Elskom.Generic.Libs
         /// <param name="pluginTypes">A list of types to the plugins to check for updates to.</param>
         /// <returns>A list of <see cref="PluginUpdateCheck"/> instances representing the plugins that needs updating or are to be installed.</returns>
         // catches the plugin urls and uses that cache to detect added urls, and only appends those to the list.
+        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         public static List<PluginUpdateCheck> CheckForUpdates(string[] pluginURLs, List<Type> pluginTypes)
         {
             _ = pluginURLs ?? throw new ArgumentNullException(nameof(pluginURLs));
@@ -98,13 +103,20 @@ namespace Elskom.Generic.Libs
             // fixup the github urls (if needed).
             for (var i = 0; i < pluginURLs.Length; i++)
             {
+#if NETSTANDARD2_1 || NETCOREAPP || NET5_0
+                pluginURLs[i] = pluginURLs[i].Replace(
+                    "https://github.com/",
+                    "https://raw.githubusercontent.com/",
+                    StringComparison.Ordinal) + (
+                pluginURLs[i].EndsWith("/", StringComparison.Ordinal) ? "master/plugins.xml" : "/master/plugins.xml");
+#else
                 pluginURLs[i] = pluginURLs[i].Replace(
                     "https://github.com/",
                     "https://raw.githubusercontent.com/") + (
-                    pluginURLs[i].EndsWith("/", StringComparison.Ordinal) ? "master/plugins.xml" : "/master/plugins.xml");
+                pluginURLs[i].EndsWith("/", StringComparison.Ordinal) ? "master/plugins.xml" : "/master/plugins.xml");
+#endif
             }
 
-            WebClient ??= new WebClient();
             PluginUrls ??= new List<string>();
             foreach (var pluginURL in pluginURLs)
             {
@@ -112,7 +124,7 @@ namespace Elskom.Generic.Libs
                 {
                     try
                     {
-                        var doc = XDocument.Parse(WebClient.DownloadString(pluginURL));
+                        var doc = XDocument.Parse(HttpClient.GetStringAsync(pluginURL).GetAwaiter().GetResult());
                         var elements = doc.Root.Elements("Plugin");
                         foreach (var element in elements)
                         {
@@ -151,9 +163,9 @@ namespace Elskom.Generic.Libs
                             }
                         }
                     }
-                    catch (WebException ex)
+                    catch (HttpRequestException ex)
                     {
-                        MessageEvent?.Invoke(typeof(PluginUpdateCheck), new MessageEventArgs(string.Format(Resources.PluginUpdateCheck_CheckForUpdates_Failed_to_download_the_plugins_sources_list_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
+                        MessageEvent?.Invoke(typeof(PluginUpdateCheck), new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_CheckForUpdates_Failed_to_download_the_plugins_sources_list_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
                     }
                 }
 
@@ -178,6 +190,7 @@ namespace Elskom.Generic.Libs
         /// </summary>
         /// <param name="saveToZip">A bool indicating if the file should be installed to a zip file instead of a folder.</param>
         /// <returns>A bool indicating if anything changed.</returns>
+        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         public bool Install(bool saveToZip)
         {
             foreach (var downloadFile in this.DownloadFiles)
@@ -185,7 +198,12 @@ namespace Elskom.Generic.Libs
                 try
                 {
                     var path = $"{Environment.CurrentDirectory}{Path.DirectorySeparatorChar}plugins{Path.DirectorySeparatorChar}{downloadFile}";
-                    WebClient.DownloadFile($"{this.DownloadUrl}{downloadFile}", path);
+                    using (var fs = File.Create(path))
+                    using (var response = HttpClient.GetStreamAsync($"{this.DownloadUrl}{downloadFile}").GetAwaiter().GetResult())
+                    {
+                        response.CopyTo(fs);
+                    }
+
                     if (saveToZip)
                     {
                         var zippath = $"{Environment.CurrentDirectory}{Path.DirectorySeparatorChar}plugins.zip";
@@ -206,9 +224,9 @@ namespace Elskom.Generic.Libs
 
                     return true;
                 }
-                catch (WebException ex)
+                catch (HttpRequestException ex)
                 {
-                    MessageEvent?.Invoke(this, new MessageEventArgs(string.Format(Resources.PluginUpdateCheck_Install_Failed_to_install_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
+                    MessageEvent?.Invoke(this, new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_Install_Failed_to_install_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
                 }
             }
 
@@ -220,6 +238,7 @@ namespace Elskom.Generic.Libs
         /// </summary>
         /// <param name="saveToZip">A bool indicating if the file should be uninstalled from a zip file instead of a folder. If the zip file after the operation becomes empty it is also deleted automatically.</param>
         /// <returns>A bool indicating if anything changed.</returns>
+        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         public bool Uninstall(bool saveToZip)
         {
             try
@@ -252,33 +271,37 @@ namespace Elskom.Generic.Libs
                             }
                         }
                     }
-
-                    return true;
                 }
+
+                return true;
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
             {
-                MessageEvent?.Invoke(this, new MessageEventArgs(string.Format(Resources.PluginUpdateCheck_Uninstall_Failed_to_uninstall_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
+                MessageEvent?.Invoke(this, new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_Uninstall_Failed_to_uninstall_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
             }
-#pragma warning restore CA1031 // Do not catch general exception types
 
             return false;
         }
 
+        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP023:Don't use reference types in finalizer context.", Justification = "Needed to clean up WebClient.")]
         private protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposedValue)
+            if (HttpClient != null && Environment.HasShutdownStarted)
             {
-                if (disposing)
-                {
-                    if (WebClient != null && Environment.HasShutdownStarted)
-                    {
-                        WebClient.Dispose();
-                        WebClient = null;
-                    }
-                }
+                // ensure the WebClient gets disposed.
+                HttpClient.Dispose();
+                HttpClient = null;
+            }
 
+            if (!this.disposedValue && disposing)
+            {
+                // prevent any leaks from this.
+                this.PluginName = null;
+                this.CurrentVersion = null;
+                this.InstalledVersion = null;
+                this.DownloadUrl = null;
+                this.DownloadFiles.Clear();
+                this.DownloadFiles = null;
                 this.disposedValue = true;
             }
         }

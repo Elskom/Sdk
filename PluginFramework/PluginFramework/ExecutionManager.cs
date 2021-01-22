@@ -8,7 +8,6 @@ namespace Elskom.Generic.Libs
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using System.Linq;
     using System.Messaging;
     using Elskom.Generic.Libs.Properties;
 
@@ -38,7 +37,7 @@ namespace Elskom.Generic.Libs
         public static bool IsElsKomRunning()
         {
             var els_komexe = Process.GetProcessesByName("Els_kom");
-            return els_komexe.Count() > 1;
+            return els_komexe.Length > 1;
         }
 
         /// <summary>
@@ -49,7 +48,7 @@ namespace Elskom.Generic.Libs
         [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "Created in a using block that never checks for null.", Scope = "member")]
         public static void RunElswordDirectly()
         {
-            if (File.Exists(SettingsFile.Path))
+            if (File.Exists(SettingsFile.SettingsPath))
             {
                 SettingsFile.Settingsxml?.ReopenFile();
                 ElsDir = SettingsFile.Settingsxml?.TryRead("ElsDir");
@@ -94,7 +93,7 @@ namespace Elskom.Generic.Libs
         {
             // for the sake of sanity and the need to disable the pack, unpack, and test mods
             // buttons in UI while updating game.
-            if (File.Exists(SettingsFile.Path))
+            if (File.Exists(SettingsFile.SettingsPath))
             {
                 SettingsFile.Settingsxml?.ReopenFile();
                 ElsDir = SettingsFile.Settingsxml?.TryRead("ElsDir");

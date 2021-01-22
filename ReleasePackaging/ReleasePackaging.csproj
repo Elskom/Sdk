@@ -21,6 +21,7 @@
     <Version Condition="'$(GITHUB_ACTIONS)' == 'true' AND !$(GITHUB_REF.StartsWith('refs/tags/'))">$(Version)-preview-$(GITHUB_RUN_ID)</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);NU5104;NU5118</NoWarn>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>

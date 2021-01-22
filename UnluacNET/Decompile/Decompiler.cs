@@ -7,15 +7,19 @@ namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class Decompiler
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private static Stack<Branch> m_backup;
         private readonly int registers;
         private readonly int length;
         private readonly Upvalues upvalues;
         private readonly LFunction[] functions;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_params;
         private readonly int vararg;
         private readonly Op tForTarget;
@@ -25,27 +29,47 @@ namespace Elskom.Generic.Libs.UnluacNET
         private bool[] skip;
         private bool[] reverseTarget;
 
+        public Decompiler(LFunction function)
+        {
+            this.F = new Function(function);
+            this.Function = function;
+            this.registers = function.MaxStackSize;
+            this.length = function.Code.Length;
+            this.Code = new Code(function);
+            if (function.Locals.Length >= function.NumParams)
+            {
+                this.DeclList = new Declaration[function.Locals.Length];
+                for (var i = 0; i < this.DeclList.Length; i++)
+                {
+                    this.DeclList[i] = new Declaration(function.Locals[i]);
+                }
+            }
+            else
+            {
+                // TODO: debug info missing
+                this.DeclList = new Declaration[function.NumParams];
+                for (var i = 0; i < this.DeclList.Length; i++)
+                {
+                    var name = string.Format("_ARG_{0}_", i);
+                    this.DeclList[i] = new Declaration(name, 0, this.length - 1);
+                }
+            }
+
+            this.upvalues = new Upvalues(function.UpValues);
+            this.functions = function.Functions;
+            this.m_params = function.NumParams;
+            this.vararg = function.VarArg;
+            this.tForTarget = function.Header.Version.TForTarget;
+        }
+
         public Code Code { get; private set; }
+
         public Declaration[] DeclList { get; private set; }
 
         // TODO: Pick better names
         protected Function F { get; set; }
+
         protected LFunction Function { get; set; }
-
-        private int BreakTarget(int line)
-        {
-            var tLine = int.MaxValue;
-            foreach (var block in this.blocks)
-            {
-                if (block.Breakable && block.Contains(line))
-                    tLine = Math.Min(tLine, block.End);
-            }
-
-            if (tLine == int.MaxValue)
-                return -1;
-
-            return tLine;
-        }
 
         public void Decompile()
         {
@@ -56,16 +80,110 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.ProcessSequence(1, this.length);
         }
 
+        public Branch PopCompareSetCondition(Stack<Branch> stack, int assignEnd, int target)
+        {
+            var top = stack.Pop();
+            var invert = false;
+            if (this.Code.B(top.Begin) == 0)
+            {
+                invert = true;
+            }
+
+            top.Begin = assignEnd;
+            top.End = assignEnd;
+            stack.Push(top);
+
+            // Invert argument doesn't matter because begin == end
+            return this.PopSetConditionInternal(stack, invert, assignEnd, target);
+        }
+
+        public Branch PopCondition(Stack<Branch> stack)
+        {
+            var branch = stack.Pop();
+            if (m_backup != null)
+            {
+                m_backup.Push(branch);
+            }
+
+            if (branch is TestSetNode)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var begin = branch.Begin;
+            if (this.Code.Op(branch.Begin) == Op.JMP)
+            {
+                begin += 1 + this.Code.sBx(branch.Begin);
+            }
+
+            while (stack.Count > 0)
+            {
+                var next = stack.Peek();
+                if (next is TestSetNode)
+                {
+                    break;
+                }
+
+                if (next.End == begin)
+                {
+                    branch = new OrBranch(this.PopCondition(stack).Invert(), branch);
+                }
+                else if (next.End == branch.End)
+                {
+                    branch = new AndBranch(this.PopCondition(stack), branch);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return branch;
+        }
+
+        public Branch PopSetCondition(Stack<Branch> stack, int assignEnd, int target)
+        {
+            stack.Push(new AssignNode(assignEnd - 1, assignEnd, assignEnd));
+
+            // Invert argument doesn't matter because begin == end
+            return this.PopSetConditionInternal(stack, false, assignEnd, target);
+        }
+
+        public void Print()
+            => this.Print(new Output());
+
+        public void Print(Output output)
+        {
+            this.HandleInitialDeclares(output);
+            this.outer.Print(output);
+        }
+
+        private int BreakTarget(int line)
+        {
+            var tLine = int.MaxValue;
+            foreach (var block in this.blocks)
+            {
+                if (block.Breakable && block.Contains(line))
+                {
+                    tLine = Math.Min(tLine, block.End);
+                }
+            }
+
+            return tLine == int.MaxValue ? -1 : tLine;
+        }
+
         private Block EnclosingBlock(int line)
         {
-            //Assumes the outer block is first
-            var outer = this.blocks[0];
-            var enclosing = outer;
+            // Assumes the outer block is first
+            var l_outer = this.blocks[0];
+            var enclosing = l_outer;
             for (var i = 1; i < this.blocks.Count; i++)
             {
                 var next = this.blocks[i];
                 if (next.IsContainer && enclosing.Contains(next) && next.Contains(line) && !next.LoopRedirectAdjustment)
+                {
                     enclosing = next;
+                }
             }
 
             return enclosing;
@@ -73,17 +191,21 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         private Block EnclosingBlock(Block block)
         {
-            //Assumes the outer block is first
-            var outer = this.blocks[0];
-            var enclosing = outer;
+            // Assumes the outer block is first
+            var l_outer = this.blocks[0];
+            var enclosing = l_outer;
             for (var i = 1; i < this.blocks.Count; i++)
             {
                 var next = this.blocks[i];
                 if (next == block)
+                {
                     continue;
+                }
 
                 if (next.Contains(block) && enclosing.Contains(next))
+                {
                     enclosing = next;
+                }
             }
 
             return enclosing;
@@ -91,31 +213,35 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         private Block EnclosingBreakableBlock(int line)
         {
-            var outer = this.blocks[0];
-            var enclosing = outer;
+            var l_outer = this.blocks[0];
+            var enclosing = l_outer;
             for (var i = 1; i < this.blocks.Count; i++)
             {
                 var next = this.blocks[i];
                 if (next.Contains(line) && enclosing.Contains(next) && next.Breakable && !next.LoopRedirectAdjustment)
+                {
                     enclosing = next;
+                }
             }
 
-            return enclosing == outer ? null : enclosing;
+            return enclosing == l_outer ? null : enclosing;
         }
 
         private Block EnclosingUnprotectedBlock(int line)
         {
-            //Assumes the outer block is first
-            var outer = this.blocks[0];
-            var enclosing = outer;
+            // Assumes the outer block is first
+            var l_outer = this.blocks[0];
+            var enclosing = l_outer;
             for (var i = 1; i < this.blocks.Count; i++)
             {
                 var next = this.blocks[i];
                 if (next.Contains(line) && enclosing.Contains(next) && next.IsUnprotected && !next.LoopRedirectAdjustment)
+                {
                     enclosing = next;
+                }
             }
 
-            return enclosing == outer ? null : enclosing;
+            return enclosing == l_outer ? null : enclosing;
         }
 
         private void FindReverseTargets()
@@ -125,7 +251,9 @@ namespace Elskom.Generic.Libs.UnluacNET
             {
                 var sBx = this.Code.sBx(line);
                 if (this.Code.Op(line) == Op.JMP && sBx < 0)
+                {
                     this.reverseTarget[line + 1 + sBx] = true;
+                }
             }
         }
 
@@ -205,6 +333,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             }
         }
 
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1312:Variable names should begin with lower-case letter", Justification = "Don't care for now.")]
         private Expression GetMoveIntoTargetValue(int line, int previous)
         {
             var A = this.Code.A(line);
@@ -218,24 +347,22 @@ namespace Elskom.Generic.Libs.UnluacNET
                 case Op.SETGLOBAL:
                     return this.r.GetExpression(A, previous);
                 case Op.SETTABLE:
-                {
-                    if ((C & 0x100) != 0)
-                        throw new InvalidOperationException();
-
-                    return this.r.GetExpression(C, previous);
-                }
+                    return ((C & 0x100) != 0) ? throw new InvalidOperationException() : this.r.GetExpression(C, previous);
                 default:
                     throw new InvalidOperationException();
             }
         }
 
         // TODO: Optimize / rewrite method
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1312:Variable names should begin with lower-case letter", Justification = "Don't care for now.")]
+        [SuppressMessage("Minor Code Smell", "S1481:Unused local variables should be removed", Justification = "Don't care for now.")]
+        [SuppressMessage("Critical Code Smell", "S2696:Instance members should not write to \"static\" fields", Justification = "Don't care for now.")]
         private OuterBlock HandleBranches(bool first)
         {
             var oldBlocks = this.blocks;
             this.blocks = new List<Block>();
-            var outer = new OuterBlock(this.Function, this.length);
-            this.blocks.Add(outer);
+            var l_outer = new OuterBlock(this.Function, this.length);
+            this.blocks.Add(l_outer);
             var isBreak = new bool[this.length + 1];
             var loopRemoved = new bool[this.length + 1];
             if (!first)
@@ -243,7 +370,10 @@ namespace Elskom.Generic.Libs.UnluacNET
                 foreach (var block in oldBlocks)
                 {
                     if (block is AlwaysLoop)
+                    {
                         this.blocks.Add(block);
+                    }
+
                     if (block is Break)
                     {
                         this.blocks.Add(block);
@@ -276,7 +406,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                 }
 
                 foreach (var block in delete)
+                {
                     this.blocks.Remove(block);
+                }
             }
 
             this.skip = new bool[this.length + 1];
@@ -288,10 +420,10 @@ namespace Elskom.Generic.Libs.UnluacNET
             {
                 if (!this.skip[line])
                 {
-                    var A   = this.Code.A(line);
-                    var B   = this.Code.B(line);
-                    var C   = this.Code.C(line);
-                    var Bx  = this.Code.Bx(line);
+                    var A = this.Code.A(line);
+                    var B = this.Code.B(line);
+                    var C = this.Code.C(line);
+                    var Bx = this.Code.Bx(line);
                     var sBx = this.Code.sBx(line);
                     var op = this.Code.Op(line);
                     switch (op)
@@ -307,18 +439,27 @@ namespace Elskom.Generic.Libs.UnluacNET
                             switch (op)
                             {
                                 case Op.EQ:
+                                {
                                     node = new EQNode(B, C, invert, line, begin, end);
                                     break;
+                                }
+
                                 case Op.LT:
+                                {
                                     node = new LTNode(B, C, invert, line, begin, end);
                                     break;
+                                }
+
                                 case Op.LE:
+                                {
                                     node = new LENode(B, C, invert, line, begin, end);
                                     break;
+                                }
                             }
 
                             stack.Push(node);
                             this.skip[line + 1] = true;
+
                             // TODO: Add code description
                             // Not quite sure what the purpose of this is,
                             // but it seems to be related to conditionals
@@ -331,6 +472,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                                     {
                                         node.IsCompareSet = true;
                                         node.SetTarget = this.Code.A(node.End);
+
                                         // Done
                                         break;
                                     }
@@ -342,8 +484,10 @@ namespace Elskom.Generic.Libs.UnluacNET
                                 // No action taken
                                 break;
                             }
-                        }
+
                             continue;
+                        }
+
                         case Op.TEST:
                         {
                             var invert = C != 0;
@@ -351,8 +495,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                             var end = begin + this.Code.sBx(line + 1);
                             stack.Push(new TestNode(A, invert, line, begin, end));
                             this.skip[line + 1] = true;
-                        }
                             continue;
+                        }
+
                         case Op.TESTSET:
                         {
                             var invert = C != 0;
@@ -362,8 +507,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                             testSetEnd = end;
                             stack.Push(new TestSetNode(A, B, invert, line, begin, end));
                             this.skip[line + 1] = true;
-                        }
                             continue;
+                        }
+
                         case Op.JMP:
                         {
                             reduce = true;
@@ -385,20 +531,25 @@ namespace Elskom.Generic.Libs.UnluacNET
                                 var tReg = this.Code.A(tLine);
                                 var tLength = this.Code.C(tLine);
                                 if (tLength == 0)
+                                {
                                     throw new InvalidOperationException();
+                                }
 
                                 var blockBegin = line + 1;
                                 var blockEnd = tLine + 2;
                                 for (var k = 0; k < 3; k++)
+                                {
                                     this.r.SetInternalLoopVariable(tReg + k, tLine, blockBegin); // TODO: end?
+                                }
 
                                 for (var index = 1; index <= tLength; index++)
+                                {
                                     this.r.SetExplicitLoopVariable(tReg + 2 + index, line, blockEnd); // TODO: end?
+                                }
 
                                 this.skip[tLine] = true;
                                 this.skip[tLine + 1] = true;
-                                this.blocks.Add(new TForBlock(this.Function, blockBegin, blockEnd, tReg, tLength,
-                                    this.r));
+                                this.blocks.Add(new TForBlock(this.Function, blockBegin, blockEnd, tReg, tLength, this.r));
                             }
                             else if (this.Code.sBx(line) == 2 && this.Code.Op(line + 1) == Op.LOADBOOL &&
                                      this.Code.C(line + 1) != 0)
@@ -429,8 +580,10 @@ namespace Elskom.Generic.Libs.UnluacNET
                                     }
                                 }
                             }
-                        }
+
                             break;
+                        }
+
                         case Op.FORPREP:
                         {
                             reduce = true;
@@ -438,31 +591,45 @@ namespace Elskom.Generic.Libs.UnluacNET
                             var close = target - 1;
                             var forBegin = line + 1;
                             var forEnd = target + 1;
-                            this.blocks.Add(new ForBlock(this.Function, forBegin, forEnd, A, r));
+                            this.blocks.Add(new ForBlock(this.Function, forBegin, forEnd, A, this.r));
                             this.skip[line + 1 + sBx] = true;
                             for (var k = 0; k < 3; k++)
+                            {
                                 this.r.SetInternalLoopVariable(A + k, forBegin - 2, forEnd - 1);
+                            }
 
                             this.r.SetExplicitLoopVariable(A + 3, forBegin - 1, forEnd - 2);
-                        }
                             break;
+                        }
+
                         case Op.FORLOOP:
+                        {
                             // Should be skipped by preceding FORPREP
                             throw new InvalidOperationException();
+                        }
+
                         default:
+                        {
                             reduce = this.IsStatement(line);
                             break;
+                        }
                     }
                 }
 
                 if ((line + 1) <= this.length && this.reverseTarget[line + 1])
+                {
                     reduce = true;
+                }
 
                 if (testSet && testSetEnd == line + 1)
+                {
                     reduce = true;
+                }
 
                 if (stack.Count == 0)
+                {
                     reduce = false;
+                }
 
                 if (reduce)
                 {
@@ -500,7 +667,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                             {
                                 var node = peekNode as TestNode;
                                 if (node.Test == this.Code.A(assignEnd - 2))
+                                {
                                     isAssignNode = true;
+                                }
                             }
                         }
                         else if (assignEnd - 2 >= 1 &&
@@ -533,7 +702,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                             {
                                 var decl = this.r.GetDeclaration(this.GetAssignment(assignEnd - 1), assignEnd - 1);
                                 if (decl.Begin == assignEnd - 1 && decl.End > assignEnd - 1)
+                                {
                                     isAssignNode = true;
+                                }
                             }
                         }
 
@@ -567,27 +738,33 @@ namespace Elskom.Generic.Libs.UnluacNET
                         {
                             m_backup = new Stack<Branch>();
                             conditions.Push(this.PopCondition(stack));
-                            m_backup.Reverse();
+                            _ = m_backup.Reverse();
                         }
 
                         backups.Push(m_backup);
-                    } while (stack.Count > 0);
+                    }
+                    while (stack.Count > 0);
 
                     do
                     {
                         var cond = conditions.Pop();
                         var backup = backups.Pop();
                         var breakTarget = this.BreakTarget(cond.Begin);
-                        var breakable = (breakTarget >= 1);
+                        var breakable = breakTarget >= 1;
                         if (breakable && this.Code.Op(breakTarget) == Op.JMP)
-                            breakTarget += (1 + this.Code.sBx(breakTarget));
+                        {
+                            breakTarget += 1 + this.Code.sBx(breakTarget);
+                        }
+
                         if (breakable && breakTarget == cond.End)
                         {
-                            var immediateEnclosing = EnclosingBlock(cond.Begin);
+                            var immediateEnclosing = this.EnclosingBlock(cond.Begin);
                             var breakableEnclosing = this.EnclosingBreakableBlock(cond.Begin);
                             var loopStart = immediateEnclosing.End;
                             if (immediateEnclosing == breakableEnclosing)
+                            {
                                 --loopStart;
+                            }
 
                             for (var iline = loopStart; iline >= Math.Max(cond.Begin, immediateEnclosing.Begin); iline--)
                             {
@@ -622,7 +799,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                             }
 
                             if (hasTail && enclosing.GetLoopback() == tail)
+                            {
                                 tail = enclosing.End - 1;
+                            }
                         }/* !!!HACK ALERT!!! */
                         else if (hasTail && breakEnclosing != null && (tail >= breakEnclosing.ScopeEnd))
                         {
@@ -632,7 +811,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 
                             // before, 'else' statements would be misinterpreted as 'break' statements
                             // thankfully, 'else' statements can be found using this method
-                            var isElse = ((cond.End + this.Code.sBx(cond.End - 1) - 1) == breakEnclosing.ScopeEnd);
+                            var isElse = (cond.End + this.Code.sBx(cond.End - 1) - 1) == breakEnclosing.ScopeEnd;
                             if (scopeIsBad && !isElse && !isBreak[tail - 1])
                             {
                                 hasScopeIssues = true;
@@ -656,7 +835,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                             var begin = cond.Begin;
                             var target = this.Code.A(begin);
                             if (this.Code.B(begin) == 0)
+                            {
                                 cond = cond.Invert();
+                            }
 
                             this.blocks.Add(new CompareBlock(this.Function, begin, begin + 2, target, cond));
                         }
@@ -674,7 +855,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                                 var sbx = this.Code.sBx(tail - 1);
                                 var loopback2 = tail + sbx;
                                 var isBreakableLoopEnd = this.Function.Header.Version.IsBreakableLoopEnd(op);
-                                var isElse = (this.Code.Op(cond.Begin - 1) == Op.JMP && (cond.Begin + this.Code.sBx(cond.Begin - 1)) >= cond.End);
+                                var isElse = this.Code.Op(cond.Begin - 1) == Op.JMP && (cond.Begin + this.Code.sBx(cond.Begin - 1)) >= cond.End;
 
                                 // --- clean check -------- hacky check ----------------------------
                                 if ((isBreakableLoopEnd || (breakEnclosing != null && hasScopeIssues)) && loopback2 <= cond.Begin && !isBreak[tail - 1])
@@ -688,8 +869,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                                     var emptyElse = tail == cond.End;
                                     this.blocks.Add(new IfThenElseBlock(this.Function, cond, originalTail, emptyElse, this.r));
                                     if (!emptyElse)
+                                    {
                                         this.blocks.Add(new ElseEndBlock(this.Function, cond.End, tail));
-
+                                    }
                                 }
                             }
                             else
@@ -705,7 +887,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                                     }
                                 }
 
-                                //TODO: check for 5.2-style if cond then break end
+                                // TODO: check for 5.2-style if cond then break end
                                 if (loopback >= cond.Begin || existsStatement)
                                 {
                                     this.blocks.Add(new IfThenEndBlock(this.Function, cond, backup, this.r));
@@ -721,12 +903,12 @@ namespace Elskom.Generic.Libs.UnluacNET
                         {
                             this.blocks.Add(new IfThenEndBlock(this.Function, cond, backup, this.r));
                         }
-
-                    } while (conditions.Count > 0);
+                    }
+                    while (conditions.Count > 0);
                 }
             }
 
-            //Find variables whose scope isn't controlled by existing blocks:
+            // Find variables whose scope isn't controlled by existing blocks:
             foreach (var decl in this.DeclList)
             {
                 if (!decl.ForLoop && !decl.ForLoopExplicit)
@@ -745,9 +927,9 @@ namespace Elskom.Generic.Libs.UnluacNET
 
                     if (needsDoEnd)
                     {
-                        //Without accounting for the order of declarations, we might
-                        //create another do..end block later that would eliminate the
-                        //need for this one. But order of decls should fix this.
+                        // Without accounting for the order of declarations, we might
+                        // create another do..end block later that would eliminate the
+                        // need for this one. But order of decls should fix this.
                         this.blocks.Add(new DoEndBlock(this.Function, decl.Begin, decl.End + 1));
                     }
                 }
@@ -759,10 +941,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                 var block = this.blocks[b];
 
                 // Remove breaks that were later parsed as else jumps
-                if (this.skip[block.Begin])
+                if (this.skip[block.Begin] && block is Break)
                 {
-                    if (block is Break)
-                        continue;
+                    continue;
                 }
 
                 newBlocks.Add(block);
@@ -771,7 +952,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             newBlocks.Sort();
             this.blocks = newBlocks;
             m_backup = null;
-            return outer;
+            return l_outer;
         }
 
         private void HandleInitialDeclares(Output output)
@@ -781,7 +962,9 @@ namespace Elskom.Generic.Libs.UnluacNET
             {
                 var decl = this.DeclList[i];
                 if (decl.Begin == 0)
+                {
                     initDecls.Add(decl);
+                }
             }
 
             if (initDecls.Count > 0)
@@ -811,8 +994,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                 case Op.SETTABLE:
                 {
                     var c = this.Code.C(line);
-                    return (c & 0x100) != 0 ? false : !this.r.IsLocal(c, line);
+                    return (c & 0x100) == 0 && !this.r.IsLocal(c, line);
                 }
+
                 default:
                     return false;
             }
@@ -850,11 +1034,14 @@ namespace Elskom.Generic.Libs.UnluacNET
                     for (var register = this.Code.A(line); register <= this.Code.B(line); register++)
                     {
                         if (this.r.IsLocal(register, line))
+                        {
                             return true;
+                        }
                     }
 
                     return false;
                 }
+
                 case Op.SETGLOBAL:
                 case Op.SETUPVAL:
                 case Op.SETTABUP:
@@ -873,6 +1060,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                     var a = this.Code.A(line);
                     return this.r.IsLocal(a, line) || this.r.IsLocal(a + 1, line);
                 }
+
                 case Op.EQ:
                 case Op.LT:
                 case Op.LE:
@@ -885,39 +1073,52 @@ namespace Elskom.Generic.Libs.UnluacNET
                     var a = this.Code.A(line);
                     var c = this.Code.C(line);
                     if (c == 1)
+                    {
                         return true;
+                    }
 
                     if (c == 0)
+                    {
                         c = this.registers - a + 1;
+                    }
 
                     for (var register = a; register < a + c - 1; register++)
                     {
                         if (this.r.IsLocal(register, line))
+                        {
                             return true;
+                        }
                     }
 
-                    return (c == 2 && a == testRegister);
+                    return c == 2 && a == testRegister;
                 }
+
                 case Op.VARARG:
                 {
                     var a = this.Code.A(line);
                     var b = this.Code.B(line);
                     if (b == 0)
+                    {
                         b = this.registers - a + 1;
+                    }
 
                     for (var register = a; register < a + b - 1; register++)
                     {
                         if (this.r.IsLocal(register, line))
+                        {
                             return true;
+                        }
                     }
 
                     return false;
                 }
+
                 default:
                     throw new InvalidOperationException("Illegal opcode: " + this.Code.Op(line));
             }
         }
 
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1312:Variable names should begin with lower-case letter", Justification = "Don't care for now.")]
         private LinkedList<Operation> ProcessLine(int line)
         {
             var operations = new LinkedList<Operation>();
@@ -928,30 +1129,42 @@ namespace Elskom.Generic.Libs.UnluacNET
             switch (this.Code.Op(line))
             {
                 case Op.MOVE:
+                {
                     operations.AddLast(new RegisterSet(line, A, this.r.GetExpression(B, line)));
                     break;
+                }
+
                 case Op.LOADK:
+                {
                     operations.AddLast(new RegisterSet(line, A, this.F.GetConstantExpression(Bx)));
                     break;
+                }
+
                 case Op.LOADBOOL:
                 {
                     var constant = new Constant((B != 0) ? LBoolean.LTRUE : LBoolean.LFALSE);
                     operations.AddLast(new RegisterSet(line, A, new ConstantExpression(constant, -1)));
-                }
                     break;
+                }
+
                 case Op.LOADNIL:
                 {
-                    var maximum = (this.Function.Header.Version.UsesOldLoadNilEncoding) ? B : (A + B);
+                    var maximum = this.Function.Header.Version.UsesOldLoadNilEncoding ? B : (A + B);
                     while (A <= maximum)
                     {
                         operations.AddLast(new RegisterSet(line, A, Expression.NIL));
                         A++;
                     }
-                }
+
                     break;
+                }
+
                 case Op.GETUPVAL:
+                {
                     operations.AddLast(new RegisterSet(line, A, this.upvalues.GetExpression(B)));
                     break;
+                }
+
                 case Op.GETTABUP:
                 {
                     var expr = (B == 0 && (C & 0x100) != 0)
@@ -959,115 +1172,160 @@ namespace Elskom.Generic.Libs.UnluacNET
                         : new TableReference(this.upvalues.GetExpression(B), this.r.GetKExpression(C, line)) as
                             Expression;
                     operations.AddLast(new RegisterSet(line, A, expr));
-                }
                     break;
+                }
+
                 case Op.GETGLOBAL:
+                {
                     operations.AddLast(new RegisterSet(line, A, this.F.GetGlobalExpression(Bx)));
                     break;
+                }
+
                 case Op.GETTABLE:
-                    operations.AddLast(new RegisterSet(line, A,
-                        new TableReference(this.r.GetExpression(B, line), this.r.GetKExpression(C, line))));
+                {
+                    operations.AddLast(new RegisterSet(line, A, new TableReference(this.r.GetExpression(B, line), this.r.GetKExpression(C, line))));
                     break;
+                }
+
                 case Op.SETUPVAL:
+                {
                     operations.AddLast(new UpvalueSet(line, this.upvalues.GetName(B), this.r.GetExpression(A, line)));
                     break;
+                }
+
                 case Op.SETTABUP:
                 {
-
                     if (A == 0 && (B & 0x100) != 0)
                     {
-                        //TODO: check
-                        operations.AddLast(new GlobalSet(line, this.F.GetGlobalName(B & 0xFF),
-                            this.r.GetKExpression(C, line)));
+                        // TODO: check
+                        operations.AddLast(new GlobalSet(line, this.F.GetGlobalName(B & 0xFF), this.r.GetKExpression(C, line)));
                     }
                     else
                     {
-                        operations.AddLast(new TableSet(line, this.upvalues.GetExpression(A),
-                            this.r.GetKExpression(B, line), this.r.GetKExpression(C, line), true, line));
+                        operations.AddLast(new TableSet(line, this.upvalues.GetExpression(A), this.r.GetKExpression(B, line), this.r.GetKExpression(C, line), true, line));
                     }
 
                     break;
                 }
 
                 case Op.SETGLOBAL:
+                {
                     operations.AddLast(new GlobalSet(line, this.F.GetGlobalName(Bx), this.r.GetExpression(A, line)));
                     break;
+                }
+
                 case Op.SETTABLE:
-                    operations.AddLast(new TableSet(line, this.r.GetExpression(A, line), this.r.GetKExpression(B, line),
-                        this.r.GetKExpression(C, line), true, line));
+                {
+                    operations.AddLast(new TableSet(line, this.r.GetExpression(A, line), this.r.GetKExpression(B, line), this.r.GetKExpression(C, line), true, line));
                     break;
+                }
+
                 case Op.NEWTABLE:
+                {
                     operations.AddLast(new RegisterSet(line, A, new TableLiteral(B, C)));
                     break;
+                }
+
                 case Op.SELF:
                 {
                     // We can later determine is : syntax was used by comparing subexpressions with ==
                     var common = this.r.GetExpression(B, line);
                     operations.AddLast(new RegisterSet(line, A + 1, common));
-                    operations.AddLast(new RegisterSet(line, A,
-                        new TableReference(common, this.r.GetKExpression(C, line))));
+                    operations.AddLast(new RegisterSet(line, A, new TableReference(common, this.r.GetKExpression(C, line))));
+                    break;
                 }
-                    break;
+
                 case Op.ADD:
-                    operations.AddLast(new RegisterSet(line, A,
-                        Expression.MakeADD(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
+                {
+                    operations.AddLast(new RegisterSet(line, A, Expression.MakeADD(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
                     break;
+                }
+
                 case Op.SUB:
-                    operations.AddLast(new RegisterSet(line, A,
-                        Expression.MakeSUB(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
+                {
+                    operations.AddLast(new RegisterSet(line, A, Expression.MakeSUB(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
                     break;
+                }
+
                 case Op.MUL:
-                    operations.AddLast(new RegisterSet(line, A,
-                        Expression.MakeMUL(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
+                {
+                    operations.AddLast(new RegisterSet(line, A, Expression.MakeMUL(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
                     break;
+                }
+
                 case Op.DIV:
-                    operations.AddLast(new RegisterSet(line, A,
-                        Expression.MakeDIV(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
+                {
+                    operations.AddLast(new RegisterSet(line, A, Expression.MakeDIV(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
                     break;
+                }
+
                 case Op.MOD:
-                    operations.AddLast(new RegisterSet(line, A,
-                        Expression.MakeMOD(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
+                {
+                    operations.AddLast(new RegisterSet(line, A, Expression.MakeMOD(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
                     break;
+                }
+
                 case Op.POW:
-                    operations.AddLast(new RegisterSet(line, A,
-                        Expression.MakePOW(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
+                {
+                    operations.AddLast(new RegisterSet(line, A, Expression.MakePOW(this.r.GetKExpression(B, line), this.r.GetKExpression(C, line))));
                     break;
+                }
+
                 case Op.UNM:
+                {
                     operations.AddLast(new RegisterSet(line, A, Expression.MakeUNM(this.r.GetExpression(B, line))));
                     break;
+                }
+
                 case Op.NOT:
+                {
                     operations.AddLast(new RegisterSet(line, A, Expression.MakeNOT(this.r.GetExpression(B, line))));
                     break;
+                }
+
                 case Op.LEN:
+                {
                     operations.AddLast(new RegisterSet(line, A, Expression.MakeLEN(this.r.GetExpression(B, line))));
                     break;
+                }
+
                 case Op.CONCAT:
                 {
                     var value = this.r.GetExpression(C, line);
 
-                    //Remember that CONCAT is right associative.
+                    // Remember that CONCAT is right associative.
                     while (C-- > B)
+                    {
                         value = Expression.MakeCONCAT(this.r.GetExpression(C, line), value);
+                    }
 
                     operations.AddLast(new RegisterSet(line, A, value));
-                }
                     break;
+                }
+
                 case Op.JMP:
                 case Op.EQ:
                 case Op.LT:
                 case Op.LE:
                 case Op.TEST:
                 case Op.TESTSET:
+                {
                     /* Do nothing ... handled with branches */
                     break;
+                }
+
                 case Op.CALL:
                 {
-                    var multiple = (C >= 3 || C == 0);
+                    var multiple = C >= 3 || C == 0;
                     if (B == 0)
+                    {
                         B = this.registers - A;
+                    }
 
                     if (C == 0)
+                    {
                         C = this.registers - A + 1;
+                    }
 
                     var function = this.r.GetExpression(A, line);
                     var arguments = new Expression[B - 1];
@@ -1092,44 +1350,61 @@ namespace Elskom.Generic.Libs.UnluacNET
                         else
                         {
                             for (var register = A; register <= A + C - 2; register++)
+                            {
                                 operations.AddLast(new RegisterSet(line, register, value));
+                            }
                         }
                     }
-                }
+
                     break;
+                }
+
                 case Op.TAILCALL:
                 {
                     if (B == 0)
+                    {
                         B = this.registers - A;
+                    }
 
                     var function = this.r.GetExpression(A, line);
                     var arguments = new Expression[B - 1];
                     for (var register = A + 1; register <= A + B - 1; register++)
+                    {
                         arguments[register - A - 1] = this.r.GetExpression(register, line);
+                    }
 
                     var value = new FunctionCall(function, arguments, true);
                     operations.AddLast(new ReturnOperation(line, value));
                     this.skip[line + 1] = true;
-                }
                     break;
+                }
+
                 case Op.RETURN:
                 {
                     if (B == 0)
+                    {
                         B = this.registers - A + 1;
+                    }
 
                     var values = new Expression[B - 1];
                     for (var register = A; register <= A + B - 2; register++)
+                    {
                         values[register - A] = this.r.GetExpression(register, line);
+                    }
 
                     operations.AddLast(new ReturnOperation(line, values));
-                }
                     break;
+                }
+
                 case Op.FORLOOP:
                 case Op.FORPREP:
                 case Op.TFORCALL:
                 case Op.TFORLOOP:
+                {
                     /* Do nothing ... handled with branches */
                     break;
+                }
+
                 case Op.SETLIST:
                 {
                     if (C == 0)
@@ -1139,15 +1414,19 @@ namespace Elskom.Generic.Libs.UnluacNET
                     }
 
                     if (B == 0)
+                    {
                         B = this.registers - A - 1;
+                    }
 
                     var table = this.r.GetValue(A, line);
                     for (var i = 1; i <= B; i++)
-                        operations.AddLast(new TableSet(line, table,
-                            new ConstantExpression(new Constant((C - 1) * 50 + i), -1),
-                            this.r.GetExpression(A + i, line), false, this.r.GetUpdated(A + i, line)));
-                }
+                    {
+                        operations.AddLast(new TableSet(line, table, new ConstantExpression(new Constant(((C - 1) * 50) + i), -1), this.r.GetExpression(A + i, line), false, this.r.GetUpdated(A + i, line)));
+                    }
+
                     break;
+                }
+
                 case Op.CLOSE:
                     break;
                 case Op.CLOSURE:
@@ -1158,24 +1437,36 @@ namespace Elskom.Generic.Libs.UnluacNET
                     {
                         // Skip upvalue declarations
                         for (var i = 0; i < f.NumUpValues; i++)
+                        {
                             this.skip[line + 1 + i] = true;
+                        }
                     }
-                }
+
                     break;
+                }
+
                 case Op.VARARG:
                 {
-                    var multiple = (B != 2);
+                    var multiple = B != 2;
                     if (B == 1)
+                    {
                         throw new InvalidOperationException();
+                    }
 
                     if (B == 0)
+                    {
                         B = this.registers - A + 1;
+                    }
 
                     var value = new Vararg(B - 1, multiple);
                     for (var register = A; register <= A + B - 2; register++)
+                    {
                         operations.AddLast(new RegisterSet(line, register, value));
-                }
+                    }
+
                     break;
+                }
+
                 default:
                     throw new InvalidOperationException("Illegal instruction: " + this.Code.Op(line));
             }
@@ -1188,7 +1479,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             Assignment assign = null;
             var wasMultiple = false;
             var stmt = operation.Process(this.r, block);
-            
+
             // TODO: Optimize code
             if (stmt != null)
             {
@@ -1196,9 +1487,13 @@ namespace Elskom.Generic.Libs.UnluacNET
                 {
                     assign = stmt as Assignment;
                     if (!assign.GetFirstValue().IsMultiple)
+                    {
                         block.AddStatement(stmt);
+                    }
                     else
+                    {
                         wasMultiple = true;
+                    }
                 }
                 else
                 {
@@ -1217,7 +1512,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                     }
 
                     if (wasMultiple && !assign.GetFirstValue().IsMultiple)
+                    {
                         block.AddStatement(stmt);
+                    }
                 }
             }
 
@@ -1237,13 +1534,17 @@ namespace Elskom.Generic.Libs.UnluacNET
                 {
                     blockHandler = blockStack.Pop().Process(this);
                     if (blockHandler != null)
+                    {
                         break;
+                    }
                 }
 
                 if (blockHandler == null)
                 {
                     while (blockIndex < this.blocks.Count && this.blocks[blockIndex].Begin <= line)
+                    {
                         blockStack.Push(this.blocks[blockIndex++]);
+                    }
                 }
 
                 var block = blockStack.Peek();
@@ -1256,7 +1557,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                         var a = new Assignment();
                         a.Declare(nLocals[0].Begin);
                         foreach (var decl in nLocals)
+                        {
                             a.AddLast(new VariableTarget(decl), this.r.GetValue(decl.Register, line));
+                        }
 
                         block.AddStatement(a);
                     }
@@ -1285,7 +1588,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                         }
 
                         if (count > 0)
+                        {
                             block.AddStatement(assign);
+                        }
                     }
                     else
                     {
@@ -1293,11 +1598,15 @@ namespace Elskom.Generic.Libs.UnluacNET
                         {
                             var temp = this.ProcessOperation(operation, line, line + 1, block);
                             if (temp != null)
+                            {
                                 assign = temp;
+                            }
                         }
 
                         if (assign != null && assign.GetFirstValue().IsMultiple)
+                        {
                             block.AddStatement(assign);
+                        }
                     }
                 }
                 else
@@ -1305,13 +1614,12 @@ namespace Elskom.Generic.Libs.UnluacNET
                     assign = this.ProcessOperation(blockHandler, line, line, block);
                 }
 
-                if (assign != null)
+                if (assign != null && newLocals.Count > 0)
                 {
-                    if (newLocals.Count > 0)
+                    assign.Declare(newLocals[0].Begin);
+                    foreach (var decl in newLocals)
                     {
-                        assign.Declare(newLocals[0].Begin);
-                        foreach (var decl in newLocals)
-                            assign.AddLast(new VariableTarget(decl), this.r.GetValue(decl.Register, line + 1));
+                        assign.AddLast(new VariableTarget(decl), this.r.GetValue(decl.Register, line + 1));
                     }
                 }
 
@@ -1321,88 +1629,37 @@ namespace Elskom.Generic.Libs.UnluacNET
                     {
                         // TODO: Handle when 'blockHandler' is null and 'assign' is NOT null
                     }
-                    else if (newLocals.Count > 0 && this.Code.Op(line) != Op.FORPREP)
+                    else if (newLocals.Count > 0 && this.Code.Op(line) != Op.FORPREP && (this.Code.Op(line) != Op.JMP || this.Code.Op(line + 1 + this.Code.sBx(line)) != this.tForTarget))
                     {
-                        if (this.Code.Op(line) != Op.JMP || this.Code.Op(line + 1 + this.Code.sBx(line)) != this.tForTarget)
+                        assign = new Assignment();
+                        assign.Declare(newLocals[0].Begin);
+                        foreach (var decl in newLocals)
                         {
-                            assign = new Assignment();
-                            assign.Declare(newLocals[0].Begin);
-                            foreach (var decl in newLocals)
-                                assign.AddLast(new VariableTarget(decl), this.r.GetValue(decl.Register, line));
-
-                            block.AddStatement(assign);
+                            assign.AddLast(new VariableTarget(decl), this.r.GetValue(decl.Register, line));
                         }
+
+                        block.AddStatement(assign);
                     }
                 }
                 else
                 {
                     line--;
-                    continue;
                 }
             }
-        }
-
-        public Branch PopCompareSetCondition(Stack<Branch> stack, int assignEnd, int target)
-        {
-            var top = stack.Pop();
-            var invert = false;
-            if (this.Code.B(top.Begin) == 0)
-                invert = true;
-
-            top.Begin = assignEnd;
-            top.End = assignEnd;
-            stack.Push(top);
-
-            // Invert argument doesn't matter because begin == end
-            return this.PopSetConditionInternal(stack, invert, assignEnd, target);
-        }
-
-        public Branch PopCondition(Stack<Branch> stack)
-        {
-            var branch = stack.Pop();
-            if (m_backup != null)
-                m_backup.Push(branch);
-
-            if (branch is TestSetNode)
-                throw new InvalidOperationException();
-
-            var begin = branch.Begin;
-            if (this.Code.Op(branch.Begin) == Op.JMP)
-                begin += (1 + this.Code.sBx(branch.Begin));
-
-            while (stack.Count > 0)
-            {
-                var next = stack.Peek();
-                if (next is TestSetNode)
-                    break;
-
-                if (next.End == begin)
-                    branch = new OrBranch(this.PopCondition(stack).Invert(), branch);
-                else if (next.End == branch.End)
-                    branch = new AndBranch(this.PopCondition(stack), branch);
-                else
-                    break;
-            }
-
-            return branch;
-        }
-
-        public Branch PopSetCondition(Stack<Branch> stack, int assignEnd, int target)
-        {
-            stack.Push(new AssignNode(assignEnd - 1, assignEnd, assignEnd));
-            
-            //Invert argument doesn't matter because begin == end
-            return this.PopSetConditionInternal(stack, false, assignEnd, target);
         }
 
         private int AdjustLine(int line, int target)
         {
             var testLine = line;
             while (testLine >= 1 && this.Code.Op(testLine) == Op.LOADBOOL && (target == -1 || this.Code.A(testLine) == target))
+            {
                 testLine--;
+            }
 
             if (testLine == line)
+            {
                 return testLine;
+            }
 
             testLine++;
             testLine += (this.Code.C(testLine) != 0) ? 2 : 1;
@@ -1415,7 +1672,9 @@ namespace Elskom.Generic.Libs.UnluacNET
             var begin = branch.Begin;
             var end = branch.End;
             if (invert)
+            {
                 branch = branch.Invert();
+            }
 
             begin = this.AdjustLine(begin, target);
             end = this.AdjustLine(end, target);
@@ -1430,10 +1689,10 @@ namespace Elskom.Generic.Libs.UnluacNET
                     nInvert = this.Code.B(nEnd) != 0;
                     nEnd = this.AdjustLine(nEnd, target);
                 }
-                else if (next is TestNode)
+                else if (next is TestNode node)
                 {
                     // also applies to TestSetNode's
-                    nInvert = ((TestNode)next).Inverted;
+                    nInvert = node.Inverted;
                 }
                 else if (nEnd >= assignEnd)
                 {
@@ -1443,15 +1702,8 @@ namespace Elskom.Generic.Libs.UnluacNET
                 var addr = (nInvert == invert) ? end : begin;
                 if (addr == nEnd)
                 {
-                    // TODO: Fix impossible statement
-                    //if (addr != nEnd)
-                    //    nInvert = !nInvert;
                     var left = this.PopSetConditionInternal(stack, nInvert, assignEnd, target);
-                    if (nInvert)
-                        branch = new OrBranch(left, branch);
-                    else
-                        branch = new AndBranch(left, branch);
-
+                    branch = nInvert ? new OrBranch(left, branch) : (Branch)new AndBranch(left, branch);
                     branch.End = nEnd;
                 }
                 else
@@ -1469,46 +1721,6 @@ namespace Elskom.Generic.Libs.UnluacNET
             branch.IsSet = true;
             branch.SetTarget = btarget;
             return branch;
-        }
-
-        public void Print()
-            => this.Print(new Output());
-
-        public void Print(Output output)
-        {
-            this.HandleInitialDeclares(output);
-            this.outer.Print(output);
-        }
-
-        public Decompiler(LFunction function)
-        {
-            this.F = new Function(function);
-            this.Function = function;
-            this.registers = function.MaxStackSize;
-            this.length = function.Code.Length;
-            this.Code = new Code(function);
-            if (function.Locals.Length >= function.NumParams)
-            {
-                this.DeclList = new Declaration[function.Locals.Length];
-                for (var i = 0; i < this.DeclList.Length; i++)
-                    this.DeclList[i] = new Declaration(function.Locals[i]);
-            }
-            else
-            {
-                // TODO: debug info missing;
-                this.DeclList = new Declaration[function.NumParams];
-                for (var i = 0; i < this.DeclList.Length; i++)
-                {
-                    var name = string.Format("_ARG_{0}_", i);
-                    this.DeclList[i] = new Declaration(name, 0, this.length - 1);
-                }
-            }
-
-            this.upvalues = new Upvalues(function.UpValues);
-            this.functions = function.Functions;
-            this.m_params = function.NumParams;
-            this.vararg = function.VarArg;
-            this.tForTarget = function.Header.Version.TForTarget;
         }
     }
 }

@@ -6,10 +6,24 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System.Collections.Generic;
-    
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class Return : Statement
     {
-        private Expression[] values;
+        private readonly Expression[] values;
+
+        public Return()
+            => this.values = new Expression[0];
+
+        public Return(Expression value)
+            => this.values = new Expression[1]
+            {
+                value,
+            };
+
+        public Return(Expression[] values)
+            => this.values = values;
 
         public override void Print(Output output)
         {
@@ -26,22 +40,12 @@ namespace Elskom.Generic.Libs.UnluacNET
                 output.Print(" ");
                 var rtns = new List<Expression>(this.values.Length);
                 foreach (var value in this.values)
+                {
                     rtns.Add(value);
+                }
 
                 Expression.PrintSequence(output, rtns, false, true);
             }
         }
-
-        public Return()
-            => values = new Expression[0];
-
-        public Return(Expression value)
-            => values = new Expression[1]
-            {
-                value
-            };
-
-        public Return(Expression[] values)
-            => this.values = values;
     }
 }

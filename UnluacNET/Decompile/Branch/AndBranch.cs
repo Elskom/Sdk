@@ -5,10 +5,22 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class AndBranch : Branch
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly Branch m_left;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly Branch m_right;
+
+        public AndBranch(Branch left, Branch right)
+            : base(right.Line, right.Begin, right.End)
+        {
+            this.m_left = left;
+            this.m_right = right;
+        }
 
         public override Expression AsExpression(Registers registers)
             => Expression.MakeAND(this.m_left.AsExpression(registers), this.m_right.AsExpression(registers));
@@ -27,13 +39,6 @@ namespace Elskom.Generic.Libs.UnluacNET
         {
             this.m_left.UseExpression(expression);
             this.m_right.UseExpression(expression);
-        }
-
-        public AndBranch(Branch left, Branch right)
-            : base(right.Line, right.Begin, right.End)
-        {
-            this.m_left = left;
-            this.m_right = right;
         }
     }
 }

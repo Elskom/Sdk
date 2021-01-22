@@ -106,14 +106,7 @@ namespace System.Runtime.InteropServices
         /// or <see langword="null"/>.
         /// </returns>
         public static GitInformation GetAssemblyInstance(Type assemblyType)
-        {
-            if (assemblyType == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyType));
-            }
-
-            return GetAssemblyInstance(assemblyType.Assembly);
-        }
+            => assemblyType == null ? throw new ArgumentNullException(nameof(assemblyType)) : GetAssemblyInstance(assemblyType.Assembly);
 
         /// <summary>
         /// Gets the instance of the <see cref="GitInformation"/> class for

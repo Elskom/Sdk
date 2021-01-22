@@ -5,11 +5,25 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class ClosureExpression : Expression
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly LFunction m_function;
-        private int m_upvalueLine;
-        private Declaration[] m_declList;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private readonly int m_upvalueLine;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private readonly Declaration[] m_declList;
+
+        public ClosureExpression(LFunction function, Declaration[] declList, int upvalueLine)
+            : base(PRECEDENCE_ATOMIC)
+        {
+            this.m_function = function;
+            this.m_upvalueLine = upvalueLine;
+            this.m_declList = declList;
+        }
 
         public override int ConstantIndex => -1;
 
@@ -22,7 +36,9 @@ namespace Elskom.Generic.Libs.UnluacNET
             foreach (var upvalue in this.m_function.UpValues)
             {
                 if (upvalue.InStack && upvalue.Index == register)
+                {
                     return true;
+                }
             }
 
             return false;
@@ -67,7 +83,9 @@ namespace Elskom.Generic.Libs.UnluacNET
             }
 
             if ((this.m_function.VarArg & 1) == 1)
+            {
                 output.Print((this.m_function.NumParams > start) ? ", ..." : "...");
+            }
 
             output.Print(")");
             output.PrintLine();
@@ -76,15 +94,8 @@ namespace Elskom.Generic.Libs.UnluacNET
             d.Print(output);
             output.DecreaseIndent();
             output.Print("end");
-            //output.PrintLine(); //This is an extra space for formatting
-        }
 
-        public ClosureExpression(LFunction function, Declaration[] declList, int upvalueLine)
-            : base(PRECEDENCE_ATOMIC)
-        {
-            this.m_function = function;
-            this.m_upvalueLine = upvalueLine;
-            this.m_declList = declList;
+            // output.PrintLine(); // This is an extra space for formatting
         }
     }
 }

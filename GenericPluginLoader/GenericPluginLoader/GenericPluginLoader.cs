@@ -12,6 +12,7 @@ namespace Elskom.Generic.Libs
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.IO.Compression;
     using System.Messaging;
@@ -44,6 +45,7 @@ namespace Elskom.Generic.Libs
         /// <returns>
         /// A list of plugins loaded that derive from the specified type.
         /// </returns>
+        [SuppressMessage("Major Code Smell", "S3885:\"Assembly.Load\" should be used", Justification = "Would make the whole library fail if Load is used instead of LoadFrom on C++/clr dlls.")]
         public ICollection<T> LoadPlugins(string path, bool saveToZip = false, bool loadPDBFile = false)
         {
             string[] dllFileNames = null;
@@ -70,7 +72,7 @@ namespace Elskom.Generic.Libs
                             var asmFile = File.ReadAllBytes(dllFile);
                             try
                             {
-#if NETSTANDARD2_1 || NETCOREAPP2_1 || NETCOREAPP2_2 || NETCOREAPP3_0 || NETCOREAPP3_1 || NET5_0
+#if NETSTANDARD2_1 || NETCOREAPP || NET5_0
                                 var pdbFile = loadPDB ? File.ReadAllBytes(
                                     dllFile.Replace("dll", "pdb", StringComparison.Ordinal)) : null;
 #else

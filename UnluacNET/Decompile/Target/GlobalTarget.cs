@@ -6,18 +6,21 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class GlobalTarget : Target
     {
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly string m_name;
+
+        public GlobalTarget(string name)
+            => this.m_name = name;
 
         public override void Print(Output output)
             => output.Print(this.m_name);
 
         public override void PrintMethod(Output output)
             => throw new InvalidOperationException();
-
-        public GlobalTarget(string name)
-            => this.m_name = name;
     }
 }

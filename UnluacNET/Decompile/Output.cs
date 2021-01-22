@@ -6,13 +6,26 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class Output
     {
-        private TextWriter m_writer;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
+        private readonly TextWriter m_writer;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private int m_indentationLevel = 0;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private int m_position = 0;
+
+        public Output()
+            : this(Console.Out)
+        {
+        }
+
+        public Output(TextWriter writer)
+            => this.m_writer = writer;
 
         public int IndentationLevel
         {
@@ -27,18 +40,6 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public void DecreaseIndent()
             => this.m_indentationLevel -= 2;
-
-        private void Start()
-        {
-            if (this.m_position == 0)
-            {
-                for (var i = this.m_indentationLevel; i != 0; i--)
-                {
-                    this.m_writer.Write(" ");
-                    this.m_position++;
-                }
-            }
-        }
 
         public void Print(string str)
         {
@@ -61,10 +62,16 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.m_position = 0;
         }
 
-        public Output()
-            : this(Console.Out) { }
-        
-        public Output(TextWriter writer)
-            => this.m_writer = writer;
+        private void Start()
+        {
+            if (this.m_position == 0)
+            {
+                for (var i = this.m_indentationLevel; i != 0; i--)
+                {
+                    this.m_writer.Write(" ");
+                    this.m_position++;
+                }
+            }
+        }
     }
 }
