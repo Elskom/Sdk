@@ -18,7 +18,6 @@
     <Description>News / changelog making tool.</Description>
     <PackageReleaseNotes>Actually fixed the substring bug which caused crashes.</PackageReleaseNotes>
     <Version>1.0.5</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <NoWarn>$(NoWarn);NU5118;NU1603</NoWarn>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>

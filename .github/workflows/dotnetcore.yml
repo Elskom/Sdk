@@ -24,5 +24,6 @@ jobs:
         dotnet build --configuration Release
         cd ..
         dotnet build --configuration Release
+        dotnet pack --configuration Release --no-build
     - name: Merge Dependabot
       uses: Elskom/merge-dependabot@v1.0

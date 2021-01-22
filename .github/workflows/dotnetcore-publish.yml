@@ -27,6 +27,7 @@ jobs:
         dotnet build --configuration Release
         cd ..
         dotnet build --configuration Release
+        dotnet pack --configuration Release --no-build
     # - name: Publish Release
     #   id: publish_nuget
     #   uses: rohith/publish-nuget@v2
