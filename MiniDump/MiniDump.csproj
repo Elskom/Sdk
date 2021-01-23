@@ -76,7 +76,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </ProjectReference>
-    <ProjectReference Include="..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj" />
+    <ProjectReference Include="..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
     <ProjectReference Include="../SettingsFile/SettingsFile.csproj" />
     <Reference Include="System.Windows.Forms" Condition="$(TargetFramework.StartsWith('net4'))" />
     <!-- Only reference this for .NET Core, Standard, and .NET Framework < 4.7.2. -->

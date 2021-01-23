@@ -9,8 +9,8 @@
     <AssemblyName>XmlAbstraction</AssemblyName>
     <LangVersion>latest</LangVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Authors>AraHaan</Authors>
-    <Company />
+    <Authors>Els_kom org.</Authors>
+    <Company>Els_kom org.</Company>
     <Version>1.2.4</Version>
     <IsPackable>false</IsPackable>
     <Version Condition="'$(GITHUB_ACTIONS)' == 'true' AND !$(GITHUB_REF.StartsWith('refs/tags/'))">$(Version)-preview-$(GITHUB_RUN_ID)</Version>
@@ -27,7 +27,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);NU5104;NU5118</NoWarn>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>AraHaan.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -86,7 +86,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj" />
+    <ProjectReference Include="..\..\..\..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
     <PackageReference Include="System.Collections" Condition="!$(TargetFramework.StartsWith('net4'))">
       <Version>4.3.0</Version>
     </PackageReference>

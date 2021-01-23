@@ -25,5 +25,8 @@ jobs:
         cd ..
         dotnet build --configuration Release
         dotnet pack --configuration Release --no-build
-    - name: Merge Dependabot
-      uses: Elskom/merge-dependabot@v1.0
+
+    - uses: hmarr/auto-approve-action@v2.0.0
+      if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]' || github.actor == 'AraHaan' || github.actor == 'CatGirlsAreLife' || github.actor == 'Raitou' || github.actor == 'JunichiSama' || github.actor == 'xioke'
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"

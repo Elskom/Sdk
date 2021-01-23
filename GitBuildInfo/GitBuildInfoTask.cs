@@ -41,6 +41,7 @@ namespace GitBuildInfo
             var splitted = this.AssemblyType.Contains(".") ? this.AssemblyType.Split('.') : new string[] { };
             var splittedLen = splitted.Length;
             var usingStr = new StringBuilder();
+            var gitinformationNamespace = "Elskom.Generic.Libs";
             foreach (var value in splitted)
             {
                 // skip the last value.
@@ -68,7 +69,7 @@ namespace GitBuildInfo
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-{(splittedLen > 0 ? $"using {usingStr.ToString()};{Environment.NewLine}" : string.Empty)}using System.Runtime.InteropServices;
+{(splittedLen > 0 && !gitinformationNamespace.Equals(usingStr.ToString()) ? $"using {usingStr.ToString()};{Environment.NewLine}using {gitinformationNamespace};" : $"using {gitinformationNamespace};")}
 
 [assembly: GitInformationAttribute(""{git_out1}"", ""{git_out2}"", ""{git_out3}"", typeof({(splittedLen > 0 ? splitted[splittedLen - 1] : this.AssemblyType)}{(this.isGeneric ? "<>" : string.Empty)}))]
 ";

@@ -184,7 +184,7 @@
     </frameworkAssemblies>
     <references>
       <group targetFramework="net40">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="UnluacNET.dll" />
@@ -194,7 +194,7 @@
         <reference file="Elskom.PluginFramework.dll" />
       </group>
       <group targetFramework="net45">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -209,7 +209,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="net451">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -224,7 +224,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="net452">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -239,7 +239,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="net46">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -254,7 +254,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="net461">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -269,7 +269,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="net462">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -284,7 +284,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="net47">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -299,7 +299,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="net471">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -314,7 +314,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="net472">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -329,7 +329,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="net48">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -344,7 +344,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="net5.0">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="ReleasePackaging.dll" />
         <reference file="ZipAssembly.dll" />
@@ -361,7 +361,7 @@
         <reference file="MessageManager.dll" />
       </group>
       <group targetFramework="netcoreapp2.0">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="ReleasePackaging.dll" />
         <reference file="ZipAssembly.dll" />
@@ -375,7 +375,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="netcoreapp2.1">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="ReleasePackaging.dll" />
         <reference file="ZipAssembly.dll" />
@@ -389,7 +389,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="netcoreapp2.2">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="ReleasePackaging.dll" />
         <reference file="ZipAssembly.dll" />
@@ -403,7 +403,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="netcoreapp3.0">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -418,7 +418,7 @@
         <reference file="PluginUpdateCheck.dll" />
       </group>
       <group targetFramework="netcoreapp3.1">
-        <reference file="AraHaan.GitInformation.dll" />
+        <reference file="Elskom.GitInformation.dll" />
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="ReleasePackaging.dll" />
@@ -440,9 +440,9 @@
     <file src="..\GitBuildInfo\bin\Any CPU\$configuration$\netstandard2.1\GitBuildInfo.dll" target="tasks\netstandard2.1\GitBuildInfo.dll" />
     <file src="..\GitBuildInfo\build\Elskom.Sdk.props" target="build\Elskom.Sdk.props" />
     <file src="..\GitBuildInfo\buildMultiTargeting\Elskom.Sdk.props" target="buildMultiTargeting\Elskom.Sdk.props" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net40\AraHaan.GitInformation.*" target="lib\net40" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net40\AraHaan.GitInformation.xml" target="ref\net40\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net40\ref\AraHaan.GitInformation.dll" target="ref\net40\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net40\Elskom.GitInformation.*" target="lib\net40" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net40\Elskom.GitInformation.xml" target="ref\net40\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net40\ref\Elskom.GitInformation.dll" target="ref\net40\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net40\BlowFish.*" target="lib\net40" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net40\BlowFish.xml" target="ref\net40\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net40\ref\BlowFish.dll" target="ref\net40\BlowFish.dll" />
@@ -464,9 +464,9 @@
     <file src="..\PluginFramework\bin\Any CPU\$configuration$\net40\Elskom.PluginFramework.*" target="lib\net40" />
     <file src="..\PluginFramework\bin\Any CPU\$configuration$\net40\Elskom.PluginFramework.xml" target="ref\net40\Elskom.PluginFramework.xml" />
     <file src="..\PluginFramework\bin\Any CPU\$configuration$\net40\ref\Elskom.PluginFramework.dll" target="ref\net40\Elskom.PluginFramework.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net45\AraHaan.GitInformation.*" target="lib\net45" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net45\AraHaan.GitInformation.xml" target="ref\net45\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net45\ref\AraHaan.GitInformation.dll" target="ref\net45\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net45\Elskom.GitInformation.*" target="lib\net45" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net45\Elskom.GitInformation.xml" target="ref\net45\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net45\ref\Elskom.GitInformation.dll" target="ref\net45\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net45\BlowFish.*" target="lib\net45" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net45\BlowFish.xml" target="ref\net45\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net45\ref\BlowFish.dll" target="ref\net45\BlowFish.dll" />
@@ -503,9 +503,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net45\PluginUpdateCheck.*" target="lib\net45" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net45\PluginUpdateCheck.xml" target="ref\net45\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net45\ref\PluginUpdateCheck.dll" target="ref\net45\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net451\AraHaan.GitInformation.*" target="lib\net451" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net451\AraHaan.GitInformation.xml" target="ref\net451\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net451\ref\AraHaan.GitInformation.dll" target="ref\net451\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net451\Elskom.GitInformation.*" target="lib\net451" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net451\Elskom.GitInformation.xml" target="ref\net451\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net451\ref\Elskom.GitInformation.dll" target="ref\net451\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net451\BlowFish.*" target="lib\net451" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net451\BlowFish.xml" target="ref\net451\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net451\ref\BlowFish.dll" target="ref\net451\BlowFish.dll" />
@@ -542,9 +542,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net451\PluginUpdateCheck.*" target="lib\net451" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net451\PluginUpdateCheck.xml" target="ref\net451\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net451\ref\PluginUpdateCheck.dll" target="ref\net451\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net452\AraHaan.GitInformation.*" target="lib\net452" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net452\AraHaan.GitInformation.xml" target="ref\net452\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net452\ref\AraHaan.GitInformation.dll" target="ref\net452\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net452\Elskom.GitInformation.*" target="lib\net452" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net452\Elskom.GitInformation.xml" target="ref\net452\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net452\ref\Elskom.GitInformation.dll" target="ref\net452\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net452\BlowFish.*" target="lib\net452" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net452\BlowFish.xml" target="ref\net452\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net452\ref\BlowFish.dll" target="ref\net452\BlowFish.dll" />
@@ -581,9 +581,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net452\PluginUpdateCheck.*" target="lib\net452" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net452\PluginUpdateCheck.xml" target="ref\net452\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net452\ref\PluginUpdateCheck.dll" target="ref\net452\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net46\AraHaan.GitInformation.*" target="lib\net46" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net46\AraHaan.GitInformation.xml" target="ref\net46\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net46\ref\AraHaan.GitInformation.dll" target="ref\net46\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net46\Elskom.GitInformation.*" target="lib\net46" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net46\Elskom.GitInformation.xml" target="ref\net46\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net46\ref\Elskom.GitInformation.dll" target="ref\net46\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net46\BlowFish.*" target="lib\net46" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net46\BlowFish.xml" target="ref\net46\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net46\ref\BlowFish.dll" target="ref\net46\BlowFish.dll" />
@@ -620,9 +620,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net46\PluginUpdateCheck.*" target="lib\net46" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net46\PluginUpdateCheck.xml" target="ref\net46\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net46\ref\PluginUpdateCheck.dll" target="ref\net46\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net461\AraHaan.GitInformation.*" target="lib\net461" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net461\AraHaan.GitInformation.xml" target="ref\net461\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net461\ref\AraHaan.GitInformation.dll" target="ref\net461\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net461\Elskom.GitInformation.*" target="lib\net461" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net461\Elskom.GitInformation.xml" target="ref\net461\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net461\ref\Elskom.GitInformation.dll" target="ref\net461\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net461\BlowFish.*" target="lib\net461" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net461\BlowFish.xml" target="ref\net461\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net461\ref\BlowFish.dll" target="ref\net461\BlowFish.dll" />
@@ -659,9 +659,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net461\PluginUpdateCheck.*" target="lib\net461" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net461\PluginUpdateCheck.xml" target="ref\net461\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net461\ref\PluginUpdateCheck.dll" target="ref\net461\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net462\AraHaan.GitInformation.*" target="lib\net462" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net462\AraHaan.GitInformation.xml" target="ref\net462\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net462\ref\AraHaan.GitInformation.dll" target="ref\net462\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net462\Elskom.GitInformation.*" target="lib\net462" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net462\Elskom.GitInformation.xml" target="ref\net462\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net462\ref\Elskom.GitInformation.dll" target="ref\net462\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net462\BlowFish.*" target="lib\net462" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net462\BlowFish.xml" target="ref\net462\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net462\ref\BlowFish.dll" target="ref\net462\BlowFish.dll" />
@@ -698,9 +698,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net462\PluginUpdateCheck.*" target="lib\net462" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net462\PluginUpdateCheck.xml" target="ref\net462\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net462\ref\PluginUpdateCheck.dll" target="ref\net462\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net47\AraHaan.GitInformation.*" target="lib\net47" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net47\AraHaan.GitInformation.xml" target="ref\net47\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net47\ref\AraHaan.GitInformation.dll" target="ref\net47\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net47\Elskom.GitInformation.*" target="lib\net47" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net47\Elskom.GitInformation.xml" target="ref\net47\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net47\ref\Elskom.GitInformation.dll" target="ref\net47\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net47\BlowFish.*" target="lib\net47" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net47\BlowFish.xml" target="ref\net47\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net47\ref\BlowFish.dll" target="ref\net47\BlowFish.dll" />
@@ -737,9 +737,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net47\PluginUpdateCheck.*" target="lib\net47" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net47\PluginUpdateCheck.xml" target="ref\net47\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net47\ref\PluginUpdateCheck.dll" target="ref\net47\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net471\AraHaan.GitInformation.*" target="lib\net471" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net471\AraHaan.GitInformation.xml" target="ref\net471\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net471\ref\AraHaan.GitInformation.dll" target="ref\net471\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net471\Elskom.GitInformation.*" target="lib\net471" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net471\Elskom.GitInformation.xml" target="ref\net471\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net471\ref\Elskom.GitInformation.dll" target="ref\net471\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net471\BlowFish.*" target="lib\net471" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net471\BlowFish.xml" target="ref\net471\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net471\ref\BlowFish.dll" target="ref\net471\BlowFish.dll" />
@@ -776,9 +776,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net471\PluginUpdateCheck.*" target="lib\net471" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net471\PluginUpdateCheck.xml" target="ref\net471\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net471\ref\PluginUpdateCheck.dll" target="ref\net471\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net472\AraHaan.GitInformation.*" target="lib\net472" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net472\AraHaan.GitInformation.xml" target="ref\net472\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net472\ref\AraHaan.GitInformation.dll" target="ref\net472\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net472\Elskom.GitInformation.*" target="lib\net472" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net472\Elskom.GitInformation.xml" target="ref\net472\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net472\ref\Elskom.GitInformation.dll" target="ref\net472\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net472\BlowFish.*" target="lib\net472" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net472\BlowFish.xml" target="ref\net472\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net472\ref\BlowFish.dll" target="ref\net472\BlowFish.dll" />
@@ -815,9 +815,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net472\PluginUpdateCheck.*" target="lib\net472" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net472\PluginUpdateCheck.xml" target="ref\net472\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net472\ref\PluginUpdateCheck.dll" target="ref\net472\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net48\AraHaan.GitInformation.*" target="lib\net48" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net48\AraHaan.GitInformation.xml" target="ref\net48\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net48\ref\AraHaan.GitInformation.dll" target="ref\net48\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net48\Elskom.GitInformation.*" target="lib\net48" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net48\Elskom.GitInformation.xml" target="ref\net48\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net48\ref\Elskom.GitInformation.dll" target="ref\net48\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net48\BlowFish.*" target="lib\net48" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net48\BlowFish.xml" target="ref\net48\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net48\ref\BlowFish.dll" target="ref\net48\BlowFish.dll" />
@@ -854,9 +854,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net48\PluginUpdateCheck.*" target="lib\net48" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net48\PluginUpdateCheck.xml" target="ref\net48\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net48\ref\PluginUpdateCheck.dll" target="ref\net48\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\AraHaan.GitInformation.*" target="lib\net5.0" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\AraHaan.GitInformation.xml" target="ref\net5.0\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\ref\AraHaan.GitInformation.dll" target="ref\net5.0\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\Elskom.GitInformation.*" target="lib\net5.0" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\Elskom.GitInformation.xml" target="ref\net5.0\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\ref\Elskom.GitInformation.dll" target="ref\net5.0\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net5.0\BlowFish.*" target="lib\net5.0" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net5.0\BlowFish.xml" target="ref\net5.0\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\net5.0\ref\BlowFish.dll" target="ref\net5.0\BlowFish.dll" />
@@ -893,9 +893,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net5.0\PluginUpdateCheck.*" target="lib\net5.0" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net5.0\PluginUpdateCheck.xml" target="ref\net5.0\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net5.0\ref\PluginUpdateCheck.dll" target="ref\net5.0\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.0\AraHaan.GitInformation.*" target="lib\netcoreapp2.0" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.0\AraHaan.GitInformation.xml" target="ref\netcoreapp2.0\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.0\ref\AraHaan.GitInformation.dll" target="ref\netcoreapp2.0\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.0\Elskom.GitInformation.*" target="lib\netcoreapp2.0" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.0\Elskom.GitInformation.xml" target="ref\netcoreapp2.0\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.0\ref\Elskom.GitInformation.dll" target="ref\netcoreapp2.0\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.0\BlowFish.*" target="lib\netcoreapp2.0" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.0\BlowFish.xml" target="ref\netcoreapp2.0\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.0\ref\BlowFish.dll" target="ref\netcoreapp2.0\BlowFish.dll" />
@@ -929,9 +929,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.0\PluginUpdateCheck.*" target="lib\netcoreapp2.0" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.0\PluginUpdateCheck.xml" target="ref\netcoreapp2.0\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.0\ref\PluginUpdateCheck.dll" target="ref\netcoreapp2.0\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.1\AraHaan.GitInformation.*" target="lib\netcoreapp2.1" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.1\AraHaan.GitInformation.xml" target="ref\netcoreapp2.1\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.1\ref\AraHaan.GitInformation.dll" target="ref\netcoreapp2.1\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.1\Elskom.GitInformation.*" target="lib\netcoreapp2.1" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.1\Elskom.GitInformation.xml" target="ref\netcoreapp2.1\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.1\ref\Elskom.GitInformation.dll" target="ref\netcoreapp2.1\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.1\BlowFish.*" target="lib\netcoreapp2.1" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.1\BlowFish.xml" target="ref\netcoreapp2.1\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.1\ref\BlowFish.dll" target="ref\netcoreapp2.1\BlowFish.dll" />
@@ -965,9 +965,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.1\PluginUpdateCheck.*" target="lib\netcoreapp2.1" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.1\PluginUpdateCheck.xml" target="ref\netcoreapp2.1\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.1\ref\PluginUpdateCheck.dll" target="ref\netcoreapp2.1\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.2\AraHaan.GitInformation.*" target="lib\netcoreapp2.2" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.2\AraHaan.GitInformation.xml" target="ref\netcoreapp2.2\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.2\ref\AraHaan.GitInformation.dll" target="ref\netcoreapp2.2\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.2\Elskom.GitInformation.*" target="lib\netcoreapp2.2" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.2\Elskom.GitInformation.xml" target="ref\netcoreapp2.2\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.2\ref\Elskom.GitInformation.dll" target="ref\netcoreapp2.2\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.2\BlowFish.*" target="lib\netcoreapp2.2" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.2\BlowFish.xml" target="ref\netcoreapp2.2\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.2\ref\BlowFish.dll" target="ref\netcoreapp2.2\BlowFish.dll" />
@@ -1001,9 +1001,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.2\PluginUpdateCheck.*" target="lib\netcoreapp2.2" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.2\PluginUpdateCheck.xml" target="ref\netcoreapp2.2\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.2\ref\PluginUpdateCheck.dll" target="ref\netcoreapp2.2\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.0\AraHaan.GitInformation.*" target="lib\netcoreapp3.0" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.0\AraHaan.GitInformation.xml" target="ref\netcoreapp3.0\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.0\ref\AraHaan.GitInformation.dll" target="ref\netcoreapp3.0\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.0\Elskom.GitInformation.*" target="lib\netcoreapp3.0" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.0\Elskom.GitInformation.xml" target="ref\netcoreapp3.0\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.0\ref\Elskom.GitInformation.dll" target="ref\netcoreapp3.0\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp3.0\BlowFish.*" target="lib\netcoreapp3.0" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp3.0\BlowFish.xml" target="ref\netcoreapp3.0\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp3.0\ref\BlowFish.dll" target="ref\netcoreapp3.0\BlowFish.dll" />
@@ -1040,9 +1040,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp3.0\PluginUpdateCheck.*" target="lib\netcoreapp3.0" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp3.0\PluginUpdateCheck.xml" target="ref\netcoreapp3.0\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp3.0\ref\PluginUpdateCheck.dll" target="ref\netcoreapp3.0\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.1\AraHaan.GitInformation.*" target="lib\netcoreapp3.1" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.1\AraHaan.GitInformation.xml" target="ref\netcoreapp3.1\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.1\ref\AraHaan.GitInformation.dll" target="ref\netcoreapp3.1\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.1\Elskom.GitInformation.*" target="lib\netcoreapp3.1" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.1\Elskom.GitInformation.xml" target="ref\netcoreapp3.1\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp3.1\ref\Elskom.GitInformation.dll" target="ref\netcoreapp3.1\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp3.1\BlowFish.*" target="lib\netcoreapp3.1" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp3.1\BlowFish.xml" target="ref\netcoreapp3.1\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp3.1\ref\BlowFish.dll" target="ref\netcoreapp3.1\BlowFish.dll" />
@@ -1079,9 +1079,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp3.1\PluginUpdateCheck.*" target="lib\netcoreapp3.1" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp3.1\PluginUpdateCheck.xml" target="ref\netcoreapp3.1\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp3.1\ref\PluginUpdateCheck.dll" target="ref\netcoreapp3.1\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\AraHaan.GitInformation.*" target="lib\netstandard2.0" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\AraHaan.GitInformation.xml" target="ref\netstandard2.0\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\ref\AraHaan.GitInformation.dll" target="ref\netstandard2.0\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\Elskom.GitInformation.*" target="lib\netstandard2.0" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\Elskom.GitInformation.xml" target="ref\netstandard2.0\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\ref\Elskom.GitInformation.dll" target="ref\netstandard2.0\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.0\BlowFish.*" target="lib\netstandard2.0" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.0\BlowFish.xml" target="ref\netstandard2.0\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.0\ref\BlowFish.dll" target="ref\netstandard2.0\BlowFish.dll" />
@@ -1115,9 +1115,9 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netstandard2.0\PluginUpdateCheck.*" target="lib\netstandard2.0" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netstandard2.0\PluginUpdateCheck.xml" target="ref\netstandard2.0\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netstandard2.0\ref\PluginUpdateCheck.dll" target="ref\netstandard2.0\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.1\AraHaan.GitInformation.*" target="lib\netstandard2.1" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.1\AraHaan.GitInformation.xml" target="ref\netstandard2.1\AraHaan.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.1\ref\AraHaan.GitInformation.dll" target="ref\netstandard2.1\AraHaan.GitInformation.dll" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.1\Elskom.GitInformation.*" target="lib\netstandard2.1" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.1\Elskom.GitInformation.xml" target="ref\netstandard2.1\Elskom.GitInformation.xml" />
+    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.1\ref\Elskom.GitInformation.dll" target="ref\netstandard2.1\Elskom.GitInformation.dll" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.1\BlowFish.*" target="lib\netstandard2.1" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.1\BlowFish.xml" target="ref\netstandard2.1\BlowFish.xml" />
     <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.1\ref\BlowFish.dll" target="ref\netstandard2.1\BlowFish.dll" />

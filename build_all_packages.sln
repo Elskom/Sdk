@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginFramework", "PluginFr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "newsmake", "newsmake\newsmake\newsmake.csproj", "{DAE6832F-960F-4896-B70C-8F1D43E1EB1D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AraHaan.GitInformation", "GitInformation\src\GitInformation\AraHaan.GitInformation.csproj", "{4F30525F-FA64-43DD-901B-0B594A7403E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elskom.GitInformation", "GitInformation\src\GitInformation\Elskom.GitInformation.csproj", "{4F30525F-FA64-43DD-901B-0B594A7403E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitBuildInfo", "GitBuildInfo\GitBuildInfo.csproj", "{A06598FB-9F37-44F9-8C6B-15ED1F2D43A7}"
 EndProject

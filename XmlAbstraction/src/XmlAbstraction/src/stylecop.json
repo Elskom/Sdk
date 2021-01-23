@@ -8,8 +8,8 @@
   "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
   "settings": {
     "documentationRules": {
-      "companyName": "AraHaan.",
-      "copyrightText": "Copyright (c) 2018-2021, {companyName}\nhttps://github.com/AraHaan/\nAll rights reserved.\nlicense: MIT, see LICENSE for more details.",
+      "companyName": "Els_kom org.",
+      "copyrightText": "Copyright (c) 2018-2021, {companyName}\nhttps://github.com/Elskom/\nAll rights reserved.\nlicense: MIT, see LICENSE for more details.",
       "documentInternalElements": false,
       "xmlHeader": false
     }
