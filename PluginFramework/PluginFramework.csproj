@@ -76,7 +76,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </ProjectReference>
-    <ProjectReference Include="../GitInformation/src/GitInformation/AraHaan.GitInformation.csproj" />
+    <ProjectReference Include="../GitInformation/src/GitInformation/Elskom.GitInformation.csproj" />
     <ProjectReference Include="../zlib.managed/zlib.managed.csproj" />
     <ProjectReference Include="../BlowFish/BlowFish.csproj" />
     <ProjectReference Include="../SettingsFile/SettingsFile.csproj" />

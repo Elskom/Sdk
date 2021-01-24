@@ -1,10 +1,11 @@
-// Copyright (c) 2019-2020, AraHaan.
-// https://github.com/AraHaan/
+// Copyright (c) 2019-2021, Els_kom org.
+// https://github.com/Elskom/
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace System.Runtime.InteropServices
+namespace Elskom.Generic.Libs
 {
+    using System;
     using System.Collections.Generic;
     using System.Reflection;
 
@@ -22,7 +23,6 @@ namespace System.Runtime.InteropServices
             this.Headdesc = headdesc;
             this.Commit = commit;
             this.Branchname = branchname;
-
             if (!AssemblyInstances.ContainsKey(assembly))
             {
                 AssemblyInstances.Add(assembly, this);
@@ -106,7 +106,9 @@ namespace System.Runtime.InteropServices
         /// or <see langword="null"/>.
         /// </returns>
         public static GitInformation GetAssemblyInstance(Type assemblyType)
-            => assemblyType == null ? throw new ArgumentNullException(nameof(assemblyType)) : GetAssemblyInstance(assemblyType.Assembly);
+            => assemblyType == null
+            ? throw new ArgumentNullException(nameof(assemblyType))
+            : GetAssemblyInstance(assemblyType.Assembly);
 
         /// <summary>
         /// Gets the instance of the <see cref="GitInformation"/> class for

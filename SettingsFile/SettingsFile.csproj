@@ -78,7 +78,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </ProjectReference>
-    <ProjectReference Include="..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj" />
+    <ProjectReference Include="..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
     <ProjectReference Include="../XmlAbstraction/src/XmlAbstraction/src/XmlAbstraction.csproj" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Condition="$(TargetFramework.StartsWith('netstandard1'))">
       <Version>4.3.0</Version>

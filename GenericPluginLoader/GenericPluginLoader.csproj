@@ -75,7 +75,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </ProjectReference>
     <ProjectReference Include="../ZipAssembly/ZipAssembly.csproj" />
-    <ProjectReference Include="..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj" />
+    <ProjectReference Include="..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
     <Reference Include="System.IO.Compression" Condition="$(TargetFramework.StartsWith('net4'))" />
   </ItemGroup>
 

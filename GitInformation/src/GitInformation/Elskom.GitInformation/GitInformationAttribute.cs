@@ -1,11 +1,14 @@
-// Copyright (c) 2019-2020, AraHaan.
-// https://github.com/AraHaan/
+// Copyright (c) 2019-2021, Els_kom org.
+// https://github.com/Elskom/
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace System.Runtime.InteropServices
+namespace Elskom.Generic.Libs
 {
-    // This attribute can only be used on an assemly.
+    using System;
+    using System.Runtime.InteropServices;
+
+    // This attribute can only be used on an assembly.
 
     /// <summary>
     /// Attribute that creates and registers a instance of the <see cref="GitInformation" /> class for the assembly.
@@ -39,7 +42,10 @@ namespace System.Runtime.InteropServices
             }
 
             GitInformation.ApplyAssemblyAttributes(typeof(GitInformation).Assembly);
-            _ = new GitInformation(headdesc, commit, branchname, assemblyType.Assembly);
+            if (GitInformation.GetAssemblyInstance(assemblyType.Assembly) == null)
+            {
+                _ = new GitInformation(headdesc, commit, branchname, assemblyType.Assembly);
+            }
         }
     }
 }

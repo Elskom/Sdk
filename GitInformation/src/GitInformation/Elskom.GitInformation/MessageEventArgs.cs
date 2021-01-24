@@ -1,10 +1,12 @@
-﻿// Copyright (c) 2019-2020, AraHaan.
-// https://github.com/AraHaan/
+﻿// Copyright (c) 2019-2021, Els_kom org.
+// https://github.com/Elskom/
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace System.Messaging
+namespace Elskom.Generic.Libs
 {
+    using System;
+
     /// <summary>
     /// Event that holds the message text and the caption.
     /// </summary>

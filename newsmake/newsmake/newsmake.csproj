@@ -103,8 +103,8 @@
   <Import Project="../../CommonPackages.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj" Condition="Exists('..\..\GitInformation\src\GitInformation\AraHaan.GitInformation.csproj')" />
-    <ProjectReference Include="../../MiniDump/MiniDump.csproj" Condition="Exists('../../MiniDump/MiniDump.csproj')" />
+    <ProjectReference Include="..\..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
+    <ProjectReference Include="../../MiniDump/MiniDump.csproj" />
   </ItemGroup>
 
 </Project>

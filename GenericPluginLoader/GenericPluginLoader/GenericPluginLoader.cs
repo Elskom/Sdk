@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2020, Els_kom org.
+// Copyright (c) 2018-2021, Els_kom org.
 // https://github.com/Elskom/
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
@@ -15,7 +15,6 @@ namespace Elskom.Generic.Libs
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.IO.Compression;
-    using System.Messaging;
     using System.Reflection;
     using System.Text;
 
