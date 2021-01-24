@@ -3,3 +3,5 @@ artifacts/
 *.log
 bin
 obj
+# backup files stored on the users machine.
+*.bak
