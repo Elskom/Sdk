@@ -40,6 +40,17 @@ jobs:
     needs: build
     runs-on: windows-latest
     steps:
+    - name: Wait on tests
+      uses: lewagon/wait-on-check-action@master
+      with:
+        ref: ${{ github.sha }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        wait-interval: 10 # seconds
+        running-workflow-name: submodule-update
+        # wait on automerge to completely merge the pull request before
+        # trying to create a new pull request in case it is not needed
+        # at all.
+        check-name: automerge
     - uses: actions/checkout@v2
       with:
         # we need the submodule to zlib.managed.
