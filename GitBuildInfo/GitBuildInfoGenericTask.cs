@@ -20,5 +20,14 @@ namespace GitBuildInfo
             return base.Execute();
         }
     }
+#else
+    /// <summary>
+    /// A MSBuild task that generates the msbuild information for an assembly.
+    ///
+    /// Note: use in the BeforeBuild target.
+    /// </summary>
+    public class GitBuildInfoGenericTask : GitBuildInfoTask
+    {
+    }
 #endif
 }
