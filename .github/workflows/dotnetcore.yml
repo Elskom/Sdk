@@ -38,7 +38,7 @@ jobs:
 
   submodule-update:
     needs: build
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Wait on tests
       uses: lewagon/wait-on-check-action@master
