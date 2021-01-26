@@ -56,4 +56,8 @@
     </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="../CommonPackages.props" />
+  </ItemGroup>
+
 </Project>
