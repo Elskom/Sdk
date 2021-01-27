@@ -9,6 +9,7 @@ All of the project files to help with building plugins for Els_kom as well as fo
 
 # Build Status
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/602ea77e56864263b58c05c7beaadf5f)](https://app.codacy.com/gh/Elskom/Sdk?utm_source=github.com&utm_medium=referral&utm_content=Elskom/Sdk&utm_campaign=Badge_Grade_Settings)
 ![Build Status](https://github.com/Elskom/Sdk/workflows/.NET%20Core%20%28build%20%26%20publish%20pre-release%29/badge.svg)
 ![Build Status](https://github.com/Elskom/Sdk/workflows/.NET%20Core%20%28build%20%26%20publish%20release%29/badge.svg)
 ![Build Status](https://github.com/Elskom/Sdk/workflows/.NET%20Core%20%28build%20pull%20request%29/badge.svg)
