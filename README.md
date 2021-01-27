@@ -5,6 +5,7 @@ All of the project files to help with building plugins for Els_kom as well as fo
 
 | Elskom.Sdk | newsmake |
 |:----------:|:--------:|
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/602ea77e56864263b58c05c7beaadf5f)](https://app.codacy.com/gh/Elskom/Sdk?utm_source=github.com&utm_medium=referral&utm_content=Elskom/Sdk&utm_campaign=Badge_Grade_Settings)
 | [![NuGet Badge](https://buildstats.info/nuget/Elskom.Sdk?includePreReleases=true)](https://www.nuget.org/packages/Elskom.Sdk/) | [![NuGet Badge](https://buildstats.info/nuget/newsmake?includePreReleases=true)](https://www.nuget.org/packages/newsmake/) |
 
 # Build Status
