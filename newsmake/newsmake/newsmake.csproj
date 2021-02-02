@@ -81,7 +81,6 @@
   <Import Project="../../CommonPackages.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
     <ProjectReference Include="../../MiniDump/MiniDump.csproj" />
   </ItemGroup>
 

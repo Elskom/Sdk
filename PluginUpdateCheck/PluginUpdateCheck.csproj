@@ -73,7 +73,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </ProjectReference>
-    <ProjectReference Include="..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
     <ProjectReference Include="../SettingsFile/SettingsFile.csproj" />
   </ItemGroup>
 

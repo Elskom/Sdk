@@ -75,7 +75,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </ProjectReference>
     <ProjectReference Include="../ZipAssembly/ZipAssembly.csproj" />
-    <ProjectReference Include="..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
   </ItemGroup>
 
   <ItemGroup>

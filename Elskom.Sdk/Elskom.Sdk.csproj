@@ -20,9 +20,6 @@
     <ProjectReference Include="..\GenericPluginLoader\GenericPluginLoader.csproj" Condition="'$(TargetFramework)' != 'net40'">
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
-    <ProjectReference Include="..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj">
-      <PrivateAssets>All</PrivateAssets>
-    </ProjectReference>
     <ProjectReference Include="..\MessageManager\MessageManager.csproj" Condition="'$(TargetFramework)' != 'netcoreapp2.0' AND '$(TargetFramework)' != 'netcoreapp2.1' AND '$(TargetFramework)' != 'netcoreapp2.2' AND '$(TargetFramework)' != 'netstandard2.0' AND '$(TargetFramework)' != 'netstandard2.1'">
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
@@ -38,19 +35,7 @@
     <ProjectReference Include="..\ReleasePackaging\ReleasePackaging.csproj" Condition="'$(TargetFramework)' != 'net40'">
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
-    <ProjectReference Include="..\SettingsFile\SettingsFile.csproj">
-      <PrivateAssets>All</PrivateAssets>
-    </ProjectReference>
     <ProjectReference Include="..\UnluacNET\UnluacNET.csproj">
-      <PrivateAssets>All</PrivateAssets>
-    </ProjectReference>
-    <ProjectReference Include="..\XmlAbstraction\src\XmlAbstraction\src\XmlAbstraction.csproj">
-      <PrivateAssets>All</PrivateAssets>
-    </ProjectReference>
-    <ProjectReference Include="..\ZipAssembly\ZipAssembly.csproj" Condition="'$(TargetFramework)' != 'net40'">
-      <PrivateAssets>All</PrivateAssets>
-    </ProjectReference>
-    <ProjectReference Include="..\zlib.managed\zlib.managed.csproj">
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
   </ItemGroup>

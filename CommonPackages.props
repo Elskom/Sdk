@@ -35,7 +35,7 @@
     <!-- for the command line. -->
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'"/>
     <!-- Only reference this for .NET Framework < 4.7.1. -->
-    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net472' AND '$(TargetFramework)' != 'net48' AND $(TargetFramework.StartsWith('net4'))">
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net472' AND '$(TargetFramework)' != 'net48' AND $(TargetFramework.StartsWith('net4')) AND '$(UseRuntimeInformation)' != '' AND '$(UseRuntimeInformation)' == 'true'">
       <Version>4.3.0</Version>
     </PackageReference>
     <!-- .NET Framework references. -->
