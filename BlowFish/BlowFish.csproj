@@ -74,12 +74,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </ProjectReference>
     <ProjectReference Include="..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
-    <PackageReference Include="System.Runtime" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Security.Cryptography.Csp" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

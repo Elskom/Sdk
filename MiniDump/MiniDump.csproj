@@ -42,6 +42,7 @@
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <UseUIFramework>true</UseUIFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -78,15 +79,6 @@
     </ProjectReference>
     <ProjectReference Include="..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
     <ProjectReference Include="../SettingsFile/SettingsFile.csproj" />
-    <Reference Include="System.Windows.Forms" Condition="$(TargetFramework.StartsWith('net4'))" />
-    <!-- Only reference this for .NET Core, Standard, and .NET Framework < 4.7.2. -->
-    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Condition="'$(TargetFramework)' != 'net472' AND !$(TargetFramework.StartsWith('net48'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <FrameworkReference Include="Microsoft.WindowsDesktop.App" Condition="!$(TargetFramework.StartsWith('net4')) AND !$(TargetFramework.StartsWith('netstandard')) AND !$(TargetFramework.StartsWith('netcoreapp2'))" />
-    <PackageReference Include="System.Diagnostics.Process" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

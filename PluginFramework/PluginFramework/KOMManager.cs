@@ -12,7 +12,6 @@ namespace Elskom.Generic.Libs
     using System.Text;
     using System.Xml.Linq;
     using Elskom.Generic.Libs.Properties;
-    using Elskom.Generic.Libs.UnluacNET;
 
     /// <summary>
     /// Class that allows managing kom Files.
@@ -218,7 +217,7 @@ namespace Elskom.Generic.Libs
                 }
                 else
                 {
-                    InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs("Unknown KOM version Detected. Please send this KOM to the Els_kom Developers file for inspection.", Resources.Error, ErrorLevel.Error));
+                    InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs("Unknown KOM version Detected. Please send this KOM file to the Els_kom Developers for inspection.", Resources.Error, ErrorLevel.Error));
                 }
             }
 
@@ -283,215 +282,11 @@ namespace Elskom.Generic.Libs
                 }
                 else
                 {
-                    InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs("Unknown KOM version Detected. Please send this KOM to the Els_kom Developers file for inspection.", Resources.Error, ErrorLevel.Error));
+                    InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs("Unknown KOM version Detected. Please send this KOM file to the Els_kom Developers for inspection.", Resources.Error, ErrorLevel.Error));
                 }
             }
 
             PackingState = false;
-        }
-
-        /// <summary>
-        /// Writes the KOM File entry to file.
-        /// </summary>
-        /// <param name="reader">The reader for the kom file.</param>
-        /// <param name="outpath">The output folder for every entry in the kom file.</param>
-        /// <param name="entry">The kom file entry instance.</param>
-        /// <param name="version">The kom file version.</param>
-        /// <param name="xmldata">The crc.xml data to write.</param>
-        /// <param name="kOMFileName">The name of the kom file the entry is from.</param>
-        public static void WriteOutput(BinaryReader reader, string outpath, EntryVer entry, int version, string xmldata, string kOMFileName)
-        {
-            if (reader == null)
-            {
-                throw new ArgumentNullException(nameof(reader));
-            }
-
-            if (entry == null)
-            {
-                throw new ArgumentNullException(nameof(entry));
-            }
-
-            if (version > 2)
-            {
-                if (!Directory.Exists(outpath))
-                {
-                    Directory.CreateDirectory(outpath);
-                }
-
-                var xmldatabuffer = Encoding.ASCII.GetBytes(xmldata);
-                if (!File.Exists($"{outpath}{Path.DirectorySeparatorChar}crc.xml"))
-                {
-                    using (var fs = File.Create($"{outpath}{Path.DirectorySeparatorChar}crc.xml"))
-                    {
-                        fs.Write(xmldatabuffer, 0, xmldatabuffer.Length);
-                    }
-                }
-
-                var entrydata = new byte[entry.CompressedSize];
-                reader.Read(entrydata, 0, entrydata.Length);
-                if (entry.Algorithm == 0)
-                {
-                    using (var entryData = new MemoryStream())
-                    {
-                        try
-                        {
-                            MemoryZlib.Decompress(entrydata, entryData);
-                        }
-                        catch (ArgumentException ex)
-                        {
-                            throw new NotUnpackableException("Something failed...", ex);
-                        }
-                        catch (NotUnpackableException ex)
-                        {
-                            throw new NotUnpackableException("decompression failed...", ex);
-                        }
-
-                        // the particles and the lua files seem to share the same encryption in alg 0.
-                        // Decrypt the data from a encryption plugin.
-                        if ((entry.Name.EndsWith(".lua", StringComparison.OrdinalIgnoreCase) || entry.Name.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)) && Encryptionplugins != null && Encryptionplugins.Count > 0)
-                        {
-                            // only use the first encryption/decryption plugin.
-                            Encryptionplugins[0].DecryptEntry(entryData, GetFileBaseName(kOMFileName), entry.Algorithm);
-                        }
-
-                        if (entry.Name.EndsWith(".lua", StringComparison.OrdinalIgnoreCase))
-                        {
-                            try
-                            {
-                                LFunction lMain;
-                                using (var ms = new MemoryStream(entryData.ToArray()))
-                                {
-                                    var header = new BHeader(ms);
-                                    lMain = header.Function.Parse(ms, header);
-                                }
-
-                                var d = new Decompiler(lMain);
-                                d.Decompile();
-                                entryData.Clear();
-                                using (var writer = new StreamWriter(entryData, Encoding.UTF8))
-                                {
-                                    d.Print(new Output(writer));
-                                    writer.Flush();
-                                }
-                            }
-                            catch (InvalidOperationException)
-                            {
-                                // save decrypted data.
-                                File.WriteAllBytes($"{outpath}{Path.DirectorySeparatorChar}{entry.Name}", entryData.GetBuffer());
-                            }
-                        }
-                        else
-                        {
-                            // is particle or any other file.
-                            File.WriteAllBytes($"{outpath}{Path.DirectorySeparatorChar}{entry.Name}", entryData.GetBuffer());
-                        }
-                    }
-                }
-                else
-                {
-                    if (entry.Algorithm == 2 || entry.Algorithm == 3)
-                    {
-                        // algorithm 2 and 3 code.
-                        var path = $"{outpath}{Path.DirectorySeparatorChar}{entry.Name}";
-                        using (var entryfile = File.Create(path))
-                        using (var entryData = new MemoryStream())
-                        using (var tmpStream = new MemoryStream(entrydata, 0, entrydata.Length, true, true))
-                        {
-                            // Decrypt the data from a encryption plugin.
-                            if (Encryptionplugins != null && Encryptionplugins.Count > 0)
-                            {
-                                // only use the first encryption/decryption plugin.
-                                Encryptionplugins[0].DecryptEntry(tmpStream, GetFileBaseName(kOMFileName), entry.Algorithm);
-                            }
-
-                            try
-                            {
-                                MemoryZlib.Decompress(tmpStream.GetBuffer(), entryData);
-                            }
-                            catch (ArgumentException ex)
-                            {
-                                throw new NotUnpackableException("Something failed...", ex);
-                            }
-                            catch (NotUnpackableException ex)
-                            {
-                                throw new NotUnpackableException("decompression failed...", ex);
-                            }
-
-                            if (entry.Name.EndsWith(".lua", StringComparison.OrdinalIgnoreCase))
-                            {
-                                try
-                                {
-                                    LFunction lMain;
-                                    using (var ms = new MemoryStream(entryData.ToArray()))
-                                    {
-                                        var header = new BHeader(ms);
-                                        lMain = header.Function.Parse(ms, header);
-                                    }
-
-                                    var d = new Decompiler(lMain);
-                                    d.Decompile();
-                                    entryfile.Close();
-                                    entryData.Clear();
-                                    using (var writer = new StreamWriter(path, false, new UTF8Encoding(false)))
-                                    {
-                                        d.Print(new Output(writer));
-                                        writer.Flush();
-                                    }
-                                }
-                                catch (InvalidOperationException)
-                                {
-                                    entryData.CopyTo(entryfile);
-                                }
-                            }
-                            else
-                            {
-                                entryData.CopyTo(entryfile);
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // Write KOM V2 output to file.
-                if (!Directory.Exists(outpath))
-                {
-                    Directory.CreateDirectory(outpath);
-                }
-
-                var entrydata = reader.ReadBytes((int)entry.CompressedSize);
-                using (var entryfile = File.Create($"{outpath}{Path.DirectorySeparatorChar}{entry.Name}"))
-                using (var entryData = new MemoryStream())
-                {
-                    try
-                    {
-                        MemoryZlib.Decompress(entrydata, entryData);
-                    }
-                    catch (NotUnpackableException)
-                    {
-                        // copyright symbols... Really funny xor key...
-                        var xorkey = Encoding.UTF8.GetBytes("\xa9\xa9\xa9\xa9\xa9\xa9\xa9\xa9\xa9\xa9");
-
-                        // xor this shit then try again...
-                        BlowFish.XorBlock(ref entrydata, xorkey);
-                        try
-                        {
-                            entryData.Clear();
-                            MemoryZlib.Decompress(entrydata, entryData);
-                            using (File.Create($"{outpath}{Path.DirectorySeparatorChar}XoRNeeded.dummy"))
-                            {
-                                // dummy comment here.
-                            }
-                        }
-                        catch (NotUnpackableException ex)
-                        {
-                            throw new NotUnpackableException("failed with zlib decompression of entries.", ex);
-                        }
-                    }
-
-                    entryData.CopyTo(entryfile);
-                }
-            }
         }
 
         /// <summary>
