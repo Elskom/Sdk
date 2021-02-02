@@ -32,52 +32,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <!-- Common .NET Dependency packages. -->
-    <PackageReference Include="System.Collections" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
     <!-- for the command line. -->
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'"/>
-    <PackageReference Include="System.Console" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45' AND '$(TargetFramework)' != 'net451' AND '$(TargetFramework)' != 'net452'">
-      <Version>4.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Diagnostics.Process" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Diagnostics.Tools" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.IO.Compression" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.IO.Compression.ZipFile" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.IO.FileSystem" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Linq" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Net.Requests" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Runtime" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Runtime.Extensions" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.1</Version>
-    </PackageReference>
-    <!-- Only reference this for .NET Core, Standard, and .NET Framework < 4.7.2. -->
-    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net472' AND !$(TargetFramework.StartsWith('net48'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Reflection" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Security.Cryptography.Csp" Condition="!$(TargetFramework.StartsWith('net4'))">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Xml.XDocument" Condition="!$(TargetFramework.StartsWith('net4'))">
+    <!-- Only reference this for .NET Framework < 4.7.1. -->
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net472' AND '$(TargetFramework)' != 'net48' AND $(TargetFramework.StartsWith('net4'))">
       <Version>4.3.0</Version>
     </PackageReference>
     <!-- .NET Framework references. -->
