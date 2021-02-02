@@ -55,8 +55,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </ProjectReference>
     <ProjectReference Include="..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
-    <Reference Include="System.Data.DataSetExtensions" Condition="!$(TargetFramework.StartsWith('net5')) AND !$(TargetFramework.StartsWith('netstandard')) AND !$(TargetFramework.StartsWith('netcoreapp'))" />
-    <Reference Include="Microsoft.CSharp" Condition="!$(TargetFramework.StartsWith('net5')) AND !$(TargetFramework.StartsWith('netstandard')) AND !$(TargetFramework.StartsWith('netcoreapp'))" />
   </ItemGroup>
 
   <ItemGroup>

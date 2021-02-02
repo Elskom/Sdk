@@ -76,7 +76,6 @@
     </ProjectReference>
     <ProjectReference Include="../ZipAssembly/ZipAssembly.csproj" />
     <ProjectReference Include="..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
-    <Reference Include="System.IO.Compression" Condition="$(TargetFramework.StartsWith('net4'))" />
   </ItemGroup>
 
   <ItemGroup>

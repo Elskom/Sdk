@@ -24,12 +24,6 @@ namespace Elskom.Generic.Libs
         public static bool WaitForProcessExit { get; set; }
 
         /// <summary>
-        /// Resets the <see cref="Executing"/> property to the default value.
-        /// </summary>
-        public static void Reset()
-            => Executing = true;
-
-        /// <summary>
         /// Overload for Shell() Function that Allows Overloading of the Working directory Variable.
         /// It must be a String but can be variables that returns strings.
         /// </summary>
@@ -76,18 +70,10 @@ namespace Elskom.Generic.Libs
                 throw new System.ArgumentNullException(nameof(proc));
             }
 
-            if (!Executing)
-            {
-                Reset();
-            }
-
+            Executing = true;
             var ret = string.Empty;
             _ = proc.Start();
-            if (Executing)
-            {
-                Executing = false;
-            }
-
+            Executing = false;
             if (proc.StartInfo.RedirectStandardError)
             {
                 ret = proc.StandardError.ReadToEnd();
