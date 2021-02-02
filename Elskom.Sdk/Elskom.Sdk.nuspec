@@ -14,151 +14,39 @@
     <repository type="git" url="https://github.com/Elskom/Sdk/" />
     <dependencies>
       <group targetFramework=".NETFramework4.0" />
-      <group targetFramework=".NETFramework4.5" />
-      <group targetFramework=".NETFramework4.5.1" />
-      <group targetFramework=".NETFramework4.5.2" />
-      <group targetFramework=".NETFramework4.6" />
-      <group targetFramework=".NETFramework4.6.1" />
-      <group targetFramework=".NETFramework4.6.2" />
-      <group targetFramework=".NETFramework4.7" />
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.5.1">
+        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.5.2">
+        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.6">
+        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.6.1">
+        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.6.2">
+        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework4.7">
+        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
       <group targetFramework=".NETFramework4.7.1" />
       <group targetFramework=".NETFramework4.7.2" />
       <group targetFramework=".NETFramework4.8" />
-      <group targetFramework=".NETCoreApp2.0">
-        <dependency id="System.Collections" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Process" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Tools" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression.ZipFile" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.FileSystem" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Linq" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Net.Requests" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Reflection" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime.Extensions" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Security.Cryptography.Csp" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Xml.XDocument" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework=".NETCoreApp2.1">
-        <dependency id="System.Collections" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Process" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Tools" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression.ZipFile" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.FileSystem" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Linq" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Net.Requests" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Reflection" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime.Extensions" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Security.Cryptography.Csp" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Xml.XDocument" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework=".NETCoreApp2.2">
-        <dependency id="System.Collections" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Process" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Tools" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression.ZipFile" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.FileSystem" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Linq" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Net.Requests" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Reflection" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime.Extensions" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Security.Cryptography.Csp" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Xml.XDocument" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework=".NETCoreApp3.0">
-        <dependency id="System.Collections" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Process" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Tools" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression.ZipFile" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.FileSystem" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Linq" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Net.Requests" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Reflection" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime.Extensions" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Security.Cryptography.Csp" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Xml.XDocument" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework=".NETCoreApp3.1">
-        <dependency id="System.Collections" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Process" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Tools" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression.ZipFile" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.FileSystem" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Linq" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Net.Requests" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Reflection" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime.Extensions" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Security.Cryptography.Csp" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Xml.XDocument" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework="net5.0">
-        <dependency id="System.Collections" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Process" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Tools" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression.ZipFile" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.FileSystem" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Linq" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Net.Requests" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Reflection" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime.Extensions" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Security.Cryptography.Csp" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Xml.XDocument" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework="net5.0-windows7.0">
-        <dependency id="System.Collections" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Process" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Tools" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression.ZipFile" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.FileSystem" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Linq" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Net.Requests" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Reflection" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime.Extensions" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Security.Cryptography.Csp" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Xml.XDocument" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework=".NETStandard2.0">
-        <dependency id="System.Collections" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Process" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Tools" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression.ZipFile" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.FileSystem" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Linq" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Net.Requests" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Reflection" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime.Extensions" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Security.Cryptography.Csp" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Xml.XDocument" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework=".NETStandard2.1">
-        <dependency id="System.Collections" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Process" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Diagnostics.Tools" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.Compression.ZipFile" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.IO.FileSystem" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Linq" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Net.Requests" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Reflection" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Runtime.Extensions" version="4.3.1" exclude="Build,Analyzers" />
-        <dependency id="System.Security.Cryptography.Csp" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Xml.XDocument" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
+      <group targetFramework=".NETCoreApp2.0" />
+      <group targetFramework=".NETCoreApp2.1" />
+      <group targetFramework=".NETCoreApp2.2" />
+      <group targetFramework=".NETCoreApp3.0" />
+      <group targetFramework=".NETCoreApp3.1" />
+      <group targetFramework="net5.0" />
+      <group targetFramework="net5.0-windows7.0" />
+      <group targetFramework=".NETStandard2.0" />
+      <group targetFramework=".NETStandard2.1" />
     </dependencies>
     <frameworkReferences>
       <group targetFramework=".NETCoreApp3.0">
@@ -179,7 +67,7 @@
       <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
       <frameworkAssembly assemblyName="System.IO.Compression" targetFramework=".NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
       <frameworkAssembly assemblyName="System.IO.Compression.FileSystem" targetFramework=".NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
-      <frameworkAssembly assemblyName="System.Runtime.InteropServices.RuntimeInformation" targetFramework=".NETFramework4.7.1" />
+      <frameworkAssembly assemblyName="System.Runtime.InteropServices.RuntimeInformation" targetFramework=".NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
       <frameworkAssembly assemblyName="System.Net.Http" targetFramework=".NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
     </frameworkAssemblies>
     <references>
