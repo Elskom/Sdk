@@ -10,34 +10,14 @@
     <projectUrl>https://github.com/Elskom/Sdk/</projectUrl>
     <description>Elskom SDK for development of Els_kom plugins and for Els_kom itself. Also contains libs that can be used for other projects as well.</description>
     <copyright>Copyright (c) 2018-2021</copyright>
-    <tags>XML GitBuildInformation SettingsFile zlib BlowFish Unluac ZipAssembly ReleasePackaging MessageManager GenericPluginLoader MiniDump PluginFramework PluginUpdateCheck GitBuildInfo</tags>
+    <tags>GitBuildInformation SettingsFile zlib BlowFish Unluac ZipAssembly ReleasePackaging MessageManager GenericPluginLoader MiniDump PluginFramework PluginUpdateCheck GitBuildInfo</tags>
     <repository type="git" url="https://github.com/Elskom/Sdk/" />
     <dependencies>
       <group targetFramework=".NETFramework4.0" />
-      <group targetFramework=".NETFramework4.5">
-        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework=".NETFramework4.5.1">
-        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework=".NETFramework4.5.2">
-        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework=".NETFramework4.6">
-        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
       <group targetFramework=".NETFramework4.6.1">
         <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
+        <dependency id="System.Text.Json" version="5.0.1" exclude="Build,Analyzers" />
       </group>
-      <group targetFramework=".NETFramework4.6.2">
-        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework=".NETFramework4.7">
-        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
-      </group>
-      <group targetFramework=".NETFramework4.7.1" />
-      <group targetFramework=".NETFramework4.7.2" />
-      <group targetFramework=".NETFramework4.8" />
       <group targetFramework=".NETCoreApp2.0" />
       <group targetFramework=".NETCoreApp2.1" />
       <group targetFramework=".NETCoreApp2.2" />
@@ -45,8 +25,9 @@
       <group targetFramework=".NETCoreApp3.1" />
       <group targetFramework="net5.0" />
       <group targetFramework="net5.0-windows7.0" />
-      <group targetFramework=".NETStandard2.0" />
-      <group targetFramework=".NETStandard2.1" />
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="System.Text.Json" version="5.0.1" exclude="Build,Analyzers" />
+      </group>
     </dependencies>
     <frameworkReferences>
       <group targetFramework=".NETCoreApp3.0">
@@ -76,45 +57,18 @@
         <reference file="BlowFish.dll" />
         <reference file="MessageManager.dll" />
         <reference file="UnluacNET.dll" />
-        <reference file="XmlAbstraction.dll" />
         <reference file="zlib.managed.dll" />
       </group>
       <group targetFramework="net45">
         <reference file="ReleasePackaging.dll" />
         <reference file="ZipAssembly.dll" />
-        <reference file="XmlAbstraction.dll" />
         <reference file="GenericPluginLoader.dll" />
         <reference file="PluginUpdateCheck.dll" />
       </group>
-      <group targetFramework="net451">
-        <reference file="XmlAbstraction.dll" />
-      </group>
-      <group targetFramework="net452">
-        <reference file="XmlAbstraction.dll" />
-      </group>
-      <group targetFramework="net46">
-        <reference file="XmlAbstraction.dll" />
-      </group>
       <group targetFramework="net461">
-        <reference file="XmlAbstraction.dll" />
         <reference file="SettingsFile.dll" />
         <reference file="MiniDump.dll" />
         <reference file="Elskom.PluginFramework.dll" />
-      </group>
-      <group targetFramework="net462">
-        <reference file="XmlAbstraction.dll" />
-      </group>
-      <group targetFramework="net47">
-        <reference file="XmlAbstraction.dll" />
-      </group>
-      <group targetFramework="net471">
-        <reference file="XmlAbstraction.dll" />
-      </group>
-      <group targetFramework="net472">
-        <reference file="XmlAbstraction.dll" />
-      </group>
-      <group targetFramework="net48">
-        <reference file="XmlAbstraction.dll" />
       </group>
       <group targetFramework="net5.0">
         <reference file="Elskom.GitInformation.dll" />
@@ -122,7 +76,6 @@
         <reference file="ReleasePackaging.dll" />
         <reference file="ZipAssembly.dll" />
         <reference file="UnluacNET.dll" />
-        <reference file="XmlAbstraction.dll" />
         <reference file="zlib.managed.dll" />
         <reference file="GenericPluginLoader.dll" />
         <reference file="SettingsFile.dll" />
@@ -139,7 +92,6 @@
         <reference file="ReleasePackaging.dll" />
         <reference file="ZipAssembly.dll" />
         <reference file="UnluacNET.dll" />
-        <reference file="XmlAbstraction.dll" />
         <reference file="zlib.managed.dll" />
         <reference file="GenericPluginLoader.dll" />
         <reference file="SettingsFile.dll" />
@@ -147,20 +99,12 @@
         <reference file="Elskom.PluginFramework.dll" />
         <reference file="PluginUpdateCheck.dll" />
       </group>
-      <group targetFramework="netcoreapp2.1">
-        <reference file="XmlAbstraction.dll" />
-      </group>
-      <group targetFramework="netcoreapp2.2">
-        <reference file="XmlAbstraction.dll" />
-      </group>
       <group targetFramework="netcoreapp3.0">
         <reference file="MessageManager.dll" />
-        <reference file="XmlAbstraction.dll" />
         <reference file="MiniDump.dll" />
       </group>
       <group targetFramework="netcoreapp3.1">
         <reference file="MessageManager.dll" />
-        <reference file="MiniDump.dll" />
       </group>
     </references>
   </metadata>
@@ -182,9 +126,6 @@
     <file src="..\UnluacNET\bin\$configuration$\net40\UnluacNET.*" target="lib\net40" />
     <file src="..\UnluacNET\bin\$configuration$\net40\UnluacNET.xml" target="ref\net40\UnluacNET.xml" />
     <file src="..\UnluacNET\bin\$configuration$\net40\ref\UnluacNET.dll" target="ref\net40\UnluacNET.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net40\XmlAbstraction.*" target="lib\net40" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net40\XmlAbstraction.xml" target="ref\net40\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net40\ref\XmlAbstraction.dll" target="ref\net40\XmlAbstraction.dll" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\net40\zlib.managed.*" target="lib\net40" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\net40\zlib.managed.xml" target="ref\net40\zlib.managed.xml" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\net40\ref\zlib.managed.dll" target="ref\net40\zlib.managed.dll" />
@@ -194,27 +135,12 @@
     <file src="..\ZipAssembly\bin\Any CPU\$configuration$\net45\ZipAssembly.*" target="lib\net45" />
     <file src="..\ZipAssembly\bin\Any CPU\$configuration$\net45\ZipAssembly.xml" target="ref\net45\ZipAssembly.xml" />
     <file src="..\ZipAssembly\bin\Any CPU\$configuration$\net45\ref\ZipAssembly.dll" target="ref\net45\ZipAssembly.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net45\XmlAbstraction.*" target="lib\net45" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net45\XmlAbstraction.xml" target="ref\net45\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net45\ref\XmlAbstraction.dll" target="ref\net45\XmlAbstraction.dll" />
     <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\net45\GenericPluginLoader.*" target="lib\net45" />
     <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\net45\GenericPluginLoader.xml" target="ref\net45\GenericPluginLoader.xml" />
     <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\net45\ref\GenericPluginLoader.dll" target="ref\net45\GenericPluginLoader.dll" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net45\PluginUpdateCheck.*" target="lib\net45" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net45\PluginUpdateCheck.xml" target="ref\net45\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net45\ref\PluginUpdateCheck.dll" target="ref\net45\PluginUpdateCheck.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net451\XmlAbstraction.*" target="lib\net451" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net451\XmlAbstraction.xml" target="ref\net451\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net451\ref\XmlAbstraction.dll" target="ref\net451\XmlAbstraction.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net452\XmlAbstraction.*" target="lib\net452" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net452\XmlAbstraction.xml" target="ref\net452\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net452\ref\XmlAbstraction.dll" target="ref\net452\XmlAbstraction.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net46\XmlAbstraction.*" target="lib\net46" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net46\XmlAbstraction.xml" target="ref\net46\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net46\ref\XmlAbstraction.dll" target="ref\net46\XmlAbstraction.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net461\XmlAbstraction.*" target="lib\net461" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net461\XmlAbstraction.xml" target="ref\net461\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net461\ref\XmlAbstraction.dll" target="ref\net461\XmlAbstraction.dll" />
     <file src="..\SettingsFile\bin\Any CPU\$configuration$\net461\SettingsFile.*" target="lib\net461" />
     <file src="..\SettingsFile\bin\Any CPU\$configuration$\net461\SettingsFile.xml" target="ref\net461\SettingsFile.xml" />
     <file src="..\SettingsFile\bin\Any CPU\$configuration$\net461\ref\SettingsFile.dll" target="ref\net461\SettingsFile.dll" />
@@ -224,21 +150,6 @@
     <file src="..\PluginFramework\bin\Any CPU\$configuration$\net461\Elskom.PluginFramework.*" target="lib\net461" />
     <file src="..\PluginFramework\bin\Any CPU\$configuration$\net461\Elskom.PluginFramework.xml" target="ref\net461\Elskom.PluginFramework.xml" />
     <file src="..\PluginFramework\bin\Any CPU\$configuration$\net461\ref\Elskom.PluginFramework.dll" target="ref\net461\Elskom.PluginFramework.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net462\XmlAbstraction.*" target="lib\net462" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net462\XmlAbstraction.xml" target="ref\net462\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net462\ref\XmlAbstraction.dll" target="ref\net462\XmlAbstraction.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net47\XmlAbstraction.*" target="lib\net47" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net47\XmlAbstraction.xml" target="ref\net47\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net47\ref\XmlAbstraction.dll" target="ref\net47\XmlAbstraction.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net471\XmlAbstraction.*" target="lib\net471" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net471\XmlAbstraction.xml" target="ref\net471\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net471\ref\XmlAbstraction.dll" target="ref\net471\XmlAbstraction.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net472\XmlAbstraction.*" target="lib\net472" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net472\XmlAbstraction.xml" target="ref\net472\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net472\ref\XmlAbstraction.dll" target="ref\net472\XmlAbstraction.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net48\XmlAbstraction.*" target="lib\net48" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net48\XmlAbstraction.xml" target="ref\net48\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net48\ref\XmlAbstraction.dll" target="ref\net48\XmlAbstraction.dll" />
     <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\Elskom.GitInformation.*" target="lib\net5.0" />
     <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\Elskom.GitInformation.xml" target="ref\net5.0\Elskom.GitInformation.xml" />
     <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\ref\Elskom.GitInformation.dll" target="ref\net5.0\Elskom.GitInformation.dll" />
@@ -257,9 +168,6 @@
     <file src="..\UnluacNET\bin\$configuration$\net5.0\UnluacNET.*" target="lib\net5.0" />
     <file src="..\UnluacNET\bin\$configuration$\net5.0\UnluacNET.xml" target="ref\net5.0\UnluacNET.xml" />
     <file src="..\UnluacNET\bin\$configuration$\net5.0\ref\UnluacNET.dll" target="ref\net5.0\UnluacNET.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net5.0\XmlAbstraction.*" target="lib\net5.0" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net5.0\XmlAbstraction.xml" target="ref\net5.0\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\net5.0\ref\XmlAbstraction.dll" target="ref\net5.0\XmlAbstraction.dll" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\net5.0\zlib.managed.*" target="lib\net5.0" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\net5.0\zlib.managed.xml" target="ref\net5.0\zlib.managed.xml" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\net5.0\ref\zlib.managed.dll" target="ref\net5.0\zlib.managed.dll" />
@@ -293,9 +201,6 @@
     <file src="..\UnluacNET\bin\$configuration$\netcoreapp2.0\UnluacNET.*" target="lib\netcoreapp2.0" />
     <file src="..\UnluacNET\bin\$configuration$\netcoreapp2.0\UnluacNET.xml" target="ref\netcoreapp2.0\UnluacNET.xml" />
     <file src="..\UnluacNET\bin\$configuration$\netcoreapp2.0\ref\UnluacNET.dll" target="ref\netcoreapp2.0\UnluacNET.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp2.0\XmlAbstraction.*" target="lib\netcoreapp2.0" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp2.0\XmlAbstraction.xml" target="ref\netcoreapp2.0\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp2.0\ref\XmlAbstraction.dll" target="ref\netcoreapp2.0\XmlAbstraction.dll" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\netcoreapp2.0\zlib.managed.*" target="lib\netcoreapp2.0" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\netcoreapp2.0\zlib.managed.xml" target="ref\netcoreapp2.0\zlib.managed.xml" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\netcoreapp2.0\ref\zlib.managed.dll" target="ref\netcoreapp2.0\zlib.managed.dll" />
@@ -314,27 +219,15 @@
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.0\PluginUpdateCheck.*" target="lib\netcoreapp2.0" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.0\PluginUpdateCheck.xml" target="ref\netcoreapp2.0\PluginUpdateCheck.xml" />
     <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.0\ref\PluginUpdateCheck.dll" target="ref\netcoreapp2.0\PluginUpdateCheck.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp2.1\XmlAbstraction.*" target="lib\netcoreapp2.1" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp2.1\XmlAbstraction.xml" target="ref\netcoreapp2.1\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp2.1\ref\XmlAbstraction.dll" target="ref\netcoreapp2.1\XmlAbstraction.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp2.2\XmlAbstraction.*" target="lib\netcoreapp2.2" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp2.2\XmlAbstraction.xml" target="ref\netcoreapp2.2\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp2.2\ref\XmlAbstraction.dll" target="ref\netcoreapp2.2\XmlAbstraction.dll" />
     <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.0\MessageManager.*" target="lib\netcoreapp3.0" />
     <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.0\MessageManager.xml" target="ref\netcoreapp3.0\MessageManager.xml" />
     <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.0\ref\MessageManager.dll" target="ref\netcoreapp3.0\MessageManager.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp3.0\XmlAbstraction.*" target="lib\netcoreapp3.0" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp3.0\XmlAbstraction.xml" target="ref\netcoreapp3.0\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp3.0\ref\XmlAbstraction.dll" target="ref\netcoreapp3.0\XmlAbstraction.dll" />
     <file src="..\MiniDump\bin\Any CPU\$configuration$\netcoreapp3.0\MiniDump.*" target="lib\netcoreapp3.0" />
     <file src="..\MiniDump\bin\Any CPU\$configuration$\netcoreapp3.0\MiniDump.xml" target="ref\netcoreapp3.0\MiniDump.xml" />
     <file src="..\MiniDump\bin\Any CPU\$configuration$\netcoreapp3.0\ref\MiniDump.dll" target="ref\netcoreapp3.0\MiniDump.dll" />
     <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.1\MessageManager.*" target="lib\netcoreapp3.1" />
     <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.1\MessageManager.xml" target="ref\netcoreapp3.1\MessageManager.xml" />
     <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.1\ref\MessageManager.dll" target="ref\netcoreapp3.1\MessageManager.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp3.1\XmlAbstraction.*" target="lib\netcoreapp3.1" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp3.1\XmlAbstraction.xml" target="ref\netcoreapp3.1\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netcoreapp3.1\ref\XmlAbstraction.dll" target="ref\netcoreapp3.1\XmlAbstraction.dll" />
     <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\Elskom.GitInformation.*" target="lib\netstandard2.0" />
     <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\Elskom.GitInformation.xml" target="ref\netstandard2.0\Elskom.GitInformation.xml" />
     <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\ref\Elskom.GitInformation.dll" target="ref\netstandard2.0\Elskom.GitInformation.dll" />
@@ -350,9 +243,6 @@
     <file src="..\UnluacNET\bin\$configuration$\netstandard2.0\UnluacNET.*" target="lib\netstandard2.0" />
     <file src="..\UnluacNET\bin\$configuration$\netstandard2.0\UnluacNET.xml" target="ref\netstandard2.0\UnluacNET.xml" />
     <file src="..\UnluacNET\bin\$configuration$\netstandard2.0\ref\UnluacNET.dll" target="ref\netstandard2.0\UnluacNET.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netstandard2.0\XmlAbstraction.*" target="lib\netstandard2.0" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netstandard2.0\XmlAbstraction.xml" target="ref\netstandard2.0\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netstandard2.0\ref\XmlAbstraction.dll" target="ref\netstandard2.0\XmlAbstraction.dll" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\netstandard2.0\zlib.managed.*" target="lib\netstandard2.0" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\netstandard2.0\zlib.managed.xml" target="ref\netstandard2.0\zlib.managed.xml" />
     <file src="..\zlib.managed\bin\Any CPU\$configuration$\netstandard2.0\ref\zlib.managed.dll" target="ref\netstandard2.0\zlib.managed.dll" />
@@ -377,9 +267,6 @@
     <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netstandard2.1\ReleasePackaging.*" target="lib\netstandard2.1" />
     <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netstandard2.1\ReleasePackaging.xml" target="ref\netstandard2.1\ReleasePackaging.xml" />
     <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netstandard2.1\ref\ReleasePackaging.dll" target="ref\netstandard2.1\ReleasePackaging.dll" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netstandard2.1\XmlAbstraction.*" target="lib\netstandard2.1" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netstandard2.1\XmlAbstraction.xml" target="ref\netstandard2.1\XmlAbstraction.xml" />
-    <file src="..\XmlAbstraction\src\XmlAbstraction\src\bin\Any CPU\$configuration$\netstandard2.1\ref\XmlAbstraction.dll" target="ref\netstandard2.1\XmlAbstraction.dll" />
     <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netstandard2.1\GenericPluginLoader.*" target="lib\netstandard2.1" />
     <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netstandard2.1\GenericPluginLoader.xml" target="ref\netstandard2.1\GenericPluginLoader.xml" />
     <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netstandard2.1\ref\GenericPluginLoader.dll" target="ref\netstandard2.1\GenericPluginLoader.dll" />

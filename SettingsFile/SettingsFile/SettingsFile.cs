@@ -5,12 +5,9 @@
 
 namespace Elskom.Generic.Libs
 {
-#if !WITH_CUSTOM_ENVIRONMENT
     using System;
-#endif
     using System.Diagnostics;
     using System.IO;
-    using XmlAbstraction;
 
     /// <summary>
     /// A class that handles the settings for any application.
@@ -18,18 +15,18 @@ namespace Elskom.Generic.Libs
     public static class SettingsFile
     {
         /// <summary>
-        /// Gets or sets the settings file XMLObject instance.
+        /// Gets or sets the Json settings file instance.
         ///
         /// This is designed so there is globally only
         /// a single instance to save time, and memory.
         /// </summary>
         /// <value>
-        /// The settings file XMLObject instance.
+        /// The Json settings file instance.
         ///
         /// This is designed so there is globally only
         /// a single instance to save time, and memory.
         /// </value>
-        public static XmlObject Settingsxml { get; set; }
+        public static JsonSettings SettingsJson { get; set; }
 
         /// <summary>
         /// Gets the path to the Application Settings file.
@@ -42,7 +39,7 @@ namespace Elskom.Generic.Libs
         /// Creates the folder if needed.
         /// </value>
         public static string SettingsPath
-            => PrivatePathResolver(".xml");
+            => PrivatePathResolver(".json");
 
         /// <summary>
         /// Gets the path to the Application Error Log file.
@@ -73,12 +70,12 @@ namespace Elskom.Generic.Libs
                 _ = Directory.CreateDirectory(localPath);
             }
 
-            if (fileExtension.Equals(".xml", StringComparison.Ordinal))
+            if (fileExtension.Equals(".json", StringComparison.Ordinal))
             {
-                // do not create the settings file, just pass this path to XmlObject.
-                // if we create it ourselves the new optimized class will fail
-                // to work right if it is empty.
-                localPath += $"{Path.DirectorySeparatorChar}Settings.xml";
+                // do not create the settings file, just pass this path to the json
+                // interface for settings. if we create it ourselves the optimized
+                // class will fail to work right if it is empty.
+                localPath += $"{Path.DirectorySeparatorChar}Settings.json";
             }
             else if (fileExtension.Equals(".log", StringComparison.Ordinal))
             {

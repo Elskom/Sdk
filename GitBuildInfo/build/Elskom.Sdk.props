@@ -11,25 +11,25 @@
     <error Condition="!Exists('$(TaskAssembly)')">Task Assembly does not exist.</error>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll')">
     <!-- Only add these analyzers when installed as a package from nuget. -->
-    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha" Condition="Exists('$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll')">
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SecurityCodeScan" Version="3.5.3" Condition="Exists('$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll')">
+    <PackageReference Include="SecurityCodeScan" Version="3.5.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.17.0.26580" Condition="Exists('$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll')">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.17.0.26580">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164" Condition="Exists('$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll')">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="IDisposableAnalyzers" Version="3.4.8" Condition="Exists('$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll')">
+    <PackageReference Include="IDisposableAnalyzers" Version="3.4.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

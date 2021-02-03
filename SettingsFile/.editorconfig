@@ -147,3 +147,6 @@ csharp_preserve_single_line_statements = true
 
 # CA1307: Specify StringComparison
 dotnet_diagnostic.CA1307.severity = warning
+
+# CS1591: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.CS1591.severity = suggestion

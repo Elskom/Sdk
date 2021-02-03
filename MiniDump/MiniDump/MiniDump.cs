@@ -77,7 +77,6 @@ namespace Elskom.Generic.Libs
 #if WITH_EXCEPTIONPOINTERS
                     ExceptionPointers = Marshal.GetExceptionPointers(),
 #else
-                    // For now since I do not know the code to actually manually get the ExceptionPointers.
                     ExceptionPointers = IntPtr.Zero,
 #endif
                     ThreadId = SafeNativeMethods.GetCurrentThreadId(),

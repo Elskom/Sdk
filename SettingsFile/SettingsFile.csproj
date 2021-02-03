@@ -75,7 +75,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </ProjectReference>
-    <ProjectReference Include="../XmlAbstraction/src/XmlAbstraction/src/XmlAbstraction.csproj" />
+    <ProjectReference Include="../GitInformation/src/GitInformation/Elskom.GitInformation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
