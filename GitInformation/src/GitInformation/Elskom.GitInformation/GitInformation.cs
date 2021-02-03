@@ -64,14 +64,27 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Gets a value indicating whether the branch is the master
         /// branch or not based upon the string constructed by
-        /// git name-rev.
+        /// git name-rev. This also returns true if the branch is main as well.
         /// </summary>
         /// <value>
         /// A value indicating whether the branch is the master
         /// branch or not based upon the string constructed by
+        /// git name-rev. This also returns true if the branch is main as well.
+        /// </value>
+        [Obsolete("Use GitInformation.IsMain instead. This will be removed in a future release. This is because most people using git are abandoning the use of master as the default branch name for the name of main to prevent breakage I suggest you rename your default branch from master to main today.")]
+        public bool IsMaster => this.Branchname.Equals("master", StringComparison.Ordinal) || this.IsMain;
+
+        /// <summary>
+        /// Gets a value indicating whether the branch is the main
+        /// branch or not based upon the string constructed by
+        /// git name-rev.
+        /// </summary>
+        /// <value>
+        /// A value indicating whether the branch is the main
+        /// branch or not based upon the string constructed by
         /// git name-rev.
         /// </value>
-        public bool IsMaster => this.Branchname.Equals("master", StringComparison.Ordinal);
+        public bool IsMain => this.Branchname.Equals("main", StringComparison.Ordinal);
 
         /// <summary>
         /// Applies the <see cref="Attribute"/>s that the specified <see cref="Assembly"/> contains.
