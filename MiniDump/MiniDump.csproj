@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1;net5.0;net45;net451;net452;net46;net461;net462;net47;net471;net472;net48</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.0;netcoreapp3.0;net5.0;net461</TargetFrameworks>
     <AssemblyName>MiniDump</AssemblyName>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
@@ -61,7 +61,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
-  <PropertyGroup Condition="(!$(TargetFramework.StartsWith('netcoreapp')) OR $(TargetFramework.EndsWith('app3.0')) OR $(TargetFramework.EndsWith('app3.1')) OR '$(TargetFramework)' == 'net5.0') AND !$(TargetFramework.StartsWith('netstandard'))">
+  <PropertyGroup Condition="(!$(TargetFramework.StartsWith('netcoreapp')) OR $(TargetFramework.EndsWith('app3.0')) OR '$(TargetFramework)' == 'net5.0') AND !$(TargetFramework.StartsWith('netstandard'))">
     <DefineConstants>$(DefineConstants);WITH_WINFORMS;WITH_EXCEPTIONPOINTERS</DefineConstants>
   </PropertyGroup>
 

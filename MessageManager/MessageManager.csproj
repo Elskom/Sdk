@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFrameworks>net40;net45;net451;net452;net46;net461;net462;net47;net471;net472;net48;netcoreapp3.0;netcoreapp3.1;net5.0-windows</TargetFrameworks>
+    <TargetFrameworks>net40;netcoreapp3.0;netcoreapp3.1;net5.0-windows</TargetFrameworks>
     <AssemblyName>MessageManager</AssemblyName>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
