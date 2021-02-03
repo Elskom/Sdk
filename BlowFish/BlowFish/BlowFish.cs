@@ -569,7 +569,6 @@ namespace Elskom.Generic.Libs
             this.bfS1 = SetupS1();
             this.bfS2 = SetupS2();
             this.bfS3 = SetupS3();
-
             var key = new byte[cipherKey.Length]; // 448 bits
             if (cipherKey.Length > 56)
             {

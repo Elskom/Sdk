@@ -7,4 +7,5 @@ obj
 *.bak
 # ignore rider bullshit files.
 .idea
-XmlAbstraction/.github/
+# not needed anymore, kept locally just in case however.
+XmlAbstraction/

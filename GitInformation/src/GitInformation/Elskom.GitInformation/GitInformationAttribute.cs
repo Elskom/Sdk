@@ -6,7 +6,6 @@
 namespace Elskom.Generic.Libs
 {
     using System;
-    using System.Runtime.InteropServices;
 
     // This attribute can only be used on an assembly.
 
@@ -34,7 +33,7 @@ namespace Elskom.Generic.Libs
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="assemblyType"/> is <see langword="null"/>.
         /// </exception>
-        public GitInformationAttribute(string headdesc, string commit, string branchname, Type assemblyType/*object assembly*/)
+        public GitInformationAttribute(string headdesc, string commit, string branchname, Type assemblyType)
         {
             if (assemblyType == null)
             {

@@ -20,7 +20,7 @@ namespace Elskom.Generic.Libs
     [DefaultEvent("MouseDoubleClick")]
     [ToolboxItemFilter("MessageManager")]
     [SRDescription(SR.DescriptionMessageManager)]
-    public class MessageManager : /*Component*/Control
+    public class MessageManager : Control
     {
         private static NotifyIcon notifyIcon;
 

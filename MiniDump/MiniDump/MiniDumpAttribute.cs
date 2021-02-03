@@ -6,9 +6,6 @@
 namespace Elskom.Generic.Libs
 {
     using System;
-#if !NETSTANDARD && !NETFRAMEWORK && !NETCOREAPP && !NET5_0
-    using System.Security.Permissions;
-#endif
 #if WITH_WINFORMS
     using System.Threading;
     using System.Windows.Forms;
@@ -29,9 +26,6 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Initializes a new instance of the <see cref="MiniDumpAttribute"/> class.
         /// </summary>
-#if !NETSTANDARD && !NETFRAMEWORK && !NETCOREAPP && !NET5_0
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
-#endif
         public MiniDumpAttribute()
         {
             var currentDomain = AppDomain.CurrentDomain;
@@ -46,9 +40,6 @@ namespace Elskom.Generic.Libs
         /// Initializes a new instance of the <see cref="MiniDumpAttribute"/> class.
         /// </summary>
         /// <param name="text">Exception message text.</param>
-#if !NETSTANDARD && !NETFRAMEWORK && !NETCOREAPP && !NET5_0
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
-#endif
         [Obsolete("This version of the constrictor is only here for backwards compatibility and will be removed in a future version.")]
         public MiniDumpAttribute(string text)
             : this()

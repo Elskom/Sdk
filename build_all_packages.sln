@@ -14,8 +14,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zlib.managed", "zlib.manage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZipAssembly", "ZipAssembly\ZipAssembly.csproj", "{FFB8B106-438B-4BF6-AD0F-DDA46A1DFEE7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XmlAbstraction", "XmlAbstraction\src\XmlAbstraction\src\XmlAbstraction.csproj", "{56C2BA66-35A6-46C3-BC29-E3AA7ABBEA6B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SettingsFile", "SettingsFile\SettingsFile.csproj", "{835F58D6-2FB7-446D-8913-E136978E8DB3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReleasePackaging", "ReleasePackaging\ReleasePackaging.csproj", "{8BDB658E-2EA8-4B49-B0AA-A3945193F306}"
@@ -32,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitBuildInfo", "GitBuildInf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnluacNET", "UnluacNET\UnluacNET.csproj", "{C5C9F3DB-3617-4785-8852-36F1E6827D85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Elskom.Sdk", "Elskom.Sdk\Elskom.Sdk.csproj", "{5F4ED6F1-47DE-475E-A491-798CEDC35369}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Elskom.Sdk", "Elskom.Sdk\Elskom.Sdk.csproj", "{5F4ED6F1-47DE-475E-A491-798CEDC35369}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,10 +62,6 @@ Global
 		{FFB8B106-438B-4BF6-AD0F-DDA46A1DFEE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFB8B106-438B-4BF6-AD0F-DDA46A1DFEE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFB8B106-438B-4BF6-AD0F-DDA46A1DFEE7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56C2BA66-35A6-46C3-BC29-E3AA7ABBEA6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56C2BA66-35A6-46C3-BC29-E3AA7ABBEA6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56C2BA66-35A6-46C3-BC29-E3AA7ABBEA6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56C2BA66-35A6-46C3-BC29-E3AA7ABBEA6B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{835F58D6-2FB7-446D-8913-E136978E8DB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{835F58D6-2FB7-446D-8913-E136978E8DB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{835F58D6-2FB7-446D-8913-E136978E8DB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
