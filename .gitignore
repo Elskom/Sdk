@@ -5,3 +5,6 @@ bin
 obj
 # backup files stored on the users machine.
 *.bak
+# ignore rider bullshit files.
+.idea
+XmlAbstraction/.github/
