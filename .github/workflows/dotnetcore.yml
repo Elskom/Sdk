@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - uses: actions-ecosystem/action-remove-labels@v1.0.2
+    - uses: actions-ecosystem/action-remove-labels@v1.1.0
       continue-on-error: true
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
