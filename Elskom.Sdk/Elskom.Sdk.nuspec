@@ -111,7 +111,7 @@
   <files>
     <file src="..\GitBuildInfo\bin\Any CPU\$configuration$\net472\GitBuildInfo.dll" target="tasks\net472\GitBuildInfo.dll" />
     <file src="..\GitBuildInfo\bin\Any CPU\$configuration$\net5.0\GitBuildInfo.dll" target="tasks\net5.0\GitBuildInfo.dll" />
-    <file src="..\GitBuildInfo\bin\Any CPU\$configuration$\netstandard2.1\GitBuildInfo.dll" target="tasks\netstandard2.1\GitBuildInfo.dll" />
+    <file src="..\GitBuildInfo\bin\Any CPU\$configuration$\netstandard2.0\GitBuildInfo.dll" target="tasks\netstandard2.0\GitBuildInfo.dll" />
     <file src="..\GitBuildInfo\build\Elskom.Sdk.props" target="build\Elskom.Sdk.props" />
     <file src="..\GitBuildInfo\buildMultiTargeting\Elskom.Sdk.props" target="buildMultiTargeting\Elskom.Sdk.props" />
     <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net40\Elskom.GitInformation.*" target="lib\net40" />
