@@ -4,7 +4,7 @@
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <Company>AraHaan</Company>
     <Authors>AraHaan</Authors>
-    <TargetFrameworks>netcoreapp2.0;net5.0;netstandard2.0;netstandard2.1;net40;net472</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;net5.0;netstandard2.0;net40;net472</TargetFrameworks>
     <!-- Workarround not needed when using the Microsoft.NETFramework.ReferenceAssemblies nuget package net framework targets. -->
     <!-- makes this sample work when compiling on macOS and Linux because .NET Framework is not available -->
     <!-- <TargetFrameworks Condition="$(OS) != 'Windows_NT'">netstandard2.0</TargetFrameworks> -->
@@ -41,7 +41,7 @@
     <OutputPath>bin\Any CPU\Debug\</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' != 'net5.0' AND '$(TargetFramework)' != 'netstandard2.1' AND '$(TargetFramework)' != 'net472'">
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net5.0' AND '$(TargetFramework)' != 'netstandard2.0' AND '$(TargetFramework)' != 'net472'">
     <DefineConstants>$(DefineConstants);NOTASKS</DefineConstants>
   </PropertyGroup>
 
@@ -59,8 +59,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'net472'" Include="Microsoft.Build.Framework" Version="16.8.0" PrivateAssets="All" />
-    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'net472'" Include="Microsoft.Build.Utilities.Core" Version="16.8.0" PrivateAssets="All" />
+    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'" Include="Microsoft.Build.Framework" Version="16.8.0" PrivateAssets="All" />
+    <PackageReference Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'" Include="Microsoft.Build.Utilities.Core" Version="16.8.0" PrivateAssets="All" />
     <!-- <PackageReference Include="LibGit2Sharp" Version="0.27.0-preview-0034" IncludeAssets="All" /> -->
   </ItemGroup>
 
