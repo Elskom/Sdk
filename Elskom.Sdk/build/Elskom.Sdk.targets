@@ -90,7 +90,7 @@ namespace GitBuildInfo
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-{(splittedLen > 0 && !gitinformationNamespace.Equals(usingStr.ToString()) ? $"using {usingStr};{Environment.NewLine}using {gitinformationNamespace};" : $"using {gitinformationNamespace};")}
+{(splittedLen > 0 && !string.Equals(gitinformationNamespace, usingStr.ToString(), StringComparison.Ordinal) ? $"using {usingStr};{Environment.NewLine}using {gitinformationNamespace};" : $"using {gitinformationNamespace};")}
 
 [assembly: GitInformationAttribute(""{git_out1}"", ""{git_out2}"", ""{git_out3}"", typeof({(splittedLen > 0 ? splitted[splittedLen - 1] : this.AssemblyType)}{(this.IsGeneric ? "<>" : string.Empty)}))]
 ";

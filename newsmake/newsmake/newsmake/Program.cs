@@ -43,6 +43,7 @@ namespace Newsmake
                     }.WithHandler(nameof(NewReleaseCommandHandler)),
                     new Command("entry", "Creates a new entry file for the current pending release.")
                     {
+                        new Argument<string>("content", "The content to add to the new entry."),
                     }.WithHandler(nameof(NewEntryCommandHandler)),
                 },
                 new Command("finalize", string.Empty)
@@ -55,7 +56,7 @@ namespace Newsmake
             return await cmd.InvokeAsync(args);
         }
 
-        internal static void GlobalCommandHandler(IConsole console)
+        internal static int GlobalCommandHandler(bool version, IConsole console)
         {
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
             if (!inst.IsMain || inst.IsDirty)
@@ -63,11 +64,16 @@ namespace Newsmake
                 console.Out.WriteLine(Resources.Commands_Potentially_Unstable_Build);
             }
 
-            console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, Resources.CommandParser_ShowHelp_Version, Assembly.GetEntryAssembly().GetName().Version));
+            if (version)
+            {
+                console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, Resources.CommandParser_ShowHelp_Version, Assembly.GetEntryAssembly().GetName().Version));
+            }
+
+            return 0;
         }
 
         [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "🖕")]
-        internal static void BuildCommandHandler(IConsole console)
+        internal static int BuildCommandHandler(IConsole console)
         {
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
             if (!inst.IsMain || inst.IsDirty)
@@ -130,7 +136,7 @@ namespace Newsmake
                                     else
                                     {
                                         console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__Environment_variable_does_not_exist);
-                                        Environment.Exit(1);
+                                        return 1;
                                     }
                                 }
                             }
@@ -145,7 +151,7 @@ namespace Newsmake
                             else if (!line.Contains("projname = \"", StringComparison.Ordinal) && string.IsNullOrEmpty(project_name))
                             {
                                 console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__Project_name_not_set);
-                                Environment.Exit(1);
+                                return 1;
                             }
                             else if (line.Contains("devmode = ", StringComparison.Ordinal))
                             {
@@ -160,7 +166,7 @@ namespace Newsmake
                             else if (!line.Contains("genfilename = \"", StringComparison.Ordinal) && string.IsNullOrEmpty(outputfile_name))
                             {
                                 console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__generated_output_file_name_not_set);
-                                Environment.Exit(1);
+                                return 1;
                             }
                             else if (line.Contains("tabs = ", StringComparison.Ordinal))
                             {
@@ -289,11 +295,13 @@ namespace Newsmake
             if (!found_master_file)
             {
                 console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__no___master_file_found);
-                Environment.Exit(1);
+                return 1;
             }
+
+            return 0;
         }
 
-        internal static void NewReleaseCommandHandler(string release, IConsole console)
+        internal static int NewReleaseCommandHandler(string release, IConsole console)
         {
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
             if (!inst.IsMain || inst.IsDirty)
@@ -322,20 +330,18 @@ namespace Newsmake
                 if (string.IsNullOrEmpty(path))
                 {
                     console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__no___master_file_found);
-                    Environment.Exit(1);
+                    return 1;
                 }
 
                 if (Directory.Exists($"{path}{Path.DirectorySeparatorChar}{release}"))
                 {
                     console.Error.WriteLine($"Fatal: The *.master file already has a pending release.");
-                    Environment.Exit(1);
+                    return 1;
                 }
 
                 if (!Directory.Exists($"{path}{Path.DirectorySeparatorChar}{release}"))
                 {
                     _ = Directory.CreateDirectory($"{path}{Path.DirectorySeparatorChar}{release}");
-
-                    // TODO: Insert the new release first in the *.master file's imports.
                     var linecnt = 0;
                     foreach (var line in lines!)
                     {
@@ -347,29 +353,30 @@ namespace Newsmake
                         else if (line.Contains($"import \"{release}\"", StringComparison.Ordinal))
                         {
                             console.Error.WriteLine($"Fatal: The import of the release '{release}' already exists in the *.master file.");
-                            Environment.Exit(1);
+                            return 1;
                         }
                     }
 
                     var linelst = lines.ToList();
                     linelst.Insert(linecnt - 1, $"import \"{release}\"");
-                    lines = linelst.ToArray();
-                    File.WriteAllLines(masterfile, lines);
+                    File.WriteAllLines(masterfile, linelst.ToArray());
                 }
                 else
                 {
                     console.Error.WriteLine($"Fatal: The release '{release}' already exists.");
-                    Environment.Exit(1);
+                    return 1;
                 }
             }
             else
             {
                 console.Error.WriteLine("Fatal: no release name specified.");
-                Environment.Exit(1);
+                return 1;
             }
+
+            return 0;
         }
 
-        internal static void NewEntryCommandHandler(IConsole console)
+        internal static int NewEntryCommandHandler(string content, IConsole console)
         {
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
             if (!inst.IsMain || inst.IsDirty)
@@ -392,7 +399,7 @@ namespace Newsmake
             if (string.IsNullOrEmpty(path))
             {
                 console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__no___master_file_found);
-                Environment.Exit(1);
+                return 1;
             }
 
             foreach (var p in Directory.GetDirectories(path))
@@ -434,15 +441,14 @@ namespace Newsmake
                 }
 
                 var newFile = $"{currentFile.Replace($"item{fileCountStr}", $"item{newfileCountStr}", StringComparison.Ordinal)}";
-                using (File.Create(newFile))
-                {
-                    // creates the new entry file.
-                }
+                File.WriteAllText(newFile, content);
             }
+
+            return 0;
         }
 
         [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "🖕")]
-        internal static void FinalizeReleaseCommandHandler(IConsole console)
+        internal static int FinalizeReleaseCommandHandler(IConsole console)
         {
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
             if (!inst.IsMain || inst.IsDirty)
@@ -527,8 +533,10 @@ namespace Newsmake
             if (!found)
             {
                 console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__no___master_file_found);
-                Environment.Exit(1);
+                return 1;
             }
+
+            return 0;
         }
 
         [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "🖕")]
