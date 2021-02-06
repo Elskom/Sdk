@@ -79,9 +79,14 @@
   </ItemGroup>
 
   <Import Project="../../CommonPackages.props" />
+  <Import Project="../../Elskom.Sdk/build/Elskom.Sdk.targets" />
 
   <ItemGroup>
     <ProjectReference Include="../../MiniDump/MiniDump.csproj" />
   </ItemGroup>
+
+  <Target Name="GitBuildInfo" BeforeTargets="PrepareForBuild">
+    <GitBuildInfoTask OutputPath="$(ProjectDir)\Properties\GitAssemblyInfo.cs" AssemblyType="Newsmake.Program" IsGeneric="false" />
+  </Target>
 
 </Project>

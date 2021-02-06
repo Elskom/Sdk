@@ -117,18 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CommandParser_ShowHelp" xml:space="preserve">
-    <value>{0}{1}	{2}</value>
-  </data>
-  <data name="CommandParser_ShowHelp_Available_commands" xml:space="preserve">
-    <value>Available commands:</value>
-  </data>
-  <data name="CommandParser_ShowHelp_For_more_information__visit" xml:space="preserve">
-    <value>For more information, visit {0}</value>
-  </data>
-  <data name="CommandParser_ShowHelp_usage" xml:space="preserve">
-    <value>usage: {0} &lt;command&gt;</value>
-  </data>
   <data name="CommandParser_ShowHelp_Version" xml:space="preserve">
     <value>Version: {0}</value>
   </data>
@@ -153,7 +141,7 @@
   <data name="Commands_Formatline_bug" xml:space="preserve">
     <value>bug</value>
   </data>
-  <data name="InvokeOption_Calling_InvokeCommand_on_a_object_with_no_code" xml:space="preserve">
-    <value />
+  <data name="Commands_Potentially_Unstable_Build" xml:space="preserve">
+    <value>You are using an potentially unstable build of newsmake.</value>
   </data>
 </root>

@@ -9,3 +9,4 @@ obj
 .idea
 # not needed anymore, kept locally just in case however.
 XmlAbstraction/
+GitAssemblyInfo.cs

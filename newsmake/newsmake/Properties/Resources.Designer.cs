@@ -61,42 +61,6 @@ namespace newsmake.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}{1}	{2}.
-        /// </summary>
-        internal static string CommandParser_ShowHelp {
-            get {
-                return ResourceManager.GetString("CommandParser_ShowHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Available commands:.
-        /// </summary>
-        internal static string CommandParser_ShowHelp_Available_commands {
-            get {
-                return ResourceManager.GetString("CommandParser_ShowHelp_Available_commands", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to For more information, visit {0}.
-        /// </summary>
-        internal static string CommandParser_ShowHelp_For_more_information__visit {
-            get {
-                return ResourceManager.GetString("CommandParser_ShowHelp_For_more_information__visit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to usage: {0} &lt;command&gt;.
-        /// </summary>
-        internal static string CommandParser_ShowHelp_usage {
-            get {
-                return ResourceManager.GetString("CommandParser_ShowHelp_usage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Version: {0}.
         /// </summary>
         internal static string CommandParser_ShowHelp_Version {
@@ -169,11 +133,11 @@ namespace newsmake.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to You are using an potentially unstable build of newsmake..
         /// </summary>
-        internal static string InvokeOption_Calling_InvokeCommand_on_a_object_with_no_code {
+        internal static string Commands_Potentially_Unstable_Build {
             get {
-                return ResourceManager.GetString("InvokeOption_Calling_InvokeCommand_on_a_object_with_no_code", resourceCulture);
+                return ResourceManager.GetString("Commands_Potentially_Unstable_Build", resourceCulture);
             }
         }
     }
