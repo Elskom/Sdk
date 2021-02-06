@@ -27,9 +27,6 @@ jobs:
     # due to ProjectReferencing it.
     - name: Build with dotnet
       run: |
-        cd GitBuildInfo
-        dotnet build --configuration Release --no-restore
-        cd ..
         dotnet build --configuration Release --no-restore
         dotnet pack --configuration Release --no-build
       shell: bash

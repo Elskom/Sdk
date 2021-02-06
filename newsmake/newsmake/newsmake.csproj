@@ -16,7 +16,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Copyright>Copyright (c) 2018-2021</Copyright>
     <Description>News / changelog making tool.</Description>
-    <PackageReleaseNotes>Actually fixed the substring bug which caused crashes.</PackageReleaseNotes>
+    <PackageReleaseNotes>Actually fixed the substring bug which caused crashes, also moved to System.CommandLine for cli options.</PackageReleaseNotes>
     <Version>1.0.5</Version>
     <NoWarn>$(NoWarn);NU5118;NU1603</NoWarn>
     <SignAssembly>true</SignAssembly>
@@ -32,11 +32,11 @@
     <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
-    <IncludeSymbols>true</IncludeSymbols>
+    <!-- <IncludeSymbols>true</IncludeSymbols> -->
     <!-- Optional: Include source code in the symbol package (.snupkg) -->
-    <IncludeSource>true</IncludeSource>
-    <IncludeBuildOutput>true</IncludeBuildOutput>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- <IncludeSource>true</IncludeSource> -->
+    <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
+    <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <UseCommandLine>true</UseCommandLine>
   </PropertyGroup>
 
@@ -59,14 +59,14 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <OutputPath>bin\Any CPU\Debug\</OutputPath>
     <DocumentationFile>bin\Any CPU\$(Configuration)\newsmake.xml</DocumentationFile>
-    <DebugType>portable</DebugType>
+    <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>bin\Any CPU\Release\</OutputPath>
     <DocumentationFile>bin\Any CPU\$(Configuration)\newsmake.xml</DocumentationFile>
-    <DebugType>portable</DebugType>
+    <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 

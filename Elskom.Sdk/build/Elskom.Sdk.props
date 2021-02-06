@@ -2,16 +2,15 @@
   This file is automatically imported by NuGet into a user's project
   when it targets a single framework, or in classic (pre 2017) csproj projects.
 -->
-<Project TreatAsLocalProperty="TaskAssembly">
+<Project>
   <PropertyGroup>
-    <TaskFolder Condition=" '$(MSBuildRuntimeType)' == 'Core' ">netstandard2.0</TaskFolder>
-    <TaskFolder Condition=" '$(MSBuildRuntimeType)' != 'Core' ">net472</TaskFolder>
-    <TaskAssembly Condition="Exists('$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll')">$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll</TaskAssembly>
-    <TaskAssembly Condition="!Exists('$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll')">$(MSBuildThisFileDirectory)..\bin\Any CPU\$(Configuration)\$(TaskFolder)\GitBuildInfo.dll</TaskAssembly>
-    <error Condition="!Exists('$(TaskAssembly)')">Task Assembly does not exist.</error>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>preview</AnalysisLevel>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
   </PropertyGroup>
 
-  <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\GitBuildInfo.dll')">
+  <ItemGroup>
     <!-- Only add these analyzers when installed as a package from nuget. -->
     <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
       <PrivateAssets>all</PrivateAssets>
@@ -34,7 +33,4 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
-  <UsingTask TaskName="GitBuildInfo.GitBuildInfoTask" AssemblyFile="$(TaskAssembly)" />
-  <UsingTask TaskName="GitBuildInfo.GitBuildInfoGenericTask" AssemblyFile="$(TaskAssembly)" />
 </Project>
