@@ -28,6 +28,7 @@ namespace Newsmake
         {
             MiniDump.DumpMessage += MiniDump_DumpMessage;
             _ = Assembly.GetEntryAssembly().EntryPoint.GetCustomAttributes<MiniDumpAttribute>(false);
+            GitInformation.ApplyAssemblyAttributes(typeof(Program).Assembly);
             var cmd = new RootCommand
             {
                 new Option("--version", "Shows the version of this command-line program."),
@@ -55,11 +56,25 @@ namespace Newsmake
         }
 
         internal static void GlobalCommandHandler(IConsole console)
-            => console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, Resources.CommandParser_ShowHelp_Version, Assembly.GetEntryAssembly().GetName().Version));
+        {
+            var inst = GitInformation.GetAssemblyInstance(typeof(Program));
+            if (!inst.IsMain || inst.IsDirty)
+            {
+                console.Out.WriteLine(Resources.Commands_Potentially_Unstable_Build);
+            }
+
+            console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, Resources.CommandParser_ShowHelp_Version, Assembly.GetEntryAssembly().GetName().Version));
+        }
 
         [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "🖕")]
         internal static void BuildCommandHandler(IConsole console)
         {
+            var inst = GitInformation.GetAssemblyInstance(typeof(Program));
+            if (!inst.IsMain || inst.IsDirty)
+            {
+                console.Out.WriteLine(Resources.Commands_Potentially_Unstable_Build);
+            }
+
             var ext = ".master";
             var project_name = string.Empty;
             var outputfile_name = string.Empty;
@@ -280,6 +295,12 @@ namespace Newsmake
 
         internal static void NewReleaseCommandHandler(string release, IConsole console)
         {
+            var inst = GitInformation.GetAssemblyInstance(typeof(Program));
+            if (!inst.IsMain || inst.IsDirty)
+            {
+                console.Out.WriteLine(Resources.Commands_Potentially_Unstable_Build);
+            }
+
             if (!string.IsNullOrEmpty(release))
             {
                 var ext = ".master";
@@ -350,6 +371,12 @@ namespace Newsmake
 
         internal static void NewEntryCommandHandler(IConsole console)
         {
+            var inst = GitInformation.GetAssemblyInstance(typeof(Program));
+            if (!inst.IsMain || inst.IsDirty)
+            {
+                console.Out.WriteLine(Resources.Commands_Potentially_Unstable_Build);
+            }
+
             var ext = ".master";
             var path = string.Empty;
             foreach (var p in Directory.GetFiles(Directory.GetCurrentDirectory(), "*", SearchOption.AllDirectories))
@@ -417,6 +444,12 @@ namespace Newsmake
         [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "🖕")]
         internal static void FinalizeReleaseCommandHandler(IConsole console)
         {
+            var inst = GitInformation.GetAssemblyInstance(typeof(Program));
+            if (!inst.IsMain || inst.IsDirty)
+            {
+                console.Out.WriteLine(Resources.Commands_Potentially_Unstable_Build);
+            }
+
             var ext = ".master";
             var tabs = true;
             var output_format_md = false;
