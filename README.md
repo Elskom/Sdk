@@ -3,9 +3,23 @@ All of the project files to help with building plugins for Els_kom as well as fo
 
 # NuGet
 
-| Elskom.Sdk | newsmake |
-|:----------:|:--------:|
-| [![NuGet Badge](https://buildstats.info/nuget/Elskom.Sdk?includePreReleases=true)](https://www.nuget.org/packages/Elskom.Sdk/) | [![NuGet Badge](https://buildstats.info/nuget/newsmake?includePreReleases=true)](https://www.nuget.org/packages/newsmake/) |
+
+| Package | Version |
+|:-------:|:-------:|
+| Elskom.Sdk | [![NuGet Badge](https://buildstats.info/nuget/Elskom.Sdk?includePreReleases=true)](https://www.nuget.org/packages/Elskom.Sdk/) |
+| newsmake | [![NuGet Badge](https://buildstats.info/nuget/newsmake?includePreReleases=true)](https://www.nuget.org/packages/newsmake/) |
+| BlowFish | [![NuGet Badge](https://buildstats.info/nuget/BlowFish?includePreReleases=true)](https://www.nuget.org/packages/BlowFish/) |
+| GenericPluginLoader | [![NuGet Badge](https://buildstats.info/nuget/GenericPluginLoader?includePreReleases=true)](https://www.nuget.org/packages/GenericPluginLoader/) |
+| Elskom.GitInformation | [![NuGet Badge](https://buildstats.info/nuget/Elskom.GitInformation?includePreReleases=true)](https://www.nuget.org/packages/Elskom.GitInformation/) |
+| MessageManager | [![NuGet Badge](https://buildstats.info/nuget/MessageManager?includePreReleases=true)](https://www.nuget.org/packages/MessageManager/) |
+| MiniDump | [![NuGet Badge](https://buildstats.info/nuget/MiniDump?includePreReleases=true)](https://www.nuget.org/packages/MiniDump/) |
+| Elskom.PluginFramework | [![NuGet Badge](https://buildstats.info/nuget/Elskom.PluginFramework?includePreReleases=true)](https://www.nuget.org/packages/Elskom.PluginFramework/) |
+| PluginUpdateCheck | [![NuGet Badge](https://buildstats.info/nuget/PluginUpdateCheck?includePreReleases=true)](https://www.nuget.org/packages/PluginUpdateCheck/) |
+| ReleasePackaging | [![NuGet Badge](https://buildstats.info/nuget/ReleasePackaging?includePreReleases=true)](https://www.nuget.org/packages/ReleasePackaging/) |
+| SettingsFile | [![NuGet Badge](https://buildstats.info/nuget/SettingsFile?includePreReleases=true)](https://www.nuget.org/packages/SettingsFile/) |
+| UnluacNET | [![NuGet Badge](https://buildstats.info/nuget/UnluacNET?includePreReleases=true)](https://www.nuget.org/packages/UnluacNET/) |
+| ZipAssembly | [![NuGet Badge](https://buildstats.info/nuget/ZipAssembly?includePreReleases=true)](https://www.nuget.org/packages/ZipAssembly/) |
+| zlib.managed | [![NuGet Badge](https://buildstats.info/nuget/zlib.managed?includePreReleases=true)](https://www.nuget.org/packages/zlib.managed/) |
 
 # Build Status
 
