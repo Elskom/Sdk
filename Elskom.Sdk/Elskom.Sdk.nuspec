@@ -13,265 +13,136 @@
     <tags>GitBuildInformation SettingsFile zlib BlowFish Unluac ZipAssembly ReleasePackaging MessageManager GenericPluginLoader MiniDump PluginFramework PluginUpdateCheck GitBuildInfo</tags>
     <repository type="git" url="https://github.com/Elskom/Sdk/" />
     <dependencies>
-      <group targetFramework=".NETFramework4.0" />
+      <group targetFramework=".NETFramework4.0">
+        <dependency id="BlowFish" version="1.0.3" />
+        <dependency id="Elskom.GitInformation" version="1.0.0" />
+        <dependency id="MessageManager" version="1.1.2" />
+        <dependency id="UnluacNET" version="1.0.0" />
+        <dependency id="zlib.managed" version="1.1.5" />
+      </group>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="BlowFish" version="1.0.3" />
+        <dependency id="Elskom.GitInformation" version="1.0.0" />
+        <dependency id="MessageManager" version="1.1.2" />
+        <dependency id="UnluacNET" version="1.0.0" />
+        <dependency id="zlib.managed" version="1.1.5" />
+        <dependency id="GenericPluginLoader" version="1.0.2" />
+        <dependency id="PluginUpdateCheck" version="1.0.3" />
+        <dependency id="ReleasePackaging" version="1.0.2" />
+        <dependency id="ZipAssembly" version="1.1.3" />
+      </group>
       <group targetFramework=".NETFramework4.6.1">
-        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" exclude="Build,Analyzers" />
-        <dependency id="System.Text.Json" version="5.0.1" exclude="Build,Analyzers" />
+        <dependency id="BlowFish" version="1.0.3" />
+        <dependency id="Elskom.GitInformation" version="1.0.0" />
+        <dependency id="MessageManager" version="1.1.2" />
+        <dependency id="UnluacNET" version="1.0.0" />
+        <dependency id="zlib.managed" version="1.1.5" />
+        <dependency id="GenericPluginLoader" version="1.0.2" />
+        <dependency id="PluginUpdateCheck" version="1.0.3" />
+        <dependency id="ReleasePackaging" version="1.0.2" />
+        <dependency id="ZipAssembly" version="1.1.3" />
+        <dependency id="MiniDump" version="1.0.3" />
+        <dependency id="Elskom.PluginFramework" version="1.0.2" />
+        <dependency id="SettingsFile" version="1.0.4" />
       </group>
-      <group targetFramework=".NETCoreApp2.0" />
-      <group targetFramework=".NETCoreApp2.1" />
-      <group targetFramework=".NETCoreApp2.2" />
-      <group targetFramework=".NETCoreApp3.0" />
-      <group targetFramework=".NETCoreApp3.1" />
-      <group targetFramework="net5.0" />
-      <group targetFramework="net5.0-windows7.0" />
-      <group targetFramework=".NETStandard2.0">
-        <dependency id="System.Text.Json" version="5.0.1" exclude="Build,Analyzers" />
+      <group targetFramework=".NETCoreApp2.0">
+        <dependency id="BlowFish" version="1.0.3" />
+        <dependency id="Elskom.GitInformation" version="1.0.0" />
+        <dependency id="UnluacNET" version="1.0.0" />
+        <dependency id="zlib.managed" version="1.1.5" />
+        <dependency id="GenericPluginLoader" version="1.0.2" />
+        <dependency id="PluginUpdateCheck" version="1.0.3" />
+        <dependency id="ReleasePackaging" version="1.0.2" />
+        <dependency id="ZipAssembly" version="1.1.3" />
+        <dependency id="MiniDump" version="1.0.3" />
+        <dependency id="Elskom.PluginFramework" version="1.0.2" />
+        <dependency id="SettingsFile" version="1.0.4" />
       </group>
-    </dependencies>
-    <frameworkReferences>
       <group targetFramework=".NETCoreApp3.0">
-        <frameworkReference name="Microsoft.WindowsDesktop.App" />
+        <dependency id="BlowFish" version="1.0.3" />
+        <dependency id="Elskom.GitInformation" version="1.0.0" />
+        <dependency id="MessageManager" version="1.1.2" />
+        <dependency id="UnluacNET" version="1.0.0" />
+        <dependency id="zlib.managed" version="1.1.5" />
+        <dependency id="GenericPluginLoader" version="1.0.2" />
+        <dependency id="PluginUpdateCheck" version="1.0.3" />
+        <dependency id="ReleasePackaging" version="1.0.2" />
+        <dependency id="ZipAssembly" version="1.1.3" />
+        <dependency id="MiniDump" version="1.0.3" />
+        <dependency id="Elskom.PluginFramework" version="1.0.2" />
+        <dependency id="SettingsFile" version="1.0.4" />
       </group>
       <group targetFramework=".NETCoreApp3.1">
-        <frameworkReference name="Microsoft.WindowsDesktop.App" />
-      </group>
-      <group targetFramework="net5.0-windows7.0">
-        <frameworkReference name="Microsoft.WindowsDesktop.App" />
-      </group>
-    </frameworkReferences>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
-      <frameworkAssembly assemblyName="System.Data.DataSetExtensions" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
-      <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
-      <frameworkAssembly assemblyName="System.Xml" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
-      <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
-      <frameworkAssembly assemblyName="System.IO.Compression" targetFramework=".NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
-      <frameworkAssembly assemblyName="System.IO.Compression.FileSystem" targetFramework=".NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
-      <frameworkAssembly assemblyName="System.Runtime.InteropServices.RuntimeInformation" targetFramework=".NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
-      <frameworkAssembly assemblyName="System.Net.Http" targetFramework=".NETFramework4.5, .NETFramework4.5.1, .NETFramework4.5.2, .NETFramework4.6, .NETFramework4.6.1, .NETFramework4.6.2, .NETFramework4.7, .NETFramework4.7.1, .NETFramework4.7.2, .NETFramework4.8" />
-    </frameworkAssemblies>
-    <references>
-      <group targetFramework="net40">
-        <reference file="Elskom.GitInformation.dll" />
-        <reference file="BlowFish.dll" />
-        <reference file="MessageManager.dll" />
-        <reference file="UnluacNET.dll" />
-        <reference file="zlib.managed.dll" />
-      </group>
-      <group targetFramework="net45">
-        <reference file="ReleasePackaging.dll" />
-        <reference file="ZipAssembly.dll" />
-        <reference file="GenericPluginLoader.dll" />
-        <reference file="PluginUpdateCheck.dll" />
-      </group>
-      <group targetFramework="net461">
-        <reference file="SettingsFile.dll" />
-        <reference file="MiniDump.dll" />
-        <reference file="Elskom.PluginFramework.dll" />
+        <dependency id="BlowFish" version="1.0.3" />
+        <dependency id="Elskom.GitInformation" version="1.0.0" />
+        <dependency id="MessageManager" version="1.1.2" />
+        <dependency id="UnluacNET" version="1.0.0" />
+        <dependency id="zlib.managed" version="1.1.5" />
+        <dependency id="GenericPluginLoader" version="1.0.2" />
+        <dependency id="PluginUpdateCheck" version="1.0.3" />
+        <dependency id="ReleasePackaging" version="1.0.2" />
+        <dependency id="ZipAssembly" version="1.1.3" />
+        <dependency id="MiniDump" version="1.0.3" />
+        <dependency id="Elskom.PluginFramework" version="1.0.2" />
+        <dependency id="SettingsFile" version="1.0.4" />
       </group>
       <group targetFramework="net5.0">
-        <reference file="Elskom.GitInformation.dll" />
-        <reference file="BlowFish.dll" />
-        <reference file="ReleasePackaging.dll" />
-        <reference file="ZipAssembly.dll" />
-        <reference file="UnluacNET.dll" />
-        <reference file="zlib.managed.dll" />
-        <reference file="GenericPluginLoader.dll" />
-        <reference file="SettingsFile.dll" />
-        <reference file="MiniDump.dll" />
-        <reference file="Elskom.PluginFramework.dll" />
-        <reference file="PluginUpdateCheck.dll" />
+        <dependency id="BlowFish" version="1.0.3" />
+        <dependency id="Elskom.GitInformation" version="1.0.0" />
+        <dependency id="UnluacNET" version="1.0.0" />
+        <dependency id="zlib.managed" version="1.1.5" />
+        <dependency id="GenericPluginLoader" version="1.0.2" />
+        <dependency id="PluginUpdateCheck" version="1.0.3" />
+        <dependency id="ReleasePackaging" version="1.0.2" />
+        <dependency id="ZipAssembly" version="1.1.3" />
+        <dependency id="MiniDump" version="1.0.3" />
+        <dependency id="Elskom.PluginFramework" version="1.0.2" />
+        <dependency id="SettingsFile" version="1.0.4" />
       </group>
       <group targetFramework="net5.0-windows7.0">
-        <reference file="MessageManager.dll" />
+        <dependency id="BlowFish" version="1.0.3" />
+        <dependency id="Elskom.GitInformation" version="1.0.0" />
+        <dependency id="MessageManager" version="1.1.2" />
+        <dependency id="UnluacNET" version="1.0.0" />
+        <dependency id="zlib.managed" version="1.1.5" />
+        <dependency id="GenericPluginLoader" version="1.0.2" />
+        <dependency id="PluginUpdateCheck" version="1.0.3" />
+        <dependency id="ReleasePackaging" version="1.0.2" />
+        <dependency id="ZipAssembly" version="1.1.3" />
+        <dependency id="MiniDump" version="1.0.3" />
+        <dependency id="Elskom.PluginFramework" version="1.0.2" />
+        <dependency id="SettingsFile" version="1.0.4" />
       </group>
-      <group targetFramework="netcoreapp2.0">
-        <reference file="Elskom.GitInformation.dll" />
-        <reference file="BlowFish.dll" />
-        <reference file="ReleasePackaging.dll" />
-        <reference file="ZipAssembly.dll" />
-        <reference file="UnluacNET.dll" />
-        <reference file="zlib.managed.dll" />
-        <reference file="GenericPluginLoader.dll" />
-        <reference file="SettingsFile.dll" />
-        <reference file="MiniDump.dll" />
-        <reference file="Elskom.PluginFramework.dll" />
-        <reference file="PluginUpdateCheck.dll" />
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="BlowFish" version="1.0.3" />
+        <dependency id="Elskom.GitInformation" version="1.0.0" />
+        <dependency id="UnluacNET" version="1.0.0" />
+        <dependency id="zlib.managed" version="1.1.5" />
+        <dependency id="GenericPluginLoader" version="1.0.2" />
+        <dependency id="PluginUpdateCheck" version="1.0.3" />
+        <dependency id="ReleasePackaging" version="1.0.2" />
+        <dependency id="ZipAssembly" version="1.1.3" />
+        <dependency id="MiniDump" version="1.0.3" />
+        <dependency id="Elskom.PluginFramework" version="1.0.2" />
+        <dependency id="SettingsFile" version="1.0.4" />
       </group>
-      <group targetFramework="netcoreapp3.0">
-        <reference file="MessageManager.dll" />
-        <reference file="MiniDump.dll" />
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="BlowFish" version="1.0.3" />
+        <dependency id="Elskom.GitInformation" version="1.0.0" />
+        <dependency id="UnluacNET" version="1.0.0" />
+        <dependency id="zlib.managed" version="1.1.5" />
+        <dependency id="GenericPluginLoader" version="1.0.2" />
+        <dependency id="PluginUpdateCheck" version="1.0.3" />
+        <dependency id="ReleasePackaging" version="1.0.2" />
+        <dependency id="ZipAssembly" version="1.1.3" />
+        <dependency id="MiniDump" version="1.0.3" />
+        <dependency id="Elskom.PluginFramework" version="1.0.2" />
+        <dependency id="SettingsFile" version="1.0.4" />
       </group>
-      <group targetFramework="netcoreapp3.1">
-        <reference file="MessageManager.dll" />
-      </group>
-    </references>
+    </dependencies>
   </metadata>
   <files>
-    <file src="..\GitBuildInfo\bin\Any CPU\$configuration$\net472\GitBuildInfo.dll" target="tasks\net472\GitBuildInfo.dll" />
-    <file src="..\GitBuildInfo\bin\Any CPU\$configuration$\net5.0\GitBuildInfo.dll" target="tasks\net5.0\GitBuildInfo.dll" />
-    <file src="..\GitBuildInfo\bin\Any CPU\$configuration$\netstandard2.0\GitBuildInfo.dll" target="tasks\netstandard2.0\GitBuildInfo.dll" />
-    <file src="..\GitBuildInfo\build\Elskom.Sdk.props" target="build\Elskom.Sdk.props" />
-    <file src="..\GitBuildInfo\buildMultiTargeting\Elskom.Sdk.props" target="buildMultiTargeting\Elskom.Sdk.props" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net40\Elskom.GitInformation.*" target="lib\net40" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net40\Elskom.GitInformation.xml" target="ref\net40\Elskom.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net40\ref\Elskom.GitInformation.dll" target="ref\net40\Elskom.GitInformation.dll" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\net40\BlowFish.*" target="lib\net40" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\net40\BlowFish.xml" target="ref\net40\BlowFish.xml" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\net40\ref\BlowFish.dll" target="ref\net40\BlowFish.dll" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\net40\MessageManager.*" target="lib\net40" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\net40\MessageManager.xml" target="ref\net40\MessageManager.xml" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\net40\ref\MessageManager.dll" target="ref\net40\MessageManager.dll" />
-    <file src="..\UnluacNET\bin\$configuration$\net40\UnluacNET.*" target="lib\net40" />
-    <file src="..\UnluacNET\bin\$configuration$\net40\UnluacNET.xml" target="ref\net40\UnluacNET.xml" />
-    <file src="..\UnluacNET\bin\$configuration$\net40\ref\UnluacNET.dll" target="ref\net40\UnluacNET.dll" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\net40\zlib.managed.*" target="lib\net40" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\net40\zlib.managed.xml" target="ref\net40\zlib.managed.xml" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\net40\ref\zlib.managed.dll" target="ref\net40\zlib.managed.dll" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\net45\ReleasePackaging.*" target="lib\net45" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\net45\ReleasePackaging.xml" target="ref\net45\ReleasePackaging.xml" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\net45\ref\ReleasePackaging.dll" target="ref\net45\ReleasePackaging.dll" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\net45\ZipAssembly.*" target="lib\net45" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\net45\ZipAssembly.xml" target="ref\net45\ZipAssembly.xml" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\net45\ref\ZipAssembly.dll" target="ref\net45\ZipAssembly.dll" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\net45\GenericPluginLoader.*" target="lib\net45" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\net45\GenericPluginLoader.xml" target="ref\net45\GenericPluginLoader.xml" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\net45\ref\GenericPluginLoader.dll" target="ref\net45\GenericPluginLoader.dll" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net45\PluginUpdateCheck.*" target="lib\net45" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net45\PluginUpdateCheck.xml" target="ref\net45\PluginUpdateCheck.xml" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net45\ref\PluginUpdateCheck.dll" target="ref\net45\PluginUpdateCheck.dll" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\net461\SettingsFile.*" target="lib\net461" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\net461\SettingsFile.xml" target="ref\net461\SettingsFile.xml" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\net461\ref\SettingsFile.dll" target="ref\net461\SettingsFile.dll" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\net461\MiniDump.*" target="lib\net461" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\net461\MiniDump.xml" target="ref\net461\MiniDump.xml" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\net461\ref\MiniDump.dll" target="ref\net461\MiniDump.dll" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\net461\Elskom.PluginFramework.*" target="lib\net461" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\net461\Elskom.PluginFramework.xml" target="ref\net461\Elskom.PluginFramework.xml" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\net461\ref\Elskom.PluginFramework.dll" target="ref\net461\Elskom.PluginFramework.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\Elskom.GitInformation.*" target="lib\net5.0" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\Elskom.GitInformation.xml" target="ref\net5.0\Elskom.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\net5.0\ref\Elskom.GitInformation.dll" target="ref\net5.0\Elskom.GitInformation.dll" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\net5.0\BlowFish.*" target="lib\net5.0" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\net5.0\BlowFish.xml" target="ref\net5.0\BlowFish.xml" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\net5.0\ref\BlowFish.dll" target="ref\net5.0\BlowFish.dll" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\net5.0-windows\MessageManager.*" target="lib\net5.0-windows7.0" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\net5.0-windows\MessageManager.xml" target="ref\net5.0-windows7.0\MessageManager.xml" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\net5.0-windows\ref\MessageManager.dll" target="ref\net5.0-windows7.0\MessageManager.dll" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\net5.0\ReleasePackaging.*" target="lib\net5.0" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\net5.0\ReleasePackaging.xml" target="ref\net5.0\ReleasePackaging.xml" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\net5.0\ref\ReleasePackaging.dll" target="ref\net5.0\ReleasePackaging.dll" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\net5.0\ZipAssembly.*" target="lib\net5.0" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\net5.0\ZipAssembly.xml" target="ref\net5.0\ZipAssembly.xml" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\net5.0\ref\ZipAssembly.dll" target="ref\net5.0\ZipAssembly.dll" />
-    <file src="..\UnluacNET\bin\$configuration$\net5.0\UnluacNET.*" target="lib\net5.0" />
-    <file src="..\UnluacNET\bin\$configuration$\net5.0\UnluacNET.xml" target="ref\net5.0\UnluacNET.xml" />
-    <file src="..\UnluacNET\bin\$configuration$\net5.0\ref\UnluacNET.dll" target="ref\net5.0\UnluacNET.dll" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\net5.0\zlib.managed.*" target="lib\net5.0" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\net5.0\zlib.managed.xml" target="ref\net5.0\zlib.managed.xml" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\net5.0\ref\zlib.managed.dll" target="ref\net5.0\zlib.managed.dll" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\net5.0\GenericPluginLoader.*" target="lib\net5.0" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\net5.0\GenericPluginLoader.xml" target="ref\net5.0\GenericPluginLoader.xml" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\net5.0\ref\GenericPluginLoader.dll" target="ref\net5.0\GenericPluginLoader.dll" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\net5.0\SettingsFile.*" target="lib\net5.0" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\net5.0\SettingsFile.xml" target="ref\net5.0\SettingsFile.xml" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\net5.0\ref\SettingsFile.dll" target="ref\net5.0\SettingsFile.dll" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\net5.0\MiniDump.*" target="lib\net5.0" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\net5.0\MiniDump.xml" target="ref\net5.0\MiniDump.xml" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\net5.0\ref\MiniDump.dll" target="ref\net5.0\MiniDump.dll" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\net5.0\Elskom.PluginFramework.*" target="lib\net5.0" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\net5.0\Elskom.PluginFramework.xml" target="ref\net5.0\Elskom.PluginFramework.xml" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\net5.0\ref\Elskom.PluginFramework.dll" target="ref\net5.0\Elskom.PluginFramework.dll" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net5.0\PluginUpdateCheck.*" target="lib\net5.0" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net5.0\PluginUpdateCheck.xml" target="ref\net5.0\PluginUpdateCheck.xml" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\net5.0\ref\PluginUpdateCheck.dll" target="ref\net5.0\PluginUpdateCheck.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.0\Elskom.GitInformation.*" target="lib\netcoreapp2.0" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.0\Elskom.GitInformation.xml" target="ref\netcoreapp2.0\Elskom.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netcoreapp2.0\ref\Elskom.GitInformation.dll" target="ref\netcoreapp2.0\Elskom.GitInformation.dll" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.0\BlowFish.*" target="lib\netcoreapp2.0" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.0\BlowFish.xml" target="ref\netcoreapp2.0\BlowFish.xml" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\netcoreapp2.0\ref\BlowFish.dll" target="ref\netcoreapp2.0\BlowFish.dll" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netcoreapp2.0\ReleasePackaging.*" target="lib\netcoreapp2.0" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netcoreapp2.0\ReleasePackaging.xml" target="ref\netcoreapp2.0\ReleasePackaging.xml" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netcoreapp2.0\ref\ReleasePackaging.dll" target="ref\netcoreapp2.0\ReleasePackaging.dll" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\netcoreapp2.0\ZipAssembly.*" target="lib\netcoreapp2.0" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\netcoreapp2.0\ZipAssembly.xml" target="ref\netcoreapp2.0\ZipAssembly.xml" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\netcoreapp2.0\ref\ZipAssembly.dll" target="ref\netcoreapp2.0\ZipAssembly.dll" />
-    <file src="..\UnluacNET\bin\$configuration$\netcoreapp2.0\UnluacNET.*" target="lib\netcoreapp2.0" />
-    <file src="..\UnluacNET\bin\$configuration$\netcoreapp2.0\UnluacNET.xml" target="ref\netcoreapp2.0\UnluacNET.xml" />
-    <file src="..\UnluacNET\bin\$configuration$\netcoreapp2.0\ref\UnluacNET.dll" target="ref\netcoreapp2.0\UnluacNET.dll" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\netcoreapp2.0\zlib.managed.*" target="lib\netcoreapp2.0" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\netcoreapp2.0\zlib.managed.xml" target="ref\netcoreapp2.0\zlib.managed.xml" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\netcoreapp2.0\ref\zlib.managed.dll" target="ref\netcoreapp2.0\zlib.managed.dll" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netcoreapp2.0\GenericPluginLoader.*" target="lib\netcoreapp2.0" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netcoreapp2.0\GenericPluginLoader.xml" target="ref\netcoreapp2.0\GenericPluginLoader.xml" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netcoreapp2.0\ref\GenericPluginLoader.dll" target="ref\netcoreapp2.0\GenericPluginLoader.dll" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\netcoreapp2.0\SettingsFile.*" target="lib\netcoreapp2.0" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\netcoreapp2.0\SettingsFile.xml" target="ref\netcoreapp2.0\SettingsFile.xml" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\netcoreapp2.0\ref\SettingsFile.dll" target="ref\netcoreapp2.0\SettingsFile.dll" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\netcoreapp2.0\MiniDump.*" target="lib\netcoreapp2.0" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\netcoreapp2.0\MiniDump.xml" target="ref\netcoreapp2.0\MiniDump.xml" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\netcoreapp2.0\ref\MiniDump.dll" target="ref\netcoreapp2.0\MiniDump.dll" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\netcoreapp2.0\Elskom.PluginFramework.*" target="lib\netcoreapp2.0" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\netcoreapp2.0\Elskom.PluginFramework.xml" target="ref\netcoreapp2.0\Elskom.PluginFramework.xml" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\netcoreapp2.0\ref\Elskom.PluginFramework.dll" target="ref\netcoreapp2.0\Elskom.PluginFramework.dll" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.0\PluginUpdateCheck.*" target="lib\netcoreapp2.0" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.0\PluginUpdateCheck.xml" target="ref\netcoreapp2.0\PluginUpdateCheck.xml" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netcoreapp2.0\ref\PluginUpdateCheck.dll" target="ref\netcoreapp2.0\PluginUpdateCheck.dll" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.0\MessageManager.*" target="lib\netcoreapp3.0" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.0\MessageManager.xml" target="ref\netcoreapp3.0\MessageManager.xml" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.0\ref\MessageManager.dll" target="ref\netcoreapp3.0\MessageManager.dll" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\netcoreapp3.0\MiniDump.*" target="lib\netcoreapp3.0" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\netcoreapp3.0\MiniDump.xml" target="ref\netcoreapp3.0\MiniDump.xml" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\netcoreapp3.0\ref\MiniDump.dll" target="ref\netcoreapp3.0\MiniDump.dll" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.1\MessageManager.*" target="lib\netcoreapp3.1" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.1\MessageManager.xml" target="ref\netcoreapp3.1\MessageManager.xml" />
-    <file src="..\MessageManager\bin\Any CPU\$configuration$\netcoreapp3.1\ref\MessageManager.dll" target="ref\netcoreapp3.1\MessageManager.dll" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\Elskom.GitInformation.*" target="lib\netstandard2.0" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\Elskom.GitInformation.xml" target="ref\netstandard2.0\Elskom.GitInformation.xml" />
-    <file src="..\GitInformation\src\GitInformation\bin\Any CPU\$configuration$\netstandard2.0\ref\Elskom.GitInformation.dll" target="ref\netstandard2.0\Elskom.GitInformation.dll" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.0\BlowFish.*" target="lib\netstandard2.0" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.0\BlowFish.xml" target="ref\netstandard2.0\BlowFish.xml" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.0\ref\BlowFish.dll" target="ref\netstandard2.0\BlowFish.dll" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netstandard2.0\ReleasePackaging.*" target="lib\netstandard2.0" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netstandard2.0\ReleasePackaging.xml" target="ref\netstandard2.0\ReleasePackaging.xml" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netstandard2.0\ref\ReleasePackaging.dll" target="ref\netstandard2.0\ReleasePackaging.dll" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\netstandard2.0\ZipAssembly.*" target="lib\netstandard2.0" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\netstandard2.0\ZipAssembly.xml" target="ref\netstandard2.0\ZipAssembly.xml" />
-    <file src="..\ZipAssembly\bin\Any CPU\$configuration$\netstandard2.0\ref\ZipAssembly.dll" target="ref\netstandard2.0\ZipAssembly.dll" />
-    <file src="..\UnluacNET\bin\$configuration$\netstandard2.0\UnluacNET.*" target="lib\netstandard2.0" />
-    <file src="..\UnluacNET\bin\$configuration$\netstandard2.0\UnluacNET.xml" target="ref\netstandard2.0\UnluacNET.xml" />
-    <file src="..\UnluacNET\bin\$configuration$\netstandard2.0\ref\UnluacNET.dll" target="ref\netstandard2.0\UnluacNET.dll" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\netstandard2.0\zlib.managed.*" target="lib\netstandard2.0" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\netstandard2.0\zlib.managed.xml" target="ref\netstandard2.0\zlib.managed.xml" />
-    <file src="..\zlib.managed\bin\Any CPU\$configuration$\netstandard2.0\ref\zlib.managed.dll" target="ref\netstandard2.0\zlib.managed.dll" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netstandard2.0\GenericPluginLoader.*" target="lib\netstandard2.0" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netstandard2.0\GenericPluginLoader.xml" target="ref\netstandard2.0\GenericPluginLoader.xml" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netstandard2.0\ref\GenericPluginLoader.dll" target="ref\netstandard2.0\GenericPluginLoader.dll" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\netstandard2.0\SettingsFile.*" target="lib\netstandard2.0" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\netstandard2.0\SettingsFile.xml" target="ref\netstandard2.0\SettingsFile.xml" />
-    <file src="..\SettingsFile\bin\Any CPU\$configuration$\netstandard2.0\ref\SettingsFile.dll" target="ref\netstandard2.0\SettingsFile.dll" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\netstandard2.0\MiniDump.*" target="lib\netstandard2.0" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\netstandard2.0\MiniDump.xml" target="ref\netstandard2.0\MiniDump.xml" />
-    <file src="..\MiniDump\bin\Any CPU\$configuration$\netstandard2.0\ref\MiniDump.dll" target="ref\netstandard2.0\MiniDump.dll" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\netstandard2.0\Elskom.PluginFramework.*" target="lib\netstandard2.0" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\netstandard2.0\Elskom.PluginFramework.xml" target="ref\netstandard2.0\Elskom.PluginFramework.xml" />
-    <file src="..\PluginFramework\bin\Any CPU\$configuration$\netstandard2.0\ref\Elskom.PluginFramework.dll" target="ref\netstandard2.0\Elskom.PluginFramework.dll" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netstandard2.0\PluginUpdateCheck.*" target="lib\netstandard2.0" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netstandard2.0\PluginUpdateCheck.xml" target="ref\netstandard2.0\PluginUpdateCheck.xml" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netstandard2.0\ref\PluginUpdateCheck.dll" target="ref\netstandard2.0\PluginUpdateCheck.dll" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.1\BlowFish.*" target="lib\netstandard2.1" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.1\BlowFish.xml" target="ref\netstandard2.1\BlowFish.xml" />
-    <file src="..\BlowFish\bin\Any CPU\$configuration$\netstandard2.1\ref\BlowFish.dll" target="ref\netstandard2.1\BlowFish.dll" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netstandard2.1\ReleasePackaging.*" target="lib\netstandard2.1" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netstandard2.1\ReleasePackaging.xml" target="ref\netstandard2.1\ReleasePackaging.xml" />
-    <file src="..\ReleasePackaging\bin\Any CPU\$configuration$\netstandard2.1\ref\ReleasePackaging.dll" target="ref\netstandard2.1\ReleasePackaging.dll" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netstandard2.1\GenericPluginLoader.*" target="lib\netstandard2.1" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netstandard2.1\GenericPluginLoader.xml" target="ref\netstandard2.1\GenericPluginLoader.xml" />
-    <file src="..\GenericPluginLoader\bin\Any CPU\$configuration$\netstandard2.1\ref\GenericPluginLoader.dll" target="ref\netstandard2.1\GenericPluginLoader.dll" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netstandard2.1\PluginUpdateCheck.*" target="lib\netstandard2.1" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netstandard2.1\PluginUpdateCheck.xml" target="ref\netstandard2.1\PluginUpdateCheck.xml" />
-    <file src="..\PluginUpdateCheck\bin\Any CPU\$configuration$\netstandard2.1\ref\PluginUpdateCheck.dll" target="ref\netstandard2.1\PluginUpdateCheck.dll" />
+    <file src="buildMultiTargeting/Elskom.Sdk.*" target="buildMultiTargeting" />
+    <file src="build/Elskom.Sdk.*" target="build" />
   </files>
 </package>

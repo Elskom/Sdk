@@ -15,11 +15,10 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Copyright (c) 2018-2021</Copyright>
     <Description>A c# class that handles the settings for any application.</Description>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>Added reference assemblies.</PackageReleaseNotes>
     <Version>1.0.4</Version>
-    <IsPackable>false</IsPackable>
     <Version Condition="'$(GITHUB_ACTIONS)' == 'true' AND !$(GITHUB_REF.StartsWith('refs/tags/'))">$(Version)-preview-$(GITHUB_RUN_ID)</Version>
-    <!-- <PublishDocumentationFile>false</PublishDocumentationFile> -->
+    <PublishDocumentationFile>true</PublishDocumentationFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -32,9 +31,9 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>preview</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <!-- <PackageOutputPath Condition="'$(SolutionName)' == 'build_all_packages'">$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath> -->
+    <PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
-    <!-- <PublishRepositoryUrl>true</PublishRepositoryUrl> -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
@@ -51,14 +50,14 @@
     <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
     <OutputPath>bin\Any CPU\Debug\</OutputPath>
     <DocumentationFile>bin\Any CPU\Debug\SettingsFile.xml</DocumentationFile>
-    <DebugType>portable</DebugType>
+    <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>bin\Any CPU\Release\</OutputPath>
     <DocumentationFile>bin\Any CPU\Release\SettingsFile.xml</DocumentationFile>
-    <DebugType>portable</DebugType>
+    <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
@@ -71,10 +70,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../GitBuildInfo/GitBuildInfo.csproj" ReferenceOutputAssembly="false">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </ProjectReference>
     <ProjectReference Include="../GitInformation/src/GitInformation/Elskom.GitInformation.csproj" />
   </ItemGroup>
 
@@ -83,10 +78,10 @@
   </ItemGroup>
 
   <Import Project="../CommonPackages.props" />
-  <Import Project="../GitBuildInfo/buildMultiTargeting/GitBuildInfo.props" />
+  <Import Project="../Elskom.Sdk/build/Elskom.Sdk.targets" />
 
   <Target Name="GitBuildInfo" BeforeTargets="PrepareForBuild">
-    <GitBuildInfoTask OutputPath="$(ProjectDir)\GitAssemblyInfo.cs" AssemblyType="Elskom.Generic.Libs.SettingsFile" />
+    <GitBuildInfoTask OutputPath="$(ProjectDir)\GitAssemblyInfo.cs" AssemblyType="Elskom.Generic.Libs.SettingsFile" IsGeneric="false" />
   </Target>
 
 </Project>
