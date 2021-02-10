@@ -1,15 +1,44 @@
-﻿<Project Sdk="Microsoft.Build.NoTargets/2.0.1">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
-    <NuspecFile>Elskom.Sdk.nuspec</NuspecFile>
-    <NuspecProperties>configuration=$(Configuration)</NuspecProperties>
+    <TargetFrameworks>net40;net45;net461;netcoreapp2.0;netcoreapp3.0;netcoreapp3.1;net5.0;net5.0-windows;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <Version>1.0.0</Version>
+    <Version Condition="'$(GITHUB_ACTIONS)' == 'true' AND !$(GITHUB_REF.StartsWith('refs/tags/'))">$(Version)-preview-$(GITHUB_RUN_ID)</Version>
+    <BuildOutputTargetFolder>trash</BuildOutputTargetFolder>
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Company>Els_kom org.</Company>
+    <Authors>Els_kom org.</Authors>
+    <PackageProjectUrl>https://github.com/Elskom/Sdk/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Elskom/Sdk/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>GitBuildInformation;SettingsFile;zlib;BlowFish;Unluac;ZipAssembly;ReleasePackaging;MessageManager;GenericPluginLoader;MiniDump;PluginFramework;PluginUpdateCheck;GitBuildInfo</PackageTags>
+    <Copyright>Copyright (c) 2018-2021</Copyright>
+    <Description>Elskom SDK for development of Els_kom plugins and for Els_kom itself. Also contains libs that can be used for other projects as well.</Description>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../BlowFish/BlowFish.csproj" />
+    <ProjectReference Include="../MessageManager/MessageManager.csproj" Condition="'$(TargetFramework)' != 'netcoreapp2.0' AND '$(TargetFramework)' != 'netstandard2.0' AND '$(TargetFramework)' != 'netstandard2.1' AND '$(TargetFramework)' != 'net5.0'" />
+    <ProjectReference Include="../UnluacNET/UnluacNET.csproj" />
+    <ProjectReference Include="../zlib.managed/zlib.managed.csproj" Condition="'$(TargetFramework)' == 'net40' OR '$(TargetFramework)' == 'net45'" />
+    <!-- needs .NET Framework 4.5+. -->
+    <ProjectReference Include="../GenericPluginLoader/GenericPluginLoader.csproj" Condition="'$(TargetFramework)' != 'net40'" />
+    <ProjectReference Include="../PluginUpdateCheck/PluginUpdateCheck.csproj" Condition="'$(TargetFramework)' != 'net40'" />
+    <ProjectReference Include="../ReleasePackaging/ReleasePackaging.csproj" Condition="'$(TargetFramework)' != 'net40'" />
+    <!-- needs .NET Framework 4.6.1+. -->
+    <ProjectReference Include="../MiniDump/MiniDump.csproj" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45'"/>
+    <ProjectReference Include="../PluginFramework/PluginFramework.csproj" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45'"/>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="../CommonPackages.props" />
+    <None Include="build/Elskom.Sdk.props" Pack="true" PackagePath="build" />
+    <None Include="build/Elskom.Sdk.targets" Pack="true" PackagePath="build" />
+    <None Include="buildMultiTargeting/Elskom.Sdk.props" Pack="true" PackagePath="buildMultiTargeting" />
+    <None Include="buildMultiTargeting/Elskom.Sdk.targets" Pack="true" PackagePath="buildMultiTargeting" />
   </ItemGroup>
 
 </Project>
