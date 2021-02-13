@@ -49,8 +49,8 @@ namespace Elskom.Generic.Libs
         {
             if (File.Exists(SettingsFile.SettingsPath))
             {
-                SettingsFile.SettingsJson = SettingsFile.SettingsJson?.ReopenFile();
-                ElsDir = SettingsFile.SettingsJson?.ElsDir;
+                SettingsFile.SettingsJson = SettingsFile.SettingsJson.ReopenFile();
+                ElsDir = SettingsFile.SettingsJson.ElsDir;
                 if (ElsDir.Length > 0)
                 {
                     if (File.Exists($"{ElsDir}\\data\\x2.exe"))
@@ -94,8 +94,8 @@ namespace Elskom.Generic.Libs
             // buttons in UI while updating game.
             if (File.Exists(SettingsFile.SettingsPath))
             {
-                SettingsFile.SettingsJson = SettingsFile.SettingsJson?.ReopenFile();
-                ElsDir = SettingsFile.SettingsJson?.ElsDir;
+                SettingsFile.SettingsJson = SettingsFile.SettingsJson.ReopenFile();
+                ElsDir = SettingsFile.SettingsJson.ElsDir;
                 if (ElsDir.Length > 0)
                 {
                     if (File.Exists($"{ElsDir}\\voidels.exe"))

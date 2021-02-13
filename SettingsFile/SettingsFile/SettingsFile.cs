@@ -26,7 +26,7 @@ namespace Elskom.Generic.Libs
         /// This is designed so there is globally only
         /// a single instance to save time, and memory.
         /// </value>
-        public static JsonSettings SettingsJson { get; set; }
+        public static JsonSettings SettingsJson { get; set; } = JsonSettings.OpenFile();
 
         /// <summary>
         /// Gets the path to the Application Settings file.
@@ -86,6 +86,12 @@ namespace Elskom.Generic.Libs
                 localPath += $"{Path.DirectorySeparatorChar}{thisProcess.ProcessName}-{thisProcess.Id}.mdmp";
             }
 
+            // trap devenv if it is detected.
+#if !NETFRAMEWORK && !NETSTANDARD2_0
+            localPath = localPath.Replace("devenv", "Els_kom", StringComparison.OrdinalIgnoreCase);
+#else
+            localPath = localPath.Replace("devenv", "Els_kom");
+#endif
             return localPath;
         }
     }
