@@ -10,10 +10,10 @@ namespace Elskom.Generic.Libs
     using System.Text.Json.Serialization;
 
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-    public struct JsonSettingsSources
+    public class JsonSettingsSources
     {
         [JsonPropertyName("Source")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public List<string> Source { get; private set; }
+        public List<string> Source { get; private set; } = new List<string>();
     }
 }

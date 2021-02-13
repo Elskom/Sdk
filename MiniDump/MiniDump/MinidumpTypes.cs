@@ -133,7 +133,7 @@ namespace Elskom.Generic.Libs
         WithAvxXStateContext = 0x00200000,
 
         /// <summary>
-        /// Include some sort of Ipt Trace. Maybe some sort of stack trace?
+        /// Include some sort of Ipt Trace.
         /// </summary>
         WithIptTrace = 0x00400000,
 

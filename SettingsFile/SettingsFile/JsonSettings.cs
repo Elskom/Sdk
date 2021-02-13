@@ -15,41 +15,44 @@ namespace Elskom.Generic.Libs
     /// </summary>
     public class JsonSettings
     {
+        // -1 to tell Els_kom to loop it back to it's default value.
         [JsonPropertyName("WindowIcon")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public int WindowIcon { get; private set; }
+        public int WindowIcon { get; set; } = -1;
 
         [JsonPropertyName("ElsDir")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public string ElsDir { get; private set; }
+        public string ElsDir { get; set; } = string.Empty;
 
+        // -1 to tell Els_kom to loop it back to it's default value.
         [JsonPropertyName("IconWhileElsNotRunning")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public int IconWhileElsNotRunning { get; private set; }
+        public int IconWhileElsNotRunning { get; set; } = -1;
 
+        // -1 to tell Els_kom to loop it back to it's default value.
         [JsonPropertyName("IconWhileElsRunning")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public int IconWhileElsRunning { get; private set; }
+        public int IconWhileElsRunning { get; set; } = -1;
 
         [JsonPropertyName("LoadPDB")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public int LoadPDB { get; private set; }
+        public int LoadPDB { get; set; }
 
         [JsonPropertyName("SaveToZip")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public int SaveToZip { get; private set; }
+        public int SaveToZip { get; set; }
 
         [JsonPropertyName("ShowTestMessages")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public int ShowTestMessages { get; private set; }
+        public int ShowTestMessages { get; set; }
 
         [JsonPropertyName("UseNotifications")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public int UseNotifications { get; private set; }
+        public int UseNotifications { get; set; }
 
-        [JsonPropertyName("UseNotifications")]
+        [JsonPropertyName("Sources")]
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public JsonSettingsSources Sources { get; private set; }
+        public JsonSettingsSources Sources { get; private set; } = new JsonSettingsSources();
 
         /// <summary>
         /// Deserializes the input json data to the target type for the settings file.
@@ -67,7 +70,27 @@ namespace Elskom.Generic.Libs
         /// <param name="options">The options to serialize with.</param>
         /// <returns>The json string to the input type instance's data.</returns>
         public static string Serialize(JsonSettings value, JsonSerializerOptions options = null)
-            => JsonSerializer.Serialize(value, options);
+        {
+            if (options == null)
+            {
+                options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                };
+            }
+
+            return JsonSerializer.Serialize(value, options);
+        }
+
+        /// <summary>
+        /// Returns a new instance of this type either with preset contents
+        /// from the settings file or with default settings to create a settings file.
+        /// </summary>
+        /// <returns>A new instance of this type.</returns>
+        public static JsonSettings OpenFile()
+            => File.Exists(SettingsFile.SettingsPath)
+            ? Deserialize(File.ReadAllText(SettingsFile.SettingsPath))
+            : new JsonSettings();
 
         /// <summary>
         /// Returns a new instance of this type so this one can be discarded.
@@ -75,8 +98,14 @@ namespace Elskom.Generic.Libs
         /// <returns>A new instance of this type.</returns>
         public JsonSettings ReopenFile()
         {
-            File.WriteAllText(SettingsFile.SettingsPath, Serialize(this));
+            this.Save();
             return Deserialize(File.ReadAllText(SettingsFile.SettingsPath));
         }
+
+        /// <summary>
+        /// Saves the data in this instance to file.
+        /// </summary>
+        public void Save()
+            => File.WriteAllText(SettingsFile.SettingsPath, Serialize(this));
     }
 }
