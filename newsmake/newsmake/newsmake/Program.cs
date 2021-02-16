@@ -18,7 +18,7 @@ namespace Newsmake
     using System.Text;
     using System.Threading.Tasks;
     using Elskom.Generic.Libs;
-    using newsmake.Properties;
+    using newsmakeResources = newsmake.Properties;
 
     internal static class Program
     {
@@ -61,12 +61,12 @@ namespace Newsmake
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
             if (!inst.IsMain || inst.IsDirty)
             {
-                console.Out.WriteLine(Resources.Commands_Potentially_Unstable_Build);
+                console.Out.WriteLine(newsmakeResources.Resources.Commands_Potentially_Unstable_Build);
             }
 
             if (version)
             {
-                console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, Resources.CommandParser_ShowHelp_Version, Assembly.GetEntryAssembly().GetName().Version));
+                console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, newsmakeResources.Resources.CommandParser_ShowHelp_Version, Assembly.GetEntryAssembly().GetName().Version));
             }
 
             return 0;
@@ -78,7 +78,7 @@ namespace Newsmake
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
             if (!inst.IsMain || inst.IsDirty)
             {
-                console.Out.WriteLine(Resources.Commands_Potentially_Unstable_Build);
+                console.Out.WriteLine(newsmakeResources.Resources.Commands_Potentially_Unstable_Build);
             }
 
             var ext = ".master";
@@ -96,7 +96,7 @@ namespace Newsmake
                 if (p.EndsWith(ext, StringComparison.Ordinal))
                 {
                     found_master_file = true;
-                    console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, Resources.Commands_BuildCommand_Processing, p));
+                    console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, newsmakeResources.Resources.Commands_BuildCommand_Processing, p));
 
                     // set the current directory to p.
                     Directory.SetCurrentDirectory(new FileInfo(p).Directory.FullName);
@@ -135,7 +135,7 @@ namespace Newsmake
                                     }
                                     else
                                     {
-                                        console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__Environment_variable_does_not_exist);
+                                        console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__Environment_variable_does_not_exist);
                                         return 1;
                                     }
                                 }
@@ -150,7 +150,7 @@ namespace Newsmake
                             }
                             else if (!line.Contains("projname = \"", StringComparison.Ordinal) && string.IsNullOrEmpty(project_name))
                             {
-                                console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__Project_name_not_set);
+                                console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__Project_name_not_set);
                                 return 1;
                             }
                             else if (line.Contains("devmode = ", StringComparison.Ordinal))
@@ -165,7 +165,7 @@ namespace Newsmake
                             }
                             else if (!line.Contains("genfilename = \"", StringComparison.Ordinal) && string.IsNullOrEmpty(outputfile_name))
                             {
-                                console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__generated_output_file_name_not_set);
+                                console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__generated_output_file_name_not_set);
                                 return 1;
                             }
                             else if (line.Contains("tabs = ", StringComparison.Ordinal))
@@ -269,15 +269,10 @@ namespace Newsmake
                             finfo.Directory.Create();
                         }
 
-                        using (var output_file = finfo.OpenWrite())
-                        {
-                            foreach (var section in section_data)
-                            {
-                                output_file.Write(Encoding.UTF8.GetBytes(section), 0, Encoding.UTF8.GetByteCount(section));
-                            }
-                        }
-
-                        console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, Resources.Commands_BuildCommand_Successfully_Generated, outputfile_name));
+                        var output = new StringBuilder();
+                        section_data.ForEach((x) => _ = output.Append(x));
+                        File.WriteAllText(outputfile_name, output.ToString());
+                        console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, newsmakeResources.Resources.Commands_BuildCommand_Successfully_Generated, outputfile_name));
 
                         // clear leaking any specific information to other *.master file configurations that should not be present.
                         project_name = string.Empty;
@@ -294,7 +289,7 @@ namespace Newsmake
 
             if (!found_master_file)
             {
-                console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__no___master_file_found);
+                console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__no___master_file_found);
                 return 1;
             }
 
@@ -306,7 +301,7 @@ namespace Newsmake
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
             if (!inst.IsMain || inst.IsDirty)
             {
-                console.Out.WriteLine(Resources.Commands_Potentially_Unstable_Build);
+                console.Out.WriteLine(newsmakeResources.Resources.Commands_Potentially_Unstable_Build);
             }
 
             if (!string.IsNullOrEmpty(release))
@@ -329,7 +324,7 @@ namespace Newsmake
 
                 if (string.IsNullOrEmpty(path))
                 {
-                    console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__no___master_file_found);
+                    console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__no___master_file_found);
                     return 1;
                 }
 
@@ -381,7 +376,7 @@ namespace Newsmake
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
             if (!inst.IsMain || inst.IsDirty)
             {
-                console.Out.WriteLine(Resources.Commands_Potentially_Unstable_Build);
+                console.Out.WriteLine(newsmakeResources.Resources.Commands_Potentially_Unstable_Build);
             }
 
             var ext = ".master";
@@ -398,7 +393,7 @@ namespace Newsmake
 
             if (string.IsNullOrEmpty(path))
             {
-                console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__no___master_file_found);
+                console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__no___master_file_found);
                 return 1;
             }
 
@@ -453,7 +448,7 @@ namespace Newsmake
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
             if (!inst.IsMain || inst.IsDirty)
             {
-                console.Out.WriteLine(Resources.Commands_Potentially_Unstable_Build);
+                console.Out.WriteLine(newsmakeResources.Resources.Commands_Potentially_Unstable_Build);
             }
 
             var ext = ".master";
@@ -512,11 +507,7 @@ namespace Newsmake
                                 if (!string.IsNullOrEmpty(section_text.ToString()))
                                 {
                                     // save section text and then delete the folder.
-                                    using (var section_file = File.OpenWrite($"{fi.Directory.FullName}{Path.DirectorySeparatorChar}{imported_folder}.section"))
-                                    {
-                                        section_file.Write(Encoding.UTF8.GetBytes(section_text.ToString()), 0, Encoding.UTF8.GetByteCount(section_text.ToString()));
-                                    }
-
+                                    File.WriteAllText($"{fi.Directory.FullName}{Path.DirectorySeparatorChar}{imported_folder}.section", section_text.ToString());
                                     foreach (var imported_path in Directory.GetFiles($"{fi.Directory.FullName}{Path.DirectorySeparatorChar}{imported_folder}", "*", SearchOption.AllDirectories))
                                     {
                                         File.Delete(imported_path);
@@ -532,7 +523,7 @@ namespace Newsmake
 
             if (!found)
             {
-                console.Error.WriteLine(Resources.Commands_BuildCommand_Fatal__no___master_file_found);
+                console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__no___master_file_found);
                 return 1;
             }
 
@@ -557,7 +548,7 @@ namespace Newsmake
             {
                 if (pos > 0 && last_pos == pos)
                 {
-                    throw new IOException(Resources.Commands_Formatline_bug);
+                    throw new IOException(newsmakeResources.Resources.Commands_Formatline_bug);
                 }
 
                 last_pos = pos;

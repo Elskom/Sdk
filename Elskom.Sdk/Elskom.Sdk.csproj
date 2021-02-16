@@ -26,9 +26,9 @@
     <ProjectReference Include="../zlib.managed/zlib.managed.csproj" Condition="'$(TargetFramework)' == 'net40' OR '$(TargetFramework)' == 'net45'" />
     <!-- needs .NET Framework 4.5+. -->
     <ProjectReference Include="../GenericPluginLoader/GenericPluginLoader.csproj" Condition="'$(TargetFramework)' != 'net40'" />
-    <ProjectReference Include="../PluginUpdateCheck/PluginUpdateCheck.csproj" Condition="'$(TargetFramework)' != 'net40'" />
     <ProjectReference Include="../ReleasePackaging/ReleasePackaging.csproj" Condition="'$(TargetFramework)' != 'net40'" />
     <!-- needs .NET Framework 4.6.1+. -->
+    <ProjectReference Include="../PluginUpdateCheck/PluginUpdateCheck.csproj" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45'" />
     <ProjectReference Include="../MiniDump/MiniDump.csproj" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45'"/>
     <ProjectReference Include="../PluginFramework/PluginFramework.csproj" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45'"/>
   </ItemGroup>
