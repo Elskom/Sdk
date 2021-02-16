@@ -11,7 +11,6 @@ namespace Elskom.Generic.Libs
     using System.Globalization;
     using System.IO;
     using System.Runtime.InteropServices;
-    using System.Text;
 
     /// <summary>
     /// A class that can generate mini-dumps.
@@ -27,7 +26,7 @@ namespace Elskom.Generic.Libs
         internal static void ExceptionEventHandlerCode(Exception e, bool threadException)
         {
             var exceptionData = $"{e.GetType()}: {e.Message}{Environment.NewLine}{e.StackTrace}{Environment.NewLine}";
-            var outputData = Encoding.ASCII.GetBytes(exceptionData);
+            PrintInnerExceptions(e, ref exceptionData);
 
             // do not dump or close if in a debugger.
             if (!Debugger.IsAttached)
@@ -50,17 +49,9 @@ namespace Elskom.Generic.Libs
                         MiniDumpAttribute.CurrentInstance.DumpFileName = SettingsFile.MiniDumpPath;
                     }
 
-                    using (var fileStream = File.OpenWrite(MiniDumpAttribute.CurrentInstance.DumpLogFileName))
-                    {
-                        fileStream.Write(outputData, 0, outputData.Length);
-                    }
-
+                    File.WriteAllText(MiniDumpAttribute.CurrentInstance.DumpLogFileName, exceptionData);
                     MiniDumpToFile(MiniDumpAttribute.CurrentInstance.DumpFileName, MiniDumpAttribute.CurrentInstance.DumpType);
-#if WITH_WINFORMS
                     DumpMessage?.Invoke(typeof(MiniDump), new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, MiniDumpAttribute.CurrentInstance.Text, MiniDumpAttribute.CurrentInstance.DumpLogFileName), threadException ? MiniDumpAttribute.CurrentInstance.ThreadExceptionTitle : MiniDumpAttribute.CurrentInstance.ExceptionTitle, ErrorLevel.Error));
-#else
-                    DumpMessage?.Invoke(typeof(MiniDump), new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, MiniDumpAttribute.CurrentInstance.Text, MiniDumpAttribute.CurrentInstance.DumpLogFileName), MiniDumpAttribute.CurrentInstance.ExceptionTitle, ErrorLevel.Error));
-#endif
                 }
             }
         }
@@ -93,6 +84,15 @@ namespace Elskom.Generic.Libs
                 {
                     DumpMessage?.Invoke(typeof(MiniDump), new MessageEventArgs($"Mini-dumping failed with Code: {error}", "Error!", ErrorLevel.Error));
                 }
+            }
+        }
+
+        private static void PrintInnerExceptions(Exception exception, ref string result)
+        {
+            if (exception.InnerException != null)
+            {
+                result += $"{exception.InnerException.GetType()}: {exception.InnerException.Message}{Environment.NewLine}{exception.InnerException.StackTrace}{Environment.NewLine}";
+                PrintInnerExceptions(exception.InnerException, ref result);
             }
         }
     }

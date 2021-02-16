@@ -6,10 +6,6 @@
 namespace Elskom.Generic.Libs
 {
     using System;
-#if WITH_WINFORMS
-    using System.Threading;
-    using System.Windows.Forms;
-#endif
 
     // maybe something like this could be added to the framework.
     // do not use this attribute for anything but classes, the assembly, or the Main() method.
@@ -17,8 +13,14 @@ namespace Elskom.Generic.Libs
     /// <summary>
     /// Attribute for creating MiniDumps.
     ///
-    /// This registers Unhandled exception and Thread exception (if availible)
-    /// handlers to do it.
+    /// This registers Unhandled exception handlers to do it.
+    /// For Thread Exceptions use register one manually then call the static method:
+    /// DumpException(/* exception object inside the event args*/, true);
+    ///
+    /// This will then allow minidumps from them too.
+    ///
+    /// The api was changed so that way the library would not need separate configurations
+    /// targeting Windows Forms to bring thread exception support and making build harder to maintain.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Assembly | AttributeTargets.Method)]
     public class MiniDumpAttribute : Attribute
@@ -30,9 +32,6 @@ namespace Elskom.Generic.Libs
         {
             var currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler);
-#if WITH_WINFORMS
-            Application.ThreadException += new ThreadExceptionEventHandler(ThreadExceptionHandler);
-#endif
             CurrentInstance = this;
         }
 
@@ -65,12 +64,10 @@ namespace Elskom.Generic.Libs
         /// </summary>
         public string ExceptionTitle { get; set; } = "Unhandled Exception!";
 
-#if WITH_WINFORMS
         /// <summary>
         /// Gets or sets the title of the unhandled thread exception messagebox.
         /// </summary>
         public string ThreadExceptionTitle { get; set; } = "Unhandled Thread Exception!";
-#endif
 
         /// <summary>
         /// Gets or sets the mini-dump file name.
@@ -82,12 +79,19 @@ namespace Elskom.Generic.Libs
         /// </summary>
         public string DumpLogFileName { get; set; } = string.Empty;
 
-        private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs args)
-            => MiniDump.ExceptionEventHandlerCode((Exception)args.ExceptionObject, false);
+        /// <summary>
+        /// Dumps an exception into an minidump file.
+        /// Pefect for unhandled to Thread Exceptions.
+        ///
+        /// Note: Attribute handles unhandled exceptions by default with the exception
+        /// for any Thread Exceptions.
+        /// </summary>
+        /// <param name="exception">The exception to dump into the minidump.</param>
+        /// <param name="threadException">Whether the exception is a thread exception or not.</param>
+        public static void DumpException(Exception exception, bool threadException)
+            => MiniDump.ExceptionEventHandlerCode(exception, threadException);
 
-#if WITH_WINFORMS
-        private static void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
-            => MiniDump.ExceptionEventHandlerCode(e.Exception, true);
-#endif
+        private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs args)
+            => DumpException((Exception)args.ExceptionObject, false);
     }
 }
