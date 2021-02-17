@@ -15,6 +15,7 @@ namespace Elskom.Generic.Libs
     using System.Net.Http;
     using System.Xml.Linq;
     using Elskom.Generic.Libs.Properties;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     /// A generic plugin update checker.
@@ -22,13 +23,11 @@ namespace Elskom.Generic.Libs
     [SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly", Justification = "Possible bug in analyzer?")]
     public class PluginUpdateCheck : IDisposable
     {
+        private readonly ServiceProvider serviceProvider;
         private bool disposedValue;
 
-        /// <summary>
-        /// Finalizes an instance of the <see cref="PluginUpdateCheck"/> class.
-        /// </summary>
-        ~PluginUpdateCheck()
-            => this.Dispose(false);
+        internal PluginUpdateCheck(ServiceProvider serviceprovider)
+            => this.serviceProvider = serviceprovider;
 
         /// <summary>
         /// Event that fires when a new message should show up.
@@ -83,17 +82,16 @@ namespace Elskom.Generic.Libs
         /// </summary>
         public List<string> DownloadFiles { get; private protected set; }
 
-        internal static HttpClient HttpClient { get; private protected set; } = new HttpClient();
-
         /// <summary>
         /// Checks for plugin updates from the provided plugin source urls.
         /// </summary>
         /// <param name="pluginURLs">The repository urls to the plugins.</param>
         /// <param name="pluginTypes">A list of types to the plugins to check for updates to.</param>
+        /// <param name="serviceprovider">The <see cref="ServiceProvider"/> to use.</param>
         /// <returns>A list of <see cref="PluginUpdateCheck"/> instances representing the plugins that needs updating or are to be installed.</returns>
         // catches the plugin urls and uses that cache to detect added urls, and only appends those to the list.
         [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
-        public static List<PluginUpdateCheck> CheckForUpdates(string[] pluginURLs, List<Type> pluginTypes)
+        public static List<PluginUpdateCheck> CheckForUpdates(string[] pluginURLs, List<Type> pluginTypes, ServiceProvider serviceprovider)
         {
             _ = pluginURLs ?? throw new ArgumentNullException(nameof(pluginURLs));
             _ = pluginTypes ?? throw new ArgumentNullException(nameof(pluginTypes));
@@ -123,7 +121,7 @@ namespace Elskom.Generic.Libs
                 {
                     try
                     {
-                        var doc = XDocument.Parse(HttpClient.GetStringAsync(pluginURL).GetAwaiter().GetResult());
+                        var doc = XDocument.Parse(serviceprovider.GetService<HttpClient>().GetStringAsync(pluginURL).GetAwaiter().GetResult());
                         var elements = doc.Root.Elements("Plugin");
                         foreach (var element in elements)
                         {
@@ -136,7 +134,7 @@ namespace Elskom.Generic.Libs
                                 {
                                     found = true;
                                     var installedVersion = pluginType.Assembly.GetName().Version.ToString();
-                                    var pluginUpdateCheck = new PluginUpdateCheck
+                                    var pluginUpdateCheck = new PluginUpdateCheck(serviceprovider)
                                     {
                                         CurrentVersion = currentVersion,
                                         InstalledVersion = installedVersion,
@@ -150,7 +148,7 @@ namespace Elskom.Generic.Libs
 
                             if (!found)
                             {
-                                var pluginUpdateCheck = new PluginUpdateCheck
+                                var pluginUpdateCheck = new PluginUpdateCheck(serviceprovider)
                                 {
                                     CurrentVersion = currentVersion,
                                     InstalledVersion = string.Empty,
@@ -192,13 +190,18 @@ namespace Elskom.Generic.Libs
         [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         public bool Install(bool saveToZip)
         {
+            if (this.disposedValue)
+            {
+                throw new ObjectDisposedException(nameof(PluginUpdateCheck));
+            }
+
             foreach (var downloadFile in this.DownloadFiles)
             {
                 try
                 {
                     var path = $"{Environment.CurrentDirectory}{Path.DirectorySeparatorChar}plugins{Path.DirectorySeparatorChar}{downloadFile}";
                     using (var fs = File.Create(path))
-                    using (var response = HttpClient.GetStreamAsync($"{this.DownloadUrl}{downloadFile}").GetAwaiter().GetResult())
+                    using (var response = this.serviceProvider.GetService<HttpClient>().GetStreamAsync($"{this.DownloadUrl}{downloadFile}").GetAwaiter().GetResult())
                     {
                         response.CopyTo(fs);
                     }
@@ -240,6 +243,11 @@ namespace Elskom.Generic.Libs
         [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         public bool Uninstall(bool saveToZip)
         {
+            if (this.disposedValue)
+            {
+                throw new ObjectDisposedException(nameof(PluginUpdateCheck));
+            }
+
             try
             {
                 foreach (var downloadFile in this.DownloadFiles)
@@ -282,16 +290,8 @@ namespace Elskom.Generic.Libs
             return false;
         }
 
-        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP023:Don't use reference types in finalizer context.", Justification = "Needed to clean up WebClient.")]
         private protected virtual void Dispose(bool disposing)
         {
-            if (HttpClient != null && Environment.HasShutdownStarted)
-            {
-                // ensure the WebClient gets disposed.
-                HttpClient.Dispose();
-                HttpClient = null;
-            }
-
             if (!this.disposedValue && disposing)
             {
                 // prevent any leaks from this.
