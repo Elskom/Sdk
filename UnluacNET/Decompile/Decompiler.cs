@@ -258,80 +258,27 @@ namespace Elskom.Generic.Libs.UnluacNET
         }
 
         private int GetAssignment(int line)
-        {
-            switch (this.Code.Op(line))
+            => this.Code.Op(line) switch
             {
-                case Op.MOVE:
-                case Op.LOADK:
-                case Op.LOADBOOL:
-                case Op.GETUPVAL:
-                case Op.GETTABUP:
-                case Op.GETGLOBAL:
-                case Op.GETTABLE:
-                case Op.NEWTABLE:
-                case Op.ADD:
-                case Op.SUB:
-                case Op.MUL:
-                case Op.DIV:
-                case Op.MOD:
-                case Op.POW:
-                case Op.UNM:
-                case Op.NOT:
-                case Op.LEN:
-                case Op.CONCAT:
-                case Op.CLOSURE:
-                    return this.Code.A(line);
-                case Op.LOADNIL:
-                    return (this.Code.A(line) == this.Code.B(line)) ? this.Code.A(line) : -1;
-                case Op.SETGLOBAL:
-                case Op.SETUPVAL:
-                case Op.SETTABUP:
-                case Op.SETTABLE:
-                case Op.JMP:
-                case Op.TAILCALL:
-                case Op.RETURN:
-                case Op.FORLOOP:
-                case Op.FORPREP:
-                case Op.TFORCALL:
-                case Op.TFORLOOP:
-                case Op.CLOSE:
-                    return -1;
-                case Op.SELF:
-                    return -1;
-                case Op.EQ:
-                case Op.LT:
-                case Op.LE:
-                case Op.TEST:
-                case Op.TESTSET:
-                case Op.SETLIST:
-                    return -1;
-                case Op.CALL:
-                    return (this.Code.C(line) == 2) ? this.Code.A(line) : -1;
-                case Op.VARARG:
-                    return (this.Code.C(line) == 2) ? this.Code.B(line) : -1;
-                default:
-                    throw new InvalidOperationException("Illegal opcode: " + this.Code.Op(line));
-            }
-        }
+                Op.MOVE or Op.LOADK or Op.LOADBOOL or Op.GETUPVAL or Op.GETTABUP or Op.GETGLOBAL or Op.GETTABLE or Op.NEWTABLE or Op.ADD or Op.SUB or Op.MUL or Op.DIV or Op.MOD or Op.POW or Op.UNM or Op.NOT or Op.LEN or Op.CONCAT or Op.CLOSURE => this.Code.A(line),
+                Op.LOADNIL => (this.Code.A(line) == this.Code.B(line)) ? this.Code.A(line) : -1,
+                Op.SETGLOBAL or Op.SETUPVAL or Op.SETTABUP or Op.SETTABLE or Op.JMP or Op.TAILCALL or Op.RETURN or Op.FORLOOP or Op.FORPREP or Op.TFORCALL or Op.TFORLOOP or Op.CLOSE => -1,
+                Op.SELF => -1,
+                Op.EQ or Op.LT or Op.LE or Op.TEST or Op.TESTSET or Op.SETLIST => -1,
+                Op.CALL => (this.Code.C(line) == 2) ? this.Code.A(line) : -1,
+                Op.VARARG => (this.Code.C(line) == 2) ? this.Code.B(line) : -1,
+                _ => throw new InvalidOperationException("Illegal opcode: " + this.Code.Op(line)),
+            };
 
         private Target GetMoveIntoTargetTarget(int line, int previous)
-        {
-            switch (this.Code.Op(line))
+            => this.Code.Op(line) switch
             {
-                case Op.MOVE:
-                    return this.r.GetTarget(this.Code.A(line), line);
-                case Op.SETUPVAL:
-                    return new UpvalueTarget(this.upvalues.GetName(this.Code.B(line)));
-                case Op.SETGLOBAL:
-                    return new GlobalTarget(this.F.GetGlobalName(this.Code.Bx(line)));
-                case Op.SETTABLE:
-                    return new TableTarget(
-                        this.r.GetExpression(this.Code.A(line), previous),
-                        this.r.GetKExpression(this.Code.B(line), previous));
-                default:
-                    throw new InvalidOperationException();
-            }
-        }
+                Op.MOVE => this.r.GetTarget(this.Code.A(line), line),
+                Op.SETUPVAL => new UpvalueTarget(this.upvalues.GetName(this.Code.B(line))),
+                Op.SETGLOBAL => new GlobalTarget(this.F.GetGlobalName(this.Code.Bx(line))),
+                Op.SETTABLE => new TableTarget(this.r.GetExpression(this.Code.A(line), previous), this.r.GetKExpression(this.Code.B(line), previous)),
+                _ => throw new InvalidOperationException(),
+            };
 
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1312:Variable names should begin with lower-case letter", Justification = "Don't care for now.")]
         private Expression GetMoveIntoTargetValue(int line, int previous)
@@ -339,18 +286,13 @@ namespace Elskom.Generic.Libs.UnluacNET
             var A = this.Code.A(line);
             var B = this.Code.B(line);
             var C = this.Code.C(line);
-            switch (this.Code.Op(line))
+            return this.Code.Op(line) switch
             {
-                case Op.MOVE:
-                    return this.r.GetValue(B, previous);
-                case Op.SETUPVAL:
-                case Op.SETGLOBAL:
-                    return this.r.GetExpression(A, previous);
-                case Op.SETTABLE:
-                    return ((C & 0x100) != 0) ? throw new InvalidOperationException() : this.r.GetExpression(C, previous);
-                default:
-                    throw new InvalidOperationException();
-            }
+                Op.MOVE => this.r.GetValue(B, previous),
+                Op.SETUPVAL or Op.SETGLOBAL => this.r.GetExpression(A, previous),
+                Op.SETTABLE => ((C & 0x100) != 0) ? throw new InvalidOperationException() : this.r.GetExpression(C, previous),
+                _ => throw new InvalidOperationException(),
+            };
         }
 
         // TODO: Optimize / rewrite method

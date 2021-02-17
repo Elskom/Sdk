@@ -13,7 +13,7 @@ namespace Elskom.Generic.Libs.UnluacNET
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class LFunctionType : BObjectType<LFunction>
     {
-        public static readonly LFunctionType TYPE51 = new LFunctionType();
+        public static readonly LFunctionType TYPE51 = new();
         public static readonly LFunctionType TYPE52 = new LFunctionType52();
 
         public override LFunction Parse(Stream stream, BHeader header)

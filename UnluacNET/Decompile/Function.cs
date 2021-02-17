@@ -26,9 +26,9 @@ namespace Elskom.Generic.Libs.UnluacNET
             => this.m_constants[constantIndex].AsName();
 
         public ConstantExpression GetConstantExpression(int constantIndex)
-            => new ConstantExpression(this.m_constants[constantIndex], constantIndex);
+            => new(this.m_constants[constantIndex], constantIndex);
 
         public GlobalExpression GetGlobalExpression(int constantIndex)
-            => new GlobalExpression(this.GetGlobalName(constantIndex), constantIndex);
+            => new(this.GetGlobalName(constantIndex), constantIndex);
     }
 }

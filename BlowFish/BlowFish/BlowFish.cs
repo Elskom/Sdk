@@ -476,15 +476,15 @@ namespace Elskom.Generic.Libs
 
         // gets the first byte in a uint
         private static byte WordByte0(uint w)
-            => (byte)((w / 256 / 256 / 256) % 256);
+            => WordByte3(w / 256 / 256 / 256);
 
         // gets the second byte in a uint
         private static byte WordByte1(uint w)
-            => (byte)((w / 256 / 256) % 256);
+            => WordByte3(w / 256 / 256);
 
         // gets the third byte in a uint
         private static byte WordByte2(uint w)
-            => (byte)((w / 256) % 256);
+            => WordByte3(w / 256);
 
         // gets the fourth byte in a uint
         private static byte WordByte3(uint w)

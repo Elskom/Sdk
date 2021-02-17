@@ -11,8 +11,8 @@ namespace Elskom.Generic.Libs.UnluacNET
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class LBoolean : LObject
     {
-        public static readonly LBoolean LTRUE = new LBoolean(true);
-        public static readonly LBoolean LFALSE = new LBoolean(false);
+        public static readonly LBoolean LTRUE = new(true);
+        public static readonly LBoolean LFALSE = new(false);
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly bool m_value;
 

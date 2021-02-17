@@ -11,9 +11,9 @@ namespace Elskom.Generic.Libs.UnluacNET
     public class UpvalueSet : Operation
     {
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
-        private UpvalueTarget m_target;
+        private readonly UpvalueTarget m_target;
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
-        private Expression m_value;
+        private readonly Expression m_value;
 
         public UpvalueSet(int line, string upvalue, Expression value)
             : base(line)

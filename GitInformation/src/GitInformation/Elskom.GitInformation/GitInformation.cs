@@ -15,8 +15,8 @@ namespace Elskom.Generic.Libs
     public class GitInformation
     {
         // This is the collection of instances this has.
-        private static readonly Dictionary<Assembly, GitInformation> AssemblyInstances = new Dictionary<Assembly, GitInformation>();
-        private static readonly HashSet<Assembly> AppliedAssemblies = new HashSet<Assembly>();
+        private static readonly Dictionary<Assembly, GitInformation> AssemblyInstances = new();
+        private static readonly HashSet<Assembly> AppliedAssemblies = new();
 
         internal GitInformation(string headdesc, string commit, string branchname, Assembly assembly)
         {

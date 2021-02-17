@@ -22,6 +22,6 @@ namespace Elskom.Generic.Libs.UnluacNET
             : string.Format("_UPVALUE{0}_", idx);
 
         public UpvalueExpression GetExpression(int index)
-            => new UpvalueExpression(this.GetName(index));
+            => new(this.GetName(index));
     }
 }

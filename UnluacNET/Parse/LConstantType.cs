@@ -32,19 +32,14 @@ namespace Elskom.Generic.Libs.UnluacNET
                 Console.WriteLine("-- parsing <constant>, type is {0}", type != 2 ? cType : "illegal " + type);
             }
 
-            switch (type)
+            return type switch
             {
-                case 0:
-                    return LNil.NIL;
-                case 1:
-                    return header.Bool.Parse(stream, header);
-                case 3:
-                    return header.Number.Parse(stream, header);
-                case 4:
-                    return header.String.Parse(stream, header);
-                default:
-                    throw new InvalidOperationException();
-            }
+                0 => LNil.NIL,
+                1 => header.Bool.Parse(stream, header),
+                3 => header.Number.Parse(stream, header),
+                4 => header.String.Parse(stream, header),
+                _ => throw new InvalidOperationException(),
+            };
         }
     }
 }

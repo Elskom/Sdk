@@ -5,6 +5,9 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
+#if !NET40
+    using System;
+#endif
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
@@ -14,7 +17,11 @@ namespace Elskom.Generic.Libs.UnluacNET
         private readonly Expression[] values;
 
         public Return()
+#if NET40
             => this.values = new Expression[0];
+#else
+            => this.values = Array.Empty<Expression>();
+#endif
 
         public Return(Expression value)
             => this.values = new Expression[1]

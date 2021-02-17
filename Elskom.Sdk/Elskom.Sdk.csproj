@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFrameworks>net40;net45;net461;netcoreapp2.0;netcoreapp3.0;netcoreapp3.1;net5.0;net5.0-windows;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net40;net45;net461;net471;netcoreapp2.0;netcoreapp3.0;netcoreapp3.1;net5.0;net5.0-windows;netstandard2.0;netstandard2.1</TargetFrameworks>
     <Version>1.0.0</Version>
     <Version Condition="'$(GITHUB_ACTIONS)' == 'true' AND !$(GITHUB_REF.StartsWith('refs/tags/'))">$(Version)-preview-$(GITHUB_RUN_ID)</Version>
     <BuildOutputTargetFolder>trash</BuildOutputTargetFolder>
@@ -29,8 +29,9 @@
     <ProjectReference Include="../ReleasePackaging/ReleasePackaging.csproj" Condition="'$(TargetFramework)' != 'net40'" />
     <!-- needs .NET Framework 4.6.1+. -->
     <ProjectReference Include="../PluginUpdateCheck/PluginUpdateCheck.csproj" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45'" />
-    <ProjectReference Include="../MiniDump/MiniDump.csproj" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45'"/>
     <ProjectReference Include="../PluginFramework/PluginFramework.csproj" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45'"/>
+    <!-- needs .NET Framework 4.7.1+. -->
+    <ProjectReference Include="../MiniDump/MiniDump.csproj" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45' AND '$(TargetFramework)' != 'net461'"/>
   </ItemGroup>
 
   <ItemGroup>
