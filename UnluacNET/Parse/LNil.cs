@@ -11,7 +11,7 @@ namespace Elskom.Generic.Libs.UnluacNET
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class LNil : LObject
     {
-        public static readonly LNil NIL = new LNil();
+        public static readonly LNil NIL = new();
 
         private LNil()
         {

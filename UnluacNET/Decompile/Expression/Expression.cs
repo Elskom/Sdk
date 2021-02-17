@@ -76,40 +76,40 @@ namespace Elskom.Generic.Libs.UnluacNET
         public int Precedence { get; private set; }
 
         public static BinaryExpression MakeADD(Expression left, Expression right)
-            => new BinaryExpression("+", left, right, PRECEDENCE_ADD, ASSOCIATIVITY_LEFT);
+            => new("+", left, right, PRECEDENCE_ADD, ASSOCIATIVITY_LEFT);
 
         public static BinaryExpression MakeAND(Expression left, Expression right)
-            => new BinaryExpression("and", left, right, PRECEDENCE_AND, ASSOCIATIVITY_NONE);
+            => new("and", left, right, PRECEDENCE_AND, ASSOCIATIVITY_NONE);
 
         public static BinaryExpression MakeCONCAT(Expression left, Expression right)
-            => new BinaryExpression("..", left, right, PRECEDENCE_CONCAT, ASSOCIATIVITY_RIGHT);
+            => new("..", left, right, PRECEDENCE_CONCAT, ASSOCIATIVITY_RIGHT);
 
         public static BinaryExpression MakeDIV(Expression left, Expression right)
-            => new BinaryExpression("/", left, right, PRECEDENCE_MUL, ASSOCIATIVITY_LEFT);
+            => new("/", left, right, PRECEDENCE_MUL, ASSOCIATIVITY_LEFT);
 
         public static BinaryExpression MakeMOD(Expression left, Expression right)
-            => new BinaryExpression("%", left, right, PRECEDENCE_MUL, ASSOCIATIVITY_LEFT);
+            => new("%", left, right, PRECEDENCE_MUL, ASSOCIATIVITY_LEFT);
 
         public static BinaryExpression MakeMUL(Expression left, Expression right)
-            => new BinaryExpression("*", left, right, PRECEDENCE_MUL, ASSOCIATIVITY_LEFT);
+            => new("*", left, right, PRECEDENCE_MUL, ASSOCIATIVITY_LEFT);
 
         public static BinaryExpression MakeOR(Expression left, Expression right)
-            => new BinaryExpression("or", left, right, PRECEDENCE_OR, ASSOCIATIVITY_NONE);
+            => new("or", left, right, PRECEDENCE_OR, ASSOCIATIVITY_NONE);
 
         public static BinaryExpression MakePOW(Expression left, Expression right)
-            => new BinaryExpression("^", left, right, PRECEDENCE_POW, ASSOCIATIVITY_RIGHT);
+            => new("^", left, right, PRECEDENCE_POW, ASSOCIATIVITY_RIGHT);
 
         public static BinaryExpression MakeSUB(Expression left, Expression right)
-            => new BinaryExpression("-", left, right, PRECEDENCE_ADD, ASSOCIATIVITY_LEFT);
+            => new("-", left, right, PRECEDENCE_ADD, ASSOCIATIVITY_LEFT);
 
         public static UnaryExpression MakeUNM(Expression expression)
-            => new UnaryExpression("-", expression, PRECEDENCE_UNARY);
+            => new("-", expression, PRECEDENCE_UNARY);
 
         public static UnaryExpression MakeNOT(Expression expression)
-            => new UnaryExpression("not ", expression, PRECEDENCE_UNARY);
+            => new("not ", expression, PRECEDENCE_UNARY);
 
         public static UnaryExpression MakeLEN(Expression expression)
-            => new UnaryExpression("#", expression, PRECEDENCE_UNARY);
+            => new("#", expression, PRECEDENCE_UNARY);
 
         public static void PrintSequence(Output output, List<Expression> exprs, bool lineBreak, bool multiple)
         {

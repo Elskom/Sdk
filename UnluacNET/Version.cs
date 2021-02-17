@@ -34,6 +34,6 @@ namespace Elskom.Generic.Libs.UnluacNET
         public abstract bool IsBreakableLoopEnd(Op op);
 
         public OpcodeMap GetOpcodeMap()
-            => new OpcodeMap(this.m_versionNumber);
+            => new(this.m_versionNumber);
     }
 }

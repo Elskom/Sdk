@@ -12,9 +12,9 @@ namespace Elskom.Generic.Libs.UnluacNET
     public class Assignment : Statement
     {
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
-        private readonly List<Target> m_targets = new List<Target>(5);
+        private readonly List<Target> m_targets = new(5);
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
-        private readonly List<Expression> m_values = new List<Expression>(5);
+        private readonly List<Expression> m_values = new(5);
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private bool m_allNil = true;
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]

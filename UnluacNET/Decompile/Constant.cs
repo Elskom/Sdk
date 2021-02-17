@@ -24,7 +24,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1311:Static readonly fields should begin with upper-case letter", Justification = "Don't care for now.")]
         private static readonly HashSet<string> m_reservedWords =
-            new HashSet<string>()
+            new()
             {
                 "and",
                 "and",

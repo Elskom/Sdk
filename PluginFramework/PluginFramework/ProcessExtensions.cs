@@ -5,6 +5,7 @@
 
 namespace Elskom.Generic.Libs
 {
+    using System;
     using System.Diagnostics;
 
     /// <summary>
@@ -42,7 +43,7 @@ namespace Elskom.Generic.Libs
         {
             if (proc == null)
             {
-                throw new System.ArgumentNullException(nameof(proc));
+                throw new ArgumentNullException(nameof(proc));
             }
 
             proc.StartInfo.FileName = fileName;
@@ -67,7 +68,7 @@ namespace Elskom.Generic.Libs
         {
             if (proc == null)
             {
-                throw new System.ArgumentNullException(nameof(proc));
+                throw new ArgumentNullException(nameof(proc));
             }
 
             Executing = true;

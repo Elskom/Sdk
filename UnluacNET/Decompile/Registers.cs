@@ -21,7 +21,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly Expression[,] m_values;
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
-        private bool[] m_startedLines;
+        private readonly bool[] m_startedLines;
 
         public Registers(int registers, int length, Declaration[] declList, Function func)
         {
@@ -64,14 +64,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                !this.GetDeclaration(register, line).ForLoop;
 
         public bool IsLocal(int register, int line)
-        {
-            if (register < 0)
-            {
-                return false;
-            }
-
-            return this.GetDeclaration(register, line) != null;
-        }
+            => register >= 0 && this.GetDeclaration(register, line) != null;
 
         public bool IsNewLocal(int register, int line)
         {
@@ -83,28 +76,10 @@ namespace Elskom.Generic.Libs.UnluacNET
             => this.m_decls[register, line];
 
         public Expression GetExpression(int register, int line)
-        {
-            if (this.IsLocal(register, line - 1))
-            {
-                return new LocalVariable(this.GetDeclaration(register, line - 1));
-            }
-            else
-            {
-                return this.GetValue(register, line);
-            }
-        }
+            => this.IsLocal(register, line - 1) ? new LocalVariable(this.GetDeclaration(register, line - 1)) : this.GetValue(register, line);
 
         public Expression GetKExpression(int register, int line)
-        {
-            if ((register & 0x100) != 0)
-            {
-                return this.m_func.GetConstantExpression(register & 0xFF);
-            }
-            else
-            {
-                return this.GetExpression(register, line);
-            }
-        }
+            => (register & 0x100) != 0 ? this.m_func.GetConstantExpression(register & 0xFF) : this.GetExpression(register, line);
 
         public List<Declaration> GetNewLocals(int line)
         {
@@ -121,14 +96,9 @@ namespace Elskom.Generic.Libs.UnluacNET
         }
 
         public Target GetTarget(int register, int line)
-        {
-            if (!this.IsLocal(register, line))
-            {
-                throw new InvalidOperationException("No declaration exists in register" + register + " at line " + line);
-            }
-
-            return new VariableTarget(this.GetDeclaration(register, line));
-        }
+            => !this.IsLocal(register, line)
+            ? throw new InvalidOperationException("No declaration exists in register" + register + " at line " + line)
+            : new VariableTarget(this.GetDeclaration(register, line));
 
         public int GetUpdated(int register, int line)
             => this.m_updated[register, line];
@@ -147,8 +117,10 @@ namespace Elskom.Generic.Libs.UnluacNET
             var decl = this.GetDeclaration(register, begin);
             if (decl == null)
             {
-                decl = new Declaration("_FOR_", begin, end);
-                decl.Register = register;
+                decl = new Declaration("_FOR_", begin, end)
+                {
+                    Register = register,
+                };
                 this.NewDeclaration(decl, register, begin, end);
             }
 
@@ -160,8 +132,10 @@ namespace Elskom.Generic.Libs.UnluacNET
             var decl = this.GetDeclaration(register, begin);
             if (decl == null)
             {
-                decl = new Declaration("_FORV_" + register + "_", begin, end);
-                decl.Register = register;
+                decl = new Declaration("_FORV_" + register + "_", begin, end)
+                {
+                    Register = register,
+                };
                 this.NewDeclaration(decl, register, begin, end);
             }
 

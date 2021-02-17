@@ -135,16 +135,16 @@ namespace Elskom.Generic.Libs.UnluacNET
         }
 
         public static implicit operator LInstruction(int value)
-            => new LInstruction(value);
+            => new(value);
 
         public static implicit operator int(LInstruction value)
             => value.m_value;
 
         public static LInstruction CreateABC(Op op, int a, int b, int c)
-            => new LInstruction(op, a, b, c);
+            => new(op, a, b, c);
 
         public static LInstruction CreateABx(Op op, int a, int bx)
-            => new LInstruction(op, a, bx);
+            => new(op, a, bx);
 
         public static int GetOpCode(int codePoint)
             => (codePoint >> POS_OP) & MASK_GETOPCODE;

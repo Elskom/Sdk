@@ -464,7 +464,7 @@ namespace Elskom.Generic.Libs
         /// true to release both managed and unmanaged resources; false to release only unmanaged
         /// resources.
         /// </param>
-        // holefully this is disposed of by the conatiner provided when constructing this class:
+        // hopefully this is disposed of by the conatiner provided when constructing this class:
         // notifyIcon
         protected override void Dispose(bool disposing)
             => base.Dispose(disposing);
