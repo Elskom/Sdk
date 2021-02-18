@@ -11,16 +11,11 @@ namespace Elskom.Generic.Libs.UnluacNET
     public class Vararg : Expression
     {
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
-        private readonly int m_length;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly bool m_multiple;
 
-        public Vararg(int length, bool multiple)
+        public Vararg(bool multiple)
             : base(PRECEDENCE_ATOMIC)
-        {
-            this.m_length = length;
-            this.m_multiple = multiple;
-        }
+            => this.m_multiple = multiple;
 
         public override int ConstantIndex => -1;
 

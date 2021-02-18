@@ -20,7 +20,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private bool m_finalize;
 
-        public SetBlock(LFunction function, Branch branch, int target, int line, int begin, int end, bool empty, Registers r)
+        public SetBlock(LFunction function, Branch branch, int target, int begin, int end, bool empty, Registers r)
             : base(function, begin, end)
         {
             this.m_empty = empty;
@@ -117,7 +117,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                     {
                         var target = d.Code.A(this.Branch.End - 2);
                         expr = d.Code.Op(this.Branch.End - 3) == Op.JMP &&
-                            d.Code.sBx(this.Branch.End - 3) == 2
+                            d.Code.SBx(this.Branch.End - 3) == 2
                             ? r.GetValue(target, this.Branch.End - 2)
                             : r.GetValue(target, this.Branch.Begin);
                         this.Branch.UseExpression(expr);

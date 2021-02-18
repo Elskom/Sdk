@@ -11,13 +11,10 @@ namespace Elskom.Generic.Libs.UnluacNET
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class LBoolean : LObject
     {
-        public static readonly LBoolean LTRUE = new(true);
-        public static readonly LBoolean LFALSE = new(false);
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
-        private readonly bool m_value;
+        public static readonly LBoolean LTRUE = new() { Value = true, };
+        public static readonly LBoolean LFALSE = new() { Value = false, };
 
-        private LBoolean(bool value)
-            => this.m_value = value;
+        private bool Value { get; set; }
 
         public override bool Equals(object obj)
             => this == obj;
@@ -26,6 +23,6 @@ namespace Elskom.Generic.Libs.UnluacNET
             => throw new NotImplementedException();
 
         public override string ToString()
-            => this.m_value.ToString();
+            => this.Value.ToString();
     }
 }

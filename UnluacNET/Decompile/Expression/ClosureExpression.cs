@@ -14,15 +14,12 @@ namespace Elskom.Generic.Libs.UnluacNET
         private readonly LFunction m_function;
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_upvalueLine;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
-        private readonly Declaration[] m_declList;
 
-        public ClosureExpression(LFunction function, Declaration[] declList, int upvalueLine)
+        public ClosureExpression(LFunction function, int upvalueLine)
             : base(PRECEDENCE_ATOMIC)
         {
             this.m_function = function;
             this.m_upvalueLine = upvalueLine;
-            this.m_declList = declList;
         }
 
         public override int ConstantIndex => -1;

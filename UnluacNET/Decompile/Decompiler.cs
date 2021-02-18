@@ -113,7 +113,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             var begin = branch.Begin;
             if (this.Code.Op(branch.Begin) == Op.JMP)
             {
-                begin += 1 + this.Code.sBx(branch.Begin);
+                begin += 1 + this.Code.SBx(branch.Begin);
             }
 
             while (stack.Count > 0)
@@ -189,28 +189,6 @@ namespace Elskom.Generic.Libs.UnluacNET
             return enclosing;
         }
 
-        private Block EnclosingBlock(Block block)
-        {
-            // Assumes the outer block is first
-            var l_outer = this.blocks[0];
-            var enclosing = l_outer;
-            for (var i = 1; i < this.blocks.Count; i++)
-            {
-                var next = this.blocks[i];
-                if (next == block)
-                {
-                    continue;
-                }
-
-                if (next.Contains(block) && enclosing.Contains(next))
-                {
-                    enclosing = next;
-                }
-            }
-
-            return enclosing;
-        }
-
         private Block EnclosingBreakableBlock(int line)
         {
             var l_outer = this.blocks[0];
@@ -249,7 +227,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.reverseTarget = new bool[this.length + 1];
             for (var line = 1; line <= this.length; line++)
             {
-                var sBx = this.Code.sBx(line);
+                var sBx = this.Code.SBx(line);
                 if (this.Code.Op(line) == Op.JMP && sBx < 0)
                 {
                     this.reverseTarget[line + 1 + sBx] = true;
@@ -365,8 +343,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                     var A = this.Code.A(line);
                     var B = this.Code.B(line);
                     var C = this.Code.C(line);
-                    var Bx = this.Code.Bx(line);
-                    var sBx = this.Code.sBx(line);
+                    var sBx = this.Code.SBx(line);
                     var op = this.Code.Op(line);
                     switch (op)
                     {
@@ -377,7 +354,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                             Branch node = null;
                             var invert = A != 0;
                             var begin = line + 2;
-                            var end = begin + this.Code.sBx(line + 1);
+                            var end = begin + this.Code.SBx(line + 1);
                             switch (op)
                             {
                                 case Op.EQ:
@@ -434,7 +411,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                         {
                             var invert = C != 0;
                             var begin = line + 2;
-                            var end = begin + this.Code.sBx(line + 1);
+                            var end = begin + this.Code.SBx(line + 1);
                             stack.Push(new TestNode(A, invert, line, begin, end));
                             this.skip[line + 1] = true;
                             continue;
@@ -444,7 +421,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                         {
                             var invert = C != 0;
                             var begin = line + 2;
-                            var end = begin + this.Code.sBx(line + 1);
+                            var end = begin + this.Code.SBx(line + 1);
                             testSet = true;
                             testSetEnd = end;
                             stack.Push(new TestSetNode(A, B, invert, line, begin, end));
@@ -455,7 +432,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                         case Op.JMP:
                         {
                             reduce = true;
-                            var tLine = line + 1 + this.Code.sBx(line);
+                            var tLine = line + 1 + this.Code.SBx(line);
                             if (tLine >= 2 &&
                                 this.Code.Op(tLine - 1) == Op.LOADBOOL &&
                                 this.Code.C(tLine - 1) != 0)
@@ -493,7 +470,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                                 this.skip[tLine + 1] = true;
                                 this.blocks.Add(new TForBlock(this.Function, blockBegin, blockEnd, tReg, tLength, this.r));
                             }
-                            else if (this.Code.sBx(line) == 2 && this.Code.Op(line + 1) == Op.LOADBOOL &&
+                            else if (this.Code.SBx(line) == 2 && this.Code.Op(line + 1) == Op.LOADBOOL &&
                                      this.Code.C(line + 1) != 0)
                             {
                                 /* This is the tail of a boolean set with a compare node and assign node */
@@ -511,7 +488,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                                     var enclosing = this.EnclosingBreakableBlock(line);
                                     if (enclosing != null && enclosing.Breakable &&
                                         this.Code.Op(enclosing.End) == Op.JMP &&
-                                        (this.Code.sBx(enclosing.End) + enclosing.End + 1 == tLine))
+                                        (this.Code.SBx(enclosing.End) + enclosing.End + 1 == tLine))
                                     {
                                         isBreak[line] = true;
                                         this.blocks.Add(new Break(this.Function, line, enclosing.End));
@@ -530,7 +507,6 @@ namespace Elskom.Generic.Libs.UnluacNET
                         {
                             reduce = true;
                             var target = line + 1 + sBx;
-                            var close = target - 1;
                             var forBegin = line + 1;
                             var forEnd = target + 1;
                             this.blocks.Add(new ForBlock(this.Function, forBegin, forEnd, A, this.r));
@@ -603,7 +579,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                             this.Code.Op(assignEnd - 2) == Op.LOADBOOL &&
                             this.Code.C(assignEnd - 2) != 0 &&
                             this.Code.Op(assignEnd - 3) == Op.JMP &&
-                            this.Code.sBx(assignEnd - 3) == 2)
+                            this.Code.SBx(assignEnd - 3) == 2)
                         {
                             if (peekNode is TestNode)
                             {
@@ -618,7 +594,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                             this.Code.Op(assignEnd - 1) == Op.LOADBOOL &&
                             this.Code.C(assignEnd - 1) != 0 &&
                             this.Code.Op(assignEnd - 2) == Op.JMP &&
-                            this.Code.sBx(assignEnd - 2) == 2)
+                            this.Code.SBx(assignEnd - 2) == 2)
                         {
                             if (peekNode is TestNode)
                             {
@@ -631,7 +607,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                             if (this.Code.Op(assignEnd) == Op.LOADBOOL &&
                                 this.Code.C(assignEnd) != 0 &&
                                 this.Code.Op(assignEnd - 1) == Op.JMP &&
-                                this.Code.sBx(assignEnd - 1) == 2)
+                                this.Code.SBx(assignEnd - 1) == 2)
                             {
                                 if (peekNode is TestNode)
                                 {
@@ -695,7 +671,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                         var breakable = breakTarget >= 1;
                         if (breakable && this.Code.Op(breakTarget) == Op.JMP)
                         {
-                            breakTarget += 1 + this.Code.sBx(breakTarget);
+                            breakTarget += 1 + this.Code.SBx(breakTarget);
                         }
 
                         if (breakable && breakTarget == cond.End)
@@ -711,7 +687,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                             for (var iline = loopStart; iline >= Math.Max(cond.Begin, immediateEnclosing.Begin); iline--)
                             {
                                 var op = this.Code.Op(iline);
-                                var target = iline + 1 + this.Code.sBx(iline);
+                                var target = iline + 1 + this.Code.SBx(iline);
                                 if (op == Op.JMP && target == breakTarget)
                                 {
                                     cond.End = iline;
@@ -724,7 +700,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                         var hasTail = cond.End >= 2 && this.Code.Op(cond.End - 1) == Op.JMP;
 
                         /* This is the target of the tail JMP */
-                        var tail = hasTail ? cond.End + this.Code.sBx(cond.End - 1) : -1;
+                        var tail = hasTail ? cond.End + this.Code.SBx(cond.End - 1) : -1;
                         var originalTail = tail;
                         var enclosing = this.EnclosingUnprotectedBlock(cond.Begin);
                         var breakEnclosing = this.EnclosingBreakableBlock(cond.Begin);
@@ -737,7 +713,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                             {
                                 cond.End = enclosing.End - 1;
                                 hasTail = cond.End >= 2 && this.Code.Op(cond.End - 1) == Op.JMP;
-                                tail = hasTail ? cond.End + this.Code.sBx(cond.End - 1) : -1;
+                                tail = hasTail ? cond.End + this.Code.SBx(cond.End - 1) : -1;
                             }
 
                             if (hasTail && enclosing.GetLoopback() == tail)
@@ -749,11 +725,11 @@ namespace Elskom.Generic.Libs.UnluacNET
                         {
                             // HACK: fix scope issues
                             // this is VERY hack-ish, but it works!
-                            var scopeIsBad = this.Code.Op(breakEnclosing.ScopeEnd) == Op.JMP && (this.Code.sBx(breakEnclosing.ScopeEnd) + 1) == tail;
+                            var scopeIsBad = this.Code.Op(breakEnclosing.ScopeEnd) == Op.JMP && (this.Code.SBx(breakEnclosing.ScopeEnd) + 1) == tail;
 
                             // before, 'else' statements would be misinterpreted as 'break' statements
                             // thankfully, 'else' statements can be found using this method
-                            var isElse = (cond.End + this.Code.sBx(cond.End - 1) - 1) == breakEnclosing.ScopeEnd;
+                            var isElse = (cond.End + this.Code.SBx(cond.End - 1) - 1) == breakEnclosing.ScopeEnd;
                             if (scopeIsBad && !isElse && !isBreak[tail - 1])
                             {
                                 hasScopeIssues = true;
@@ -764,13 +740,13 @@ namespace Elskom.Generic.Libs.UnluacNET
                         if (cond.IsSet)
                         {
                             var empty = cond.Begin == cond.End;
-                            if (this.Code.Op(cond.Begin) == Op.JMP && this.Code.sBx(cond.Begin) == 2 &&
+                            if (this.Code.Op(cond.Begin) == Op.JMP && this.Code.SBx(cond.Begin) == 2 &&
                                 this.Code.Op(cond.Begin + 1) == Op.LOADBOOL && this.Code.C(cond.Begin + 1) != 0)
                             {
                                 empty = true;
                             }
 
-                            this.blocks.Add(new SetBlock(this.Function, cond, cond.SetTarget, line, cond.Begin, cond.End, empty, this.r));
+                            this.blocks.Add(new SetBlock(this.Function, cond, cond.SetTarget, cond.Begin, cond.End, empty, this.r));
                         }
                         else if (this.Code.Op(cond.Begin) == Op.LOADBOOL && this.Code.C(cond.Begin) != 0)
                         {
@@ -794,10 +770,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                             if (tail > cond.End || (tail == cond.End && !isEndCondJump))
                             {
                                 var op = this.Code.Op(tail - 1);
-                                var sbx = this.Code.sBx(tail - 1);
+                                var sbx = this.Code.SBx(tail - 1);
                                 var loopback2 = tail + sbx;
                                 var isBreakableLoopEnd = this.Function.Header.Version.IsBreakableLoopEnd(op);
-                                var isElse = this.Code.Op(cond.Begin - 1) == Op.JMP && (cond.Begin + this.Code.sBx(cond.Begin - 1)) >= cond.End;
 
                                 // --- clean check -------- hacky check ----------------------------
                                 if ((isBreakableLoopEnd || (breakEnclosing != null && hasScopeIssues)) && loopback2 <= cond.Begin && !isBreak[tail - 1])
@@ -1111,8 +1086,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                 {
                     var expr = (B == 0 && (C & 0x100) != 0)
                         ? this.F.GetGlobalExpression(C & 0xFF) as Expression
-                        : new TableReference(this.upvalues.GetExpression(B), this.r.GetKExpression(C, line)) as
-                            Expression;
+                        : new TableReference(this.upvalues.GetExpression(B), this.r.GetKExpression(C, line));
                     operations.AddLast(new RegisterSet(line, A, expr));
                     break;
                 }
@@ -1374,7 +1348,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                 case Op.CLOSURE:
                 {
                     var f = this.functions[Bx];
-                    operations.AddLast(new RegisterSet(line, A, new ClosureExpression(f, this.DeclList, line + 1)));
+                    operations.AddLast(new RegisterSet(line, A, new ClosureExpression(f, line + 1)));
                     if (this.Function.Header.Version.UsesInlineUpvalueDeclaritions)
                     {
                         // Skip upvalue declarations
@@ -1400,7 +1374,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                         B = this.registers - A + 1;
                     }
 
-                    var value = new Vararg(B - 1, multiple);
+                    var value = new Vararg(multiple);
                     for (var register = A; register <= A + B - 2; register++)
                     {
                         operations.AddLast(new RegisterSet(line, register, value));
@@ -1571,7 +1545,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                     {
                         // TODO: Handle when 'blockHandler' is null and 'assign' is NOT null
                     }
-                    else if (newLocals.Count > 0 && this.Code.Op(line) != Op.FORPREP && (this.Code.Op(line) != Op.JMP || this.Code.Op(line + 1 + this.Code.sBx(line)) != this.tForTarget))
+                    else if (newLocals.Count > 0 && this.Code.Op(line) != Op.FORPREP && (this.Code.Op(line) != Op.JMP || this.Code.Op(line + 1 + this.Code.SBx(line)) != this.tForTarget))
                     {
                         assign = new Assignment();
                         assign.Declare(newLocals[0].Begin);
