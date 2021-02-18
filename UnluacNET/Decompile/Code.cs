@@ -42,19 +42,10 @@ namespace Elskom.Generic.Libs.UnluacNET
         private static readonly int MAXARG_Bx = (1 << SIZE_Bx) - 1;
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int MAXARG_sBx = MAXARG_Bx >> 1;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
-        private static readonly int MAXARG_A = (1 << SIZE_A) - 1;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
-        private static readonly int MAXARG_B = (1 << SIZE_B) - 1;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
-        private static readonly int MAXARG_C = (1 << SIZE_C) - 1;
 
         /*
          ** Macros to operate RK indices
          */
-        /* this bit 1 means constant (0 means register) */
-        private static readonly int BITRK = 1 << (SIZE_B - 1);
-        private static readonly int MAXINDEXRK = BITRK - 1;
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int MASK_OPCODE = MASK1(SIZE_OP, 0);
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
@@ -109,8 +100,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         public int Bx(int line)
             => GetArgBx(this.CodePoint(line));
 
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element should begin with upper-case letter", Justification = "Don't care for now.")]
-        public int sBx(int line)
+        public int SBx(int line)
             => GetArgsBX(this.CodePoint(line));
 
         public OpMode OpMode(int line)
@@ -131,18 +121,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         public int CodePoint(int line)
             => this.code[line - 1];
 
-        /* test whether value is a constant */
-        private static bool ISK(int x)
-            => (x & BITRK) == 1;
-
-        /* gets the index of the constant */
-        private static int INDEXK(int r)
-            => r & ~BITRK;
-
         private static int MASK1(int n, int p)
             => (~(~0 << n)) << p;
-
-        private static int MASK0(int n, int p)
-            => ~MASK1(n, p);
     }
 }

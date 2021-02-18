@@ -14,77 +14,33 @@ namespace Elskom.Generic.Libs.UnluacNET
         public static string CodePointToString(Op opcode, LInstruction code)
         {
             var name = opcode.GetType().Name;
-            switch (opcode)
+            return opcode switch
             {
                 // A
-                case Op.CLOSE:
-                case Op.LOADKX:
-                    return string.Format("{0} {1}", name, code.A);
+                Op.CLOSE or Op.LOADKX => $"{name} {code.A}",
 
                 // A_B
-                case Op.MOVE:
-                case Op.LOADNIL:
-                case Op.GETUPVAL:
-                case Op.SETUPVAL:
-                case Op.UNM:
-                case Op.NOT:
-                case Op.LEN:
-                case Op.RETURN:
-                case Op.VARARG:
-                    return string.Format("{0} {1} {2}", name, code.A, code.B);
+                Op.MOVE or Op.LOADNIL or Op.GETUPVAL or Op.SETUPVAL or Op.UNM or Op.NOT or Op.LEN or Op.RETURN or Op.VARARG => $"{name} {code.A} {code.B}",
 
                 // A_C
-                case Op.TEST:
-                case Op.TFORLOOP:
-                case Op.TFORCALL:
-                    return string.Format("{0} {1} {2}", name, code.A, code.C);
+                Op.TEST or Op.TFORLOOP or Op.TFORCALL => $"{name} {code.A} {code.C}",
 
                 // A_B_C
-                case Op.LOADBOOL:
-                case Op.GETTABLE:
-                case Op.SETTABLE:
-                case Op.NEWTABLE:
-                case Op.SELF:
-                case Op.ADD:
-                case Op.SUB:
-                case Op.MUL:
-                case Op.DIV:
-                case Op.MOD:
-                case Op.POW:
-                case Op.CONCAT:
-                case Op.EQ:
-                case Op.LT:
-                case Op.LE:
-                case Op.TESTSET:
-                case Op.CALL:
-                case Op.TAILCALL:
-                case Op.SETLIST:
-                case Op.GETTABUP:
-                case Op.SETTABUP:
-                    return string.Format("{0} {1} {2} {3}", name, code.A, code.B, code.C);
+                Op.LOADBOOL or Op.GETTABLE or Op.SETTABLE or Op.NEWTABLE or Op.SELF or Op.ADD or Op.SUB or Op.MUL or Op.DIV or Op.MOD or Op.POW or Op.CONCAT or Op.EQ or Op.LT or Op.LE or Op.TESTSET or Op.CALL or Op.TAILCALL or Op.SETLIST or Op.GETTABUP or Op.SETTABUP => $"{name} {code.A} {code.B} {code.C}",
 
                 // A_Bx
-                case Op.LOADK:
-                case Op.GETGLOBAL:
-                case Op.SETGLOBAL:
-                case Op.CLOSURE:
-                    return string.Format("{0} {1} {2}", name, code.A, code.Bx);
+                Op.LOADK or Op.GETGLOBAL or Op.SETGLOBAL or Op.CLOSURE => $"{name} {code.A} {code.Bx}",
 
                 // A_sBx
-                case Op.FORLOOP:
-                case Op.FORPREP:
-                    return string.Format("{0} {1} {2}", name, code.A, code.sBx);
+                Op.FORLOOP or Op.FORPREP => $"{name} {code.A} {code.SBx}",
 
                 // Ax
-                case Op.EXTRAARG:
-                    return string.Format("{0} <Ax>", name);
+                Op.EXTRAARG => $"{name} <Ax>",
 
                 // sBx
-                case Op.JMP:
-                    return string.Format("{0} {1}", name, code.sBx);
-                default:
-                    return name;
-            }
+                Op.JMP => $"{name} {code.SBx}",
+                _ => name,
+            };
         }
     }
 }
