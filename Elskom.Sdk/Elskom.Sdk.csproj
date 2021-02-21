@@ -25,7 +25,7 @@
     <ProjectReference Include="../UnluacNET/UnluacNET.csproj" />
     <ProjectReference Include="../zlib.managed/zlib.managed.csproj" Condition="'$(TargetFramework)' == 'net40' OR '$(TargetFramework)' == 'net45'" />
     <!-- needs .NET Framework 4.5+. -->
-    <ProjectReference Include="../GenericPluginLoader/GenericPluginLoader.csproj" Condition="'$(TargetFramework)' != 'net40'" />
+    <ProjectReference Include="../GenericPluginLoader/GenericPluginLoader.csproj" Condition="($(TargetFramework.StartsWith('net4')) AND '$(TargetFramework)' != 'net40') OR $(TargetFramework.StartsWith('net5.0'))" />
     <ProjectReference Include="../ReleasePackaging/ReleasePackaging.csproj" Condition="'$(TargetFramework)' != 'net40'" />
     <!-- needs .NET Framework 4.6.1+. -->
     <ProjectReference Include="../PluginUpdateCheck/PluginUpdateCheck.csproj" Condition="'$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45'" />
