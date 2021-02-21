@@ -12,6 +12,9 @@ namespace Elskom.Generic.Libs
     using System.IO.Compression;
     using System.Linq;
     using System.Reflection;
+#if NET5_0_OR_GREATER
+    using System.Runtime.Loader;
+#endif
     using System.Runtime.Serialization;
 
     /// <summary>
@@ -34,13 +37,38 @@ namespace Elskom.Generic.Libs
         /// </summary>
         public override string Location => this.locationValue;
 
+#if NET5_0_OR_GREATER
         /// <summary>
         /// Loads the assembly with it’s debugging symbols
         /// from the specified zip file.
         /// </summary>
         /// <param name="zipFileName">The zip file for which to look for the assembly in.</param>
         /// <param name="assemblyName">The assembly file name to load.</param>
-        /// <param name="loadPDBFile">Loads the assemblies debugging symbols (pdb file) if true.</param>
+        /// <param name="context">The context to load the assemblies into.</param>
+        /// <returns>A new <see cref="ZipAssembly"/> that represents the loaded assembly.</returns>
+        /// <exception cref="ArgumentException">
+        /// When <paramref name="zipFileName"/> is null, Empty, or does not exist.
+        /// Or <paramref name="assemblyName"/> is null, Empty or does not end with the '.dll' extension.
+        /// </exception>
+        /// <exception cref="ZipAssemblyLoadException">
+        /// When the assembly name specified was not found in the input zip file.
+        /// </exception>
+        /// <exception cref="ZipSymbolsLoadException">
+        /// When the pdb file to the specified assembly (when loading pdb file is enabled) was not found in the input zip file.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Any other exception not documented here indirectly thrown by this
+        /// If any other exceptions other than the ones above is thrown from a call to this, it exposes a bug.
+        /// </exception>
+        public static ZipAssembly LoadFromZip(string zipFileName, string assemblyName, AssemblyLoadContext context)
+#else
+        /// <summary>
+        /// Loads the assembly with it’s debugging symbols
+        /// from the specified zip file.
+        /// </summary>
+        /// <param name="zipFileName">The zip file for which to look for the assembly in.</param>
+        /// <param name="assemblyName">The assembly file name to load.</param>
+        /// <param name="domain">The <see cref="AppDomain"/> to load the assemblies into.</param>
         /// <returns>A new <see cref="ZipAssembly"/> that represents the loaded assembly.</returns>
         /// <exception cref="ArgumentException">
         /// When <paramref name="zipFileName"/> is null, Empty, or does not exist.
@@ -57,8 +85,8 @@ namespace Elskom.Generic.Libs
         /// If any other exceptions other than the ones above is thrown from a call to this, it exposes a bug.
         /// </exception>
         [SuppressMessage("Minor Code Smell", "S1905:Redundant casts should not be used", Justification = "Needed for runtime since Load and LoadFrom can return RuntimeAssembly causing zip assembly loading to fail.")]
-        [SuppressMessage("Major Code Smell", "S3885:\"Assembly.Load\" should be used", Justification = "Needed for when loading zip files fail on c++ /clr assemblies to save them to a temp file first before loading them.")]
-        public static ZipAssembly LoadFromZip(string zipFileName, string assemblyName, bool loadPDBFile = false)
+        public static ZipAssembly LoadFromZip(string zipFileName, string assemblyName, AppDomain domain)
+#endif
         {
             if (string.IsNullOrWhiteSpace(zipFileName))
             {
@@ -92,7 +120,7 @@ namespace Elskom.Generic.Libs
             using (var zipFile = ZipFile.OpenRead(zipFileName))
             {
                 GetBytesFromZipFile(assemblyName, zipFile, out asmbytes, out found, out zipAssemblyName);
-                if (loadPDBFile || Debugger.IsAttached)
+                if (Debugger.IsAttached)
                 {
                     var pdbFileName = assemblyName.Replace("dll", "pdb");
                     GetBytesFromZipFile(pdbFileName, zipFile, out pdbbytes, out pdbfound, out pdbAssemblyName);
@@ -106,7 +134,7 @@ namespace Elskom.Generic.Libs
             }
 
             // should only be evaluated if pdb-file is asked for
-            if (loadPDBFile && !pdbfound)
+            if (Debugger.IsAttached && !pdbfound)
             {
                 throw new ZipSymbolsLoadException(
                     "pdb to Assembly specified to load in ZipFile not found.");
@@ -115,10 +143,17 @@ namespace Elskom.Generic.Libs
             // always load pdb when debugging.
             // PDB should be automatically downloaded to zip file always
             // and really *should* always be present.
-            var loadPDB = loadPDBFile ? loadPDBFile : Debugger.IsAttached;
             try
             {
-                var zipassembly = (ZipAssembly)(Assembly)Load(asmbytes, loadPDB ? pdbbytes : null);
+#if NET5_0_OR_GREATER
+                using var ms1 = new MemoryStream(asmbytes);
+                using var ms2 = new MemoryStream(pdbbytes);
+                var zipassembly = Debugger.IsAttached ?
+                    (ZipAssembly)context.LoadFromStream(ms1, ms2) :
+                    (ZipAssembly)context.LoadFromStream(ms1);
+#else
+                var zipassembly = (ZipAssembly)(Assembly)domain.Load(asmbytes, Debugger.IsAttached ? pdbbytes : null);
+#endif
                 zipassembly.locationValue = $"{zipFileName}{Path.DirectorySeparatorChar}{zipAssemblyName}";
                 return zipassembly;
             }
@@ -135,13 +170,17 @@ namespace Elskom.Generic.Libs
                     dllfs.Write(asmbytes, 0, asmbytes.Length);
                 }
 
-                if ((loadPDBFile || Debugger.IsAttached) && pdbbytes != null)
+                if (Debugger.IsAttached && pdbbytes != null)
                 {
                     using var pdbfs = File.Create($"{tmpDir}{pdbAssemblyName}");
                     pdbfs.Write(pdbbytes, 0, pdbbytes.Length);
                 }
 
-                var zipassembly = (ZipAssembly)(Assembly)LoadFrom($"{tmpDir}{zipAssemblyName}");
+#if NET5_0_OR_GREATER
+                var zipassembly = (ZipAssembly)context.LoadFromAssemblyPath($"{tmpDir}{zipAssemblyName}");
+#else
+                var zipassembly = (ZipAssembly)(Assembly)domain.Load(File.ReadAllBytes($"{tmpDir}{zipAssemblyName}"));
+#endif
                 zipassembly.locationValue = $"{tmpDir}{zipAssemblyName}";
                 return zipassembly;
             }
