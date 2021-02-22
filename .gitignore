@@ -6,7 +6,7 @@ obj
 # backup files stored on the users machine.
 *.bak
 # ignore rider bullshit files.
-.idea
+.idea/
 # not needed anymore, kept locally just in case however.
 XmlAbstraction/
 GitAssemblyInfo.cs
