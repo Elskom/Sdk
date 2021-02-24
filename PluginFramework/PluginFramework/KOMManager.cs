@@ -7,7 +7,6 @@ namespace Elskom.Generic.Libs
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Text;
     using System.Xml.Linq;
@@ -16,7 +15,6 @@ namespace Elskom.Generic.Libs
     /// <summary>
     /// Class that allows managing kom Files.
     /// </summary>
-    [SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase", Justification = "Part of public API.")]
     public static class KOMManager
     {
         private static List<IKomPlugin> komplugins;
@@ -419,7 +417,6 @@ namespace Elskom.Generic.Libs
             return result;
         }
 
-        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         internal static void InvokeMessageEvent(object sender, MessageEventArgs e)
             => MessageEvent?.Invoke(sender, e);
 

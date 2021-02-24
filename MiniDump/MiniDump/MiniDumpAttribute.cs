@@ -23,7 +23,7 @@ namespace Elskom.Generic.Libs
     /// targeting Windows Forms to bring thread exception support and making build harder to maintain.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Assembly | AttributeTargets.Method)]
-    public class MiniDumpAttribute : Attribute
+    public sealed class MiniDumpAttribute : Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MiniDumpAttribute"/> class.
@@ -34,15 +34,6 @@ namespace Elskom.Generic.Libs
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler);
             CurrentInstance = this;
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MiniDumpAttribute"/> class.
-        /// </summary>
-        /// <param name="text">Exception message text.</param>
-        [Obsolete("This version of the constrictor is only here for backwards compatibility and will be removed in a future version.")]
-        public MiniDumpAttribute(string text)
-            : this()
-            => this.Text = text;
 
         /// <summary>
         /// Gets the current instance of this attribute.

@@ -150,3 +150,12 @@ dotnet_diagnostic.CA1305.severity = warning
 
 # CA1303: Do not pass literals as localized parameters
 dotnet_diagnostic.CA1303.severity = warning
+
+# S4220: Events should have proper arguments
+dotnet_diagnostic.S4220.severity = none
+
+# S101: Types should be named in PascalCase
+dotnet_diagnostic.S101.severity = none
+
+# S2346: Flags enumerations zero-value members should be named "None"
+dotnet_diagnostic.S2346.severity = none

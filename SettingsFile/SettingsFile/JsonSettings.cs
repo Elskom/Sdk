@@ -5,7 +5,6 @@
 
 namespace Elskom.Generic.Libs
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Text.Json;
     using System.Text.Json.Serialization;
@@ -15,44 +14,67 @@ namespace Elskom.Generic.Libs
     /// </summary>
     public class JsonSettings
     {
-        // -1 to tell Els_kom to loop it back to it's default value.
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonSettings"/> class.
+        /// </summary>
+        public JsonSettings()
+        {
+            this.ElsDir = string.Empty;
+            this.Sources = new JsonSettingsSources();
+
+            // default these to -1 to loop them back to their default value in Els_kom.
+            this.WindowIcon = -1;
+            this.IconWhileElsNotRunning = -1;
+            this.IconWhileElsRunning = -1;
+        }
+
+        /// <summary>
+        /// Gets or sets the icon to use.
+        /// </summary>
         [JsonPropertyName("WindowIcon")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public int WindowIcon { get; set; } = -1;
+        public int WindowIcon { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Elsword install directory.
+        /// </summary>
         [JsonPropertyName("ElsDir")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public string ElsDir { get; set; } = string.Empty;
+        public string ElsDir { get; set; }
 
-        // -1 to tell Els_kom to loop it back to it's default value.
+        /// <summary>
+        /// Gets or sets wether to show the icon in tray, in taskbar, or both when Elsword is not running.
+        /// </summary>
         [JsonPropertyName("IconWhileElsNotRunning")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public int IconWhileElsNotRunning { get; set; } = -1;
+        public int IconWhileElsNotRunning { get; set; }
 
-        // -1 to tell Els_kom to loop it back to it's default value.
+        /// <summary>
+        /// Gets or sets wether to show the icon in tray, in taskbar, or both when Elsword is running.
+        /// </summary>
         [JsonPropertyName("IconWhileElsRunning")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public int IconWhileElsRunning { get; set; } = -1;
+        public int IconWhileElsRunning { get; set; }
 
-        [JsonPropertyName("LoadPDB")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public int LoadPDB { get; set; }
-
+        /// <summary>
+        /// Gets or sets whether to save installed plugins to a zip file or not.
+        /// </summary>
         [JsonPropertyName("SaveToZip")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
         public int SaveToZip { get; set; }
 
+        /// <summary>
+        /// Gets or sets whether to show test messages or not.
+        /// </summary>
         [JsonPropertyName("ShowTestMessages")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
         public int ShowTestMessages { get; set; }
 
+        /// <summary>
+        /// Gets or sets whether to use notifications or not.
+        /// </summary>
         [JsonPropertyName("UseNotifications")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
         public int UseNotifications { get; set; }
 
+        /// <summary>
+        /// Gets the sources to use to install plugins from.
+        /// </summary>
         [JsonPropertyName("Sources")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public JsonSettingsSources Sources { get; private set; } = new JsonSettingsSources();
+        public JsonSettingsSources Sources { get; private set; }
 
         /// <summary>
         /// Deserializes the input json data to the target type for the settings file.

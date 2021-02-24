@@ -7,19 +7,15 @@ namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class Decompiler
     {
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private static Stack<Branch> m_backup;
         private readonly int registers;
         private readonly int length;
         private readonly Upvalues upvalues;
         private readonly LFunction[] functions;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_params;
         private readonly int vararg;
         private readonly Op tForTarget;
@@ -258,7 +254,6 @@ namespace Elskom.Generic.Libs.UnluacNET
                 _ => throw new InvalidOperationException(),
             };
 
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1312:Variable names should begin with lower-case letter", Justification = "Don't care for now.")]
         private Expression GetMoveIntoTargetValue(int line, int previous)
         {
             var A = this.Code.A(line);
@@ -274,9 +269,6 @@ namespace Elskom.Generic.Libs.UnluacNET
         }
 
         // TODO: Optimize / rewrite method
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1312:Variable names should begin with lower-case letter", Justification = "Don't care for now.")]
-        [SuppressMessage("Minor Code Smell", "S1481:Unused local variables should be removed", Justification = "Don't care for now.")]
-        [SuppressMessage("Critical Code Smell", "S2696:Instance members should not write to \"static\" fields", Justification = "Don't care for now.")]
         private OuterBlock HandleBranches(bool first)
         {
             var oldBlocks = this.blocks;
@@ -1035,7 +1027,6 @@ namespace Elskom.Generic.Libs.UnluacNET
             }
         }
 
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1312:Variable names should begin with lower-case letter", Justification = "Don't care for now.")]
         private LinkedList<Operation> ProcessLine(int line)
         {
             var operations = new LinkedList<Operation>();

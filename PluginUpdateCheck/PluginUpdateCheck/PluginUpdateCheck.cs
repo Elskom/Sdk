@@ -7,7 +7,6 @@ namespace Elskom.Generic.Libs
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.IO.Compression;
@@ -20,8 +19,7 @@ namespace Elskom.Generic.Libs
     /// <summary>
     /// A generic plugin update checker.
     /// </summary>
-    [SuppressMessage("Major Code Smell", "S3881:\"IDisposable\" should be implemented correctly", Justification = "Possible bug in analyzer?")]
-    public class PluginUpdateCheck : IDisposable
+    public sealed class PluginUpdateCheck : IDisposable
     {
         private readonly ServiceProvider serviceProvider;
         private bool disposedValue;
@@ -37,12 +35,11 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Gets the plugin urls used in all instances.
         /// </summary>
-        public static List<string> PluginUrls { get; private protected set; }
+        public static List<string> PluginUrls { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether there are any pending updates and displays a message if there is.
         /// </summary>
-        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         public bool ShowMessage
         {
             get
@@ -60,27 +57,27 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Gets the plugin name this instance is pointing to.
         /// </summary>
-        public string PluginName { get; private protected set; }
+        public string PluginName { get; private set; }
 
         /// <summary>
         /// Gets the current version of the plugin that is pointed to by this instance.
         /// </summary>
-        public string CurrentVersion { get; private protected set; }
+        public string CurrentVersion { get; private set; }
 
         /// <summary>
         /// Gets the installed version of the plugin that is pointed to by this instance.
         /// </summary>
-        public string InstalledVersion { get; private protected set; }
+        public string InstalledVersion { get; private set; }
 
         /// <summary>
         /// Gets the url to download the files to the plugin from.
         /// </summary>
-        public Uri DownloadUrl { get; private protected set; }
+        public Uri DownloadUrl { get; private set; }
 
         /// <summary>
         /// Gets the files to the plugin to download.
         /// </summary>
-        public List<string> DownloadFiles { get; private protected set; }
+        public List<string> DownloadFiles { get; private set; }
 
         /// <summary>
         /// Checks for plugin updates from the provided plugin source urls.
@@ -90,7 +87,6 @@ namespace Elskom.Generic.Libs
         /// <param name="serviceprovider">The <see cref="ServiceProvider"/> to use.</param>
         /// <returns>A list of <see cref="PluginUpdateCheck"/> instances representing the plugins that needs updating or are to be installed.</returns>
         // catches the plugin urls and uses that cache to detect added urls, and only appends those to the list.
-        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         public static List<PluginUpdateCheck> CheckForUpdates(string[] pluginURLs, List<Type> pluginTypes, ServiceProvider serviceprovider)
         {
             _ = pluginURLs ?? throw new ArgumentNullException(nameof(pluginURLs));
@@ -177,17 +173,13 @@ namespace Elskom.Generic.Libs
         /// Cleans up the resources used by <see cref="PluginUpdateCheck"/>.
         /// </summary>
         public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+            => this.Dispose(true);
 
         /// <summary>
         /// Installs the files to the plugin pointed to by this instance.
         /// </summary>
         /// <param name="saveToZip">A bool indicating if the file should be installed to a zip file instead of a folder.</param>
         /// <returns>A bool indicating if anything changed.</returns>
-        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         public bool Install(bool saveToZip)
         {
             if (this.disposedValue)
@@ -238,7 +230,6 @@ namespace Elskom.Generic.Libs
         /// </summary>
         /// <param name="saveToZip">A bool indicating if the file should be uninstalled from a zip file instead of a folder. If the zip file after the operation becomes empty it is also deleted automatically.</param>
         /// <returns>A bool indicating if anything changed.</returns>
-        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Sender cannot be null.")]
         public bool Uninstall(bool saveToZip)
         {
             if (this.disposedValue)
@@ -286,7 +277,7 @@ namespace Elskom.Generic.Libs
             return false;
         }
 
-        private protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!this.disposedValue && disposing)
             {

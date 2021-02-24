@@ -6,10 +6,8 @@
 namespace Elskom.Generic.Libs.UnluacNET.IO
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
 
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public static class StreamExtensions
     {
         public static char ReadChar(this Stream stream)
@@ -128,7 +126,6 @@ namespace Elskom.Generic.Libs.UnluacNET.IO
             return BitConverter.ToDouble(buffer, 0);
         }
 
-        [SuppressMessage("Major Bug", "S2583:Conditionally executed code should be reachable", Justification = "🖕")]
         internal static int Read(this Stream stream, byte[] buffer)
         {
             _ = stream.Read(buffer, 0, buffer.Length);

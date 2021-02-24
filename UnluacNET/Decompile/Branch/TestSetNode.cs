@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
-    using System.Diagnostics.CodeAnalysis;
-
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class TestSetNode : TestNode
     {
         public TestSetNode(int target, int test, bool inverted, int line, int begin, int end)

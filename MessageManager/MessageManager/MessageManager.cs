@@ -7,7 +7,6 @@ namespace Elskom.Generic.Libs
 {
     using System;
     using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.Drawing.Design;
     using System.Windows.Forms;
@@ -22,20 +21,14 @@ namespace Elskom.Generic.Libs
     [SRDescription(SR.DescriptionMessageManager)]
     public class MessageManager : Control
     {
-        private static NotifyIcon notifyIcon;
-        private readonly bool trash;
+        private readonly NotifyIcon notifyIcon;
+        private readonly bool disposeIcon = true;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageManager"/> class.
         /// </summary>
-        [SuppressMessage("Major Code Smell", "S3010:Static fields should not be updated in constructors", Justification = "Needed here.")]
-        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP007:Don't dispose injected.", Justification = "To not leak the old notify icon.")]
         public MessageManager()
-        {
-            this.trash = true;
-            notifyIcon?.Dispose();
-            notifyIcon = new NotifyIcon();
-        }
+            => this.notifyIcon = new NotifyIcon();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageManager"/> class
@@ -45,13 +38,17 @@ namespace Elskom.Generic.Libs
         /// An <see cref="IContainer"/> that represents the container for the internal
         /// <see cref="NotifyIcon"/> control.
         /// </param>
-        [SuppressMessage("Major Code Smell", "S3010:Static fields should not be updated in constructors", Justification = "Needed here.")]
-        [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP007:Don't dispose injected.", Justification = "To not leak the old notify icon.")]
         public MessageManager(IContainer container)
+            : this()
         {
-            this.trash = true;
-            notifyIcon?.Dispose();
-            notifyIcon = new NotifyIcon(container);
+            this.disposeIcon = false;
+            if (container == null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            container.Add(this);
+            container.Add(this.notifyIcon);
         }
 
         /// <summary>
@@ -63,22 +60,12 @@ namespace Elskom.Generic.Libs
         {
             add
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.BalloonTipClicked += value;
+                this.notifyIcon.BalloonTipClicked += value;
             }
 
             remove
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.BalloonTipClicked -= value;
+                this.notifyIcon.BalloonTipClicked -= value;
             }
         }
 
@@ -91,22 +78,12 @@ namespace Elskom.Generic.Libs
         {
             add
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.BalloonTipClosed += value;
+                this.notifyIcon.BalloonTipClosed += value;
             }
 
             remove
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.BalloonTipClosed -= value;
+                this.notifyIcon.BalloonTipClosed -= value;
             }
         }
 
@@ -119,22 +96,12 @@ namespace Elskom.Generic.Libs
         {
             add
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.BalloonTipShown += value;
+                this.notifyIcon.BalloonTipShown += value;
             }
 
             remove
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.BalloonTipShown -= value;
+                this.notifyIcon.BalloonTipShown -= value;
             }
         }
 
@@ -147,22 +114,12 @@ namespace Elskom.Generic.Libs
         {
             add
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.Click += value;
+                this.notifyIcon.Click += value;
             }
 
             remove
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.Click -= value;
+                this.notifyIcon.Click -= value;
             }
         }
 
@@ -175,22 +132,12 @@ namespace Elskom.Generic.Libs
         {
             add
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.DoubleClick += value;
+                this.notifyIcon.DoubleClick += value;
             }
 
             remove
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.DoubleClick -= value;
+                this.notifyIcon.DoubleClick -= value;
             }
         }
 
@@ -203,22 +150,12 @@ namespace Elskom.Generic.Libs
         {
             add
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.MouseClick += value;
+                this.notifyIcon.MouseClick += value;
             }
 
             remove
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.MouseClick -= value;
+                this.notifyIcon.MouseClick -= value;
             }
         }
 
@@ -232,22 +169,12 @@ namespace Elskom.Generic.Libs
         {
             add
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.MouseDoubleClick += value;
+                this.notifyIcon.MouseDoubleClick += value;
             }
 
             remove
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.MouseDoubleClick -= value;
+                this.notifyIcon.MouseDoubleClick -= value;
             }
         }
 
@@ -261,22 +188,12 @@ namespace Elskom.Generic.Libs
         {
             add
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.MouseDown += value;
+                this.notifyIcon.MouseDown += value;
             }
 
             remove
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.MouseDown -= value;
+                this.notifyIcon.MouseDown -= value;
             }
         }
 
@@ -290,22 +207,12 @@ namespace Elskom.Generic.Libs
         {
             add
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.MouseMove += value;
+                this.notifyIcon.MouseMove += value;
             }
 
             remove
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.MouseMove -= value;
+                this.notifyIcon.MouseMove -= value;
             }
         }
 
@@ -319,22 +226,12 @@ namespace Elskom.Generic.Libs
         {
             add
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.MouseUp += value;
+                this.notifyIcon.MouseUp += value;
             }
 
             remove
             {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.MouseUp -= value;
+                this.notifyIcon.MouseUp -= value;
             }
         }
 
@@ -351,25 +248,9 @@ namespace Elskom.Generic.Libs
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SYSTEMDESIGN, typeof(UITypeEditor))]
         public string BalloonTipText
         {
-            get
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
+            get => this.notifyIcon.BalloonTipText;
 
-                return notifyIcon.BalloonTipText;
-            }
-
-            set
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.BalloonTipText = value;
-            }
+            set => this.notifyIcon.BalloonTipText = value;
         }
 
         /// <summary>
@@ -386,25 +267,9 @@ namespace Elskom.Generic.Libs
         [SRDescription(SR.MessageManagerBalloonTipIconDescr)]
         public ToolTipIcon BalloonTipIcon
         {
-            get
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
+            get => this.notifyIcon.BalloonTipIcon;
 
-                return notifyIcon.BalloonTipIcon;
-            }
-
-            set
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.BalloonTipIcon = value;
-            }
+            set => this.notifyIcon.BalloonTipIcon = value;
         }
 
         /// <summary>
@@ -419,28 +284,12 @@ namespace Elskom.Generic.Libs
         [SRDescription(SR.MessageManagerBalloonTipTitleDescr)]
         public string BalloonTipTitle
         {
-            get
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
+            get => this.notifyIcon.BalloonTipTitle;
 
-                return notifyIcon.BalloonTipTitle;
-            }
-
-            set
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.BalloonTipTitle = value;
-            }
+            set => this.notifyIcon.BalloonTipTitle = value;
         }
 
-#if !NETCOREAPP3_1 && !NET5_0
+#if !NETCOREAPP3_1 && !NET5_0_OR_GREATER
         /// <summary>
         /// Gets or sets the shortcut menu for the internal icon.
         /// </summary>
@@ -453,25 +302,9 @@ namespace Elskom.Generic.Libs
         [SRDescription(SR.MessageManagerMenuDescr)]
         public new ContextMenu ContextMenu
         {
-            get
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
+            get => this.notifyIcon.ContextMenu;
 
-                return notifyIcon.ContextMenu;
-            }
-
-            set
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.ContextMenu = value;
-            }
+            set => this.notifyIcon.ContextMenu = value;
         }
 #endif
 
@@ -486,25 +319,9 @@ namespace Elskom.Generic.Libs
         [SRDescription(SR.MessageManagerMenuDescr)]
         public new ContextMenuStrip ContextMenuStrip
         {
-            get
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
+            get => this.notifyIcon.ContextMenuStrip;
 
-                return notifyIcon.ContextMenuStrip;
-            }
-
-            set
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.ContextMenuStrip = value;
-            }
+            set => this.notifyIcon.ContextMenuStrip = value;
         }
 
         /// <summary>
@@ -520,25 +337,9 @@ namespace Elskom.Generic.Libs
         [SRDescription(SR.MessageManagerIconDescr)]
         public Icon Icon
         {
-            get
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
+            get => this.notifyIcon.Icon;
 
-                return notifyIcon.Icon;
-            }
-
-            set
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.Icon = value;
-            }
+            set => this.notifyIcon.Icon = value;
         }
 
         /// <summary>
@@ -558,25 +359,9 @@ namespace Elskom.Generic.Libs
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SYSTEMDESIGN, typeof(UITypeEditor))]
         public new string Text
         {
-            get
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
+            get => this.notifyIcon.Text;
 
-                return notifyIcon.Text;
-            }
-
-            set
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.Text = value;
-            }
+            set => this.notifyIcon.Text = value;
         }
 
         /// <summary>
@@ -593,25 +378,9 @@ namespace Elskom.Generic.Libs
         [SRDescription(SR.MessageManagerVisDescr)]
         public new bool Visible
         {
-            get
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
+            get => this.notifyIcon.Visible;
 
-                return notifyIcon.Visible;
-            }
-
-            set
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.Visible = value;
-            }
+            set => this.notifyIcon.Visible = value;
         }
 
         /// <summary>
@@ -628,26 +397,19 @@ namespace Elskom.Generic.Libs
         [TypeConverter(typeof(StringConverter))]
         public new object Tag
         {
-            get
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
+            get => this.notifyIcon.Tag;
 
-                return notifyIcon.Tag;
-            }
-
-            set
-            {
-                if (!this.trash)
-                {
-                    // just to get rid of notification to make this shit static as making it static will not work.
-                }
-
-                notifyIcon.Tag = value;
-            }
+            set => this.notifyIcon.Tag = value;
         }
+
+        /// <summary>
+        /// Shows an MessageBox that is for an Question.
+        /// </summary>
+        /// <param name="text">The text on the messagebox.</param>
+        /// <param name="caption">The title of the messagebox.</param>
+        /// <returns>A new <see cref="DialogResult"/>.</returns>
+        public static DialogResult ShowQuestion(string text, string caption)
+            => MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
         /// <summary>
         /// Shows an MessageBox that is for an Error.
@@ -656,11 +418,11 @@ namespace Elskom.Generic.Libs
         /// <param name="caption">The title of the messagebox.</param>
         /// <param name="useNotifications">Indicates if this function should show notifications using the input notification icon.</param>
         /// <returns>A new <see cref="DialogResult"/>.</returns>
-        public static DialogResult ShowError(string text, string caption, bool useNotifications)
+        public DialogResult ShowError(string text, string caption, bool useNotifications)
         {
-            if (notifyIcon != null && useNotifications)
+            if (this.notifyIcon != null && useNotifications)
             {
-                notifyIcon.ShowBalloonTip(0, caption, text, ToolTipIcon.Error);
+                this.notifyIcon.ShowBalloonTip(0, caption, text, ToolTipIcon.Error);
                 return DialogResult.OK;
             }
 
@@ -674,11 +436,11 @@ namespace Elskom.Generic.Libs
         /// <param name="caption">The title of the messagebox.</param>
         /// <param name="useNotifications">Indicates if this function should show notifications using the input notification icon.</param>
         /// <returns>A new <see cref="DialogResult"/>.</returns>
-        public static DialogResult ShowInfo(string text, string caption, bool useNotifications)
+        public DialogResult ShowInfo(string text, string caption, bool useNotifications)
         {
-            if (notifyIcon != null && useNotifications)
+            if (this.notifyIcon != null && useNotifications)
             {
-                notifyIcon.ShowBalloonTip(0, caption, text, ToolTipIcon.Info);
+                this.notifyIcon.ShowBalloonTip(0, caption, text, ToolTipIcon.Info);
                 return DialogResult.OK;
             }
 
@@ -692,25 +454,16 @@ namespace Elskom.Generic.Libs
         /// <param name="caption">The title of the messagebox.</param>
         /// <param name="useNotifications">Indicates if this function should show notifications using the input notification icon.</param>
         /// <returns>A new <see cref="DialogResult"/>.</returns>
-        public static DialogResult ShowWarning(string text, string caption, bool useNotifications)
+        public DialogResult ShowWarning(string text, string caption, bool useNotifications)
         {
-            if (notifyIcon != null && useNotifications)
+            if (this.notifyIcon != null && useNotifications)
             {
-                notifyIcon.ShowBalloonTip(0, caption, text, ToolTipIcon.Warning);
+                this.notifyIcon.ShowBalloonTip(0, caption, text, ToolTipIcon.Warning);
                 return DialogResult.OK;
             }
 
             return MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
-
-        /// <summary>
-        /// Shows an MessageBox that is for an Question.
-        /// </summary>
-        /// <param name="text">The text on the messagebox.</param>
-        /// <param name="caption">The title of the messagebox.</param>
-        /// <returns>A new <see cref="DialogResult"/>.</returns>
-        public static DialogResult ShowQuestion(string text, string caption)
-            => MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
         /// <summary>
         /// Releases the unmanaged resources used by the <see cref="MessageManager"/>
@@ -720,9 +473,14 @@ namespace Elskom.Generic.Libs
         /// true to release both managed and unmanaged resources; false to release only unmanaged
         /// resources.
         /// </param>
-        // hopefully this is disposed of by the conatiner provided when constructing this class:
-        // notifyIcon
         protected override void Dispose(bool disposing)
-            => base.Dispose(disposing);
+        {
+            if (disposing && this.disposeIcon)
+            {
+                this.notifyIcon?.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

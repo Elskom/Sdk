@@ -7,12 +7,9 @@ namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
 
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class OuterBlock : Block
     {
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly List<Statement> m_statements;
 
         public OuterBlock(LFunction function, int length)
@@ -25,7 +22,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public override bool IsUnprotected => false;
 
-        public override int ScopeEnd => (this.End - 1) + this.Function.Header.Version.OuterBlockScopeAdjustment;
+        public override int ScopeEnd => this.End - 1 + this.Function.Header.Version.OuterBlockScopeAdjustment;
 
         public override void AddStatement(Statement statement)
             => this.m_statements.Add(statement);

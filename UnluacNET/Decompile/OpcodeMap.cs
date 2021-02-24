@@ -6,12 +6,9 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class OpcodeMap
     {
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private readonly int[] luaP_opmodes =
         {
           /*       T  A    B                 C                 mode             opcode       */
@@ -55,7 +52,6 @@ namespace Elskom.Generic.Libs.UnluacNET
            opmode(0, 1, OpArgMask.OpArgU, OpArgMask.OpArgN, OpMode.iABC), /* OP_VARARG */
         };
 
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly Op[] m_map;
 
         public OpcodeMap(int version)
@@ -105,7 +101,6 @@ namespace Elskom.Generic.Libs.UnluacNET
         ** bit 6: instruction set register A
         ** bit 7: operator is a test
         */
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element should begin with upper-case letter", Justification = "Don't care for now.")]
         private static int opmode(byte t, byte a, OpArgMask b, OpArgMask c, OpMode m)
             => (t << 7) | (a << 6) | (((byte)b) << 4) | (((byte)c) << 2) | ((byte)m);
     }

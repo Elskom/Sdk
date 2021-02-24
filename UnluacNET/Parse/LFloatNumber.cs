@@ -6,9 +6,7 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class LFloatNumber : LNumber
     {
         public LFloatNumber(float number)

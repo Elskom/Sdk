@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
-    using System.Diagnostics.CodeAnalysis;
-
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public static class Opcode
     {
         // TODO: Optimize method

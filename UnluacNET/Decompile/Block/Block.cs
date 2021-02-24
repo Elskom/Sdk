@@ -6,9 +6,7 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public abstract class Block : Statement, IComparable<Block>
     {
         protected Block(LFunction function, int begin, int end)
@@ -56,7 +54,6 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public abstract int GetLoopback();
 
-        [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "Impossible to separate.")]
         public virtual int CompareTo(Block other)
             => this.Begin < other.Begin
             ? -1

@@ -6,18 +6,12 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using Elskom.Generic.Libs.UnluacNET.IO;
 
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class BHeader
     {
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1311:Static readonly fields should begin with upper-case letter", Justification = "Don't care for now.")]
         private static readonly int m_signature = 0x61754C1B; // '\x1B\Lua'
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1311:Static readonly fields should begin with upper-case letter", Justification = "Don't care for now.")]
         private static readonly byte[] m_luacTail =
         {
             0x19, 0x93, 0x0D, 0x0A, 0x1A, 0x0A,
