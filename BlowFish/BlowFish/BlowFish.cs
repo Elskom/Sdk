@@ -7,7 +7,6 @@ namespace Elskom.Generic.Libs
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -141,8 +140,7 @@ namespace Elskom.Generic.Libs
 
             if (block is MemoryStream ms)
             {
-                var block1 = new byte[ms.Length];
-                Array.Copy(ms.GetBuffer(), block1, ms.GetBuffer().LongLength);
+                var block1 = ms.ToArray();
                 XorBlock(ref block1, iv);
 
                 // clear the old data then copy the new data to the stream.
@@ -244,19 +242,12 @@ namespace Elskom.Generic.Libs
         /// </summary>
         /// <param name="cipherText">Ciphertext byte array.</param>
         /// <param name="mode">Cipher mode.</param>
-        /// <returns>Plaintext or null if mode is not CipherMode.ECB.</returns>
-        [SuppressMessage("Security", "SCS0011:CBC mode is weak", Justification = "Needed for Blowfish.")]
-        [SuppressMessage("Security", "SCS0012:ECB mode is weak", Justification = "Needed for Blowfish.")]
-        [SuppressMessage("Security", "SCS0013:Weak cipher mode", Justification = "Needed for Blowfish.")]
+        /// <returns>Plaintext or <see langword="null"/> if mode is not <see cref="CipherMode.ECB"/>.</returns>
         public byte[] Decrypt(byte[] cipherText, CipherMode mode)
             => mode switch
             {
                 CipherMode.ECB => this.Decrypt_ECB(cipherText),
-                CipherMode.CBC => null,
-                CipherMode.CFB => null,
-                CipherMode.CTS => null,
-                CipherMode.OFB => null,
-                _ => null,
+                CipherMode.CBC or CipherMode.CFB or CipherMode.CTS or CipherMode.OFB or _ => null,
             };
 
         /// <summary>
@@ -535,11 +526,6 @@ namespace Elskom.Generic.Libs
             return 0;
         }
 
-        /// <summary>
-        /// XoR encrypts two 8 bit blocks.
-        /// </summary>
-        /// <param name="block">8 bit block 1.</param>
-        /// <param name="iv">8 bit block 2.</param>
         private static void XorBlock_private(ref byte[] block, byte[] iv)
         {
             for (var i = 0; i < block.Length; i++)
@@ -548,18 +534,9 @@ namespace Elskom.Generic.Libs
             }
         }
 
-        /// <summary>
-        /// Decrypts a byte array (ECB).
-        /// </summary>
-        /// <param name="ct">Ciphertext byte array.</param>
-        /// <returns>Plaintext.</returns>
         private byte[] Decrypt_ECB(byte[] ct)
             => this.Crypt_ECB(ct, true);
 
-        /// <summary>
-        /// Sets up the S-blocks and the key.
-        /// </summary>
-        /// <param name="cipherKey">Block cipher key (1-448 bits).</param>
         private void SetupKey(byte[] cipherKey)
         {
             this.bfP = SetupP();
@@ -622,12 +599,6 @@ namespace Elskom.Generic.Libs
             }
         }
 
-        /// <summary>
-        /// Encrypts or decrypts data in ECB mode.
-        /// </summary>
-        /// <param name="text">plain/ciphertext.</param>
-        /// <param name="decrypt">true to decrypt, false to encrypt.</param>
-        /// <returns>(En/De)crypted data.</returns>
         private byte[] Crypt_ECB(byte[] text, bool decrypt)
         {
             var paddedLen = text.Length % 8 == 0 ? text.Length : text.Length + 8 - (text.Length % 8);
@@ -652,12 +623,6 @@ namespace Elskom.Generic.Libs
             return plainText;
         }
 
-        /// <summary>
-        /// Encrypts or decrypts data in CBC mode.
-        /// </summary>
-        /// <param name="text">plain/ciphertext.</param>
-        /// <param name="decrypt">true to decrypt, false to encrypt.</param>
-        /// <returns>(En/De)crypted data.</returns>
         private byte[] Crypt_CBC(byte[] text, bool decrypt)
         {
             if (!this.iVSet)
@@ -701,10 +666,6 @@ namespace Elskom.Generic.Libs
             return plainText;
         }
 
-        /// <summary>
-        /// Encrypts a 64 bit block.
-        /// </summary>
-        /// <param name="block">The 64 bit block to encrypt.</param>
         private void BlockEncrypt(ref byte[] block)
         {
             this.SetBlock(block);
@@ -712,10 +673,6 @@ namespace Elskom.Generic.Libs
             this.GetBlock(ref block);
         }
 
-        /// <summary>
-        /// Decrypts a 64 bit block.
-        /// </summary>
-        /// <param name="block">The 64 bit block to decrypt.</param>
         private void BlockDecrypt(ref byte[] block)
         {
             this.SetBlock(block);
@@ -723,10 +680,6 @@ namespace Elskom.Generic.Libs
             this.GetBlock(ref block);
         }
 
-        /// <summary>
-        /// Splits the block into the two uint values.
-        /// </summary>
-        /// <param name="block">the 64 bit block to setup.</param>
         private void SetBlock(byte[] block)
         {
             var block1 = new byte[4];
@@ -750,10 +703,6 @@ namespace Elskom.Generic.Libs
             }
         }
 
-        /// <summary>
-        /// Converts the two uint values into a 64 bit block.
-        /// </summary>
-        /// <param name="block">64 bit buffer to receive the block.</param>
         private void GetBlock(ref byte[] block)
         {
             if (this.NonStandard)
@@ -780,9 +729,6 @@ namespace Elskom.Generic.Libs
             }
         }
 
-        /// <summary>
-        /// Runs the blowfish algorithm (standard 16 rounds).
-        /// </summary>
         private void Encipher()
         {
             this.xlPar ^= this.bfP[0];
@@ -800,9 +746,6 @@ namespace Elskom.Generic.Libs
             this.xrPar = swap;
         }
 
-        /// <summary>
-        /// Runs the blowfish algorithm in reverse (standard 16 rounds).
-        /// </summary>
         private void Decipher()
         {
             this.xlPar ^= this.bfP[17];
@@ -820,13 +763,6 @@ namespace Elskom.Generic.Libs
             this.xrPar = swap;
         }
 
-        /// <summary>
-        /// one round of the blowfish algorithm.
-        /// </summary>
-        /// <param name="a">See spec.</param>
-        /// <param name="b">See the spec.</param>
-        /// <param name="n">See the specification.</param>
-        /// <returns>The rounded value.</returns>
         private uint Round(uint a, uint b, uint n)
         {
             var x1 = (this.bfS0[WordByte0(b)] + this.bfS1[WordByte1(b)]) ^ this.bfS2[WordByte2(b)];

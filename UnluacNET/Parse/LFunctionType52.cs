@@ -5,10 +5,8 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
 
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class LFunctionType52 : LFunctionType
     {
         protected override void ParseDebug(Stream stream, BHeader header, LFunctionParseState s)

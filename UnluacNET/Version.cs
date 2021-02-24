@@ -5,15 +5,10 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
-    using System.Diagnostics.CodeAnalysis;
-
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public abstract class Version
     {
         public static readonly Version LUA51 = new Version51();
         public static readonly Version LUA52 = new Version52();
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Part of API.")]
-        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "Part of API.")]
         protected int m_versionNumber;
 
         protected Version(int versionNumber)

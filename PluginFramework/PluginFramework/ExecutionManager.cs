@@ -6,7 +6,6 @@
 namespace Elskom.Generic.Libs
 {
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using Elskom.Generic.Libs.Properties;
 
@@ -44,7 +43,6 @@ namespace Elskom.Generic.Libs
         /// This is an blocking call that has to run in an separate thread from Els_kom's main thread.
         /// NEVER UNDER ANY CIRCUMSTANCES RUN THIS IN THE MAIN THREAD, YOU WILL DEADLOCK ELS_KOM!!!.
         /// </summary>
-        [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "Created in a using block that never checks for null.", Scope = "member")]
         public static void RunElswordDirectly()
         {
             if (File.Exists(SettingsFile.SettingsPath))
@@ -87,7 +85,6 @@ namespace Elskom.Generic.Libs
         /// This is an blocking call that has to run in an separate thread from Els_kom's main thread.
         /// NEVER UNDER ANY CIRCUMSTANCES RUN THIS IN THE MAIN THREAD, YOU WILL DEADLOCK ELS_KOM!!!.
         /// </summary>
-        [SuppressMessage("Maintainability", "CA1508:Avoid dead conditional code", Justification = "Created in a using block that never checks for null.", Scope = "member")]
         public static void RunElswordLauncher()
         {
             // for the sake of sanity and the need to disable the pack, unpack, and test mods

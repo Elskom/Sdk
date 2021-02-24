@@ -10,7 +10,6 @@ namespace Newsmake
     using System.CommandLine;
     using System.CommandLine.Invocation;
     using System.CommandLine.IO;
-    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -23,7 +22,6 @@ namespace Newsmake
     internal static class Program
     {
         [MiniDump(Text = "Please send a copy of {0} to https://github.com/Elskom/Sdk/issues by making an issue and attaching the log(s) and mini-dump(s).", DumpType = MinidumpTypes.ValidTypeFlags)]
-        [SuppressMessage("Major Bug", "S4210:Windows Forms entry points should be marked with STAThread", Justification = "Not using Windows Forms.")]
         internal static async Task<int> Main(string[] args)
         {
             MiniDump.DumpMessage += MiniDump_DumpMessage;
@@ -72,7 +70,6 @@ namespace Newsmake
             return 0;
         }
 
-        [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "🖕")]
         internal static int BuildCommandHandler(IConsole console)
         {
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
@@ -442,7 +439,6 @@ namespace Newsmake
             return 0;
         }
 
-        [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "🖕")]
         internal static int FinalizeReleaseCommandHandler(IConsole console)
         {
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
@@ -530,7 +526,6 @@ namespace Newsmake
             return 0;
         }
 
-        [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "🖕")]
         internal static void Formatline(ref string input, bool tabs, bool output_format_md, int line_length = 80)
         {
             if (input.Length < line_length)

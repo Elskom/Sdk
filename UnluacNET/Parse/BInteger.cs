@@ -6,20 +6,14 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class BInteger : BObject
     {
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly long MAX_INT = int.MaxValue;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly long MIN_INT = int.MinValue;
 
         // TODO: Why not just use a 'long' to hold both sizes? Doesn't make much of a difference IMO
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly long m_big;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_number;
 
         public BInteger(BInteger b)
@@ -40,7 +34,6 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.m_number = 0;
         }
 
-        [SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "🖕")]
         public int AsInteger()
             => this.m_big == 0
             ? this.m_number

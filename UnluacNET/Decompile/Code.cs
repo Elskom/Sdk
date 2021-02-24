@@ -5,56 +5,36 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
-    using System.Diagnostics.CodeAnalysis;
-
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class Code
     {
         /*
         ** Size and position of opcode arguments
         */
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int SIZE_C = 9;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int SIZE_B = 9;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int SIZE_Bx = SIZE_C + SIZE_B;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int SIZE_A = 8;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int SIZE_OP = 6;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int POS_OP = 0;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int POS_A = POS_OP + SIZE_OP;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int POS_C = POS_A + SIZE_A;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int POS_B = POS_C + SIZE_C;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int POS_Bx = POS_C;
 
         /*
         ** Limits for opcode arguments
         ** (signed) int used to manipulate most arguments
         */
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int MAXARG_Bx = (1 << SIZE_Bx) - 1;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int MAXARG_sBx = MAXARG_Bx >> 1;
 
         /*
          ** Macros to operate RK indices
          */
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int MASK_OPCODE = MASK1(SIZE_OP, 0);
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int MASK_A = MASK1(SIZE_A, 0);
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int MASK_B = MASK1(SIZE_B, 0);
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int MASK_C = MASK1(SIZE_C, 0);
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "Don't care for now.")]
         private static readonly int MASK_Bx = MASK1(SIZE_Bx, 0);
 
         private readonly OpcodeMap map;

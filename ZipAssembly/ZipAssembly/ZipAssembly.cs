@@ -7,7 +7,6 @@ namespace Elskom.Generic.Libs
 {
     using System;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
@@ -21,7 +20,6 @@ namespace Elskom.Generic.Libs
     /// Load assemblies from a zip file.
     /// </summary>
     [Serializable]
-    [SuppressMessage("Major Code Smell", "S3925:\"ISerializable\" should be implemented correctly", Justification = "Stupid Analyizer.")]
     public sealed class ZipAssembly : Assembly
     {
         // always set to Zip file full path + \\ + file path in zip.
@@ -84,7 +82,6 @@ namespace Elskom.Generic.Libs
         /// Any other exception not documented here indirectly thrown by this
         /// If any other exceptions other than the ones above is thrown from a call to this, it exposes a bug.
         /// </exception>
-        [SuppressMessage("Minor Code Smell", "S1905:Redundant casts should not be used", Justification = "Needed for runtime since Load and LoadFrom can return RuntimeAssembly causing zip assembly loading to fail.")]
         public static ZipAssembly LoadFromZip(string zipFileName, string assemblyName, AppDomain domain)
 #endif
         {

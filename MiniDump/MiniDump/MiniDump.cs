@@ -7,7 +7,6 @@ namespace Elskom.Generic.Libs
 {
     using System;
     using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Runtime.InteropServices;
@@ -22,7 +21,6 @@ namespace Elskom.Generic.Libs
         /// </summary>
         public static event EventHandler<MessageEventArgs> DumpMessage;
 
-        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Cannot be null.")]
         internal static void ExceptionEventHandlerCode(Exception e, bool threadException)
         {
             var exceptionData = $"{e.GetType()}: {e.Message}{Environment.NewLine}{e.StackTrace}{Environment.NewLine}";
@@ -56,7 +54,6 @@ namespace Elskom.Generic.Libs
             }
         }
 
-        [SuppressMessage("Major Code Smell", "S4220:Events should have proper arguments", Justification = "Cannot be null.")]
         private static void MiniDumpToFile(string fileToDump, MinidumpTypes dumpType)
         {
             using (var fsToDump = File.Open(fileToDump, FileMode.Create, FileAccess.ReadWrite, FileShare.Write))

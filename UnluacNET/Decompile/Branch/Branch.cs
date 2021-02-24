@@ -5,14 +5,8 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
-    using System.Diagnostics.CodeAnalysis;
-
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public abstract class Branch
     {
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
-        private int m_setTarget = -1;
-
         protected Branch(int line, int begin, int end)
         {
             this.Line = line;
@@ -32,11 +26,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public bool IsTest { get; set; }
 
-        public int SetTarget
-        {
-            get => this.m_setTarget;
-            set => this.m_setTarget = value;
-        }
+        public int SetTarget { get; set; } = -1;
 
         public abstract Branch Invert();
 

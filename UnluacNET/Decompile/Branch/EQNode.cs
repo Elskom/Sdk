@@ -5,16 +5,10 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
-    using System.Diagnostics.CodeAnalysis;
-
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs yet.")]
     public class EQNode : Branch
     {
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_left;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly int m_right;
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names should not be prefixed", Justification = "Don't care for now.")]
         private readonly bool m_invert;
 
         public EQNode(int left, int right, bool invert, int line, int begin, int end)
@@ -31,7 +25,6 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override int GetRegister()
             => -1;
 
-        [SuppressMessage("Major Bug", "S2583:Conditionally executed code should be reachable", Justification = "Don't care for now.")]
         public override Expression AsExpression(Registers registers)
         {
             var transpose = false;

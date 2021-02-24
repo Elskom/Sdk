@@ -6,14 +6,20 @@
 namespace Elskom.Generic.Libs
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Text.Json.Serialization;
 
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
+    /// <summary>
+    /// Json settings file Sources data.
+    /// </summary>
     public class JsonSettingsSources
     {
+        internal JsonSettingsSources()
+            => this.Source = new List<string>();
+
+        /// <summary>
+        /// Gets the list of sources.
+        /// </summary>
         [JsonPropertyName("Source")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "No docs needed.")]
-        public List<string> Source { get; private set; } = new List<string>();
+        public List<string> Source { get; private set; }
     }
 }
