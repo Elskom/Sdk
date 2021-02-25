@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+
+  <PropertyGroup>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>preview</AnalysisLevel>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Only add these analyzers when installed as an Sdk package from nuget. -->
+    <PackageReference Include="SecurityCodeScan.VS2019" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="IDisposableAnalyzers" IsImplicitlyDefined="true" Version="*-*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- We need to reference System.Net.Http on .NET Framework targets. -->
+    <Reference Include="System.Net.Http" Condition="$(TargetFramework.StartsWith('net4'))" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BlowFish" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="MessageManager" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseWindowsForms)' == 'true'" />
+    <PackageReference Include="UnluacNET" IsImplicitlyDefined="true" Version="*-*" />
+    <!-- needs .NET Framework 4.5+. -->
+    <PackageReference Include="GenericPluginLoader" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="ReleasePackaging" IsImplicitlyDefined="true" Version="*-*" />
+    <!-- needs .NET Framework 4.6.1+. -->
+    <PackageReference Include="PluginUpdateCheck" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="Elskom.PluginFramework" IsImplicitlyDefined="true" Version="*-*" />
+    <!-- needs .NET Framework 4.7.1+. -->
+    <PackageReference Include="MiniDump" IsImplicitlyDefined="true" Version="*-*" />
+  </ItemGroup>
+</Project>

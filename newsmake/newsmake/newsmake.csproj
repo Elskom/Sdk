@@ -81,7 +81,7 @@
   </ItemGroup>
 
   <Import Project="../../CommonPackages.props" />
-  <Import Project="../../Elskom.Sdk/build/Elskom.Sdk.targets" />
+  <Import Project="../../Sdk/GitBuildInfo.Task.targets" />
 
   <ItemGroup>
     <ProjectReference Include="../../MiniDump/MiniDump.csproj" />
