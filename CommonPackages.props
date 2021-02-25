@@ -2,51 +2,34 @@
 
   <ItemGroup>
     <!-- Common Analyzers -->
-    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+    <PackageReference Include="SecurityCodeScan.VS2019" Version="*-*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SecurityCodeScan.VS2019" Version="5.0.0">
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="*-*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.19.0.28253">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.321">
+    <PackageReference Include="StyleCop.Analyzers" Version="*-*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="IDisposableAnalyzers" Version="3.4.13">
+    <PackageReference Include="IDisposableAnalyzers" Version="*-*">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <!-- SourceLink -->
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-21151-01">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="*-*">
       <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <!-- .NET Framework Reference Assemblies. -->
-    <PackageReference Condition="$(TargetFramework.StartsWith('net4'))" Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <!-- Common .NET Dependency packages. -->
     <!-- for the command line. -->
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21109.1" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
-    <PackageReference Include="System.Text.Json" Version="6.0.0-preview.3.21151.4" Condition="'$(UseJsonPackage)' != '' AND '$(UseJsonPackage)' == 'true'" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.3.21151.4" Condition="'$(UseDependencyInjection)' != '' AND '$(UseDependencyInjection)' == 'true'" />
+    <PackageReference Include="System.CommandLine" Version="*-*" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
+    <PackageReference Include="System.Text.Json" Version="*-*" Condition="'$(UseJsonPackage)' != '' AND '$(UseJsonPackage)' == 'true'" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="*-*" Condition="'$(UseDependencyInjection)' != '' AND '$(UseDependencyInjection)' == 'true'" />
     <!-- .NET Framework references. -->
-    <Reference Include="System.Data.DataSetExtensions" Condition="$(TargetFramework.StartsWith('net4'))" />
     <Reference Include="System.IO.Compression" Condition="$(TargetFramework.StartsWith('net4')) AND '$(TargetFramework)' != 'net40'" />
-    <Reference Include="System.IO.Compression.FileSystem" Condition="$(TargetFramework.StartsWith('net4')) AND '$(TargetFramework)' != 'net40'" />
     <Reference Include="System.Net.Http" Condition="$(TargetFramework.StartsWith('net4')) AND '$(TargetFramework)' != 'net40'" />
-    <Reference Include="System.Windows.Forms" Condition="$(TargetFramework.StartsWith('net4')) AND '$(UseUIFramework)' != '' AND '$(UseUIFramework)' == 'true'" />
-    <Reference Include="System.Xml" Condition="$(TargetFramework.StartsWith('net4'))" />
-    <Reference Include="System.Xml.Linq" Condition="$(TargetFramework.StartsWith('net4'))" />
-    <Reference Include="Microsoft.CSharp" Condition="$(TargetFramework.StartsWith('net4'))" />
-    <!-- Optionally add the UI .NET SDK for Windows Desktop. -->
-    <FrameworkReference Include="Microsoft.WindowsDesktop.App" Condition="!$(TargetFramework.StartsWith('net4')) AND !$(TargetFramework.StartsWith('netstandard')) AND !$(TargetFramework.StartsWith('netcoreapp2')) AND '$(UseUIFramework)' != '' AND '$(UseUIFramework)' == 'true'" />
   </ItemGroup>
 
 </Project>
