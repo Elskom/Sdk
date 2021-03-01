@@ -112,23 +112,15 @@ namespace Newsmake
                                 var env_close = line.IndexOf(")", StringComparison.Ordinal);
                                 if (env_open != env_close)
                                 {
-                                    env_open += 2;
-                                    var envvar = line.Substring(env_open, env_close - env_open);
-                                    var envvalue = Environment.GetEnvironmentVariable(envvar);
+                                    var envvar = line[(env_open + 2)..env_close];
 
                                     // a hack to resolve the current working directory manually...
-                                    if (envvar.Equals("CD", StringComparison.Ordinal) || envvar.Equals("cd", StringComparison.Ordinal))
+                                    var envvalue = envvar.Equals("CD", StringComparison.OrdinalIgnoreCase)
+                                        ? $"{Directory.GetCurrentDirectory().Replace("\\", "/", StringComparison.Ordinal)}/"
+                                        : Environment.GetEnvironmentVariable(envvar);
+                                    if (envvalue != null)
                                     {
-                                        envvalue = Directory.GetCurrentDirectory();
-                                        envvalue += "/";
-                                        envvalue = envvalue.Replace("\\", "/", StringComparison.Ordinal);
-                                        env_open -= 2;
-                                        line = line.Replace(line.Substring(env_open, env_close + 1 - env_open), envvalue, StringComparison.Ordinal);
-                                    }
-                                    else if (envvalue != null)
-                                    {
-                                        env_open -= 2;
-                                        line = line.Replace(line.Substring(env_open, env_close + 1 - env_open), envvalue, StringComparison.Ordinal);
+                                        line = line.Replace(line[env_open..(env_close + 1)], envvalue, StringComparison.Ordinal);
                                     }
                                     else
                                     {

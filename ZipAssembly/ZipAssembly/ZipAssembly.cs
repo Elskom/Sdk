@@ -51,9 +51,6 @@ namespace Elskom.Generic.Libs
         /// <exception cref="ZipAssemblyLoadException">
         /// When the assembly name specified was not found in the input zip file.
         /// </exception>
-        /// <exception cref="ZipSymbolsLoadException">
-        /// When the pdb file to the specified assembly (when loading pdb file is enabled) was not found in the input zip file.
-        /// </exception>
         /// <exception cref="Exception">
         /// Any other exception not documented here indirectly thrown by this
         /// If any other exceptions other than the ones above is thrown from a call to this, it exposes a bug.
@@ -74,9 +71,6 @@ namespace Elskom.Generic.Libs
         /// </exception>
         /// <exception cref="ZipAssemblyLoadException">
         /// When the assembly name specified was not found in the input zip file.
-        /// </exception>
-        /// <exception cref="ZipSymbolsLoadException">
-        /// When the pdb file to the specified assembly (when loading pdb file is enabled) was not found in the input zip file.
         /// </exception>
         /// <exception cref="Exception">
         /// Any other exception not documented here indirectly thrown by this
@@ -130,22 +124,15 @@ namespace Elskom.Generic.Libs
                     "Assembly specified to load in ZipFile not found.");
             }
 
-            // should only be evaluated if pdb-file is asked for
-            if (Debugger.IsAttached && !pdbfound)
-            {
-                throw new ZipSymbolsLoadException(
-                    "pdb to Assembly specified to load in ZipFile not found.");
-            }
-
-            // always load pdb when debugging.
+            // always load pdb when debugging (automatically loaded when embedded however).
             // PDB should be automatically downloaded to zip file always
-            // and really *should* always be present.
+            // and really *should* always be present unless embedded inside of the dll file.
             try
             {
 #if NET5_0_OR_GREATER
                 using var ms1 = new MemoryStream(asmbytes);
                 using var ms2 = new MemoryStream(pdbbytes);
-                var zipassembly = Debugger.IsAttached ?
+                var zipassembly = Debugger.IsAttached && pdbfound ?
                     (ZipAssembly)context.LoadFromStream(ms1, ms2) :
                     (ZipAssembly)context.LoadFromStream(ms1);
 #else
