@@ -34,7 +34,7 @@
     <!-- Common .NET Dependency packages. -->
     <!-- for the command line. -->
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21109.1" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
-    <PackageReference Include="System.Text.Json" Version="6.0.0-preview.3.21125.3" Condition="'$(UseJsonPackage)' != '' AND '$(UseJsonPackage)' == 'true'" />
+    <PackageReference Include="System.Text.Json" Version="6.0.0-preview.3.21128.3" Condition="'$(UseJsonPackage)' != '' AND '$(UseJsonPackage)' == 'true'" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0-preview.3.21125.3" Condition="'$(UseDependencyInjection)' != '' AND '$(UseDependencyInjection)' == 'true'" />
     <!-- .NET Framework references. -->
     <Reference Include="System.Data.DataSetExtensions" Condition="$(TargetFramework.StartsWith('net4'))" />
