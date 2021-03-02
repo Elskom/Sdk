@@ -18,7 +18,6 @@
     <Description>A c# library that Registers git repository information on the assembly.</Description>
     <PackageReleaseNotes>Initial Release.</PackageReleaseNotes>
     <Version>1.0.0</Version>
-    <Version Condition="'$(GITHUB_ACTIONS)' == 'true' AND !$(GITHUB_REF.StartsWith('refs/tags/'))">$(Version)-preview-$(GITHUB_RUN_ID)</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <PublishDocumentationFile>true</PublishDocumentationFile>
