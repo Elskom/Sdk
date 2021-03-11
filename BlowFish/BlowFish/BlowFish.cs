@@ -186,7 +186,7 @@ namespace Elskom.Generic.Libs
             }
 
             this.IV = HexToByte(ct.Substring(0, 16));
-#if NETCOREAPP || NETSTANDARD2_1 || NET5_0
+#if !NETFRAMEWORK
             return Encoding.ASCII.GetString(this.DecryptCBC(HexToByte(ct.Substring(16)))).Replace("\0", string.Empty, StringComparison.Ordinal);
 #else
             return Encoding.ASCII.GetString(this.DecryptCBC(HexToByte(ct.Substring(16)))).Replace("\0", string.Empty);
@@ -230,7 +230,7 @@ namespace Elskom.Generic.Libs
                 throw new ArgumentNullException(nameof(ct));
             }
 
-#if NETCOREAPP || NETSTANDARD2_1 || NET5_0
+#if !NETFRAMEWORK
             return Encoding.ASCII.GetString(this.Decrypt_ECB(HexToByte(ct))).Replace("\0", string.Empty, StringComparison.Ordinal);
 #else
             return Encoding.ASCII.GetString(this.Decrypt_ECB(HexToByte(ct))).Replace("\0", string.Empty);

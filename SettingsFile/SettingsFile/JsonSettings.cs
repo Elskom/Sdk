@@ -5,6 +5,7 @@
 
 namespace Elskom.Generic.Libs
 {
+    using System;
     using System.IO;
     using System.Text.Json;
     using System.Text.Json.Serialization;
@@ -20,7 +21,7 @@ namespace Elskom.Generic.Libs
         public JsonSettings()
         {
             this.ElsDir = string.Empty;
-            this.Sources = new JsonSettingsSources();
+            this.Sources = Array.Empty<string>();
 
             // default these to -1 to loop them back to their default value in Els_kom.
             this.WindowIcon = -1;
@@ -74,7 +75,7 @@ namespace Elskom.Generic.Libs
         /// Gets the sources to use to install plugins from.
         /// </summary>
         [JsonPropertyName("Sources")]
-        public JsonSettingsSources Sources { get; private set; }
+        public string[] Sources { get; private set; }
 
         /// <summary>
         /// Deserializes the input json data to the target type for the settings file.

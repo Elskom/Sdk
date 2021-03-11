@@ -1,5 +1,10 @@
 <Project>
 
+  <PropertyGroup>
+    <!-- suppress message when using the .NET Preview SDKs. -->
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+  </PropertyGroup>
+
   <ItemGroup>
     <!-- Common Analyzers -->
     <PackageReference Include="SecurityCodeScan.VS2019" Version="*-*">
@@ -27,6 +32,7 @@
     <PackageReference Include="System.CommandLine" Version="*-*" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
     <PackageReference Include="System.Text.Json" Version="*-*" Condition="'$(UseJsonPackage)' != '' AND '$(UseJsonPackage)' == 'true'" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="*-*" Condition="'$(UseDependencyInjection)' != '' AND '$(UseDependencyInjection)' == 'true'" />
+    <PackageReference Include="System.ValueTuple" Version="*-*" Condition="$(TargetFramework.StartsWith('net4')) AND '$(UseValueTuple)' == 'true'" />
     <!-- .NET Framework references. -->
     <Reference Include="System.IO.Compression" Condition="$(TargetFramework.StartsWith('net4')) AND '$(TargetFramework)' != 'net40'" />
     <Reference Include="System.Net.Http" Condition="$(TargetFramework.StartsWith('net4')) AND '$(TargetFramework)' != 'net40'" />

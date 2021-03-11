@@ -17,7 +17,7 @@ namespace Elskom.Generic.Libs
         /// </summary>
         /// <param name="text">The text for the message.</param>
         /// <param name="caption">The title (caption) for the message.</param>
-        /// <param name="errorlevel">The error level for the message, or None for no error level information.</param>
+        /// <param name="errorlevel">The error level for the message, or <see cref="ErrorLevel.None"/> for no error level information.</param>
         public MessageEventArgs(string text, string caption, ErrorLevel errorlevel)
         {
             this.Text = text;

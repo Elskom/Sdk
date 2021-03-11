@@ -35,7 +35,11 @@ namespace Elskom.Generic.Libs
                 // cannot be used as it does not exist. I need to figure out mini-dumping for
                 // these platforms manually. In that case I guess it does not matter much anyway
                 // with the world of debugging and running in a IDE.
+#if NET5_0_OR_GREATER
+                if (OperatingSystem.IsWindows())
+#else
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+#endif
                 {
                     if (string.IsNullOrEmpty(MiniDumpAttribute.CurrentInstance.DumpLogFileName))
                     {
@@ -56,31 +60,29 @@ namespace Elskom.Generic.Libs
 
         private static void MiniDumpToFile(string fileToDump, MinidumpTypes dumpType)
         {
-            using (var fsToDump = File.Open(fileToDump, FileMode.Create, FileAccess.ReadWrite, FileShare.Write))
-            using (var thisProcess = Process.GetCurrentProcess())
+            using var fsToDump = File.Open(fileToDump, FileMode.Create, FileAccess.ReadWrite, FileShare.Write);
+            using var thisProcess = Process.GetCurrentProcess();
+            var mINIDUMP_EXCEPTION_INFORMATION = new MINIDUMP_EXCEPTION_INFORMATION
             {
-                var mINIDUMP_EXCEPTION_INFORMATION = new MINIDUMP_EXCEPTION_INFORMATION
-                {
-                    ClientPointers = false,
+                ClientPointers = false,
 #if WITH_EXCEPTIONPOINTERS
-                    ExceptionPointers = Marshal.GetExceptionPointers(),
+                ExceptionPointers = Marshal.GetExceptionPointers(),
 #else
-                    ExceptionPointers = IntPtr.Zero,
+                ExceptionPointers = IntPtr.Zero,
 #endif
-                    ThreadId = SafeNativeMethods.GetCurrentThreadId(),
-                };
-                var error = SafeNativeMethods.MiniDumpWriteDump(
-                    thisProcess.Handle,
-                    thisProcess.Id,
-                    fsToDump.SafeFileHandle,
-                    dumpType,
-                    ref mINIDUMP_EXCEPTION_INFORMATION,
-                    IntPtr.Zero,
-                    IntPtr.Zero);
-                if (error > 0)
-                {
-                    DumpMessage?.Invoke(typeof(MiniDump), new MessageEventArgs($"Mini-dumping failed with Code: {error}", "Error!", ErrorLevel.Error));
-                }
+                ThreadId = SafeNativeMethods.GetCurrentThreadId(),
+            };
+            var error = SafeNativeMethods.MiniDumpWriteDump(
+                thisProcess.Handle,
+                thisProcess.Id,
+                fsToDump.SafeFileHandle,
+                dumpType,
+                ref mINIDUMP_EXCEPTION_INFORMATION,
+                IntPtr.Zero,
+                IntPtr.Zero);
+            if (error > 0)
+            {
+                DumpMessage?.Invoke(typeof(MiniDump), new MessageEventArgs($"Mini-dumping failed with Code: {error}", "Error!", ErrorLevel.Error));
             }
         }
 

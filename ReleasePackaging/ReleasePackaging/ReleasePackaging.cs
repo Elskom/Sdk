@@ -44,7 +44,7 @@ namespace Elskom.Generic.Libs
             {
                 // Replace spaces with periods.
                 outfilename = ReplaceStr(args[1], " ", ".", StringComparison.OrdinalIgnoreCase);
-                args[1] = $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{outfilename}";
+                args[1] = $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{ReplaceStr(outfilename, ".", string.Empty, StringComparison.OrdinalIgnoreCase)}";
             }
 
             if (args[0].Equals("-p", StringComparison.Ordinal))
@@ -101,7 +101,7 @@ namespace Elskom.Generic.Libs
         }
 
         private static string ReplaceStr(string str1, string str2, string str3, StringComparison comp)
-#if NETSTANDARD2_1 || NETCOREAPP || NET5_0
+#if !NETFRAMEWORK
             => str1.Replace(str2, str3, comp);
 #else
         {

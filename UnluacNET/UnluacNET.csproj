@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="PublishRefAssemblies.Sdk/1.0.3">
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFrameworks>net40;net5.0;netcoreapp2.0;netcoreapp3.0;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net40;net5.0;netcoreapp2.0;netcoreapp3.0</TargetFrameworks>
     <AssemblyTitle>Unluac.NET</AssemblyTitle>
     <LangVersion>latest</LangVersion>
     <Product>Unluac.NET</Product>
@@ -10,7 +10,6 @@
     <Description>Lua 5.1 decompiler based on 'unluac' by tehtmi.</Description>
     <Copyright>Original UnluacNET Copyright © 2014 Mark Ludwig, tehtmi, Copyright © 2020-2021</Copyright>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>bin\$(Configuration)\UnluacNET.xml</DocumentationFile>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
@@ -20,8 +19,6 @@
     <PackageTags>Unluac</PackageTags>
     <Authors>Els_kom org.</Authors>
     <PackageProjectUrl>https://github.com/Elskom/Sdk/</PackageProjectUrl>
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NeutralLanguage>en-US</NeutralLanguage>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -39,17 +36,15 @@
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
     <NoWarn>1591, 0659</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
 

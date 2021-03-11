@@ -1,10 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="PublishRefAssemblies.Sdk/1.0.3">
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <TargetFrameworks>net40;netcoreapp3.0;netcoreapp3.1;net5.0-windows</TargetFrameworks>
     <AssemblyName>MessageManager</AssemblyName>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
     <Company>Els_kom org.</Company>
     <Authors>Els_kom org.</Authors>
@@ -18,8 +17,6 @@
     <PackageReleaseNotes>Reduced supported TargetFrameworks and changed a few methods from static to non-static.</PackageReleaseNotes>
     <Version>2.0.0</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <PublishDocumentationFile>true</PublishDocumentationFile>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);NU5104;NU5118</NoWarn>
     <SignAssembly>true</SignAssembly>
@@ -42,21 +39,13 @@
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <UseWindowsForms>true</UseWindowsForms>
+    <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
-    <OutputPath>bin\Any CPU\Debug\</OutputPath>
-    <DocumentationFile>bin\Any CPU\Debug\MessageManager.xml</DocumentationFile>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>bin\Any CPU\Release\</OutputPath>
-    <DocumentationFile>bin\Any CPU\Release\MessageManager.xml</DocumentationFile>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

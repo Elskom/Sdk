@@ -72,19 +72,10 @@ namespace Elskom.Generic.Libs
             }
 
             Executing = true;
-            var ret = string.Empty;
             _ = proc.Start();
             Executing = false;
-            if (proc.StartInfo.RedirectStandardError)
-            {
-                ret = proc.StandardError.ReadToEnd();
-            }
-
-            if (proc.StartInfo.RedirectStandardOutput)
-            {
-                ret = proc.StandardOutput.ReadToEnd();
-            }
-
+            var ret = proc.StartInfo.RedirectStandardError ? proc.StandardError.ReadToEnd() : string.Empty;
+            ret += proc.StartInfo.RedirectStandardOutput ? proc.StandardOutput.ReadToEnd() : string.Empty;
             if (WaitForProcessExit)
             {
                 proc.WaitForExit();

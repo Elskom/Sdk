@@ -7,8 +7,4 @@
     <GenerateResourceUsePreserializedResources Condition="$(TargetFramework.StartsWith('net4')) AND ('$(UseWindowsForms)' == 'true' OR '$(UseWPF)' == 'true')">true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Resources.Extensions" IsImplicitlyDefined="true" Version="*-*" Condition="$(TargetFramework.StartsWith('net4')) AND ('$(UseWindowsForms)' == 'true' OR '$(UseWPF)' == 'true')" />
-  </ItemGroup>
-
 </Project>
