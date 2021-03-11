@@ -1,10 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="PublishRefAssemblies.Sdk/1.0.3">
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <TargetFrameworks>net5.0;net45</TargetFrameworks>
     <AssemblyName>GenericPluginLoader</AssemblyName>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
     <Company>Els_kom org.</Company>
     <Authors>Els_kom org.</Authors>
@@ -18,8 +17,6 @@
     <PackageReleaseNotes>Removed ability to force load pdbs as it was not needed. Also loads each plugin into a separate AppDomain on .NET Framework builds, while using AssemblyLoadContexts for .NET 5 or newer builds.</PackageReleaseNotes>
     <Version>2.0.0</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <PublishDocumentationFile>true</PublishDocumentationFile>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);NU5104;NU5118</NoWarn>
     <SignAssembly>true</SignAssembly>
@@ -41,21 +38,13 @@
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <OutputPath>bin\Any CPU\Debug\</OutputPath>
-    <DocumentationFile>bin\Any CPU\Debug\GenericPluginLoader.xml</DocumentationFile>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>bin\Any CPU\Release\</OutputPath>
-    <DocumentationFile>bin\Any CPU\Release\GenericPluginLoader.xml</DocumentationFile>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

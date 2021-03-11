@@ -188,7 +188,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                         var pipe = 0;
                         var pipeString = new StringBuilder();
                         pipeString.Append("]]");
-#if !NETFRAMEWORK && !NETCOREAPP2_0 && !NETSTANDARD2_0
+#if !NETFRAMEWORK && !NETCOREAPP2_0
                         while (this.m_string.Contains(pipeString.ToString(), StringComparison.InvariantCulture))
 #else
                         while (this.m_string.Contains(pipeString.ToString()))

@@ -1,10 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="PublishRefAssemblies.Sdk/1.0.3">
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.0;net5.0;net461</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;net5.0;net461</TargetFrameworks>
     <AssemblyName>SettingsFile</AssemblyName>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
     <Company>Els_kom org.</Company>
     <Authors>Els_kom org.</Authors>
@@ -17,9 +16,7 @@
     <Description>A c# class that handles the settings for any application.</Description>
     <PackageReleaseNotes>Changed settings file property and data from xml to json.</PackageReleaseNotes>
     <Version>2.0.0</Version>
-    <PublishDocumentationFile>true</PublishDocumentationFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);NU5104;NU5118</NoWarn>
     <SignAssembly>true</SignAssembly>
@@ -43,21 +40,13 @@
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <UseJsonPackage>true</UseJsonPackage>
+    <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
-    <OutputPath>bin\Any CPU\Debug\</OutputPath>
-    <DocumentationFile>bin\Any CPU\Debug\SettingsFile.xml</DocumentationFile>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>bin\Any CPU\Release\</OutputPath>
-    <DocumentationFile>bin\Any CPU\Release\SettingsFile.xml</DocumentationFile>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

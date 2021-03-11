@@ -123,41 +123,71 @@ namespace Elskom.Generic.Libs
                         catch (BadImageFormatException)
                         {
                             // ignore the error and load the other files.
+#if NET5_0_OR_GREATER
+                            context.Unload();
+#else
+                            AppDomain.Unload(domain);
+#endif
                         }
                         catch (FileLoadException)
                         {
 #if NET5_0_OR_GREATER
                             var assembly = context.LoadFromAssemblyPath(dllFile);
                             contexts.Add(context);
-#elif NET45
-                            var assembly = domain.Load(File.ReadAllBytes(dllFile));
-#else
-                            var assembly = Assembly.LoadFrom(dllFile);
-#endif
                             assemblies.Add(assembly);
+#elif NET45
+                            try
+                            {
+                                var assembly = domain.Load(AssemblyName.GetAssemblyName(dllFile));
+                                domains.Add(domain);
+                                assemblies.Add(assembly);
+                            }
+                            catch (Exception)
+                            {
+                                // ignore the error and load the other files.
+                                AppDomain.Unload(domain);
+                            }
+#elif !NET45
+                            var assembly = Assembly.LoadFrom(dllFile);
+                            domains.Add(domain);
+                            assemblies.Add(assembly);
+#endif
                         }
                         catch (FileNotFoundException)
                         {
                             // ignore the error and load other files.
+#if NET5_0_OR_GREATER
+                            context.Unload();
+#else
+                            AppDomain.Unload(domain);
+#endif
                         }
                     }
                 }
 
                 if (saveToZip && File.Exists(zippath))
                 {
-                    using var zipFile = ZipFile.OpenRead(zippath);
-                    foreach (var entry in zipFile.Entries)
+                    var filesInZip = new Dictionary<string, int>();
+                    using (var zipFile = ZipFile.OpenRead(zippath))
+                    {
+                        foreach (var entry in zipFile.Entries)
+                        {
+                            filesInZip.Add(entry.FullName, zipFile.Entries.IndexOf(entry));
+                        }
+                    }
+
+                    foreach (var entry in filesInZip.Keys)
                     {
                         // just lookup the dlls here. The LoadFromZip method will load the pdb’s if they are deemed needed.
-                        if (entry.FullName.EndsWith(".dll", StringComparison.Ordinal))
+                        if (entry.EndsWith(".dll", StringComparison.Ordinal))
                         {
 #if NET5_0_OR_GREATER
-                            var context = new PluginLoadContext($"ZipPlugin#{zipFile.Entries.IndexOf(entry)}", path);
-                            var assembly = ZipAssembly.LoadFromZip(zippath, entry.FullName, context);
+                            var context = new PluginLoadContext($"ZipPlugin#{filesInZip[entry]}", path);
+                            var assembly = ZipAssembly.LoadFromZip(zippath, entry, context);
                             contexts.Add(context);
 #else
-                            var domain = AppDomain.CreateDomain($"ZipPlugin#{zipFile.Entries.IndexOf(entry)}");
-                            var assembly = ZipAssembly.LoadFromZip(zippath, entry.FullName, domain);
+                            var domain = AppDomain.CreateDomain($"ZipPlugin#{filesInZip[entry]}");
+                            var assembly = ZipAssembly.LoadFromZip(zippath, entry, domain);
                             domains.Add(domain);
 #endif
                             if (assembly != null)

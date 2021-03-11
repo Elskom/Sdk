@@ -96,7 +96,7 @@ namespace Elskom.Generic.Libs
             // fixup the github urls (if needed).
             for (var i = 0; i < pluginURLs.Length; i++)
             {
-#if NETSTANDARD2_1 || NETCOREAPP || NET5_0
+#if !NETFRAMEWORK
                 pluginURLs[i] = pluginURLs[i].Replace(
                     "https://github.com/",
                     "https://raw.githubusercontent.com/",
