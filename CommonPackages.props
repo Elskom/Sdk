@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <!-- Common Analyzers -->
-    <PackageReference Include="SecurityCodeScan.VS2019" Version="*-*">
+    <PackageReference Include="SecurityCodeScan.VS2019" Version="-*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
