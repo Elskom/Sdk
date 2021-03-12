@@ -29,7 +29,7 @@
     </PackageReference>
     <!-- Common .NET Dependency packages. -->
     <!-- for the command line. -->
-    <PackageReference Include="System.CommandLine" Version="*-*" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
+    <PackageReference Include="System.CommandLine" Version="-*" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
     <PackageReference Include="System.Text.Json" Version="*-*" Condition="'$(UseJsonPackage)' != '' AND '$(UseJsonPackage)' == 'true'" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="*-*" Condition="'$(UseDependencyInjection)' != '' AND '$(UseDependencyInjection)' == 'true'" />
     <PackageReference Include="System.ValueTuple" Version="*-*" Condition="$(TargetFramework.StartsWith('net4')) AND '$(UseValueTuple)' == 'true'" />
