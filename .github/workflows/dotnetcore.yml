@@ -37,7 +37,7 @@ jobs:
         dotnet pack --configuration Release --no-build
       shell: bash
 
-    - uses: hmarr/auto-approve-action@v2.0.0
+    - uses: hmarr/auto-approve-action@v2.1.0
       if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]' || github.actor == 'AraHaan' || github.actor == 'CatGirlsAreLife' || github.actor == 'Raitou' || github.actor == 'JunichiSama' || github.actor == 'xioke' || github.actor == 'Elskom-gitsync'
       with:
         # I think this must stay the same.
