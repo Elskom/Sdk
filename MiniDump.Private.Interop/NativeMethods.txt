@@ -1,0 +1,4 @@
+MiniDumpWriteDump
+GetCurrentProcess
+GetCurrentProcessId
+GetCurrentThreadId

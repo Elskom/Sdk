@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../SettingsFile/SettingsFile.csproj" />
+    <ProjectReference Include="../MiniDump.Private.Interop/MiniDump.Private.Interop.csproj" />
   </ItemGroup>
 
   <Import Project="../Directory.Packages.props" />

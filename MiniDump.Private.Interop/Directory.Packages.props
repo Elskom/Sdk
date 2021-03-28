@@ -1,0 +1,12 @@
+<Project>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWin32" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <ProjectReference Include="../Common/Elskom.Common.csproj" />
+  </ItemGroup>
+
+  <Import Project="../Directory.Packages.props" />
+
+</Project>

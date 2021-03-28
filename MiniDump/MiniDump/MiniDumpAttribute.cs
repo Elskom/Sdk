@@ -62,7 +62,7 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Gets or sets the mini-dump type.
         /// </summary>
-        public MinidumpTypes DumpType { get; set; }
+        public MINIDUMP_TYPE DumpType { get; set; }
 
         /// <summary>
         /// Gets or sets the title of the unhandled exception messagebox.

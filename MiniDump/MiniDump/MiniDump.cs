@@ -12,6 +12,8 @@ namespace Elskom.Generic.Libs
     using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Text;
+    using Windows.Win32;
+    using Windows.Win32.System.Diagnostics.Debug;
 
     internal static class MiniDump
     {
@@ -44,7 +46,7 @@ namespace Elskom.Generic.Libs
                     }
 
                     File.WriteAllText(MiniDumpAttribute.CurrentInstance.DumpLogFileName, exceptionData);
-                    MiniDumpToFile(MiniDumpAttribute.CurrentInstance.DumpFileName, MiniDumpAttribute.CurrentInstance.DumpType);
+                    MiniDumpToFile(MiniDumpAttribute.CurrentInstance.DumpFileName, (Windows.Win32.System.Diagnostics.Debug.MINIDUMP_TYPE)MiniDumpAttribute.CurrentInstance.DumpType);
                     MessageEventArgs args = new(
                         string.Format(
                             CultureInfo.InvariantCulture,
@@ -60,7 +62,7 @@ namespace Elskom.Generic.Libs
             return 1;
         }
 
-        private static void MiniDumpToFile(string fileToDump, MinidumpTypes dumpType)
+        private static void MiniDumpToFile(string fileToDump, Windows.Win32.System.Diagnostics.Debug.MINIDUMP_TYPE dumpType)
         {
             using var fsToDump = File.Open(fileToDump, FileMode.Create, FileAccess.ReadWrite, FileShare.Write);
             var error = MiniDumpWriteDump(fsToDump.SafeFileHandle, dumpType);
@@ -74,15 +76,15 @@ namespace Elskom.Generic.Libs
             }
         }
 
-        private static unsafe int MiniDumpWriteDump(SafeHandle hFile, MinidumpTypes dumpType)
+        private static int MiniDumpWriteDump(SafeHandle hFile, Windows.Win32.System.Diagnostics.Debug.MINIDUMP_TYPE dumpType)
         {
-            var exceptionInformation = GetExceptionInformation();
-            _ = SafeNativeMethods.MiniDumpWriteDump(
-                SafeNativeMethods.GetCurrentProcess_SafeHandle(),
-                SafeNativeMethods.GetCurrentProcessId(),
+            using var safeHandle = PInvoke.GetCurrentProcess_SafeHandle();
+            _ = PInvoke.MiniDumpWriteDump(
+                safeHandle,
+                PInvoke.GetCurrentProcessId(),
                 hFile,
                 dumpType,
-                &exceptionInformation,
+                GetExceptionInformation(),
                 default,
                 default);
             return Marshal.GetLastWin32Error();
@@ -93,10 +95,10 @@ namespace Elskom.Generic.Libs
             {
                 ClientPointers = false,
                 ExceptionPointers = GetExceptionPointers(),
-                ThreadId = SafeNativeMethods.GetCurrentThreadId(),
+                ThreadId = PInvoke.GetCurrentThreadId(),
             };
 
-        private static IntPtr GetExceptionPointers()
+        private static nint GetExceptionPointers()
         {
             // because we target .NET Standard 2.0 we need to probe for
             // Marshal.GetExceptionPointers using reflection then call
@@ -107,7 +109,7 @@ namespace Elskom.Generic.Libs
                 null,
                 Type.EmptyTypes,
                 null);
-            return (IntPtr?)method?.Invoke(null, null) ?? IntPtr.Zero;
+            return (nint?)method?.Invoke(null, null) ?? IntPtr.Zero;
         }
 
         private static string PrintExceptions(Exception exception)
