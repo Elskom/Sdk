@@ -35,7 +35,7 @@ All of the project files to help with building plugins for Els_kom as well as fo
 [![GitHub pulls-merged](https://img.shields.io/github/issues-search/Elskom/Sdk?label=merged%20pull%20requests&query=is%3Apr%20is%3Aclosed%20is%3Amerged&color=darkviolet)](https://github.com/Elskom/Sdk/pulls?q=is%3Apr+is%3Aclosed+is%3Amerged)
 [![GitHub pulls-unmerged](https://img.shields.io/github/issues-search/Elskom/Sdk?label=unmerged%20pull%20requests&query=is%3Apr%20is%3Aclosed%20is%3Aunmerged&color=red)](https://github.com/Elskom/Sdk/pulls?q=is%3Apr+is%3Aclosed+is%3Aunmerged)
 [![GitHub contributors](https://img.shields.io/github/contributors/Elskom/Sdk.svg)](https://GitHub.com/Elskom/Sdk/graphs/contributors/)
-[![Commit Activity](https://img.shields.io/github/commit-activity/m/badges/shields)]()
+![Commit activity](https://img.shields.io/github/commit-activity/y/Elskom/Sdk)
 
 Note: all of my other nuget packages are combined into the Elskom.Sdk package all other packages except the ones from this repository are deprecated.
 
