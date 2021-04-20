@@ -10,6 +10,7 @@ namespace Elskom.Generic.Libs
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
+    using System.Reflection;
 
     /// <summary>
     /// Handles application's release packaging command line.
@@ -22,7 +23,7 @@ namespace Elskom.Generic.Libs
         /// <param name="args">The command line arguments passed into the calling process.</param>
         public static void PackageRelease(string[] args)
         {
-            if (args == null)
+            if (args is null)
             {
                 throw new ArgumentNullException(nameof(args));
             }
@@ -56,15 +57,21 @@ namespace Elskom.Generic.Libs
                 }
 
                 using var zipFile = ZipFile.Open(args[1], ZipArchiveMode.Update);
-                var di1 = new DirectoryInfo(Directory.GetCurrentDirectory());
-                foreach (var fi1 in GetAllFilesWithExtensions(di1, new string[] { "*.exe", "*.dll", "*.xml", "*.txt", "*.pdb" }, new string[] { ".CodeAnalysisLog.xml" }))
+                DirectoryInfo di1 = new(Directory.GetCurrentDirectory());
+                var extensions = new[] { "*.exe", "*.dll", "*.xml", "*.txt", "*.pdb" };
+                Span<char> excludeFile = stackalloc char[]
+                {
+                    '.', 'C', 'o', 'd', 'e', 'A', 'n', 'a', 'l', 'y', 's', 'i', 's',
+                    'L', 'o', 'g', '.', 'x', 'm', 'l',
+                };
+                foreach (var fi1 in GetAllFilesWithExtensions(di1, extensions, excludeFile))
                 {
                     _ = zipFile.CreateEntryFromFile(fi1.Name, fi1.Name);
                 }
 
                 foreach (var di2 in di1.GetDirectories())
                 {
-                    foreach (var fi2 in GetAllFilesWithExtensions(di2, new string[] { "*.pdb", "*.dll", "*.xml", "*.txt" }, new string[] { ".CodeAnalysisLog.xml" }))
+                    foreach (var fi2 in GetAllFilesWithExtensions(di2, extensions.AsSpan().Slice(1).ToArray(), excludeFile))
                     {
                         _ = zipFile.CreateEntryFromFile($"{di2.Name}{Path.DirectorySeparatorChar}{fi2.Name}", $"{di2.Name}{Path.DirectorySeparatorChar}{fi2.Name}");
                     }
@@ -72,24 +79,16 @@ namespace Elskom.Generic.Libs
             }
         }
 
-        private static FileInfo[] GetAllFilesWithExtensions(DirectoryInfo dinfo, string[] extensions, string[] excludeFiles)
+        private static FileInfo[] GetAllFilesWithExtensions(DirectoryInfo dinfo, string[] extensions, ReadOnlySpan<char> excludeFile)
         {
-            var fileInfos = new List<FileInfo>();
+            List<FileInfo> fileInfos = new();
             foreach (var extension in extensions)
             {
                 var files = dinfo.GetFiles(extension).ToList();
                 foreach (var file in files)
                 {
                     // filter out excluded files.
-                    var excluded = false;
-                    foreach (var excludeFile in excludeFiles)
-                    {
-                        if (file.Name.EndsWith(excludeFile, StringComparison.OrdinalIgnoreCase))
-                        {
-                            excluded = true;
-                        }
-                    }
-
+                    var excluded = file.Name.EndsWith(excludeFile.ToString(), StringComparison.OrdinalIgnoreCase);
                     if (!excluded)
                     {
                         fileInfos.Add(file);
@@ -101,17 +100,15 @@ namespace Elskom.Generic.Libs
         }
 
         private static string ReplaceStr(string str1, string str2, string str3, StringComparison comp)
-#if !NETFRAMEWORK
-            => str1.Replace(str2, str3, comp);
-#else
         {
-            if (comp == StringComparison.OrdinalIgnoreCase)
-            {
-                // to suppress warnings with unused parameter.
-            }
-
-            return str1.Replace(str2, str3);
+            var args = new object[] { str2, str3, comp };
+            var method = typeof(string).GetMethod(
+                "Replace",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly,
+                null,
+                Type.GetTypeArray(args),
+                null);
+            return method is not null ? (string)method.Invoke(str1, args) : str1.Replace(str2, str3);
         }
-#endif
     }
 }

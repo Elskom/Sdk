@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFrameworks>net5.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
     <AssemblyName>GenericPluginLoader</AssemblyName>
     <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <Company>Els_kom org.</Company>
     <Authors>Els_kom org.</Authors>
     <PackageTags>GenericPluginLoader</PackageTags>
@@ -14,7 +15,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Copyright (c) 2018-2021</Copyright>
     <Description>A c# generc plugin loader.</Description>
-    <PackageReleaseNotes>Removed ability to force load pdbs as it was not needed. Also loads each plugin into a separate AppDomain on .NET Framework builds, while using AssemblyLoadContexts for .NET 5 or newer builds.</PackageReleaseNotes>
+    <PackageReleaseNotes>Removed ability to force load pdbs as it was not needed. Also loads each plugin into a separate AppDomain on .NET Standard builds, while using AssemblyLoadContexts for .NET 5 or newer builds.</PackageReleaseNotes>
     <Version>2.0.0</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -22,10 +23,6 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>preview</AnalysisLevel>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -38,7 +35,6 @@
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
-    <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -55,21 +51,13 @@
     <None Remove="LICENSE" />
     <None Remove="readme.md" />
     <None Remove="stylecop.json" />
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../ZipAssembly/ZipAssembly.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-
   <Import Project="../CommonPackages.props" />
-  <Import Project="../Sdk/GitBuildInfo.Task.targets" />
-
-  <Target Name="GitBuildInfo" BeforeTargets="PrepareForBuild">
-    <GitBuildInfoTask OutputPath="$(ProjectDir)\GitAssemblyInfo.cs" AssemblyType="Elskom.Generic.Libs.GenericPluginLoader" IsGeneric="true" />
-  </Target>
 
 </Project>

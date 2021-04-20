@@ -7,6 +7,8 @@
 namespace Elskom.Generic.Libs
 {
     using System;
+    using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Runtime.Loader;
 
@@ -22,20 +24,43 @@ namespace Elskom.Generic.Libs
         /// <param name="pluginPath">The path the the plugins.</param>
         public PluginLoadContext(string name, string pluginPath)
             : base(name, true)
-            => this.resolver = new AssemblyDependencyResolver(pluginPath);
+            => this.resolver = new(pluginPath);
 
         /// <inheritdoc/>
-        protected override Assembly Load(AssemblyName assemblyName)
+        protected override Assembly? Load(AssemblyName assemblyName)
         {
+            var isLoadedToDefaultContext = new Func<string, bool>(static name =>
+            {
+                return Default.Assemblies.Any(assembly =>
+                    assembly.FullName is not null && assembly.FullName.Equals(name, StringComparison.Ordinal));
+            });
+            var getFromDefaultContext = new Func<string, Assembly?>(static name =>
+            {
+                return Default.Assemblies.FirstOrDefault(assembly => assembly.FullName is not null && assembly.FullName.Equals(name, StringComparison.Ordinal));
+            });
+            if (isLoadedToDefaultContext(assemblyName.FullName))
+            {
+                // return the assembly from the default context instead of reloading it (is same assembly and version).
+                return getFromDefaultContext(assemblyName.FullName);
+            }
+
             var assemblyPath = this.resolver.ResolveAssemblyToPath(assemblyName);
-            return assemblyPath != null ? this.LoadFromAssemblyPath(assemblyPath) : null;
+            return assemblyPath is not null
+                ? this.LoadFromAssemblyPath(assemblyPath)
+                : !File.Exists($"{AppContext.BaseDirectory}{assemblyName.Name}.dll")
+                ? null
+                : this.LoadFromAssemblyPath($"{AppContext.BaseDirectory}{assemblyName.Name}.dll");
         }
 
         /// <inheritdoc/>
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
         {
             var libraryPath = this.resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
-            return libraryPath != null ? this.LoadUnmanagedDllFromPath(libraryPath) : IntPtr.Zero;
+            return libraryPath is not null
+                ? this.LoadUnmanagedDllFromPath(libraryPath)
+                : !File.Exists($"{AppContext.BaseDirectory}{unmanagedDllName}.dll")
+                ? IntPtr.Zero
+                : this.LoadUnmanagedDllFromPath($"{AppContext.BaseDirectory}{unmanagedDllName}.dll");
         }
     }
 }

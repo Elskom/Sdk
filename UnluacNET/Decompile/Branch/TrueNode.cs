@@ -15,12 +15,12 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.SetTarget = register;
         }
 
-        public int Register { get; private set; }
+        public int Register { get; }
 
-        public bool Inverted { get; private set; }
+        public bool Inverted { get; }
 
         public override Expression AsExpression(Registers registers)
-            => new ConstantExpression(new Constant(this.Inverted ? LBoolean.LTRUE : LBoolean.LFALSE), -1);
+            => new ConstantExpression(new(this.Inverted ? LBoolean.LTRUE : LBoolean.LFALSE), -1);
 
         public override int GetRegister()
             => this.Register;

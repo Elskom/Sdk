@@ -55,21 +55,21 @@ namespace Elskom.Generic.Libs.UnluacNET
         private readonly Op[] m_map;
 
         public OpcodeMap(int version)
-            => this.m_map = version == 0x51
-            ? (new Op[38]
+            => this.m_map = version is 0x51
+            ? new[]
             {
                 Op.MOVE, Op.LOADK, Op.LOADBOOL, Op.LOADNIL, Op.GETUPVAL, Op.GETGLOBAL, Op.GETTABLE, Op.SETGLOBAL, Op.SETUPVAL,
                 Op.SETTABLE, Op.NEWTABLE, Op.SELF, Op.ADD, Op.SUB, Op.MUL, Op.DIV, Op.MOD, Op.POW, Op.UNM, Op.NOT, Op.LEN, Op.CONCAT,
                 Op.JMP, Op.EQ, Op.LT, Op.LE, Op.TEST, Op.TESTSET, Op.CALL, Op.TAILCALL, Op.RETURN, Op.FORLOOP, Op.FORPREP, Op.TFORLOOP,
                 Op.SETLIST, Op.CLOSE, Op.CLOSURE, Op.VARARG,
-            })
-            : (new Op[40]
+            }
+            : new[]
             {
                 Op.MOVE, Op.LOADK, Op.LOADKX, Op.LOADBOOL, Op.LOADNIL, Op.GETUPVAL, Op.GETTABUP, Op.GETTABLE, Op.SETTABUP, Op.SETUPVAL,
                 Op.SETTABLE, Op.NEWTABLE, Op.SELF, Op.ADD, Op.SUB, Op.MUL, Op.DIV, Op.MOD, Op.POW, Op.UNM, Op.NOT, Op.LEN, Op.CONCAT,
                 Op.JMP, Op.EQ, Op.LT, Op.LE, Op.TEST, Op.TESTSET, Op.CALL, Op.TAILCALL, Op.RETURN, Op.FORLOOP, Op.FORPREP, Op.TFORCALL,
                 Op.TFORLOOP, Op.SETLIST, Op.CLOSURE, Op.VARARG, Op.EXTRAARG,
-            });
+            };
 
         public Op this[int opcode] => this.GetOp(opcode);
 
@@ -102,6 +102,6 @@ namespace Elskom.Generic.Libs.UnluacNET
         ** bit 7: operator is a test
         */
         private static int opmode(byte t, byte a, OpArgMask b, OpArgMask c, OpMode m)
-            => (t << 7) | (a << 6) | (((byte)b) << 4) | (((byte)c) << 2) | ((byte)m);
+            => (t << 7) | (a << 6) | ((byte)b << 4) | ((byte)c << 2) | (byte)m;
     }
 }

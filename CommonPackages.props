@@ -3,39 +3,35 @@
   <PropertyGroup>
     <!-- suppress message when using the .NET Preview SDKs. -->
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+    <ElskomSdkBuild>true</ElskomSdkBuild>
+    <!--
+        Sorry, we have to disable the warning for adding the reference assemblies to the package without adding them to the nuspec.
+        This is because of the fact that if we use the methods to add them that does add them to the nuspec, then the folder paths
+        would be added automatically to the project which is not intended at all or even wanted. As such for now the only way to
+        fix that is to disable package analysis for now.
+    -->
+    <NoPackageAnalysis Condition="'$(PublishReferenceAssemblies)' == 'true'">true</NoPackageAnalysis>
   </PropertyGroup>
 
+  <!--
+      Import the Sdk.props from this project to simplify this file and the setups on all
+      the other projects (set defaults that would normally not be set).
+  -->
+  <Import Project="./Sdk/Sdk.props" />
+
   <ItemGroup>
-    <!-- Common Analyzers -->
-    <PackageReference Include="SecurityCodeScan.VS2019" Version="*-*">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="*-*">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="*-*">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="IDisposableAnalyzers" Version="*-*">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <!-- SourceLink -->
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="*-*">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" IsImplicitlyDefined="true" Version="*-*">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <!-- Common .NET Dependency packages. -->
+    <!-- For Span/ReadOnlySpan. -->
+    <PackageReference Include="System.Memory" Version="*-*" IsImplicitlyDefined="true" />
     <!-- for the command line. -->
-    <PackageReference Include="System.CommandLine" Version="*-*" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
-    <PackageReference Include="System.Text.Json" Version="*-*" Condition="'$(UseJsonPackage)' != '' AND '$(UseJsonPackage)' == 'true'" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="*-*" Condition="'$(UseDependencyInjection)' != '' AND '$(UseDependencyInjection)' == 'true'" />
-    <PackageReference Include="System.ValueTuple" Version="*-*" Condition="$(TargetFramework.StartsWith('net4')) AND '$(UseValueTuple)' == 'true'" />
-    <!-- .NET Framework references. -->
-    <Reference Include="System.IO.Compression" Condition="$(TargetFramework.StartsWith('net4')) AND '$(TargetFramework)' != 'net40'" />
-    <Reference Include="System.Net.Http" Condition="$(TargetFramework.StartsWith('net4')) AND '$(TargetFramework)' != 'net40'" />
+    <PackageReference Include="System.CommandLine" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
+    <!-- for Json file loading and reading/writing. -->
+    <PackageReference Include="System.Text.Json" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseJsonPackage)' != '' AND '$(UseJsonPackage)' == 'true'" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseDependencyInjection)' != '' AND '$(UseDependencyInjection)' == 'true'" />
   </ItemGroup>
 
 </Project>

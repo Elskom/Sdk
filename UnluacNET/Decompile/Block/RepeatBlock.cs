@@ -19,7 +19,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         {
             this.m_branch = branch;
             this.m_r = r;
-            this.m_statements = new List<Statement>(branch.Begin - branch.End + 1);
+            this.m_statements = new(branch.Begin - branch.End + 1);
         }
 
         public override bool Breakable => true;

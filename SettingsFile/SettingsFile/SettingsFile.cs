@@ -8,6 +8,7 @@ namespace Elskom.Generic.Libs
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Text;
 
     /// <summary>
     /// A class that handles the settings for any application.
@@ -27,6 +28,12 @@ namespace Elskom.Generic.Libs
         /// a single instance to save time, and memory.
         /// </value>
         public static JsonSettings SettingsJson { get; set; } = JsonSettings.OpenFile();
+
+        /// <summary>
+        /// Gets or sets the Application's name to use for Resolving the paths for the
+        /// Settings file, error logs, and minidumps.
+        /// </summary>
+        public static string ApplicationName { get; set; } = "Els_kom";
 
         /// <summary>
         /// Gets the path to the Application Settings file.
@@ -61,13 +68,15 @@ namespace Elskom.Generic.Libs
             // Create annoying folders, and throw annoying Exceptions making it harder to
             // debug as it spams the debugger. Also then we would not need to Replace
             // everything added to the path obtained from System.Environment.GetFolderPath.
-            var localPath = Environment.GetFolderPath(
-                Environment.SpecialFolder.LocalApplicationData);
+            StringBuilder localPath = new();
+            _ = localPath.Append(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.LocalApplicationData));
             using var thisProcess = Process.GetCurrentProcess();
-            localPath += $"{Path.DirectorySeparatorChar}{thisProcess.ProcessName}";
-            if (!Directory.Exists(localPath))
+            _ = localPath.Append($"{Path.DirectorySeparatorChar}{thisProcess.ProcessName}");
+            if (!Directory.Exists(localPath.ToString()))
             {
-                _ = Directory.CreateDirectory(localPath);
+                _ = Directory.CreateDirectory(localPath.ToString());
             }
 
             if (fileExtension.Equals(".json", StringComparison.Ordinal))
@@ -75,24 +84,20 @@ namespace Elskom.Generic.Libs
                 // do not create the settings file, just pass this path to the json
                 // interface for settings. if we create it ourselves the optimized
                 // class will fail to work right if it is empty.
-                localPath += $"{Path.DirectorySeparatorChar}Settings.json";
+                _ = localPath.Append($"{Path.DirectorySeparatorChar}Settings.json");
             }
             else if (fileExtension.Equals(".log", StringComparison.Ordinal))
             {
-                localPath += $"{Path.DirectorySeparatorChar}{thisProcess.ProcessName}-{thisProcess.Id}.log";
+                _ = localPath.Append($"{Path.DirectorySeparatorChar}{thisProcess.ProcessName}-{thisProcess.Id}.log");
             }
             else if (fileExtension.Equals(".mdmp", StringComparison.Ordinal))
             {
-                localPath += $"{Path.DirectorySeparatorChar}{thisProcess.ProcessName}-{thisProcess.Id}.mdmp";
+                _ = localPath.Append($"{Path.DirectorySeparatorChar}{thisProcess.ProcessName}-{thisProcess.Id}.mdmp");
             }
 
             // trap devenv if it is detected.
-#if !NETFRAMEWORK
-            localPath = localPath.Replace("devenv", "Els_kom", StringComparison.OrdinalIgnoreCase);
-#else
-            localPath = localPath.Replace("devenv", "Els_kom");
-#endif
-            return localPath;
+            localPath = localPath.Replace("devenv", ApplicationName);
+            return localPath.ToString();
         }
     }
 }

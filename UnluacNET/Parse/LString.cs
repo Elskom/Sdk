@@ -12,12 +12,12 @@ namespace Elskom.Generic.Libs.UnluacNET
         public LString(BSizeT size, string value)
         {
             this.Size = size;
-            this.Value = (value.Length == 0) ? string.Empty : value.Substring(0, value.Length - 1);
+            this.Value = value.Length is 0 ? string.Empty : value.AsSpan().Slice(0, value.Length - 1).ToString();
         }
 
-        public BSizeT Size { get; private set; }
+        public BSizeT Size { get; }
 
-        public string Value { get; private set; }
+        public string Value { get; }
 
         public override string DeRef()
             => this.Value;
@@ -29,6 +29,6 @@ namespace Elskom.Generic.Libs.UnluacNET
             => throw new NotImplementedException();
 
         public override string ToString()
-            => string.Format("\"{0}\"", this.Value);
+            => $"\"{this.Value}\"";
     }
 }

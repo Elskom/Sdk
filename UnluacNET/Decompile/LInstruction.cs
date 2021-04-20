@@ -129,6 +129,6 @@ namespace Elskom.Generic.Libs.UnluacNET
             => GetArgBx(codePoint) - MAXARG_sBx;
 
         private static int MASK1(int n, int p)
-            => (~(~0 << n)) << p;
+            => ~(~0 << n) << p;
     }
 }

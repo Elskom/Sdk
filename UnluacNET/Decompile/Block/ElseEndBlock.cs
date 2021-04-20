@@ -14,7 +14,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public ElseEndBlock(LFunction function, int begin, int end)
             : base(function, begin, end)
-            => this.m_statements = new List<Statement>(end - begin + 1);
+            => this.m_statements = new(end - begin + 1);
 
         public IfThenElseBlock Partner { get; set; }
 

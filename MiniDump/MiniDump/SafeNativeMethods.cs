@@ -8,21 +8,25 @@ namespace Elskom.Generic.Libs
     using System;
     using System.Runtime.InteropServices;
 
-    /// <summary>
-    /// Windows Native Methods.
-    /// </summary>
     internal static class SafeNativeMethods
     {
         [DllImport("kernel32.dll", EntryPoint = "GetCurrentThreadId", ExactSpelling = true)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
         internal static extern uint GetCurrentThreadId();
 
-        internal static int MiniDumpWriteDump(IntPtr hProcess, int ProcessId, SafeHandle hFile, MinidumpTypes DumpType, ref MINIDUMP_EXCEPTION_INFORMATION ExceptionParam, IntPtr UserStreamParam, IntPtr CallackParam)
-        {
-            _ = MiniDumpWriteDump_internal(hProcess, ProcessId, hFile, DumpType, ref ExceptionParam, UserStreamParam, CallackParam);
-            return Marshal.GetLastWin32Error();
-        }
+        [DllImport("Kernel32", ExactSpelling = true)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        internal static extern uint GetCurrentProcessId();
+
+        internal static Microsoft.Win32.SafeHandles.SafeFileHandle GetCurrentProcess_SafeHandle()
+            => new(GetCurrentProcess(), true);
 
         [DllImport("dbghelp.dll", EntryPoint = "MiniDumpWriteDump", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
-        private static extern bool MiniDumpWriteDump_internal(IntPtr hProcess, int ProcessId, SafeHandle hFile, MinidumpTypes DumpType, ref MINIDUMP_EXCEPTION_INFORMATION ExceptionParam, IntPtr UserStreamParam, IntPtr CallackParam);
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        internal static extern unsafe bool MiniDumpWriteDump(SafeHandle hProcess, uint processId, SafeHandle hFile, MinidumpTypes DumpType, MINIDUMP_EXCEPTION_INFORMATION* ExceptionParam, IntPtr UserStreamParam, IntPtr CallackParam);
+
+        [DllImport("Kernel32", ExactSpelling = true)]
+        [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+        private static extern IntPtr GetCurrentProcess();
     }
 }

@@ -138,8 +138,13 @@ namespace Elskom.Generic.Libs
         // Updated from the above. Could be why mini dump fails with error code 87 sometimes?
 
         /// <summary>
+        /// Scans inaccessible partial memory pages.
+        /// </summary>
+        ScanInaccessiblePartialPages = 0x00800000,
+
+        /// <summary>
         /// Include Valid types?.
         /// </summary>
-        ValidTypeFlags = 0x007fffff,
+        ValidTypeFlags = 0x00ffffff,
     }
 }

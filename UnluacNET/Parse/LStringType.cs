@@ -5,7 +5,7 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
-    using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Text;
     using Elskom.Generic.Libs.UnluacNET.IO;
@@ -15,7 +15,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override LString Parse(Stream stream, BHeader header)
         {
             var sizeT = header.SizeT.Parse(stream, header);
-            var sb = new StringBuilder();
+            StringBuilder sb = new();
             sizeT.Iterate(() =>
             {
                 sb.Append(stream.ReadChar());
@@ -23,10 +23,10 @@ namespace Elskom.Generic.Libs.UnluacNET
             var str = sb.ToString();
             if (header.Debug)
             {
-                Console.WriteLine("-- parsed <string> \"" + str + "\"");
+                Debug.WriteLine($"-- parsed <string> \"{str}\"");
             }
 
-            return new LString(sizeT, str);
+            return new(sizeT, str);
         }
     }
 }

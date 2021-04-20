@@ -26,7 +26,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.m_branch = branch;
             this.m_stack = stack;
             this.m_r = r;
-            this.m_statements = new List<Statement>(branch.End - branch.Begin + 1);
+            this.m_statements = new(branch.End - branch.Begin + 1);
         }
 
         public override bool Breakable => false;
@@ -67,12 +67,12 @@ namespace Elskom.Generic.Libs.UnluacNET
                         var decl = this.m_r.GetDeclaration(node.Test, node.Line);
                         if (assignment.GetFirstTarget().IsDeclaration(decl))
                         {
-                            var left = new LocalVariable(decl);
+                            LocalVariable left = new(decl);
                             var right = assignment.GetFirstValue();
                             var expr = node.Inverted
                                 ? Expression.MakeOR(left, right)
                                 : Expression.MakeAND(left, right);
-                            return new LambdaOperation(this.End - 1, (r, block) =>
+                            return new LambdaOperation(this.End - 1, (_, _) =>
                             {
                                 return new Assignment(assignment.GetFirstTarget(), expr);
                             });
@@ -106,7 +106,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                     var setb = d.PopSetCondition(this.m_stack, this.m_stack.Peek().End, test);
                     setb.UseExpression(right);
                     var testReg = test;
-                    return new LambdaOperation(this.End - 1, (r, block) =>
+                    return new LambdaOperation(this.End - 1, (r, _) =>
                     {
                         r.SetValue(testReg, this.m_branch.End - 1, setb.AsExpression(r));
                         return null;

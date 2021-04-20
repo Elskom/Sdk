@@ -44,18 +44,7 @@ namespace Elskom.Generic.Libs
         /// <value>
         /// The list of <see cref="IKomPlugin"/> plugins.
         /// </value>
-        public static List<IKomPlugin> Komplugins
-        {
-            get
-            {
-                if (komplugins == null)
-                {
-                    komplugins = new List<IKomPlugin>();
-                }
-
-                return komplugins;
-            }
-        }
+        public static List<IKomPlugin> Komplugins => komplugins ??= new();
 
         /// <summary>
         /// Gets The list of <see cref="IEncryptionPlugin"/> plugins.
@@ -63,18 +52,7 @@ namespace Elskom.Generic.Libs
         /// <value>
         /// The list of <see cref="IEncryptionPlugin"/> plugins.
         /// </value>
-        public static List<IEncryptionPlugin> Encryptionplugins
-        {
-            get
-            {
-                if (encryptionplugins == null)
-                {
-                    encryptionplugins = new List<IEncryptionPlugin>();
-                }
-
-                return encryptionplugins;
-            }
-        }
+        public static List<IEncryptionPlugin> Encryptionplugins => encryptionplugins ??= new();
 
         /// <summary>
         /// Gets the list of <see cref="ICallbackPlugin"/> plugins.
@@ -82,18 +60,7 @@ namespace Elskom.Generic.Libs
         /// <value>
         /// The list of <see cref="ICallbackPlugin"/> plugins.
         /// </value>
-        public static List<ICallbackPlugin> Callbackplugins
-        {
-            get
-            {
-                if (callbackplugins == null)
-                {
-                    callbackplugins = new List<ICallbackPlugin>();
-                }
-
-                return callbackplugins;
-            }
-        }
+        public static List<ICallbackPlugin> Callbackplugins => callbackplugins ??= new();
 
         /// <summary>
         /// Copies Modified KOM files to the Elsword Directory that was Set in the Settings Dialog in Els_kom. Requires: File Name, Original Directory the File is in, And Destination Directory.
@@ -163,7 +130,7 @@ namespace Elskom.Generic.Libs
         public static void UnpackKoms()
         {
             UnpackingState = true;
-            var di = new DirectoryInfo($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms");
+            DirectoryInfo di = new($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms");
             foreach (var fi in di.GetFiles("*.kom"))
             {
                 var kom_file = fi.Name;
@@ -171,7 +138,8 @@ namespace Elskom.Generic.Libs
                 if (kom_ver != 0)
                 {
                     // remove ".kom" on end of string.
-                    var kom_data_folder = Path.GetFileNameWithoutExtension($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms{Path.DirectorySeparatorChar}{kom_file}");
+                    var kom_data_folder = Path.GetFileNameWithoutExtension(
+                        $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms{Path.DirectorySeparatorChar}{kom_file}");
                     foreach (var komplugin in Komplugins)
                     {
                         try
@@ -205,17 +173,31 @@ namespace Elskom.Generic.Libs
                         catch (NotUnpackableException)
                         {
                             // do not delete kom file.
-                            InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs(Resources.KOMManager_Unpacking_KOM_file_failed, Resources.Error, ErrorLevel.Error));
+                            MessageEventArgs args = new(
+                                Resources.KOMManager_Unpacking_KOM_File_Failed,
+                                Resources.Error,
+                                ErrorLevel.Error);
+                            InvokeMessageEvent(typeof(KOMManager), args);
                         }
                         catch (NotImplementedException)
                         {
-                            InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs($"The KOM V{komplugin.SupportedKOMVersion} plugin does not implement an unpacker function yet. Although it should.", Resources.Error, ErrorLevel.Error));
+                            MessageEventArgs args = new(
+                                string.Format(
+                                    Resources.KOMManager_Plugin_No_Unpacker_Function,
+                                    komplugin.SupportedKOMVersion),
+                                Resources.Error,
+                                ErrorLevel.Error);
+                            InvokeMessageEvent(typeof(KOMManager), args);
                         }
                     }
                 }
                 else
                 {
-                    InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs("Unknown KOM version Detected. Please send this KOM file to the Els_kom Developers for inspection.", Resources.Error, ErrorLevel.Error));
+                    MessageEventArgs args = new(
+                        Resources.KOMManager_Unkown_KOM_Version,
+                        Resources.Error,
+                        ErrorLevel.Error);
+                    InvokeMessageEvent(typeof(KOMManager), args);
                 }
             }
 
@@ -228,11 +210,12 @@ namespace Elskom.Generic.Libs
         public static void PackKoms()
         {
             PackingState = true;
-            var di = new DirectoryInfo($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms");
+            DirectoryInfo di = new($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms");
             foreach (var dri in di.GetDirectories())
             {
                 var kom_data_folder = dri.Name;
-                var kom_ver = CheckFolderVersion($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms{Path.DirectorySeparatorChar}{kom_data_folder}");
+                var kom_ver = CheckFolderVersion(
+                    $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms{Path.DirectorySeparatorChar}{kom_data_folder}");
                 if (kom_ver != 0)
                 {
                     var kom_file = $"{kom_data_folder}.kom";
@@ -244,7 +227,7 @@ namespace Elskom.Generic.Libs
                         {
                             try
                             {
-                                if (kom_ver == komplugin.SupportedKOMVersion)
+                                if (kom_ver.Equals(komplugin.SupportedKOMVersion))
                                 {
                                     komplugin.Pack($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms{Path.DirectorySeparatorChar}{kom_data_folder}", $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms{Path.DirectorySeparatorChar}{kom_file}", kom_file);
 
@@ -260,7 +243,11 @@ namespace Elskom.Generic.Libs
                                     // just need to create the dummy file.
                                 }
 
-                                InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs("Packing an folder to an KOM file failed.", Resources.Error, ErrorLevel.Error));
+                                MessageEventArgs args = new(
+                                    Resources.KOMManager_Packing_KOM_File_Failed,
+                                    Resources.Error,
+                                    ErrorLevel.Error);
+                                InvokeMessageEvent(typeof(KOMManager), args);
                             }
                             catch (NotImplementedException)
                             {
@@ -269,18 +256,32 @@ namespace Elskom.Generic.Libs
                                     // just need to create the dummy file.
                                 }
 
-                                InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs($"The KOM V{komplugin.SupportedKOMVersion} plugin does not implement an packer function yet. Although it should.", Resources.Error, ErrorLevel.Error));
+                                MessageEventArgs args = new(
+                                    string.Format(
+                                        Resources.KOMManager_Plugin_No_Packer_Function,
+                                        komplugin.SupportedKOMVersion),
+                                    Resources.Error,
+                                    ErrorLevel.Error);
+                                InvokeMessageEvent(typeof(KOMManager), args);
                             }
                         }
                     }
                     else
                     {
-                        InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs("An error occured while packing the file(s) to an KOM file.", Resources.Error, ErrorLevel.Error));
+                        MessageEventArgs args = new(
+                            Resources.KOMManager_Folder_Version_Check_Error,
+                            Resources.Error,
+                            ErrorLevel.Error);
+                        InvokeMessageEvent(typeof(KOMManager), args);
                     }
                 }
                 else
                 {
-                    InvokeMessageEvent(typeof(KOMManager), new MessageEventArgs("Unknown KOM version Detected. Please send this KOM file to the Els_kom Developers for inspection.", Resources.Error, ErrorLevel.Error));
+                    MessageEventArgs args = new(
+                        Resources.KOMManager_Unkown_KOM_Version,
+                        Resources.Error,
+                        ErrorLevel.Error);
+                    InvokeMessageEvent(typeof(KOMManager), args);
                 }
             }
 
@@ -302,7 +303,7 @@ namespace Elskom.Generic.Libs
                 {
                     foreach (var plugin in Komplugins)
                     {
-                        if (toVersion == plugin.SupportedKOMVersion)
+                        if (toVersion.Equals(plugin.SupportedKOMVersion))
                         {
                             plugin.ConvertCRC(crcversion, crcpath);
                         }
@@ -321,8 +322,8 @@ namespace Elskom.Generic.Libs
         /// <param name="checkpath">The directry that contains the crc.xml file.</param>
         public static void UpdateCRC(int crcversion, string crcpath, string checkpath)
         {
-            var crcfile = new FileInfo(crcpath);
-            var di1 = new DirectoryInfo(checkpath);
+            FileInfo crcfile = new(crcpath);
+            DirectoryInfo di1 = new(checkpath);
             foreach (var fi1 in di1.GetFiles())
             {
                 if (!fi1.Name.Equals(crcfile.Name, StringComparison.Ordinal))
@@ -353,7 +354,7 @@ namespace Elskom.Generic.Libs
                     {
                         foreach (var plugin in Komplugins)
                         {
-                            if (crcversion == plugin.SupportedKOMVersion)
+                            if (crcversion.Equals(plugin.SupportedKOMVersion))
                             {
                                 plugin.UpdateCRC(crcpath, checkpath);
                             }
@@ -387,7 +388,7 @@ namespace Elskom.Generic.Libs
         /// <returns>The base file name of the KOM File.</returns>
         public static string GetFileBaseName(string fileName)
         {
-            var fi = new FileInfo(fileName);
+            FileInfo fi = new(fileName);
             return fi.Name;
         }
 
@@ -451,13 +452,13 @@ namespace Elskom.Generic.Libs
         private static int GetHeaderVersion(string komfile)
         {
             var ret = 0;
-            var headerbuffer = new byte[27];
+            byte[] headerbuffer;
 
             // 27 is the size of the header string denoting the KOM file version number.
-            var offset = 0;
-            using (var reader = new BinaryReader(File.OpenRead($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms{Path.DirectorySeparatorChar}{komfile}"), Encoding.ASCII))
+            using (var fs = File.OpenRead($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}koms{Path.DirectorySeparatorChar}{komfile}"))
+            using (BinaryReader reader = new(fs, Encoding.ASCII))
             {
-                _ = reader.Read(headerbuffer, offset, 27);
+                headerbuffer = reader.ReadBytes(27);
             }
 
             var headerstring = Encoding.UTF8.GetString(headerbuffer);

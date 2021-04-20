@@ -35,7 +35,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         }
 
         public int AsInteger()
-            => this.m_big == 0
+            => this.m_big is 0
             ? this.m_number
             : this.m_big.CompareTo(MAX_INT) > 0 || this.m_big.CompareTo(MIN_INT) < 0
             ? throw new InvalidOperationException("The size of an integer is outside the range that unluac can handle.")
@@ -44,10 +44,10 @@ namespace Elskom.Generic.Libs.UnluacNET
         public void Iterate(Action thunk)
         {
             // so what even is the difference between these two? they look exactly the same..
-            if (this.m_big == 0)
+            if (this.m_big is 0)
             {
                 var i = this.m_number;
-                while (i-- != 0)
+                while (i-- is not 0)
                 {
                     thunk.Invoke();
                 }

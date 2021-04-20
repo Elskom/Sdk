@@ -6,6 +6,7 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics;
 
     public class SetBlock : Block
     {
@@ -86,14 +87,14 @@ namespace Elskom.Generic.Libs.UnluacNET
                 this.Branch.UseExpression(this.m_assign.GetFirstValue());
                 var target = this.m_assign.GetFirstTarget();
                 var value = this.GetValue();
-                return new LambdaOperation(this.End - 1, (r, block) =>
+                return new LambdaOperation(this.End - 1, (_, _) =>
                 {
                     return new Assignment(target, value);
                 });
             }
             else
             {
-                return new LambdaOperation(this.End - 1, (r, block) =>
+                return new LambdaOperation(this.End - 1, (r, _) =>
                 {
                     Expression expr = null;
                     var register = 0;
@@ -134,9 +135,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                     }
                     else
                     {
-                        Console.WriteLine("-- fail " + (this.Branch.End - 1));
-                        Console.WriteLine(expr);
-                        Console.WriteLine(this.Target);
+                        Debug.WriteLine($"-- fail {this.Branch.End - 1}");
+                        Debug.WriteLine(expr);
+                        Debug.WriteLine(this.Target);
                     }
 
                     return null;

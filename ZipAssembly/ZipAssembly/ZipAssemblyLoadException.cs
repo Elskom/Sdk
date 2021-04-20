@@ -19,7 +19,6 @@ namespace Elskom.Generic.Libs
         /// Initializes a new instance of the <see cref="ZipAssemblyLoadException"/> class.
         /// </summary>
         public ZipAssemblyLoadException()
-            : base()
         {
         }
 

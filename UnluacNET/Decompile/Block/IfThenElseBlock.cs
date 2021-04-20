@@ -22,7 +22,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.m_loopback = loopback;
             this.m_emptyElse = emptyElse;
             this.m_r = r;
-            this.m_statements = new List<Statement>(branch.End - branch.Begin + 1);
+            this.m_statements = new(branch.End - branch.Begin + 1);
         }
 
         public ElseEndBlock Partner { get; set; }

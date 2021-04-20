@@ -14,7 +14,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public OuterBlock(LFunction function, int length)
             : base(function, 0, length + 1)
-            => this.m_statements = new List<Statement>(length);
+            => this.m_statements = new(length);
 
         public override bool Breakable => false;
 

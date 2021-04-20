@@ -6,26 +6,26 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
 
     public class LConstantType : BObjectType<LObject>
     {
-        private static readonly string[] m_constantTypes =
-        {
-            "<nil>",
-            "<boolean>",
-            null, // no type?
-            "<number>",
-            "<string>",
-        };
-
         public override LObject Parse(Stream stream, BHeader header)
         {
             var type = stream.ReadByte();
-            if (header.Debug && type < m_constantTypes.Length)
+            if (header.Debug && type < 5)
             {
-                var cType = m_constantTypes[type];
-                Console.WriteLine("-- parsing <constant>, type is {0}", type != 2 ? cType : "illegal " + type);
+                var cType = type switch
+                {
+                    0 => "<nil>",
+                    1 => "<boolean>",
+                    2 => null, // no type?
+                    3 => "<number>",
+                    4 => "<string>",
+                    _ => throw new InvalidOperationException(),
+                };
+                Debug.WriteLine($"-- parsing <constant>, type is {(type is not 2 ? cType : $"illegal {type}")}");
             }
 
             return type switch

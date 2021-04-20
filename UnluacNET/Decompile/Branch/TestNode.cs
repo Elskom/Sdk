@@ -15,9 +15,9 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.IsTest = true;
         }
 
-        public int Test { get; private set; }
+        public int Test { get; }
 
-        public bool Inverted { get; private set; }
+        public bool Inverted { get; }
 
         public override Expression AsExpression(Registers registers)
             => this.Inverted ? new NotBranch(this.Invert()).AsExpression(registers) : registers.GetExpression(this.Test, this.Line);

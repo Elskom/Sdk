@@ -235,13 +235,13 @@ namespace Elskom.Generic.Libs.UnluacNET
             => this.Code.Op(line) switch
             {
                 Op.MOVE or Op.LOADK or Op.LOADBOOL or Op.GETUPVAL or Op.GETTABUP or Op.GETGLOBAL or Op.GETTABLE or Op.NEWTABLE or Op.ADD or Op.SUB or Op.MUL or Op.DIV or Op.MOD or Op.POW or Op.UNM or Op.NOT or Op.LEN or Op.CONCAT or Op.CLOSURE => this.Code.A(line),
-                Op.LOADNIL => (this.Code.A(line) == this.Code.B(line)) ? this.Code.A(line) : -1,
+                Op.LOADNIL => this.Code.A(line) == this.Code.B(line) ? this.Code.A(line) : -1,
                 Op.SETGLOBAL or Op.SETUPVAL or Op.SETTABUP or Op.SETTABLE or Op.JMP or Op.TAILCALL or Op.RETURN or Op.FORLOOP or Op.FORPREP or Op.TFORCALL or Op.TFORLOOP or Op.CLOSE => -1,
                 Op.SELF => -1,
                 Op.EQ or Op.LT or Op.LE or Op.TEST or Op.TESTSET or Op.SETLIST => -1,
-                Op.CALL => (this.Code.C(line) == 2) ? this.Code.A(line) : -1,
-                Op.VARARG => (this.Code.C(line) == 2) ? this.Code.B(line) : -1,
-                _ => throw new InvalidOperationException("Illegal opcode: " + this.Code.Op(line)),
+                Op.CALL => this.Code.C(line) is 2 ? this.Code.A(line) : -1,
+                Op.VARARG => this.Code.C(line) is 2 ? this.Code.B(line) : -1,
+                _ => throw new InvalidOperationException($"Illegal opcode: {this.Code.Op(line)}"),
             };
 
         private Target GetMoveIntoTargetTarget(int line, int previous)
@@ -263,7 +263,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             {
                 Op.MOVE => this.r.GetValue(B, previous),
                 Op.SETUPVAL or Op.SETGLOBAL => this.r.GetExpression(A, previous),
-                Op.SETTABLE => ((C & 0x100) != 0) ? throw new InvalidOperationException() : this.r.GetExpression(C, previous),
+                Op.SETTABLE => (C & 0x100) is not 0 ? throw new InvalidOperationException() : this.r.GetExpression(C, previous),
                 _ => throw new InvalidOperationException(),
             };
         }
@@ -478,9 +478,9 @@ namespace Elskom.Generic.Libs.UnluacNET
                                 else
                                 {
                                     var enclosing = this.EnclosingBreakableBlock(line);
-                                    if (enclosing != null && enclosing.Breakable &&
-                                        this.Code.Op(enclosing.End) == Op.JMP &&
-                                        (this.Code.SBx(enclosing.End) + enclosing.End + 1 == tLine))
+                                    if (enclosing is not null && enclosing.Breakable &&
+                                        this.Code.Op(enclosing.End) is Op.JMP &&
+                                        this.Code.SBx(enclosing.End) + enclosing.End + 1 == tLine)
                                     {
                                         isBreak[line] = true;
                                         this.blocks.Add(new Break(this.Function, line, enclosing.End));
@@ -526,7 +526,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                     }
                 }
 
-                if ((line + 1) <= this.length && this.reverseTarget[line + 1])
+                if (line + 1 <= this.length && this.reverseTarget[line + 1])
                 {
                     reduce = true;
                 }
@@ -536,7 +536,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                     reduce = true;
                 }
 
-                if (stack.Count == 0)
+                if (stack.Count is 0)
                 {
                     reduce = false;
                 }
@@ -556,14 +556,14 @@ namespace Elskom.Generic.Libs.UnluacNET
                         {
                             isAssignNode = true;
                             compareCorrect = true;
-                            assignEnd += (this.Code.C(assignEnd) != 0) ? 2 : 1;
+                            assignEnd += this.Code.C(assignEnd) is not 0 ? 2 : 1;
                         }
                         else if (peekNode.IsCompareSet)
                         {
-                            if (this.Code.Op(peekNode.Begin) != Op.LOADBOOL || this.Code.C(peekNode.Begin) == 0)
+                            if (this.Code.Op(peekNode.Begin) is not Op.LOADBOOL || this.Code.C(peekNode.Begin) is 0)
                             {
                                 isAssignNode = true;
-                                assignEnd += (this.Code.C(assignEnd) != 0) ? 2 : 1;
+                                assignEnd += this.Code.C(assignEnd) is not 0 ? 2 : 1;
                                 compareCorrect = true;
                             }
                         }
@@ -713,15 +713,15 @@ namespace Elskom.Generic.Libs.UnluacNET
                                 tail = enclosing.End - 1;
                             }
                         }/* !!!HACK ALERT!!! */
-                        else if (hasTail && breakEnclosing != null && (tail >= breakEnclosing.ScopeEnd))
+                        else if (hasTail && breakEnclosing is not null && tail >= breakEnclosing.ScopeEnd)
                         {
                             // HACK: fix scope issues
                             // this is VERY hack-ish, but it works!
-                            var scopeIsBad = this.Code.Op(breakEnclosing.ScopeEnd) == Op.JMP && (this.Code.SBx(breakEnclosing.ScopeEnd) + 1) == tail;
+                            var scopeIsBad = this.Code.Op(breakEnclosing.ScopeEnd) is Op.JMP && this.Code.SBx(breakEnclosing.ScopeEnd) + 1 == tail;
 
                             // before, 'else' statements would be misinterpreted as 'break' statements
                             // thankfully, 'else' statements can be found using this method
-                            var isElse = (cond.End + this.Code.SBx(cond.End - 1) - 1) == breakEnclosing.ScopeEnd;
+                            var isElse = cond.End + this.Code.SBx(cond.End - 1) - 1 == breakEnclosing.ScopeEnd;
                             if (scopeIsBad && !isElse && !isBreak[tail - 1])
                             {
                                 hasScopeIssues = true;
@@ -758,7 +758,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                         else if (hasTail)
                         {
                             var endOp = this.Code.Op(cond.End - 2);
-                            var isEndCondJump = endOp == Op.EQ || endOp == Op.LE || endOp == Op.LT || endOp == Op.TEST || endOp == Op.TESTSET;
+                            var isEndCondJump = endOp is Op.EQ or Op.LE or Op.LT or Op.TEST or Op.TESTSET;
                             if (tail > cond.End || (tail == cond.End && !isEndCondJump))
                             {
                                 var op = this.Code.Op(tail - 1);
@@ -1050,14 +1050,14 @@ namespace Elskom.Generic.Libs.UnluacNET
 
                 case Op.LOADBOOL:
                 {
-                    var constant = new Constant((B != 0) ? LBoolean.LTRUE : LBoolean.LFALSE);
+                    var constant = new Constant(B is not 0 ? LBoolean.LTRUE : LBoolean.LFALSE);
                     operations.AddLast(new RegisterSet(line, A, new ConstantExpression(constant, -1)));
                     break;
                 }
 
                 case Op.LOADNIL:
                 {
-                    var maximum = this.Function.Header.Version.UsesOldLoadNilEncoding ? B : (A + B);
+                    var maximum = this.Function.Header.Version.UsesOldLoadNilEncoding ? B : A + B;
                     while (A <= maximum)
                     {
                         operations.AddLast(new RegisterSet(line, A, Expression.NIL));
@@ -1075,7 +1075,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 
                 case Op.GETTABUP:
                 {
-                    var expr = (B == 0 && (C & 0x100) != 0)
+                    var expr = B is 0 && (C & 0x100) is not 0
                         ? this.F.GetGlobalExpression(C & 0xFF) as Expression
                         : new TableReference(this.upvalues.GetExpression(B), this.r.GetKExpression(C, line));
                     operations.AddLast(new RegisterSet(line, A, expr));
@@ -1223,7 +1223,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 
                 case Op.CALL:
                 {
-                    var multiple = C >= 3 || C == 0;
+                    var multiple = C is >= 3 or 0;
                     if (B == 0)
                     {
                         B = this.registers - A;
@@ -1569,7 +1569,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             }
 
             testLine++;
-            testLine += (this.Code.C(testLine) != 0) ? 2 : 1;
+            testLine += this.Code.C(testLine) is not 0 ? 2 : 1;
             return testLine;
         }
 
@@ -1606,16 +1606,16 @@ namespace Elskom.Generic.Libs.UnluacNET
                     break;
                 }
 
-                var addr = (nInvert == invert) ? end : begin;
+                var addr = nInvert == invert ? end : begin;
                 if (addr == nEnd)
                 {
                     var left = this.PopSetConditionInternal(stack, nInvert, assignEnd, target);
-                    branch = nInvert ? new OrBranch(left, branch) : (Branch)new AndBranch(left, branch);
+                    branch = nInvert ? new OrBranch(left, branch) : new AndBranch(left, branch);
                     branch.End = nEnd;
                 }
                 else
                 {
-                    if (!(branch is TestSetNode))
+                    if (branch is not TestSetNode)
                     {
                         stack.Push(branch);
                         branch = this.PopCondition(stack);

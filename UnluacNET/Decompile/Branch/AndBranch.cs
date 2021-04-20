@@ -24,7 +24,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         {
             var rLeft = this.m_left.GetRegister();
             var rRight = this.m_right.GetRegister();
-            return (rLeft == rRight) ? rLeft : -1;
+            return rLeft == rRight ? rLeft : -1;
         }
 
         public override Branch Invert()

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>  
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" Condition="'$(UsingMicrosoftNETSdk)' == ''" />
 
   <PropertyGroup>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
@@ -27,12 +27,21 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="ReflectionAnalyzers" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <!-- We need the source generator we created. -->
+    <PackageReference Include="GitBuildInfo.SourceGenerator" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <!-- We need to reference System.Net.Http on .NET Framework targets. -->
-    <Reference Include="System.Net.Http" Condition="$(TargetFramework.StartsWith('net4'))" />
-    <PackageReference Include="System.Resources.Extensions" IsImplicitlyDefined="true" Version="*-*" Condition="$(TargetFramework.StartsWith('net4')) AND ('$(UseWindowsForms)' == 'true' OR '$(UseWPF)' == 'true') AND '$(OS)' == 'Windows_NT'" />
+    <Reference Include="System.Net.Http" IsImplicitlyDefined="true" Condition="$(TargetFramework.StartsWith('net4')) AND '$(ElskomSdkBuild)' == ''" />
+    <PackageReference Include="System.Resources.Extensions" IsImplicitlyDefined="true" Version="*-*" Condition="$(TargetFramework.StartsWith('net4')) AND ('$(UseWindowsForms)' == 'true' OR '$(UseWPF)' == 'true') AND '$(OS)' == 'Windows_NT' AND '$(ElskomSdkBuild)' == ''" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(ElskomSdkBuild)' == ''">
     <PackageReference Include="BlowFish" IsImplicitlyDefined="true" Version="*-*" />
     <PackageReference Include="MessageManager" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseWindowsForms)' == 'true' AND '$(OS)' == 'Windows_NT'" />
     <PackageReference Include="UnluacNET" IsImplicitlyDefined="true" Version="*-*" />
@@ -47,4 +56,5 @@
     <PackageReference Include="SettingsFile" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' != 'Windows_NT'" />
     <PackageReference Include="zlib.managed" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' != 'Windows_NT'" />
   </ItemGroup>
+
 </Project>

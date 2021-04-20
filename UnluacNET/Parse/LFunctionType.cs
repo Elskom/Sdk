@@ -5,7 +5,7 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
-    using System;
+    using System.Diagnostics;
     using System.IO;
     using Elskom.Generic.Libs.UnluacNET.IO;
 
@@ -18,13 +18,13 @@ namespace Elskom.Generic.Libs.UnluacNET
         {
             if (header.Debug)
             {
-                Console.WriteLine("-- beginning to parse function");
-                Console.WriteLine("-- parsing name...start...end...upvalues...params...varargs...stack");
+                Debug.WriteLine("-- beginning to parse function");
+                Debug.WriteLine("-- parsing name...start...end...upvalues...params...varargs...stack");
             }
 
-            var s = new LFunctionParseState();
+            LFunctionParseState s = new();
             this.ParseMain(stream, header, s);
-            return new LFunction(
+            return new(
                 header,
                 s.Code,
                 s.Locals.AsArray(),
@@ -37,11 +37,11 @@ namespace Elskom.Generic.Libs.UnluacNET
                 s.VarArg);
         }
 
-        protected virtual void ParseCode(Stream stream, BHeader header, LFunctionParseState s)
+        protected void ParseCode(Stream stream, BHeader header, LFunctionParseState s)
         {
             if (header.Debug)
             {
-                Console.WriteLine("-- beginning to parse bytecode list");
+                Debug.WriteLine("-- beginning to parse bytecode list");
             }
 
             // HACK HACK HACK
@@ -53,22 +53,22 @@ namespace Elskom.Generic.Libs.UnluacNET
                 s.Code[i] = stream.ReadInt32(bigEndian);
                 if (header.Debug)
                 {
-                    Console.WriteLine("-- parsed codepoint 0x{0:X}" + s.Code[i]);
+                    Debug.WriteLine($"-- parsed codepoint 0x{s.Code[i]:X}");
                 }
             }
         }
 
-        protected virtual void ParseConstants(Stream stream, BHeader header, LFunctionParseState s)
+        protected void ParseConstants(Stream stream, BHeader header, LFunctionParseState s)
         {
             if (header.Debug)
             {
-                Console.WriteLine("-- beginning to parse constants list");
+                Debug.WriteLine("-- beginning to parse constants list");
             }
 
             s.Constants = header.Constant.ParseList(stream, header);
             if (header.Debug)
             {
-                Console.WriteLine("-- beginning to parse functions list");
+                Debug.WriteLine("-- beginning to parse functions list");
             }
 
             s.Functions = header.Function.ParseList(stream, header);
@@ -78,19 +78,19 @@ namespace Elskom.Generic.Libs.UnluacNET
         {
             if (header.Debug)
             {
-                Console.WriteLine("-- beginning to parse source lines list");
+                Debug.WriteLine("-- beginning to parse source lines list");
             }
 
             s.Lines = header.Integer.ParseList(stream, header);
             if (header.Debug)
             {
-                Console.WriteLine("-- beginning to parse locals list");
+                Debug.WriteLine("-- beginning to parse locals list");
             }
 
             s.Locals = header.Local.ParseList(stream, header);
             if (header.Debug)
             {
-                Console.WriteLine("-- beginning to parse upvalues list");
+                Debug.WriteLine("-- beginning to parse upvalues list");
             }
 
             var upvalNames = header.String.ParseList(stream, header);
@@ -121,7 +121,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             s.Upvalues = new LUpvalue[s.LenUpvalues];
             for (var i = 0; i < s.LenUpvalues; i++)
             {
-                s.Upvalues[i] = new LUpvalue();
+                s.Upvalues[i] = new();
             }
         }
 

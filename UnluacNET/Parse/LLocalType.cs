@@ -5,7 +5,7 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
-    using System;
+    using System.Diagnostics;
     using System.IO;
 
     public class LLocalType : BObjectType<LLocal>
@@ -17,10 +17,10 @@ namespace Elskom.Generic.Libs.UnluacNET
             var end = header.Integer.Parse(stream, header);
             if (header.Debug)
             {
-                Console.WriteLine("-- parsing local, name: {0} from {1} to {2}", name, start.AsInteger(), end.AsInteger());
+                Debug.WriteLine($"-- parsing local, name: {name} from {start.AsInteger()} to {end.AsInteger()}");
             }
 
-            return new LLocal(name, start, end);
+            return new(name, start, end);
         }
     }
 }

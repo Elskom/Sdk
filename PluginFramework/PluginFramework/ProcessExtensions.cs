@@ -7,6 +7,7 @@ namespace Elskom.Generic.Libs
 {
     using System;
     using System.Diagnostics;
+    using System.Text;
 
     /// <summary>
     /// A extension class for extensions to <see cref="Process"/>.
@@ -20,7 +21,7 @@ namespace Elskom.Generic.Libs
         public static bool Executing { get; internal set; } = true;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the process should wait indefinately until exited.
+        /// Gets or sets a value indicating whether the process should wait indefinitely until exited.
         /// </summary>
         public static bool WaitForProcessExit { get; set; }
 
@@ -71,17 +72,26 @@ namespace Elskom.Generic.Libs
                 throw new ArgumentNullException(nameof(proc));
             }
 
+            StringBuilder ret = new();
             Executing = true;
             _ = proc.Start();
             Executing = false;
-            var ret = proc.StartInfo.RedirectStandardError ? proc.StandardError.ReadToEnd() : string.Empty;
-            ret += proc.StartInfo.RedirectStandardOutput ? proc.StandardOutput.ReadToEnd() : string.Empty;
+            if (proc.StartInfo.RedirectStandardOutput)
+            {
+                _ = ret.Append(proc.StandardOutput.ReadToEnd());
+            }
+
+            if (proc.StartInfo.RedirectStandardError)
+            {
+                _ = ret.Append(proc.StandardError.ReadToEnd());
+            }
+
             if (WaitForProcessExit)
             {
                 proc.WaitForExit();
             }
 
-            return ret;
+            return ret.ToString();
         }
     }
 }

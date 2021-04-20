@@ -12,8 +12,8 @@ namespace Elskom.Generic.Libs.UnluacNET
         private readonly List<Target> m_targets = new(5);
         private readonly List<Expression> m_values = new(5);
         private bool m_allNil = true;
-        private bool m_declare = false;
-        private int m_declareStart = 0;
+        private bool m_declare;
+        private int m_declareStart;
 
         public Assignment()
         {
@@ -116,7 +116,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                 var functionSugar = false;
                 var value = this.m_values[0];
                 var target = this.m_targets[0];
-                if (this.m_targets.Count == 1 && this.m_values.Count == 1 && value.IsClosure && target.IsFunctionName)
+                if (this.m_targets.Count is 1 && value.IsClosure && target.IsFunctionName)
                 {
                     // This check only works in Lua version 0x51
                     if (!this.m_declare || this.m_declareStart >= value.ClosureUpvalueLine)
@@ -150,7 +150,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                     value.PrintClosure(output, target);
                 }
 
-                if (this.Comment != null)
+                if (this.Comment is not null)
                 {
                     output.Print(" -- ");
                     output.Print(this.Comment);

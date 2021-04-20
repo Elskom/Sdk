@@ -83,7 +83,8 @@ namespace Elskom.Generic.Libs
             {
                 throw new ArgumentException($"{nameof(zipFileName)} is not allowed to be empty.", nameof(zipFileName));
             }
-            else if (!File.Exists(zipFileName))
+
+            if (!File.Exists(zipFileName))
             {
                 throw new ArgumentException($"{nameof(zipFileName)} does not exist.", nameof(zipFileName));
             }
@@ -92,7 +93,8 @@ namespace Elskom.Generic.Libs
             {
                 throw new ArgumentException($"{nameof(assemblyName)} is not allowed to be empty.", nameof(assemblyName));
             }
-            else if (!assemblyName.EndsWith(".dll", StringComparison.Ordinal))
+
+            if (!assemblyName.EndsWith(".dll", StringComparison.Ordinal))
             {
                 // setting pdbFileName fails or makes unpredicted/unwanted things if this is not checked
                 throw new ArgumentException($"{nameof(assemblyName)} must end with '.dll' to be a valid assembly name.", nameof(assemblyName));
@@ -102,11 +104,10 @@ namespace Elskom.Generic.Libs
             // If it is, get it’s bytes then load it.
             // If not throw an exception. Also throw
             // an exception if the pdb file is requested but not found.
-            var found = false;
-            var pdbfound = false;
-            var zipAssemblyName = string.Empty;
+            bool found;
+            string zipAssemblyName;
             var pdbAssemblyName = string.Empty;
-            byte[] asmbytes = null;
+            byte[] asmbytes;
             byte[] pdbbytes = null;
             using (var zipFile = ZipFile.OpenRead(zipFileName))
             {
@@ -114,7 +115,7 @@ namespace Elskom.Generic.Libs
                 if (Debugger.IsAttached)
                 {
                     var pdbFileName = assemblyName.Replace("dll", "pdb");
-                    GetBytesFromZipFile(pdbFileName, zipFile, out pdbbytes, out pdbfound, out pdbAssemblyName);
+                    GetBytesFromZipFile(pdbFileName, zipFile, out pdbbytes, out _, out pdbAssemblyName);
                 }
             }
 
@@ -130,11 +131,12 @@ namespace Elskom.Generic.Libs
             try
             {
 #if NET5_0_OR_GREATER
-                using var ms1 = new MemoryStream(asmbytes);
-                using var ms2 = new MemoryStream(pdbbytes);
-                var zipassembly = Debugger.IsAttached && pdbfound ?
+                using MemoryStream ms1 = new(asmbytes);
+                MemoryStream ms2 = pdbbytes is not null ? new(pdbbytes) : null;
+                var zipassembly = Debugger.IsAttached && pdbbytes is not null ?
                     (ZipAssembly)context.LoadFromStream(ms1, ms2) :
                     (ZipAssembly)context.LoadFromStream(ms1);
+                ms2?.Dispose();
 #else
                 var zipassembly = (ZipAssembly)(Assembly)domain.Load(asmbytes, Debugger.IsAttached ? pdbbytes : null);
 #endif
@@ -154,7 +156,7 @@ namespace Elskom.Generic.Libs
                     dllfs.Write(asmbytes, 0, asmbytes.Length);
                 }
 
-                if (Debugger.IsAttached && pdbbytes != null)
+                if (Debugger.IsAttached && pdbbytes is not null)
                 {
                     using var pdbfs = File.Create($"{tmpDir}{pdbAssemblyName}");
                     pdbfs.Write(pdbbytes, 0, pdbbytes.Length);
@@ -176,12 +178,12 @@ namespace Elskom.Generic.Libs
             assemblyName = string.Empty;
             found = false;
             bytes = null;
-            if (assemblyEntry != null)
+            if (assemblyEntry is not null)
             {
                 assemblyName = assemblyEntry.FullName;
                 found = true;
                 using var strm = assemblyEntry.Open();
-                using var ms = new MemoryStream();
+                using MemoryStream ms = new();
                 strm.CopyTo(ms);
                 bytes = ms.ToArray();
             }

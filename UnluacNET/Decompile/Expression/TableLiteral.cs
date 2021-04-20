@@ -20,7 +20,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             : base(PRECEDENCE_ATOMIC)
         {
             this.m_capacity = arraySize + hashSize;
-            this.m_entries = new List<Entry>(this.m_capacity);
+            this.m_entries = new(this.m_capacity);
         }
 
         public override int ConstantIndex
@@ -63,7 +63,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             {
                 var lineBreak = (this.m_isList && this.m_entries.Count > 5) ||
                                 (this.m_isObject && this.m_entries.Count > 2) ||
-                                (!this.m_isObject);
+                                !this.m_isObject;
                 if (!lineBreak)
                 {
                     foreach (var entry in this.m_entries)
@@ -123,7 +123,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             var key = entry.Key;
             var value = entry.Value;
             var isList = entry.IsList;
-            var multiple = (index + 1 >= this.m_entries.Count) || value.IsMultiple;
+            var multiple = index + 1 >= this.m_entries.Count || value.IsMultiple;
             if (isList && key.IsInteger && this.m_listLength == key.AsInteger())
             {
                 if (multiple)
@@ -183,7 +183,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                 => left is null || left.CompareTo(right) <= 0;
 
             public static bool operator >(Entry left, Entry right)
-                => left is object && left.CompareTo(right) > 0;
+                => left is not null && left.CompareTo(right) > 0;
 
             public static bool operator >=(Entry left, Entry right)
                 => left is null ? right is null : left.CompareTo(right) >= 0;
@@ -192,7 +192,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                 => this.Timestamp.CompareTo(other.Timestamp);
 
             public override bool Equals(object obj)
-                => ReferenceEquals(this, obj) && obj is object && this.CompareTo((Entry)obj) == 0;
+                => ReferenceEquals(this, obj) && obj is not null && this.CompareTo((Entry)obj) == 0;
 
             public override int GetHashCode()
                 => throw new NotImplementedException();

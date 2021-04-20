@@ -19,7 +19,7 @@ namespace Elskom.Generic.Libs
     /// </summary>
     public sealed class BlowFish : IDisposable
     {
-        private RNGCryptoServiceProvider randomSource;
+        private RNGCryptoServiceProvider randomSource = new();
 
         // SBLOCKS
         private uint[] bfS0;
@@ -45,8 +45,7 @@ namespace Elskom.Generic.Libs
                 throw new ArgumentNullException(nameof(hexKey));
             }
 
-            this.randomSource = new RNGCryptoServiceProvider();
-            this.SetupKey(HexToByte(hexKey));
+            this.SetupKey(HexToByte(hexKey.AsSpan()));
         }
 
         /// <summary>
@@ -60,7 +59,6 @@ namespace Elskom.Generic.Libs
                 throw new ArgumentNullException(nameof(cipherKey));
             }
 
-            this.randomSource = new RNGCryptoServiceProvider();
             this.SetupKey(cipherKey);
         }
 
@@ -108,22 +106,19 @@ namespace Elskom.Generic.Libs
         /// </summary>
         /// <param name="block">8 bit block 1.</param>
         /// <param name="iv">8 bit block 2.</param>
-        public static void XorBlock(ref byte[] block, byte[] iv)
+        public static void XorBlock(Span<byte> block, Span<byte> iv)
         {
-            if (block == null)
+            if (block.Length is 0)
             {
                 throw new ArgumentNullException(nameof(block));
             }
 
-            if (iv == null)
+            if (iv.Length == 0)
             {
                 throw new ArgumentNullException(nameof(iv));
             }
 
-            for (var i = 0; i < block.Length; i++)
-            {
-                block[i] ^= iv[i % iv.Length];
-            }
+            XorBlock_private(block, iv);
         }
 
         /// <summary>
@@ -133,19 +128,14 @@ namespace Elskom.Generic.Libs
         /// <param name="iv">8 bit block 2.</param>
         public static void XorBlock(Stream block, byte[] iv)
         {
-            if (block == null)
+            if (block is null)
             {
                 throw new ArgumentNullException(nameof(block));
             }
 
             if (block is MemoryStream ms)
             {
-                var block1 = ms.ToArray();
-                XorBlock(ref block1, iv);
-
-                // clear the old data then copy the new data to the stream.
-                Array.Clear(ms.GetBuffer(), 0, block1.Length);
-                Array.Copy(block1, 0, ms.GetBuffer(), 0, block1.Length);
+                XorBlock(ms.GetBuffer(), iv);
             }
         }
 
@@ -161,7 +151,7 @@ namespace Elskom.Generic.Libs
                 _ = this.SetRandomIV();
             }
 
-            return ByteToHex(this.initVector) + ByteToHex(this.EncryptCBC(Encoding.ASCII.GetBytes(pt)));
+            return $"{ByteToHex(this.initVector)}{ByteToHex(this.EncryptCBC(Encoding.ASCII.GetBytes(pt)))}";
         }
 
         /// <summary>
@@ -171,7 +161,7 @@ namespace Elskom.Generic.Libs
         /// <param name="pt">Plaintext data to encrypt.</param>
         /// <returns>Ciphertext.</returns>
         public byte[] EncryptCBC(byte[] pt)
-            => pt == null ? throw new ArgumentNullException(nameof(pt)) : this.Crypt_CBC(pt, false);
+            => pt == null ? throw new ArgumentNullException(nameof(pt)) : this.Crypt_CBC((byte[])pt.Clone(), false);
 
         /// <summary>
         /// Decrypts a string in CBC mode.
@@ -185,12 +175,8 @@ namespace Elskom.Generic.Libs
                 throw new ArgumentNullException(nameof(ct));
             }
 
-            this.IV = HexToByte(ct.Substring(0, 16));
-#if !NETFRAMEWORK
-            return Encoding.ASCII.GetString(this.DecryptCBC(HexToByte(ct.Substring(16)))).Replace("\0", string.Empty, StringComparison.Ordinal);
-#else
-            return Encoding.ASCII.GetString(this.DecryptCBC(HexToByte(ct.Substring(16)))).Replace("\0", string.Empty);
-#endif
+            this.IV = HexToByte(ct.AsSpan().Slice(0, 16));
+            return Encoding.ASCII.GetString(this.DecryptCBC(HexToByte(ct.AsSpan().Slice(16))).Remove((byte)'\0'));
         }
 
         /// <summary>
@@ -200,7 +186,7 @@ namespace Elskom.Generic.Libs
         /// <param name="ct">Ciphertext data to decrypt.</param>
         /// <returns>Plaintext.</returns>
         public byte[] DecryptCBC(byte[] ct)
-            => ct == null ? throw new ArgumentNullException(nameof(ct)) : this.Crypt_CBC(ct, true);
+            => ct == null ? throw new ArgumentNullException(nameof(ct)) : this.Crypt_CBC((byte[])ct.Clone(), true);
 
         /// <summary>
         /// Encrypt a string in ECB mode.
@@ -216,7 +202,7 @@ namespace Elskom.Generic.Libs
         /// <param name="pt">Plaintext data.</param>
         /// <returns>Ciphertext bytes.</returns>
         public byte[] EncryptECB(byte[] pt)
-            => pt == null ? throw new ArgumentNullException(nameof(pt)) : this.Crypt_ECB(pt, false);
+            => pt == null ? throw new ArgumentNullException(nameof(pt)) : this.Crypt_ECB((byte[])pt.Clone(), false);
 
         /// <summary>
         /// Decrypts a string (ECB).
@@ -230,11 +216,7 @@ namespace Elskom.Generic.Libs
                 throw new ArgumentNullException(nameof(ct));
             }
 
-#if !NETFRAMEWORK
-            return Encoding.ASCII.GetString(this.Decrypt_ECB(HexToByte(ct))).Replace("\0", string.Empty, StringComparison.Ordinal);
-#else
-            return Encoding.ASCII.GetString(this.Decrypt_ECB(HexToByte(ct))).Replace("\0", string.Empty);
-#endif
+            return Encoding.ASCII.GetString(this.Decrypt_ECB(HexToByte(ct.AsSpan())).Remove((byte)'\0'));
         }
 
         /// <summary>
@@ -262,70 +244,134 @@ namespace Elskom.Generic.Libs
         /// <returns>The random IV.</returns>
         public byte[] SetRandomIV()
         {
-            this.initVector = new byte[8];
+            Span<byte> iv = stackalloc byte[8];
+            this.initVector = iv.ToArray();
             this.randomSource.GetBytes(this.initVector);
             this.iVSet = true;
             return this.initVector;
         }
 
-        // SBLOCKS ARE THE HEX DIGITS OF PI.
-        // The amount of hex digits can be increased if you want to experiment with more rounds and longer key lengths
-        private static uint[] SetupP() => new uint[]
+        // gets the first byte in a uint
+        private static byte WordByte0(uint w)
+            => WordByte3(w / 256 / 256 / 256);
+
+        // gets the second byte in a uint
+        private static byte WordByte1(uint w)
+            => WordByte3(w / 256 / 256);
+
+        // gets the third byte in a uint
+        private static byte WordByte2(uint w)
+            => WordByte3(w / 256);
+
+        // gets the fourth byte in a uint
+        private static byte WordByte3(uint w)
+            => (byte)(w % 256);
+
+        // converts a byte array to a hex string
+        private static string ByteToHex(byte[] bytes)
         {
+            StringBuilder s = new();
+            foreach (var b in bytes)
+            {
+                _ = s.Append(b.ToString("x2", CultureInfo.InvariantCulture));
+            }
+
+            return s.ToString();
+        }
+
+        // converts a hex string to a byte array
+        private static byte[] HexToByte(ReadOnlySpan<char> hex)
+        {
+            Span<byte> r = stackalloc byte[hex.Length / 2];
+            for (var i = 0; i < hex.Length - 1; i += 2)
+            {
+                var a = GetHex(hex[i]);
+                var b = GetHex(hex[i + 1]);
+                r[i / 2] = (byte)((a * 16) + b);
+            }
+
+            return r.ToArray();
+        }
+
+        // converts a single hex character to it's decimal value
+        private static byte GetHex(char x)
+            => x switch
+            {
+                <= '9' and >= '0' => (byte)(x - '0'),
+                <= 'z' and >= 'a' => (byte)(x - 'a' + 10),
+                <= 'Z' and >= 'A' => (byte)(x - 'A' + 10),
+                _ => 0,
+            };
+
+        private static void XorBlock_private(Span<byte> block, Span<byte> iv)
+        {
+            for (var i = 0; i < block.Length; i++)
+            {
+                block[i] ^= iv[i];
+            }
+        }
+
+        private byte[] Decrypt_ECB(byte[] ct)
+            => this.Crypt_ECB(ct, true);
+
+        private void SetupKey(Span<byte> cipherKey)
+        {
+            // SBLOCKS ARE THE HEX DIGITS OF PI.
+            // The amount of hex digits can be increased if you want to experiment with more rounds and longer key lengths
+            Span<uint> setupP = stackalloc uint[]
+            {
                 0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344, 0xa4093822, 0x299f31d0,
                 0x082efa98, 0xec4e6c89, 0x452821e6, 0x38d01377, 0xbe5466cf, 0x34e90c6c,
                 0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5, 0xb5470917, 0x9216d5d9, 0x8979fb1b,
-        };
-
-        private static uint[] SetupS0() => new uint[]
-        {
-                    0xd1310ba6, 0x98dfb5ac, 0x2ffd72db, 0xd01adfb7, 0xb8e1afed, 0x6a267e96,
-                    0xba7c9045, 0xf12c7f99, 0x24a19947, 0xb3916cf7, 0x0801f2e2, 0x858efc16,
-                    0x636920d8, 0x71574e69, 0xa458fea3, 0xf4933d7e, 0x0d95748f, 0x728eb658,
-                    0x718bcd58, 0x82154aee, 0x7b54a41d, 0xc25a59b5, 0x9c30d539, 0x2af26013,
-                    0xc5d1b023, 0x286085f0, 0xca417918, 0xb8db38ef, 0x8e79dcb0, 0x603a180e,
-                    0x6c9e0e8b, 0xb01e8a3e, 0xd71577c1, 0xbd314b27, 0x78af2fda, 0x55605c60,
-                    0xe65525f3, 0xaa55ab94, 0x57489862, 0x63e81440, 0x55ca396a, 0x2aab10b6,
-                    0xb4cc5c34, 0x1141e8ce, 0xa15486af, 0x7c72e993, 0xb3ee1411, 0x636fbc2a,
-                    0x2ba9c55d, 0x741831f6, 0xce5c3e16, 0x9b87931e, 0xafd6ba33, 0x6c24cf5c,
-                    0x7a325381, 0x28958677, 0x3b8f4898, 0x6b4bb9af, 0xc4bfe81b, 0x66282193,
-                    0x61d809cc, 0xfb21a991, 0x487cac60, 0x5dec8032, 0xef845d5d, 0xe98575b1,
-                    0xdc262302, 0xeb651b88, 0x23893e81, 0xd396acc5, 0x0f6d6ff3, 0x83f44239,
-                    0x2e0b4482, 0xa4842004, 0x69c8f04a, 0x9e1f9b5e, 0x21c66842, 0xf6e96c9a,
-                    0x670c9c61, 0xabd388f0, 0x6a51a0d2, 0xd8542f68, 0x960fa728, 0xab5133a3,
-                    0x6eef0b6c, 0x137a3be4, 0xba3bf050, 0x7efb2a98, 0xa1f1651d, 0x39af0176,
-                    0x66ca593e, 0x82430e88, 0x8cee8619, 0x456f9fb4, 0x7d84a5c3, 0x3b8b5ebe,
-                    0xe06f75d8, 0x85c12073, 0x401a449f, 0x56c16aa6, 0x4ed3aa62, 0x363f7706,
-                    0x1bfedf72, 0x429b023d, 0x37d0d724, 0xd00a1248, 0xdb0fead3, 0x49f1c09b,
-                    0x075372c9, 0x80991b7b, 0x25d479d8, 0xf6e8def7, 0xe3fe501a, 0xb6794c3b,
-                    0x976ce0bd, 0x04c006ba, 0xc1a94fb6, 0x409f60c4, 0x5e5c9ec2, 0x196a2463,
-                    0x68fb6faf, 0x3e6c53b5, 0x1339b2eb, 0x3b52ec6f, 0x6dfc511f, 0x9b30952c,
-                    0xcc814544, 0xaf5ebd09, 0xbee3d004, 0xde334afd, 0x660f2807, 0x192e4bb3,
-                    0xc0cba857, 0x45c8740f, 0xd20b5f39, 0xb9d3fbdb, 0x5579c0bd, 0x1a60320a,
-                    0xd6a100c6, 0x402c7279, 0x679f25fe, 0xfb1fa3cc, 0x8ea5e9f8, 0xdb3222f8,
-                    0x3c7516df, 0xfd616b15, 0x2f501ec8, 0xad0552ab, 0x323db5fa, 0xfd238760,
-                    0x53317b48, 0x3e00df82, 0x9e5c57bb, 0xca6f8ca0, 0x1a87562e, 0xdf1769db,
-                    0xd542a8f6, 0x287effc3, 0xac6732c6, 0x8c4f5573, 0x695b27b0, 0xbbca58c8,
-                    0xe1ffa35d, 0xb8f011a0, 0x10fa3d98, 0xfd2183b8, 0x4afcb56c, 0x2dd1d35b,
-                    0x9a53e479, 0xb6f84565, 0xd28e49bc, 0x4bfb9790, 0xe1ddf2da, 0xa4cb7e33,
-                    0x62fb1341, 0xcee4c6e8, 0xef20cada, 0x36774c01, 0xd07e9efe, 0x2bf11fb4,
-                    0x95dbda4d, 0xae909198, 0xeaad8e71, 0x6b93d5a0, 0xd08ed1d0, 0xafc725e0,
-                    0x8e3c5b2f, 0x8e7594b7, 0x8ff6e2fb, 0xf2122b64, 0x8888b812, 0x900df01c,
-                    0x4fad5ea0, 0x688fc31c, 0xd1cff191, 0xb3a8c1ad, 0x2f2f2218, 0xbe0e1777,
-                    0xea752dfe, 0x8b021fa1, 0xe5a0cc0f, 0xb56f74e8, 0x18acf3d6, 0xce89e299,
-                    0xb4a84fe0, 0xfd13e0b7, 0x7cc43b81, 0xd2ada8d9, 0x165fa266, 0x80957705,
-                    0x93cc7314, 0x211a1477, 0xe6ad2065, 0x77b5fa86, 0xc75442f5, 0xfb9d35cf,
-                    0xebcdaf0c, 0x7b3e89a0, 0xd6411bd3, 0xae1e7e49, 0x00250e2d, 0x2071b35e,
-                    0x226800bb, 0x57b8e0af, 0x2464369b, 0xf009b91e, 0x5563911d, 0x59dfa6aa,
-                    0x78c14389, 0xd95a537f, 0x207d5ba2, 0x02e5b9c5, 0x83260376, 0x6295cfa9,
-                    0x11c81968, 0x4e734a41, 0xb3472dca, 0x7b14a94a, 0x1b510052, 0x9a532915,
-                    0xd60f573f, 0xbc9bc6e4, 0x2b60a476, 0x81e67400, 0x08ba6fb5, 0x571be91f,
-                    0xf296ec6b, 0x2a0dd915, 0xb6636521, 0xe7b9f9b6, 0xff34052e, 0xc5855664,
-                    0x53b02d5d, 0xa99f8fa1, 0x08ba4799, 0x6e85076a,
-        };
-
-        private static uint[] SetupS1() => new uint[]
-        {
+            };
+            Span<uint> setupS0 = stackalloc uint[]
+            {
+                0xd1310ba6, 0x98dfb5ac, 0x2ffd72db, 0xd01adfb7, 0xb8e1afed, 0x6a267e96,
+                0xba7c9045, 0xf12c7f99, 0x24a19947, 0xb3916cf7, 0x0801f2e2, 0x858efc16,
+                0x636920d8, 0x71574e69, 0xa458fea3, 0xf4933d7e, 0x0d95748f, 0x728eb658,
+                0x718bcd58, 0x82154aee, 0x7b54a41d, 0xc25a59b5, 0x9c30d539, 0x2af26013,
+                0xc5d1b023, 0x286085f0, 0xca417918, 0xb8db38ef, 0x8e79dcb0, 0x603a180e,
+                0x6c9e0e8b, 0xb01e8a3e, 0xd71577c1, 0xbd314b27, 0x78af2fda, 0x55605c60,
+                0xe65525f3, 0xaa55ab94, 0x57489862, 0x63e81440, 0x55ca396a, 0x2aab10b6,
+                0xb4cc5c34, 0x1141e8ce, 0xa15486af, 0x7c72e993, 0xb3ee1411, 0x636fbc2a,
+                0x2ba9c55d, 0x741831f6, 0xce5c3e16, 0x9b87931e, 0xafd6ba33, 0x6c24cf5c,
+                0x7a325381, 0x28958677, 0x3b8f4898, 0x6b4bb9af, 0xc4bfe81b, 0x66282193,
+                0x61d809cc, 0xfb21a991, 0x487cac60, 0x5dec8032, 0xef845d5d, 0xe98575b1,
+                0xdc262302, 0xeb651b88, 0x23893e81, 0xd396acc5, 0x0f6d6ff3, 0x83f44239,
+                0x2e0b4482, 0xa4842004, 0x69c8f04a, 0x9e1f9b5e, 0x21c66842, 0xf6e96c9a,
+                0x670c9c61, 0xabd388f0, 0x6a51a0d2, 0xd8542f68, 0x960fa728, 0xab5133a3,
+                0x6eef0b6c, 0x137a3be4, 0xba3bf050, 0x7efb2a98, 0xa1f1651d, 0x39af0176,
+                0x66ca593e, 0x82430e88, 0x8cee8619, 0x456f9fb4, 0x7d84a5c3, 0x3b8b5ebe,
+                0xe06f75d8, 0x85c12073, 0x401a449f, 0x56c16aa6, 0x4ed3aa62, 0x363f7706,
+                0x1bfedf72, 0x429b023d, 0x37d0d724, 0xd00a1248, 0xdb0fead3, 0x49f1c09b,
+                0x075372c9, 0x80991b7b, 0x25d479d8, 0xf6e8def7, 0xe3fe501a, 0xb6794c3b,
+                0x976ce0bd, 0x04c006ba, 0xc1a94fb6, 0x409f60c4, 0x5e5c9ec2, 0x196a2463,
+                0x68fb6faf, 0x3e6c53b5, 0x1339b2eb, 0x3b52ec6f, 0x6dfc511f, 0x9b30952c,
+                0xcc814544, 0xaf5ebd09, 0xbee3d004, 0xde334afd, 0x660f2807, 0x192e4bb3,
+                0xc0cba857, 0x45c8740f, 0xd20b5f39, 0xb9d3fbdb, 0x5579c0bd, 0x1a60320a,
+                0xd6a100c6, 0x402c7279, 0x679f25fe, 0xfb1fa3cc, 0x8ea5e9f8, 0xdb3222f8,
+                0x3c7516df, 0xfd616b15, 0x2f501ec8, 0xad0552ab, 0x323db5fa, 0xfd238760,
+                0x53317b48, 0x3e00df82, 0x9e5c57bb, 0xca6f8ca0, 0x1a87562e, 0xdf1769db,
+                0xd542a8f6, 0x287effc3, 0xac6732c6, 0x8c4f5573, 0x695b27b0, 0xbbca58c8,
+                0xe1ffa35d, 0xb8f011a0, 0x10fa3d98, 0xfd2183b8, 0x4afcb56c, 0x2dd1d35b,
+                0x9a53e479, 0xb6f84565, 0xd28e49bc, 0x4bfb9790, 0xe1ddf2da, 0xa4cb7e33,
+                0x62fb1341, 0xcee4c6e8, 0xef20cada, 0x36774c01, 0xd07e9efe, 0x2bf11fb4,
+                0x95dbda4d, 0xae909198, 0xeaad8e71, 0x6b93d5a0, 0xd08ed1d0, 0xafc725e0,
+                0x8e3c5b2f, 0x8e7594b7, 0x8ff6e2fb, 0xf2122b64, 0x8888b812, 0x900df01c,
+                0x4fad5ea0, 0x688fc31c, 0xd1cff191, 0xb3a8c1ad, 0x2f2f2218, 0xbe0e1777,
+                0xea752dfe, 0x8b021fa1, 0xe5a0cc0f, 0xb56f74e8, 0x18acf3d6, 0xce89e299,
+                0xb4a84fe0, 0xfd13e0b7, 0x7cc43b81, 0xd2ada8d9, 0x165fa266, 0x80957705,
+                0x93cc7314, 0x211a1477, 0xe6ad2065, 0x77b5fa86, 0xc75442f5, 0xfb9d35cf,
+                0xebcdaf0c, 0x7b3e89a0, 0xd6411bd3, 0xae1e7e49, 0x00250e2d, 0x2071b35e,
+                0x226800bb, 0x57b8e0af, 0x2464369b, 0xf009b91e, 0x5563911d, 0x59dfa6aa,
+                0x78c14389, 0xd95a537f, 0x207d5ba2, 0x02e5b9c5, 0x83260376, 0x6295cfa9,
+                0x11c81968, 0x4e734a41, 0xb3472dca, 0x7b14a94a, 0x1b510052, 0x9a532915,
+                0xd60f573f, 0xbc9bc6e4, 0x2b60a476, 0x81e67400, 0x08ba6fb5, 0x571be91f,
+                0xf296ec6b, 0x2a0dd915, 0xb6636521, 0xe7b9f9b6, 0xff34052e, 0xc5855664,
+                0x53b02d5d, 0xa99f8fa1, 0x08ba4799, 0x6e85076a,
+            };
+            Span<uint> setupS1 = stackalloc uint[]
+            {
                 0x4b7a70e9, 0xb5b32944, 0xdb75092e, 0xc4192623, 0xad6ea6b0, 0x49a7df7d,
                 0x9cee60b8, 0x8fedb266, 0xecaa8c71, 0x699a17ff, 0x5664526c, 0xc2b19ee1,
                 0x193602a5, 0x75094c29, 0xa0591340, 0xe4183a3e, 0x3f54989a, 0x5b429d65,
@@ -369,10 +415,9 @@ namespace Elskom.Generic.Libs
                 0x9e447a2e, 0xc3453484, 0xfdd56705, 0x0e1e9ec9, 0xdb73dbd3, 0x105588cd,
                 0x675fda79, 0xe3674340, 0xc5c43465, 0x713e38d8, 0x3d28f89e, 0xf16dff20,
                 0x153e21e7, 0x8fb03d4a, 0xe6e39f2b, 0xdb83adf7,
-        };
-
-        private static uint[] SetupS2() => new uint[]
-        {
+            };
+            Span<uint> setupS2 = stackalloc uint[]
+            {
                 0xe93d5a68, 0x948140f7, 0xf64c261c, 0x94692934, 0x411520f7, 0x7602d4f7,
                 0xbcf46b2e, 0xd4a20068, 0xd4082471, 0x3320f46a, 0x43b7d4b7, 0x500061af,
                 0x1e39f62e, 0x97244546, 0x14214f74, 0xbf8b8840, 0x4d95fc1d, 0x96b591af,
@@ -416,147 +461,69 @@ namespace Elskom.Generic.Libs
                 0xed545578, 0x08fca5b5, 0xd83d7cd3, 0x4dad0fc4, 0x1e50ef5e, 0xb161e6f8,
                 0xa28514d9, 0x6c51133c, 0x6fd5c7e7, 0x56e14ec4, 0x362abfce, 0xddc6c837,
                 0xd79a3234, 0x92638212, 0x670efa8e, 0x406000e0,
-        };
-
-        private static uint[] SetupS3() => new uint[]
-        {
-                    0x3a39ce37, 0xd3faf5cf, 0xabc27737, 0x5ac52d1b, 0x5cb0679e, 0x4fa33742,
-                    0xd3822740, 0x99bc9bbe, 0xd5118e9d, 0xbf0f7315, 0xd62d1c7e, 0xc700c47b,
-                    0xb78c1b6b, 0x21a19045, 0xb26eb1be, 0x6a366eb4, 0x5748ab2f, 0xbc946e79,
-                    0xc6a376d2, 0x6549c2c8, 0x530ff8ee, 0x468dde7d, 0xd5730a1d, 0x4cd04dc6,
-                    0x2939bbdb, 0xa9ba4650, 0xac9526e8, 0xbe5ee304, 0xa1fad5f0, 0x6a2d519a,
-                    0x63ef8ce2, 0x9a86ee22, 0xc089c2b8, 0x43242ef6, 0xa51e03aa, 0x9cf2d0a4,
-                    0x83c061ba, 0x9be96a4d, 0x8fe51550, 0xba645bd6, 0x2826a2f9, 0xa73a3ae1,
-                    0x4ba99586, 0xef5562e9, 0xc72fefd3, 0xf752f7da, 0x3f046f69, 0x77fa0a59,
-                    0x80e4a915, 0x87b08601, 0x9b09e6ad, 0x3b3ee593, 0xe990fd5a, 0x9e34d797,
-                    0x2cf0b7d9, 0x022b8b51, 0x96d5ac3a, 0x017da67d, 0xd1cf3ed6, 0x7c7d2d28,
-                    0x1f9f25cf, 0xadf2b89b, 0x5ad6b472, 0x5a88f54c, 0xe029ac71, 0xe019a5e6,
-                    0x47b0acfd, 0xed93fa9b, 0xe8d3c48d, 0x283b57cc, 0xf8d56629, 0x79132e28,
-                    0x785f0191, 0xed756055, 0xf7960e44, 0xe3d35e8c, 0x15056dd4, 0x88f46dba,
-                    0x03a16125, 0x0564f0bd, 0xc3eb9e15, 0x3c9057a2, 0x97271aec, 0xa93a072a,
-                    0x1b3f6d9b, 0x1e6321f5, 0xf59c66fb, 0x26dcf319, 0x7533d928, 0xb155fdf5,
-                    0x03563482, 0x8aba3cbb, 0x28517711, 0xc20ad9f8, 0xabcc5167, 0xccad925f,
-                    0x4de81751, 0x3830dc8e, 0x379d5862, 0x9320f991, 0xea7a90c2, 0xfb3e7bce,
-                    0x5121ce64, 0x774fbe32, 0xa8b6e37e, 0xc3293d46, 0x48de5369, 0x6413e680,
-                    0xa2ae0810, 0xdd6db224, 0x69852dfd, 0x09072166, 0xb39a460a, 0x6445c0dd,
-                    0x586cdecf, 0x1c20c8ae, 0x5bbef7dd, 0x1b588d40, 0xccd2017f, 0x6bb4e3bb,
-                    0xdda26a7e, 0x3a59ff45, 0x3e350a44, 0xbcb4cdd5, 0x72eacea8, 0xfa6484bb,
-                    0x8d6612ae, 0xbf3c6f47, 0xd29be463, 0x542f5d9e, 0xaec2771b, 0xf64e6370,
-                    0x740e0d8d, 0xe75b1357, 0xf8721671, 0xaf537d5d, 0x4040cb08, 0x4eb4e2cc,
-                    0x34d2466a, 0x0115af84, 0xe1b00428, 0x95983a1d, 0x06b89fb4, 0xce6ea048,
-                    0x6f3f3b82, 0x3520ab82, 0x011a1d4b, 0x277227f8, 0x611560b1, 0xe7933fdc,
-                    0xbb3a792b, 0x344525bd, 0xa08839e1, 0x51ce794b, 0x2f32c9b7, 0xa01fbac9,
-                    0xe01cc87e, 0xbcc7d1f6, 0xcf0111c3, 0xa1e8aac7, 0x1a908749, 0xd44fbd9a,
-                    0xd0dadecb, 0xd50ada38, 0x0339c32a, 0xc6913667, 0x8df9317c, 0xe0b12b4f,
-                    0xf79e59b7, 0x43f5bb3a, 0xf2d519ff, 0x27d9459c, 0xbf97222c, 0x15e6fc2a,
-                    0x0f91fc71, 0x9b941525, 0xfae59361, 0xceb69ceb, 0xc2a86459, 0x12baa8d1,
-                    0xb6c1075e, 0xe3056a0c, 0x10d25065, 0xcb03a442, 0xe0ec6e0e, 0x1698db3b,
-                    0x4c98a0be, 0x3278e964, 0x9f1f9532, 0xe0d392df, 0xd3a0342b, 0x8971f21e,
-                    0x1b0a7441, 0x4ba3348c, 0xc5be7120, 0xc37632d8, 0xdf359f8d, 0x9b992f2e,
-                    0xe60b6f47, 0x0fe3f11d, 0xe54cda54, 0x1edad891, 0xce6279cf, 0xcd3e7e6f,
-                    0x1618b166, 0xfd2c1d05, 0x848fd2c5, 0xf6fb2299, 0xf523f357, 0xa6327623,
-                    0x93a83531, 0x56cccd02, 0xacf08162, 0x5a75ebb5, 0x6e163697, 0x88d273cc,
-                    0xde966292, 0x81b949d0, 0x4c50901b, 0x71c65614, 0xe6c6c7bd, 0x327a140a,
-                    0x45e1d006, 0xc3f27b9a, 0xc9aa53fd, 0x62a80f00, 0xbb25bfe2, 0x35bdd2f6,
-                    0x71126905, 0xb2040222, 0xb6cbcf7c, 0xcd769c2b, 0x53113ec0, 0x1640e3d3,
-                    0x38abbd60, 0x2547adf0, 0xba38209c, 0xf746ce76, 0x77afa1c5, 0x20756060,
-                    0x85cbfe4e, 0x8ae88dd8, 0x7aaaf9b0, 0x4cf9aa7e, 0x1948c25c, 0x02fb8a8c,
-                    0x01c36ae4, 0xd6ebe1f9, 0x90d4f869, 0xa65cdea0, 0x3f09252d, 0xc208e69f,
-                    0xb74e6132, 0xce77e25b, 0x578fdfe3, 0x3ac372e6,
-        };
-
-        // gets the first byte in a uint
-        private static byte WordByte0(uint w)
-            => WordByte3(w / 256 / 256 / 256);
-
-        // gets the second byte in a uint
-        private static byte WordByte1(uint w)
-            => WordByte3(w / 256 / 256);
-
-        // gets the third byte in a uint
-        private static byte WordByte2(uint w)
-            => WordByte3(w / 256);
-
-        // gets the fourth byte in a uint
-        private static byte WordByte3(uint w)
-            => (byte)(w % 256);
-
-        // converts a byte array to a hex string
-        private static string ByteToHex(byte[] bytes)
-        {
-            var s = new StringBuilder();
-            foreach (var b in bytes)
+            };
+            Span<uint> setupS3 = stackalloc uint[]
             {
-                _ = s.Append(b.ToString("x2", CultureInfo.InvariantCulture));
-            }
-
-            return s.ToString();
-        }
-
-        // converts a hex string to a byte array
-        private static byte[] HexToByte(string hex)
-        {
-            var r = new byte[hex.Length / 2];
-            for (var i = 0; i < hex.Length - 1; i += 2)
-            {
-                var a = GetHex(hex[i]);
-                var b = GetHex(hex[i + 1]);
-                r[i / 2] = (byte)((a * 16) + b);
-            }
-
-            return r;
-        }
-
-        // converts a single hex character to it's decimal value
-        private static byte GetHex(char x)
-        {
-            if (x <= '9' && x >= '0')
-            {
-                return (byte)(x - '0');
-            }
-            else if (x <= 'z' && x >= 'a')
-            {
-                return (byte)(x - 'a' + 10);
-            }
-            else if (x <= 'Z' && x >= 'A')
-            {
-                return (byte)(x - 'A' + 10);
-            }
-
-            return 0;
-        }
-
-        private static void XorBlock_private(ref byte[] block, byte[] iv)
-        {
-            for (var i = 0; i < block.Length; i++)
-            {
-                block[i] ^= iv[i];
-            }
-        }
-
-        private byte[] Decrypt_ECB(byte[] ct)
-            => this.Crypt_ECB(ct, true);
-
-        private void SetupKey(byte[] cipherKey)
-        {
-            this.bfP = SetupP();
+                0x3a39ce37, 0xd3faf5cf, 0xabc27737, 0x5ac52d1b, 0x5cb0679e, 0x4fa33742,
+                0xd3822740, 0x99bc9bbe, 0xd5118e9d, 0xbf0f7315, 0xd62d1c7e, 0xc700c47b,
+                0xb78c1b6b, 0x21a19045, 0xb26eb1be, 0x6a366eb4, 0x5748ab2f, 0xbc946e79,
+                0xc6a376d2, 0x6549c2c8, 0x530ff8ee, 0x468dde7d, 0xd5730a1d, 0x4cd04dc6,
+                0x2939bbdb, 0xa9ba4650, 0xac9526e8, 0xbe5ee304, 0xa1fad5f0, 0x6a2d519a,
+                0x63ef8ce2, 0x9a86ee22, 0xc089c2b8, 0x43242ef6, 0xa51e03aa, 0x9cf2d0a4,
+                0x83c061ba, 0x9be96a4d, 0x8fe51550, 0xba645bd6, 0x2826a2f9, 0xa73a3ae1,
+                0x4ba99586, 0xef5562e9, 0xc72fefd3, 0xf752f7da, 0x3f046f69, 0x77fa0a59,
+                0x80e4a915, 0x87b08601, 0x9b09e6ad, 0x3b3ee593, 0xe990fd5a, 0x9e34d797,
+                0x2cf0b7d9, 0x022b8b51, 0x96d5ac3a, 0x017da67d, 0xd1cf3ed6, 0x7c7d2d28,
+                0x1f9f25cf, 0xadf2b89b, 0x5ad6b472, 0x5a88f54c, 0xe029ac71, 0xe019a5e6,
+                0x47b0acfd, 0xed93fa9b, 0xe8d3c48d, 0x283b57cc, 0xf8d56629, 0x79132e28,
+                0x785f0191, 0xed756055, 0xf7960e44, 0xe3d35e8c, 0x15056dd4, 0x88f46dba,
+                0x03a16125, 0x0564f0bd, 0xc3eb9e15, 0x3c9057a2, 0x97271aec, 0xa93a072a,
+                0x1b3f6d9b, 0x1e6321f5, 0xf59c66fb, 0x26dcf319, 0x7533d928, 0xb155fdf5,
+                0x03563482, 0x8aba3cbb, 0x28517711, 0xc20ad9f8, 0xabcc5167, 0xccad925f,
+                0x4de81751, 0x3830dc8e, 0x379d5862, 0x9320f991, 0xea7a90c2, 0xfb3e7bce,
+                0x5121ce64, 0x774fbe32, 0xa8b6e37e, 0xc3293d46, 0x48de5369, 0x6413e680,
+                0xa2ae0810, 0xdd6db224, 0x69852dfd, 0x09072166, 0xb39a460a, 0x6445c0dd,
+                0x586cdecf, 0x1c20c8ae, 0x5bbef7dd, 0x1b588d40, 0xccd2017f, 0x6bb4e3bb,
+                0xdda26a7e, 0x3a59ff45, 0x3e350a44, 0xbcb4cdd5, 0x72eacea8, 0xfa6484bb,
+                0x8d6612ae, 0xbf3c6f47, 0xd29be463, 0x542f5d9e, 0xaec2771b, 0xf64e6370,
+                0x740e0d8d, 0xe75b1357, 0xf8721671, 0xaf537d5d, 0x4040cb08, 0x4eb4e2cc,
+                0x34d2466a, 0x0115af84, 0xe1b00428, 0x95983a1d, 0x06b89fb4, 0xce6ea048,
+                0x6f3f3b82, 0x3520ab82, 0x011a1d4b, 0x277227f8, 0x611560b1, 0xe7933fdc,
+                0xbb3a792b, 0x344525bd, 0xa08839e1, 0x51ce794b, 0x2f32c9b7, 0xa01fbac9,
+                0xe01cc87e, 0xbcc7d1f6, 0xcf0111c3, 0xa1e8aac7, 0x1a908749, 0xd44fbd9a,
+                0xd0dadecb, 0xd50ada38, 0x0339c32a, 0xc6913667, 0x8df9317c, 0xe0b12b4f,
+                0xf79e59b7, 0x43f5bb3a, 0xf2d519ff, 0x27d9459c, 0xbf97222c, 0x15e6fc2a,
+                0x0f91fc71, 0x9b941525, 0xfae59361, 0xceb69ceb, 0xc2a86459, 0x12baa8d1,
+                0xb6c1075e, 0xe3056a0c, 0x10d25065, 0xcb03a442, 0xe0ec6e0e, 0x1698db3b,
+                0x4c98a0be, 0x3278e964, 0x9f1f9532, 0xe0d392df, 0xd3a0342b, 0x8971f21e,
+                0x1b0a7441, 0x4ba3348c, 0xc5be7120, 0xc37632d8, 0xdf359f8d, 0x9b992f2e,
+                0xe60b6f47, 0x0fe3f11d, 0xe54cda54, 0x1edad891, 0xce6279cf, 0xcd3e7e6f,
+                0x1618b166, 0xfd2c1d05, 0x848fd2c5, 0xf6fb2299, 0xf523f357, 0xa6327623,
+                0x93a83531, 0x56cccd02, 0xacf08162, 0x5a75ebb5, 0x6e163697, 0x88d273cc,
+                0xde966292, 0x81b949d0, 0x4c50901b, 0x71c65614, 0xe6c6c7bd, 0x327a140a,
+                0x45e1d006, 0xc3f27b9a, 0xc9aa53fd, 0x62a80f00, 0xbb25bfe2, 0x35bdd2f6,
+                0x71126905, 0xb2040222, 0xb6cbcf7c, 0xcd769c2b, 0x53113ec0, 0x1640e3d3,
+                0x38abbd60, 0x2547adf0, 0xba38209c, 0xf746ce76, 0x77afa1c5, 0x20756060,
+                0x85cbfe4e, 0x8ae88dd8, 0x7aaaf9b0, 0x4cf9aa7e, 0x1948c25c, 0x02fb8a8c,
+                0x01c36ae4, 0xd6ebe1f9, 0x90d4f869, 0xa65cdea0, 0x3f09252d, 0xc208e69f,
+                0xb74e6132, 0xce77e25b, 0x578fdfe3, 0x3ac372e6,
+            };
+            this.bfP = setupP.ToArray();
 
             // set up the S blocks
-            this.bfS0 = SetupS0();
-            this.bfS1 = SetupS1();
-            this.bfS2 = SetupS2();
-            this.bfS3 = SetupS3();
-            var key = new byte[cipherKey.Length]; // 448 bits
+            this.bfS0 = setupS0.ToArray();
+            this.bfS1 = setupS1.ToArray();
+            this.bfS2 = setupS2.ToArray();
+            this.bfS3 = setupS3.ToArray();
             if (cipherKey.Length > 56)
             {
                 throw new InvalidOperationException(Resources.BlowFish_Key_Too_Long);
             }
 
-            Buffer.BlockCopy(cipherKey, 0, key, 0, cipherKey.Length);
             var j = 0;
             for (var i = 0; i < 18; i++)
             {
-                var d = (uint)((((((key[j % cipherKey.Length] * 256) + key[(j + 1) % cipherKey.Length]) * 256) + key[(j + 2) % cipherKey.Length]) * 256) + key[(j + 3) % cipherKey.Length]);
+                var d = (uint)((((((cipherKey[j % cipherKey.Length] * 256) + cipherKey[(j + 1) % cipherKey.Length]) * 256) + cipherKey[(j + 2) % cipherKey.Length]) * 256) + cipherKey[(j + 3) % cipherKey.Length]);
                 this.bfP[i] ^= d;
                 j = (j + 4) % cipherKey.Length;
             }
@@ -602,25 +569,26 @@ namespace Elskom.Generic.Libs
         private byte[] Crypt_ECB(byte[] text, bool decrypt)
         {
             var paddedLen = text.Length % 8 == 0 ? text.Length : text.Length + 8 - (text.Length % 8);
-            var plainText = new byte[paddedLen];
-            Buffer.BlockCopy(text, 0, plainText, 0, text.Length);
-            var block = new byte[8];
+            if (paddedLen != text.Length)
+            {
+                Array.Resize(ref text, paddedLen);
+            }
+
+            var plainText = text.AsSpan();
             for (var i = 0; i < plainText.Length; i += 8)
             {
-                Buffer.BlockCopy(plainText, i, block, 0, 8);
+                var block = plainText.Slice(i, 8);
                 if (decrypt)
                 {
-                    this.BlockDecrypt(ref block);
+                    this.BlockDecrypt(block);
                 }
                 else
                 {
-                    this.BlockEncrypt(ref block);
+                    this.BlockEncrypt(block);
                 }
-
-                Buffer.BlockCopy(block, 0, plainText, i, 8);
             }
 
-            return plainText;
+            return text;
         }
 
         private byte[] Crypt_CBC(byte[] text, bool decrypt)
@@ -631,102 +599,94 @@ namespace Elskom.Generic.Libs
             }
 
             var paddedLen = text.Length % 8 == 0 ? text.Length : text.Length + 8 - (text.Length % 8);
-            var plainText = new byte[paddedLen];
-            Buffer.BlockCopy(text, 0, plainText, 0, text.Length);
-            var block = new byte[8];
-            var preblock = new byte[8];
-            var iv = new byte[8];
-            Buffer.BlockCopy(this.initVector, 0, iv, 0, 8);
-            if (!decrypt)
+            if (paddedLen != text.Length)
             {
-                for (var i = 0; i < plainText.Length; i += 8)
-                {
-                    Buffer.BlockCopy(plainText, i, block, 0, 8);
-                    XorBlock_private(ref block, iv);
-                    this.BlockEncrypt(ref block);
-                    Buffer.BlockCopy(block, 0, iv, 0, 8);
-                    Buffer.BlockCopy(block, 0, plainText, i, 8);
-                }
-            }
-            else
-            {
-                for (var i = 0; i < plainText.Length; i += 8)
-                {
-                    Buffer.BlockCopy(plainText, i, block, 0, 8);
-
-                    Buffer.BlockCopy(block, 0, preblock, 0, 8);
-                    this.BlockDecrypt(ref block);
-                    XorBlock_private(ref block, iv);
-                    Buffer.BlockCopy(preblock, 0, iv, 0, 8);
-
-                    Buffer.BlockCopy(block, 0, plainText, i, 8);
-                }
+                Array.Resize(ref text, paddedLen);
             }
 
-            return plainText;
+            var plainText = text.AsSpan();
+            byte[] preblock = null;
+            var iv = this.initVector.AsSpan().Slice(0, 8);
+            for (var i = 0; i < plainText.Length; i += 8)
+            {
+                var block = plainText.Slice(i, 8);
+                if (decrypt)
+                {
+                    preblock = block.ToArray();
+                    this.BlockDecrypt(block);
+                }
+
+                XorBlock_private(block, iv);
+                if (!decrypt)
+                {
+                    this.BlockEncrypt(block);
+                    iv = block;
+                }
+                else
+                {
+                    // clone preblock into iv.
+                    iv = preblock.AsSpan();
+                }
+            }
+
+            return text;
         }
 
-        private void BlockEncrypt(ref byte[] block)
+        private void BlockEncrypt(Span<byte> block)
         {
             this.SetBlock(block);
             this.Encipher();
-            this.GetBlock(ref block);
+            this.GetBlock(block);
         }
 
-        private void BlockDecrypt(ref byte[] block)
+        private void BlockDecrypt(Span<byte> block)
         {
             this.SetBlock(block);
             this.Decipher();
-            this.GetBlock(ref block);
+            this.GetBlock(block);
         }
 
-        private void SetBlock(byte[] block)
+        private void SetBlock(Span<byte> block)
         {
-            var block1 = new byte[4];
-            var block2 = new byte[4];
-            Buffer.BlockCopy(block, 0, block1, 0, 4);
-            Buffer.BlockCopy(block, 4, block2, 0, 4);
-
             // split the block
-            if (this.NonStandard)
-            {
-                this.xrPar = BitConverter.ToUInt32(block1, 0);
-                this.xlPar = BitConverter.ToUInt32(block2, 0);
-            }
-            else
+            if (!this.NonStandard)
             {
                 // ToUInt32 requires the bytes in reverse order
-                Array.Reverse(block1);
-                Array.Reverse(block2);
-                this.xlPar = BitConverter.ToUInt32(block1, 0);
-                this.xrPar = BitConverter.ToUInt32(block2, 0);
+                block.Reverse();
+            }
+
+            this.xrPar = BitConverter.ToUInt32(block.ToArray(), 0);
+            this.xlPar = BitConverter.ToUInt32(block.ToArray(), 4);
+            if (!this.NonStandard)
+            {
+                // reverse them back.
+                block.Reverse();
             }
         }
 
-        private void GetBlock(ref byte[] block)
+        private void GetBlock(Span<byte> block)
         {
+            byte[] block1;
+            byte[] block2;
             if (this.NonStandard)
             {
-                var block1 = BitConverter.GetBytes(this.xrPar);
-                var block2 = BitConverter.GetBytes(this.xlPar);
-
-                // join the block
-                Buffer.BlockCopy(block1, 0, block, 0, 4);
-                Buffer.BlockCopy(block2, 0, block, 4, 4);
+                block1 = BitConverter.GetBytes(this.xrPar);
+                block2 = BitConverter.GetBytes(this.xlPar);
             }
             else
             {
-                var block1 = BitConverter.GetBytes(this.xlPar);
-                var block2 = BitConverter.GetBytes(this.xrPar);
+                block1 = BitConverter.GetBytes(this.xlPar);
+                block2 = BitConverter.GetBytes(this.xrPar);
 
                 // GetBytes returns the bytes in reverse order
                 Array.Reverse(block1);
                 Array.Reverse(block2);
-
-                // join the block
-                Buffer.BlockCopy(block1, 0, block, 0, 4);
-                Buffer.BlockCopy(block2, 0, block, 4, 4);
             }
+
+            // join the block
+            Array.Resize(ref block1, block1.Length + 4);
+            block2.CopyTo(block1, 4);
+            block1.CopyTo(block);
         }
 
         private void Encipher()
@@ -779,6 +739,14 @@ namespace Elskom.Generic.Libs
                 {
                     this.randomSource.Dispose();
                     this.randomSource = null;
+
+                    // do not leak these arrays either.
+                    this.bfS0 = null;
+                    this.bfS1 = null;
+                    this.bfS2 = null;
+                    this.bfS3 = null;
+                    this.bfP = null;
+                    this.initVector = null;
                 }
 
                 this.IsDisposed = true;

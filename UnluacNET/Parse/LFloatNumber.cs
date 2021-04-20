@@ -12,7 +12,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         public LFloatNumber(float number)
             => this.Number = number;
 
-        public float Number { get; private set; }
+        public float Number { get; }
 
         public override double Value => this.Number;
 

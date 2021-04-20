@@ -11,16 +11,12 @@ namespace Elskom.Generic.Libs.UnluacNET
 
     public class BHeader
     {
-        private static readonly int m_signature = 0x61754C1B; // '\x1B\Lua'
-        private static readonly byte[] m_luacTail =
-        {
-            0x19, 0x93, 0x0D, 0x0A, 0x1A, 0x0A,
-        };
+        private static readonly int Signature = 0x61754C1B; // '\x1B\Lua'
 
         public BHeader(Stream stream)
         {
             // 4-byte Lua signature
-            if (stream.ReadInt32() != m_signature)
+            if (stream.ReadInt32() != Signature)
             {
                 throw new InvalidOperationException("The input file does not have the signature of a valid Lua file.");
             }
@@ -45,101 +41,105 @@ namespace Elskom.Generic.Libs.UnluacNET
                 {
                     var major = version >> 4;
                     var minor = version & 0x0F;
-                    var error = string.Format("The input chunk's Lua version is {0}.{1}; unluac can only handle Lua 5.1 and Lua 5.2.", major, minor);
+                    var error = $"The input chunk's Lua version is {major}.{minor}; unluac can only handle Lua 5.1 and Lua 5.2.";
                     throw new InvalidOperationException(error);
                 }
             }
 
             if (this.Debug)
             {
-                Console.WriteLine("-- version: 0x{0:X}", version);
+                System.Diagnostics.Debug.WriteLine($"-- version: 0x{version:X}");
             }
 
             // 1-byte Lua "format"
             var format = stream.ReadByte();
             if (format != 0)
             {
-                throw new InvalidOperationException("The input chunk reports a non-standard lua format: " + format);
+                throw new InvalidOperationException($"The input chunk reports a non-standard lua format: {format}");
             }
 
             if (this.Debug)
             {
-                Console.WriteLine("-- format: {0}", format);
+                System.Diagnostics.Debug.WriteLine($"-- format: {format}");
             }
 
             // 1-byte endianness
             var endianness = stream.ReadByte();
             if (endianness > 1)
             {
-                throw new InvalidOperationException("The input chunk reports an invalid endianness: " + endianness);
+                throw new InvalidOperationException($"The input chunk reports an invalid endianness: {endianness}");
             }
 
             this.BigEndian = endianness == 0;
             if (this.Debug)
             {
-                Console.WriteLine("-- endianness: {0}", this.BigEndian ? "0 (big)" : "1 (little)");
+                System.Diagnostics.Debug.WriteLine($"-- endianness: {(this.BigEndian ? "0 (big)" : "1 (little)")}");
             }
 
             // 1-byte int size
             var intSize = stream.ReadByte();
             if (this.Debug)
             {
-                Console.WriteLine("-- int size: {0}", intSize);
+                System.Diagnostics.Debug.WriteLine($"-- int size: {intSize}");
             }
 
-            this.Integer = new BIntegerType(intSize);
+            this.Integer = new(intSize);
 
             // 1-byte sizeT size
             var sizeTSize = stream.ReadByte();
             if (this.Debug)
             {
-                Console.WriteLine("-- size_t size: {0}", sizeTSize);
+                System.Diagnostics.Debug.WriteLine($"-- size_t size: {sizeTSize}");
             }
 
-            this.SizeT = new BSizeTType(sizeTSize);
+            this.SizeT = new(sizeTSize);
 
             // 1-byte instruction size
             var instructionSize = stream.ReadByte();
             if (this.Debug)
             {
-                Console.WriteLine("-- instruction size: {0}", instructionSize);
+                System.Diagnostics.Debug.WriteLine($"-- instruction size: {instructionSize}");
             }
 
             if (instructionSize != 4)
             {
-                throw new InvalidOperationException("The input chunk reports an unsupported instruction size: " + instructionSize + " bytes");
+                throw new InvalidOperationException($"The input chunk reports an unsupported instruction size: {instructionSize} bytes");
             }
 
             var lNumberSize = stream.ReadByte();
             if (this.Debug)
             {
-                Console.WriteLine("-- Lua number size: {0}", lNumberSize);
+                System.Diagnostics.Debug.WriteLine($"-- Lua number size: {lNumberSize}");
             }
 
             var lNumberIntegralCode = stream.ReadByte();
             if (this.Debug)
             {
-                Console.WriteLine("-- Lua number integral code: {0}", lNumberIntegralCode);
+                System.Diagnostics.Debug.WriteLine($"-- Lua number integral code: {lNumberIntegralCode}");
             }
 
             if (lNumberIntegralCode > 1)
             {
-                throw new InvalidOperationException("The input chunk reports an invalid code for lua number integralness: " + lNumberIntegralCode);
+                throw new InvalidOperationException($"The input chunk reports an invalid code for lua number integralness: {lNumberIntegralCode}");
             }
 
             var lNumberIntegral = lNumberIntegralCode == 1;
-            this.Number = new LNumberType(lNumberSize, lNumberIntegral);
-            this.Bool = new LBooleanType();
-            this.String = new LStringType();
-            this.Constant = new LConstantType();
-            this.Local = new LLocalType();
-            this.UpValue = new LUpvalueType();
+            this.Number = new(lNumberSize, lNumberIntegral);
+            this.Bool = new();
+            this.String = new();
+            this.Constant = new();
+            this.Local = new();
+            this.UpValue = new();
             this.Function = this.Version.GetLFunctionType();
             if (this.Version.HasHeaderTail)
             {
-                for (var i = 0; i < m_luacTail.Length; i++)
+                Span<byte> luacTail = stackalloc byte[]
                 {
-                    if (stream.ReadByte() != m_luacTail[i])
+                    0x19, 0x93, 0x0D, 0x0A, 0x1A, 0x0A,
+                };
+                foreach (var t in luacTail)
+                {
+                    if (stream.ReadByte() != t)
                     {
                         throw new InvalidOperationException("The input chunk does not have the header tail of a valid Lua file.");
                     }
@@ -149,26 +149,26 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public bool Debug { get; set; }
 
-        public bool BigEndian { get; set; }
+        public bool BigEndian { get; }
 
-        public Version Version { get; set; }
+        public Version Version { get; }
 
-        public BIntegerType Integer { get; set; }
+        public BIntegerType Integer { get; }
 
-        public BSizeTType SizeT { get; set; }
+        public BSizeTType SizeT { get; }
 
-        public LBooleanType Bool { get; set; }
+        public LBooleanType Bool { get; }
 
-        public LNumberType Number { get; set; }
+        public LNumberType Number { get; }
 
-        public LStringType String { get; set; }
+        public LStringType String { get; }
 
-        public LConstantType Constant { get; set; }
+        public LConstantType Constant { get; }
 
-        public LLocalType Local { get; set; }
+        public LLocalType Local { get; }
 
-        public LUpvalueType UpValue { get; set; }
+        public LUpvalueType UpValue { get; }
 
-        public LFunctionType Function { get; set; }
+        public LFunctionType Function { get; }
     }
 }

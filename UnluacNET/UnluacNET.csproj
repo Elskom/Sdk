@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFrameworks>net40;net5.0;netcoreapp2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyTitle>Unluac.NET</AssemblyTitle>
     <LangVersion>latest</LangVersion>
     <Product>Unluac.NET</Product>
@@ -10,7 +10,6 @@
     <Description>Lua 5.1 decompiler based on 'unluac' by tehtmi.</Description>
     <Copyright>Original UnluacNET Copyright © 2014 Mark Ludwig, tehtmi, Copyright © 2020-2021</Copyright>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -20,10 +19,6 @@
     <Authors>Els_kom org.</Authors>
     <PackageProjectUrl>https://github.com/Elskom/Sdk/</PackageProjectUrl>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>preview</AnalysisLevel>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -53,21 +48,13 @@
     <EmbeddedResource Remove="Test\**" />
     <None Remove="Test\**" />
     <None Remove="stylecop.json" />
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GitInformation\src\GitInformation\Elskom.GitInformation.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-
   <Import Project="../CommonPackages.props" />
-  <Import Project="../Sdk/GitBuildInfo.Task.targets" />
-
-  <Target Name="GitBuildInfo" BeforeTargets="PrepareForBuild">
-    <GitBuildInfoTask OutputPath="$(ProjectDir)\GitAssemblyInfo.cs" AssemblyType="Elskom.Generic.Libs.UnluacNET.Decompiler" IsGeneric="false" />
-  </Target>
 
 </Project>

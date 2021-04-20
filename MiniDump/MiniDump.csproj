@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFrameworks>netcoreapp2.0;net5.0;net471</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>MiniDump</AssemblyName>
     <LangVersion>latest</LangVersion>
     <Company>Els_kom org.</Company>
@@ -22,10 +22,6 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>preview</AnalysisLevel>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -38,18 +34,13 @@
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
-    <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="($(TargetFramework.StartsWith('net4')) OR $(TargetFramework.EndsWith('app3.0')) OR $(TargetFramework.EndsWith('app3.1')) OR '$(TargetFramework)' == 'net5.0') AND !$(TargetFramework.StartsWith('netstandard'))">
-    <!-- We need to use the ExceptionPointers member in Marshal on these TFM's. -->
-    <DefineConstants>$(DefineConstants);WITH_EXCEPTIONPOINTERS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -58,21 +49,13 @@
     <None Remove="LICENSE" />
     <None Remove="readme.md" />
     <None Remove="stylecop.json" />
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../SettingsFile/SettingsFile.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-
   <Import Project="../CommonPackages.props" />
-  <Import Project="../Sdk/GitBuildInfo.Task.targets" />
-
-  <Target Name="GitBuildInfo" BeforeTargets="PrepareForBuild">
-    <GitBuildInfoTask OutputPath="$(ProjectDir)\GitAssemblyInfo.cs" AssemblyType="Elskom.Generic.Libs.MiniDump" IsGeneric="false" />
-  </Target>
 
 </Project>

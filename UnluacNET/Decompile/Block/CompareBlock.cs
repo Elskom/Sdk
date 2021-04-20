@@ -16,9 +16,9 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.Branch = branch;
         }
 
-        public int Target { get; set; }
+        public int Target { get; }
 
-        public Branch Branch { get; set; }
+        public Branch Branch { get; }
 
         public override bool Breakable => false;
 

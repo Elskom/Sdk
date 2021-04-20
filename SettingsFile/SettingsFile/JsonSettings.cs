@@ -42,13 +42,13 @@ namespace Elskom.Generic.Libs
         public string ElsDir { get; set; }
 
         /// <summary>
-        /// Gets or sets wether to show the icon in tray, in taskbar, or both when Elsword is not running.
+        /// Gets or sets whether to show the icon in tray, in taskbar, or both when Elsword is not running.
         /// </summary>
         [JsonPropertyName("IconWhileElsNotRunning")]
         public int IconWhileElsNotRunning { get; set; }
 
         /// <summary>
-        /// Gets or sets wether to show the icon in tray, in taskbar, or both when Elsword is running.
+        /// Gets or sets whether to show the icon in tray, in taskbar, or both when Elsword is running.
         /// </summary>
         [JsonPropertyName("IconWhileElsRunning")]
         public int IconWhileElsRunning { get; set; }
@@ -94,14 +94,10 @@ namespace Elskom.Generic.Libs
         /// <returns>The json string to the input type instance's data.</returns>
         public static string Serialize(JsonSettings value, JsonSerializerOptions options = null)
         {
-            if (options == null)
+            options ??= new()
             {
-                options = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                };
-            }
-
+                WriteIndented = true,
+            };
             return JsonSerializer.Serialize(value, options);
         }
 
@@ -113,7 +109,7 @@ namespace Elskom.Generic.Libs
         public static JsonSettings OpenFile()
             => File.Exists(SettingsFile.SettingsPath)
             ? Deserialize(File.ReadAllText(SettingsFile.SettingsPath))
-            : new JsonSettings();
+            : new();
 
         /// <summary>
         /// Returns a new instance of this type so this one can be discarded.
@@ -122,7 +118,7 @@ namespace Elskom.Generic.Libs
         public JsonSettings ReopenFile()
         {
             this.Save();
-            return Deserialize(File.ReadAllText(SettingsFile.SettingsPath));
+            return OpenFile();
         }
 
         /// <summary>
