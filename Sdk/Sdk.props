@@ -32,7 +32,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <!-- We need the source generator we created. -->
-    <PackageReference Include="GitBuildInfo.SourceGenerator" IsImplicitlyDefined="true" Version="*-*">
+    <PackageReference Include="GitBuildInfo.SourceGenerator" IsImplicitlyDefined="true" Version="-*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
