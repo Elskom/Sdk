@@ -47,7 +47,7 @@
     <PackageReference Include="UnluacNET" IsImplicitlyDefined="true" Version="*-*" />
     <!-- needs .NET Framework 4.5+. -->
     <PackageReference Include="GenericPluginLoader" IsImplicitlyDefined="true" Version="*-*" />
-    <PackageReference Include="ReleasePackaging" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="ReleasePackaging" IsImplicitlyDefined="true" Version="-*" />
     <!-- needs .NET Framework 4.6.1+. -->
     <PackageReference Include="PluginUpdateCheck" IsImplicitlyDefined="true" Version="*-*" />
     <PackageReference Include="Elskom.PluginFramework" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' == 'Windows_NT'" />
