@@ -38,7 +38,7 @@
     </PackageReference>
     <!-- We need to reference System.Net.Http on .NET Framework targets. -->
     <Reference Include="System.Net.Http" IsImplicitlyDefined="true" Condition="$(TargetFramework.StartsWith('net4')) AND '$(ElskomSdkBuild)' == ''" />
-    <PackageReference Include="System.Resources.Extensions" IsImplicitlyDefined="true" Version="*-*" Condition="$(TargetFramework.StartsWith('net4')) AND ('$(UseWindowsForms)' == 'true' OR '$(UseWPF)' == 'true') AND '$(OS)' == 'Windows_NT' AND '$(ElskomSdkBuild)' == ''" />
+    <PackageReference Include="System.Resources.Extensions" IsImplicitlyDefined="true" Version="-*" Condition="$(TargetFramework.StartsWith('net4')) AND ('$(UseWindowsForms)' == 'true' OR '$(UseWPF)' == 'true') AND '$(OS)' == 'Windows_NT' AND '$(ElskomSdkBuild)' == ''" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(ElskomSdkBuild)' == ''">
