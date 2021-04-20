@@ -26,7 +26,7 @@
     </PackageReference>
     <!-- Common .NET Dependency packages. -->
     <!-- For Span/ReadOnlySpan. -->
-    <PackageReference Include="System.Memory" Version="*-*" IsImplicitlyDefined="true" />
+    <PackageReference Include="System.Memory" Version="-*" IsImplicitlyDefined="true" />
     <!-- for the command line. -->
     <PackageReference Include="System.CommandLine" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
     <!-- for Json file loading and reading/writing. -->
