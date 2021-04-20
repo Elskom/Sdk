@@ -102,6 +102,6 @@ namespace Elskom.Generic.Libs.UnluacNET
             => this.code[line - 1];
 
         private static int MASK1(int n, int p)
-            => (~(~0 << n)) << p;
+            => ~(~0 << n) << p;
     }
 }

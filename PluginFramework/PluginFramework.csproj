@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <TargetFrameworks>netcoreapp3.0;net5.0-windows;net461</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Elskom.PluginFramework</AssemblyName>
     <LangVersion>latest</LangVersion>
-    <UseWindowsForms>true</UseWindowsForms>
     <Company>Els_kom org.</Company>
     <Authors>Els_kom org.</Authors>
     <PackageTags>PluginFramework</PackageTags>
@@ -23,10 +22,6 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>preview</AnalysisLevel>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -40,8 +35,6 @@
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <RootNamespace>Elskom.Generic.Libs</RootNamespace>
-    <OutputPath>bin\Any CPU\$(Configuration)\</OutputPath>
-    <DocumentationFile>bin\Any CPU\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -61,25 +54,11 @@
     <None Remove="LICENSE" />
     <None Remove="readme.md" />
     <None Remove="stylecop.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="../zlib.managed/zlib.managed.csproj" />
-    <ProjectReference Include="../SettingsFile/SettingsFile.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -87,11 +66,11 @@
     </Compile>
   </ItemGroup>
 
-  <Import Project="../CommonPackages.props" />
-  <Import Project="../Sdk/GitBuildInfo.Task.targets" />
+  <ItemGroup>
+    <ProjectReference Include="../zlib.managed/zlib.managed.csproj" />
+    <ProjectReference Include="../SettingsFile/SettingsFile.csproj" />
+  </ItemGroup>
 
-  <Target Name="GitBuildInfo" BeforeTargets="PrepareForBuild">
-    <GitBuildInfoTask OutputPath="$(ProjectDir)\GitAssemblyInfo.cs" AssemblyType="Elskom.Generic.Libs.KOMManager" IsGeneric="false" />
-  </Target>
+  <Import Project="../CommonPackages.props" />
 
 </Project>

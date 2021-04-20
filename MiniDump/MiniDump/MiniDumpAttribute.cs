@@ -31,14 +31,28 @@ namespace Elskom.Generic.Libs
         public MiniDumpAttribute()
         {
             var currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler);
+            currentDomain.UnhandledException += (o, args)
+                => _ = DumpException((Exception)args.ExceptionObject, false);
             CurrentInstance = this;
         }
+
+        /// <summary>
+        /// Occurs when a mini-dump is generated or fails.
+        /// </summary>
+        public static event EventHandler<MessageEventArgs> DumpMessage;
 
         /// <summary>
         /// Gets the current instance of this attribute.
         /// </summary>
         public static MiniDumpAttribute CurrentInstance { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the application should force close.
+        /// <para>Lets the program know that it needs to close even if it is
+        /// not wanted because a crash dump was created by this library and we
+        /// do not want the system itself to produce a second one.</para>
+        /// </summary>
+        public static bool ForceClose { get; internal set; }
 
         /// <summary>
         /// Gets or sets the Exception message text.
@@ -72,17 +86,18 @@ namespace Elskom.Generic.Libs
 
         /// <summary>
         /// Dumps an exception into an minidump file.
-        /// Pefect for unhandled to Thread Exceptions.
+        /// Perfect for unhandled to Thread Exceptions.
         ///
         /// Note: Attribute handles unhandled exceptions by default with the exception
         /// for any Thread Exceptions.
         /// </summary>
         /// <param name="exception">The exception to dump into the minidump.</param>
         /// <param name="threadException">Whether the exception is a thread exception or not.</param>
-        public static void DumpException(Exception exception, bool threadException)
+        /// <returns>The ExitCode for the application.</returns>
+        public static int DumpException(Exception exception, bool threadException)
             => MiniDump.ExceptionEventHandlerCode(exception, threadException);
 
-        private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs args)
-            => DumpException((Exception)args.ExceptionObject, false);
+        internal static void InvokeDumpMessage(object sender, MessageEventArgs e)
+            => DumpMessage?.Invoke(sender, e);
     }
 }

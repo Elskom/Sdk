@@ -16,12 +16,12 @@ namespace Elskom.Generic.Libs.UnluacNET
         public BList<T> ParseList(Stream stream, BHeader header)
         {
             var length = header.Integer.Parse(stream, header);
-            var values = new List<T>();
+            List<T> values = new();
             length.Iterate(() =>
             {
                 values.Add(this.Parse(stream, header));
             });
-            return new BList<T>(length, values);
+            return new(length, values);
         }
     }
 }

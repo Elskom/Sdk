@@ -30,7 +30,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public abstract bool IsUnprotected { get; }
 
-        protected LFunction Function { get; private set; }
+        protected LFunction Function { get; }
 
         public static bool operator ==(Block left, Block right)
             => left is null ? right is null : left.Equals(right);
@@ -45,7 +45,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             => left is null || left.CompareTo(right) <= 0;
 
         public static bool operator >(Block left, Block right)
-            => left is object && left.CompareTo(right) > 0;
+            => left is not null && left.CompareTo(right) > 0;
 
         public static bool operator >=(Block left, Block right)
             => left is null ? right is null : left.CompareTo(right) >= 0;
@@ -78,14 +78,11 @@ namespace Elskom.Generic.Libs.UnluacNET
         public virtual Operation Process(Decompiler d)
         {
             var statement = this;
-            return new LambdaOperation(this.End - 1, (r, block) =>
-            {
-                return statement;
-            });
+            return new LambdaOperation(this.End - 1, (_, _) => statement);
         }
 
         public override bool Equals(object obj)
-            => ReferenceEquals(this, obj) && obj is object && this.CompareTo((Block)obj) == 0;
+            => ReferenceEquals(this, obj) && obj is not null && this.CompareTo((Block)obj) is 0;
 
         public override int GetHashCode()
             => throw new NotImplementedException();

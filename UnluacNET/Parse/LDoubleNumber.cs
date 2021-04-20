@@ -12,7 +12,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         public LDoubleNumber(double number)
             => this.Number = number;
 
-        public double Number { get; private set; }
+        public double Number { get; }
 
         public override double Value => this.Number;
 

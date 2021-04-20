@@ -32,10 +32,8 @@ namespace Elskom.Generic.Libs.UnluacNET
                 this.m_table.AddEntry(new TableLiteral.Entry(this.m_index, this.m_value, !this.m_isTable, this.m_timestamp));
                 return null;
             }
-            else
-            {
-                return new Assignment(new TableTarget(this.m_table, this.m_index), this.m_value);
-            }
+
+            return new Assignment(new TableTarget(this.m_table, this.m_index), this.m_value);
         }
     }
 }

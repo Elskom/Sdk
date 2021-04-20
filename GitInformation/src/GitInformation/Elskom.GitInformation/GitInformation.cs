@@ -33,23 +33,23 @@ namespace Elskom.Generic.Libs
         /// Gets the git commit head description based upon the string constructed by
         /// git name-rev.
         /// </summary>
-        public string Headdesc { get; private set; }
+        public string Headdesc { get; }
 
         /// <summary>
-        /// Gets the git commit hash as formated by git rev-parse.
+        /// Gets the git commit hash as formatted by git rev-parse.
         /// </summary>
         /// <value>
-        /// The git commit hash as formated by git rev-parse.
+        /// The git commit hash as formatted by git rev-parse.
         /// </value>
-        public string Commit { get; private set; }
+        public string Commit { get; }
 
         /// <summary>
-        /// Gets the git branch name as formated by git name-rev.
+        /// Gets the git branch name as formatted by git name-rev.
         /// </summary>
         /// <value>
-        /// The git branch name as formated by git name-rev.
+        /// The git branch name as formatted by git name-rev.
         /// </value>
-        public string Branchname { get; private set; }
+        public string Branchname { get; }
 
         /// <summary>
         /// Gets a value indicating whether the branch is dirty or

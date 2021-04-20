@@ -11,7 +11,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public ReturnOperation(int line, Expression value)
             : base(line)
-            => this.m_values = new Expression[1]
+            => this.m_values = new[]
             {
                 value,
             };

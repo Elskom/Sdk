@@ -6,6 +6,7 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using Elskom.Generic.Libs.UnluacNET.IO;
 
@@ -14,14 +15,14 @@ namespace Elskom.Generic.Libs.UnluacNET
         public BIntegerType(int intSize)
             => this.IntSize = intSize;
 
-        public int IntSize { get; private set; }
+        public int IntSize { get; }
 
         public override BInteger Parse(Stream stream, BHeader header)
         {
             var value = this.RawParse(stream, header);
             if (header.Debug)
             {
-                Console.WriteLine("-- parsed <integer> " + value.AsInteger());
+                Debug.WriteLine($"-- parsed <integer> {value.AsInteger()}");
             }
 
             return value;
@@ -36,31 +37,31 @@ namespace Elskom.Generic.Libs.UnluacNET
             {
                 case 0:
                 {
-                    value = new BInteger(0);
+                    value = new(0);
                     break;
                 }
 
                 case 1:
                 {
-                    value = new BInteger(stream.ReadByte());
+                    value = new(stream.ReadByte());
                     break;
                 }
 
                 case 2:
                 {
-                    value = new BInteger(stream.ReadInt16(bigEndian));
+                    value = new(stream.ReadInt16(bigEndian));
                     break;
                 }
 
                 case 4:
                 {
-                    value = new BInteger(stream.ReadInt32(bigEndian));
+                    value = new(stream.ReadInt32(bigEndian));
                     break;
                 }
 
                 case 8:
                 {
-                    value = new BInteger(stream.ReadInt64(bigEndian));
+                    value = new(stream.ReadInt64(bigEndian));
                     break;
                 }
 

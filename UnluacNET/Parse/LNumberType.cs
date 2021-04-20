@@ -6,6 +6,7 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using Elskom.Generic.Libs.UnluacNET.IO;
 
@@ -15,64 +16,39 @@ namespace Elskom.Generic.Libs.UnluacNET
         {
             this.Size = size;
             this.Integral = integral;
-            if (!(size == 4 || size == 8))
+            if (size is not (4 or 8))
             {
-                throw new InvalidOperationException("The input chunk has an unsupported Lua number size: " + size);
+                throw new InvalidOperationException($"The input chunk has an unsupported Lua number size: {size}");
             }
         }
 
-        public int Size { get; private set; }
+        public int Size { get; }
 
-        public bool Integral { get; private set; }
+        public bool Integral { get; }
 
         public override LNumber Parse(Stream stream, BHeader header)
         {
             // HACK HACK HACK
             var bigEndian = header.BigEndian;
-            LNumber value = null;
-            if (this.Integral)
+            LNumber value = this.Size switch
             {
-                switch (this.Size)
-                {
-                    case 4:
-                    {
-                        value = new LIntNumber(stream.ReadInt32(bigEndian));
-                        break;
-                    }
+                4 => this.Integral
+                    ? new LIntNumber(stream.ReadInt32(bigEndian))
+                    : new LFloatNumber(stream.ReadSingle(bigEndian)),
+                8 => this.Integral
+                    ? new LLongNumber(stream.ReadInt64(bigEndian))
+                    : new LDoubleNumber(stream.ReadDouble(bigEndian)),
+                _ => null,
+            };
 
-                    case 8:
-                    {
-                        value = new LLongNumber(stream.ReadInt64(bigEndian));
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                switch (this.Size)
-                {
-                    case 4:
-                    {
-                        value = new LFloatNumber(stream.ReadSingle(bigEndian));
-                        break;
-                    }
-
-                    case 8:
-                    {
-                        value = new LDoubleNumber(stream.ReadDouble(bigEndian));
-                        break;
-                    }
-                }
-            }
-
-            if (value == null)
+            if (value is null)
             {
                 throw new InvalidOperationException("The input chunk has an unsupported Lua number format");
             }
 
             if (header.Debug)
             {
-                Console.WriteLine("-- parsed <number> " + value);
+                Debug.WriteLine($"-- parsed <number> {value}");
             }
 
             return value;

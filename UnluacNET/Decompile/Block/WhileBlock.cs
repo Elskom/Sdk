@@ -20,7 +20,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             this.m_branch = branch;
             this.m_loopback = loopback;
             this.m_registers = registers;
-            this.m_statements = new List<Statement>(branch.End - branch.Begin + 1);
+            this.m_statements = new(branch.End - branch.Begin + 1);
         }
 
         public override int ScopeEnd => this.End - 2;

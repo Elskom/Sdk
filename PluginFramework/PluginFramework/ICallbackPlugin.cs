@@ -6,7 +6,6 @@
 namespace Elskom.Generic.Libs
 {
     using System;
-    using System.Windows.Forms;
 
     /// <summary>
     /// Interface for Els_kom Test Mods callback plugins.
@@ -39,15 +38,13 @@ namespace Elskom.Generic.Libs
 
         /// <summary>
         /// Gets the plugin's actual settings window for showing from Els_kom's core at runtime.
-        ///
-        /// Note: Create instance before returning.
-        /// Also Note: return type is <see cref="Form"/> casted as an <see cref="object"/>.
+        /// <para>Note: Create instance before returning.</para>
+        /// <para>Also Note: return type is System.Windows.Forms.Form casted as an <see cref="object"/>.</para>
         /// </summary>
         /// <value>
         /// The plugin's actual settings window for showing from Els_kom's core at runtime.
-        ///
-        /// Note: Create instance before returning.
-        /// Also Note: return type is <see cref="Form"/> casted as an <see cref="object"/>.
+        /// <para>Note: Create instance before returning.</para>
+        /// <para>Also Note: return type is System.Windows.Forms.Form casted as an <see cref="object"/>.</para>
         /// </value>
         object SettingsWindow { get; }
 

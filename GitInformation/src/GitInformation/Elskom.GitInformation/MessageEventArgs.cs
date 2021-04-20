@@ -26,18 +26,26 @@ namespace Elskom.Generic.Libs
         }
 
         /// <summary>
-        /// Gets or sets the text for the message.
+        /// Gets the text for the message.
         /// </summary>
-        public string Text { get; set; }
+        public string Text { get; }
 
         /// <summary>
-        /// Gets or sets the caption (title) for the message.
+        /// Gets the caption (title) for the message.
         /// </summary>
-        public string Caption { get; set; }
+        public string Caption { get; }
 
         /// <summary>
-        /// Gets or sets the <see cref="Libs.ErrorLevel"/> of the message.
+        /// Gets the <see cref="Libs.ErrorLevel"/> of the message.
         /// </summary>
-        public ErrorLevel ErrorLevel { get; set; }
+        public ErrorLevel ErrorLevel { get; }
+
+        /// <summary>
+        /// Gets or sets the ExitCode for the application.
+        ///
+        /// Note: Only set if <see cref="MessageEventArgs.Text"/> does not represent
+        /// a minidump failure.
+        /// </summary>
+        public int ExitCode { get; set; }
     }
 }

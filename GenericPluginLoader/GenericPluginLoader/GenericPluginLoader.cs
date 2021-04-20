@@ -11,14 +11,12 @@ namespace Elskom.Generic.Libs
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
-#if !NETCOREAPP2_0 && !NETSTANDARD
     using System.Linq;
-#endif
+#if !NET5_0_OR_GREATER
     using System.Reflection;
-    using System.Text;
+#endif
 
     /// <summary>
     /// A generic loader for plugins.
@@ -29,43 +27,47 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Triggers when the Plugin Loader has a message to send to the application.
         /// </summary>
-        public static event EventHandler<MessageEventArgs> PluginLoaderMessage;
+        public static event EventHandler<MessageEventArgs>? PluginLoaderMessage;
 
 #if NET5_0_OR_GREATER
         /// <summary>
-        /// Loads plugins with the specified plugin interface type.
+        /// Gets the list of <see cref="PluginLoadContext"/>s loaded by this instance.
         /// </summary>
-        /// <param name="path">
-        /// The path to look for plugins to load.
-        /// </param>
-        /// <param name="contexts">
-        /// The contexts created by the loader.
-        /// </param>
-        /// <param name="saveToZip">
-        /// Tells this function to see if the plugin was saved to a zip file and it's pdb file as well.
-        /// </param>
-        /// <returns>
-        /// A list of plugins loaded that derive from the specified type.
-        /// </returns>
-        public ICollection<T> LoadPlugins(string path, out List<PluginLoadContext> contexts, bool saveToZip = false)
+        public List<PluginLoadContext> Contexts { get; } = new();
 #else
+        /// <summary>
+        /// Gets the list of <see cref="AppDomain"/>s loaded by this instance.
+        /// </summary>
+        public List<AppDomain> Domains { get; } = new();
+#endif
+
         /// <summary>
         /// Loads plugins with the specified plugin interface type.
         /// </summary>
         /// <param name="path">
         /// The path to look for plugins to load.
         /// </param>
-        /// <param name="domains">The <see cref="AppDomain"/>s created by the loader.</param>
+        /// <returns>
+        /// A list of plugins loaded that derive from the specified type.
+        /// </returns>
+        public ICollection<T> LoadPlugins(string path)
+            => this.LoadPlugins(path, false);
+
+        /// <summary>
+        /// Loads plugins with the specified plugin interface type.
+        /// </summary>
+        /// <param name="path">
+        /// The path to look for plugins to load.
+        /// </param>
         /// <param name="saveToZip">
         /// Tells this function to see if the plugin was saved to a zip file and it's pdb file as well.
         /// </param>
         /// <returns>
         /// A list of plugins loaded that derive from the specified type.
         /// </returns>
-        public ICollection<T> LoadPlugins(string path, out List<AppDomain> domains, bool saveToZip = false)
-#endif
+        public ICollection<T> LoadPlugins(string path, bool saveToZip)
         {
-            string[] dllFileNames = null;
+            string[]? dllFileNames = null;
             if (Directory.Exists(path))
             {
                 dllFileNames = Directory.GetFiles(path, "*.dll");
@@ -73,93 +75,33 @@ namespace Elskom.Generic.Libs
 
             // try to load from a zip as well if plugins are installed in both places.
             var zippath = $"{path}.zip";
-            ICollection<T> plugins = new List<T>();
-#if NET5_0_OR_GREATER
-            contexts = new List<PluginLoadContext>();
-#elif NET45
-            domains = new List<AppDomain>();
-#endif
+            List<T> plugins = new();
 
             // handle when path points to a zip file.
             if (Directory.Exists(path) || File.Exists(zippath))
             {
-                ICollection<Assembly> assemblies = new List<Assembly>();
-                if (dllFileNames != null)
+                if (dllFileNames is not null)
                 {
                     foreach (var dllFile in dllFileNames)
                     {
 #if NET5_0_OR_GREATER
-                        var context = new PluginLoadContext($"Plugin#{dllFileNames.ToList().IndexOf(dllFile)}", path);
+                        PluginLoadContext context = new($"Plugin#{dllFileNames.ToList().IndexOf(dllFile)}", path);
+                        var instances = context.CreateInstancesFromInterface<T>(
+                            dllFile,
+                            dllFile.Replace(".dll", ".pdb", StringComparison.InvariantCulture));
+                        context.UnloadIfNoInstances(instances);
 #else
                         var domain = AppDomain.CreateDomain($"Plugin#{dllFileNames.ToList().IndexOf(dllFile)}");
+                        domain.AssemblyResolve += this.Domain_AssemblyResolve;
+                        var instances = domain.CreateInstancesFromInterface<T>(dllFile, dllFile.Replace(".dll", ".pdb"));
+                        domain.UnloadIfNoInstances(instances);
 #endif
-                        try
+                        if (instances.Any())
                         {
-                            var asmFile = File.ReadAllBytes(dllFile);
-
-                            // We need to handle the case where the pdb does not exist and where the
-                            // symbols might actually be embedded inside the dll instead or simply does
-                            // not exist yet.
 #if NET5_0_OR_GREATER
-                            var pdbFile = Debugger.IsAttached && File.Exists(dllFile.Replace("dll", "pdb", StringComparison.Ordinal))
-                                ? File.ReadAllBytes(
-                                    dllFile.Replace("dll", "pdb", StringComparison.Ordinal)) : null;
-                            using var ms1 = new MemoryStream(asmFile);
-                            using var ms2 = new MemoryStream(pdbFile);
-                            var assembly = Debugger.IsAttached && pdbFile != null ?
-                                context.LoadFromStream(ms1, ms2) :
-                                context.LoadFromStream(ms1);
-                            contexts.Add(context);
+                            this.Contexts.Add(context);
 #else
-                            var pdbFile = Debugger.IsAttached && File.Exists(dllFile.Replace("dll", "pdb"))
-                                ? File.ReadAllBytes(dllFile.Replace("dll", "pdb")) : null;
-                            var assembly = Debugger.IsAttached && pdbFile != null ?
-                                domain.Load(asmFile, pdbFile) :
-                                domain.Load(asmFile);
-                            domains.Add(domain);
-#endif
-                            assemblies.Add(assembly);
-                        }
-                        catch (BadImageFormatException)
-                        {
-                            // ignore the error and load the other files.
-#if NET5_0_OR_GREATER
-                            context.Unload();
-#else
-                            AppDomain.Unload(domain);
-#endif
-                        }
-                        catch (FileLoadException)
-                        {
-#if NET5_0_OR_GREATER
-                            var assembly = context.LoadFromAssemblyPath(dllFile);
-                            contexts.Add(context);
-                            assemblies.Add(assembly);
-#elif NET45
-                            try
-                            {
-                                var assembly = domain.Load(AssemblyName.GetAssemblyName(dllFile));
-                                domains.Add(domain);
-                                assemblies.Add(assembly);
-                            }
-                            catch (Exception)
-                            {
-                                // ignore the error and load the other files.
-                                AppDomain.Unload(domain);
-                            }
-#elif !NET45
-                            var assembly = Assembly.LoadFrom(dllFile);
-                            domains.Add(domain);
-                            assemblies.Add(assembly);
-#endif
-                        }
-                        catch (FileNotFoundException)
-                        {
-                            // ignore the error and load other files.
-#if NET5_0_OR_GREATER
-                            context.Unload();
-#else
-                            AppDomain.Unload(domain);
+                            this.Domains.Add(domain);
 #endif
                         }
                     }
@@ -167,7 +109,7 @@ namespace Elskom.Generic.Libs
 
                 if (saveToZip && File.Exists(zippath))
                 {
-                    var filesInZip = new Dictionary<string, int>();
+                    Dictionary<string, int> filesInZip = new();
                     using (var zipFile = ZipFile.OpenRead(zippath))
                     {
                         foreach (var entry in zipFile.Entries)
@@ -182,152 +124,112 @@ namespace Elskom.Generic.Libs
                         if (entry.EndsWith(".dll", StringComparison.Ordinal))
                         {
 #if NET5_0_OR_GREATER
-                            var context = new PluginLoadContext($"ZipPlugin#{filesInZip[entry]}", path);
-                            var assembly = ZipAssembly.LoadFromZip(zippath, entry, context);
-                            contexts.Add(context);
+                            PluginLoadContext context = new($"ZipPlugin#{filesInZip[entry]}", path);
+                            var instances = RuntimeExtensions.CreateInstancesFromInterface<T>(ZipAssembly.LoadFromZip(zippath, entry, context));
+                            context.UnloadIfNoInstances(instances);
 #else
                             var domain = AppDomain.CreateDomain($"ZipPlugin#{filesInZip[entry]}");
-                            var assembly = ZipAssembly.LoadFromZip(zippath, entry, domain);
-                            domains.Add(domain);
+                            var instances = RuntimeExtensions.CreateInstancesFromInterface<T>(ZipAssembly.LoadFromZip(zippath, entry, domain));
+                            domain.UnloadIfNoInstances(instances);
 #endif
-                            if (assembly != null)
+                            if (instances.Any())
                             {
-                                assemblies.Add(assembly);
-                            }
-                        }
-                    }
-                }
-
-                var pluginType = typeof(T);
-                var pluginTypes = new List<Type>();
-                foreach (var assembly in assemblies)
-                {
-                    if (assembly != null)
-                    {
-                        try
-                        {
-                            var types = assembly.GetTypes();
-                            foreach (var type in types)
-                            {
-                                if (!type.IsInterface && !type.IsAbstract && type.GetInterface(pluginType.FullName) != null)
-                                {
-                                    pluginTypes.Add(type);
-                                }
-                            }
-                        }
-                        catch (ReflectionTypeLoadException ex)
-                        {
-                            var exMsg = new StringBuilder();
-                            foreach (var exceptions in ex.LoaderExceptions)
-                            {
-                                exMsg.Append($"{exceptions.Message}{Environment.NewLine}{exceptions.StackTrace}{Environment.NewLine}");
-                            }
-
-                            PluginLoaderMessage?.Invoke(null, new MessageEventArgs(exMsg.ToString(), "Error!", ErrorLevel.Error));
-                        }
-                        catch (ArgumentNullException ex)
-                        {
-                            var exMsg = string.Empty;
-                            LogException(ex, ref exMsg);
-                            PluginLoaderMessage?.Invoke(null, new MessageEventArgs(exMsg, "Error!", ErrorLevel.Error));
-                        }
-                    }
-                }
-
-                ICollection<int> toRemove = new List<int>();
-                foreach (var type in pluginTypes)
-                {
-                    try
-                    {
-                        var plugin = (T)Activator.CreateInstance(type);
-                        plugins.Add(plugin);
-                    }
-                    catch (MissingMethodException)
-                    {
-                        toRemove.Add(pluginTypes.IndexOf(type));
-                        var index = 0;
 #if NET5_0_OR_GREATER
-                        foreach (var context in contexts)
-                        {
-                            if (context.Assemblies.Contains(type.Assembly) && context.IsCollectible)
-                            {
-                                index = contexts.IndexOf(context);
-                                context.Unload();
-                            }
-                        }
+                                this.Contexts.Add(context);
 #else
-                        foreach (var domain in domains)
-                        {
-                            if (domain.GetAssemblies().ToList().Contains(type.Assembly))
-                            {
-                                index = domains.IndexOf(domain);
-                                AppDomain.Unload(domain);
+                                this.Domains.Add(domain);
+#endif
                             }
-                        }
-#endif
-
-                        if (index > -1)
-                        {
-#if NET5_0_OR_GREATER
-                            contexts.RemoveAt(index);
-#else
-                            domains.RemoveAt(index);
-#endif
                         }
                     }
                 }
-
-                foreach (var indexToRemove in toRemove)
-                {
-                    if (indexToRemove > -1)
-                    {
-                        pluginTypes.RemoveAt(indexToRemove);
-                    }
-                }
-
-                toRemove.Clear();
-                return plugins;
             }
 
             return plugins;
         }
 
-#if NET5_0_OR_GREATER
         /// <summary>
-        /// Unloads all of the plugins using their contexts.
+        /// Unloads all of the loaded plugins.
         /// </summary>
-        /// <param name="contexts">The list returned from LoadPlugins to unload all plugins loaded.</param>
-        public void UnloadPlugins(List<PluginLoadContext> contexts)
+        public void UnloadPlugins()
         {
-            foreach (var context in contexts)
+#if NET5_0_OR_GREATER
+            foreach (var context in this.Contexts)
             {
                 if (context.IsCollectible)
                 {
                     context.Unload();
                 }
             }
-        }
+
+            this.Contexts.Clear();
 #else
-        /// <summary>
-        /// Unloads all of the plugins using their <see cref="AppDomain"/>s.
-        /// </summary>
-        /// <param name="domains">The list returned from LoadPlugins to unload all plugins loaded.</param>
-        public void UnloadPlugins(List<AppDomain> domains)
-        {
-            foreach (var domain in domains)
+            foreach (var domain in this.Domains)
             {
                 AppDomain.Unload(domain);
             }
+
+            this.Domains.Clear();
+#endif
+        }
+
+        internal static void InvokeLoaderMessage(MessageEventArgs args)
+            => PluginLoaderMessage?.Invoke(null, args);
+
+#if !NET5_0_OR_GREATER
+        private Assembly? Domain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var isLoadedToDefaultDomain = new Func<string, bool>(name =>
+            {
+                var found = false;
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    if (assembly.FullName.Equals(name, StringComparison.Ordinal))
+                    {
+                        found = true;
+                    }
+                }
+
+                return AppDomain.CurrentDomain.IsDefaultAppDomain() && found;
+            });
+            var getFromDefaultDomain = new Func<string, Assembly?>(name =>
+            {
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    if (assembly.FullName.Equals(name, StringComparison.Ordinal))
+                    {
+                        return assembly;
+                    }
+                }
+
+                return null;
+            });
+            var getDomainFromAssembly = new Func<Assembly, AppDomain>(assembly =>
+            {
+                if (assembly is not null)
+                {
+                    foreach (var appDomain in this.Domains)
+                    {
+                        if (appDomain.GetAssemblies().Contains(assembly))
+                        {
+                            return appDomain;
+                        }
+                    }
+                }
+
+                return AppDomain.CurrentDomain;
+            });
+            if (isLoadedToDefaultDomain(args.Name))
+            {
+                return getFromDefaultDomain(args.Name);
+            }
+
+            AssemblyName assemblyName = new(args.Name);
+            var domain = getDomainFromAssembly(args.RequestingAssembly);
+            return !File.Exists($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{assemblyName.Name}.dll")
+                ? null
+                : domain.Load(AssemblyName.GetAssemblyName($"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{assemblyName.Name}.dll"));
         }
 #endif
-
-        private static void LogException(Exception ex, ref string exMsg)
-        {
-            exMsg += $"{ex.Message}{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}";
-            if (ex.InnerException != null)
-            {
-                LogException(ex.InnerException, ref exMsg);
-            }
-        }
     }
 }

@@ -15,85 +15,85 @@ namespace Elskom.Generic.Libs.UnluacNET.IO
 
         public static char[] ReadChars(this Stream stream, int count)
         {
-            var chars = new char[count];
+            Span<char> chars = stackalloc char[count];
             for (var i = 0; i < count; i++)
             {
                 chars[i] = stream.ReadChar();
             }
 
-            return chars;
+            return chars.ToArray();
         }
 
         public static short ReadInt16(this Stream stream, bool bigEndian = false)
         {
-            var buffer = new byte[sizeof(short)];
-            stream.Read(buffer);
+            Span<byte> buffer = stackalloc byte[2];
+            _ = stream.Read(buffer);
             if (bigEndian)
             {
-                Array.Reverse(buffer);
+                buffer.Reverse();
             }
 
-            return BitConverter.ToInt16(buffer, 0);
+            return BitConverter.ToInt16(buffer.ToArray(), 0);
         }
 
         public static ushort ReadUInt16(this Stream stream, bool bigEndian = false)
         {
-            var buffer = new byte[sizeof(ushort)];
-            stream.Read(buffer);
+            Span<byte> buffer = stackalloc byte[2];
+            _ = stream.Read(buffer);
             if (bigEndian)
             {
-                Array.Reverse(buffer);
+                buffer.Reverse();
             }
 
-            return BitConverter.ToUInt16(buffer, 0);
+            return BitConverter.ToUInt16(buffer.ToArray(), 0);
         }
 
         public static int ReadInt32(this Stream stream, bool bigEndian = false)
         {
-            var buffer = new byte[sizeof(int)];
-            stream.Read(buffer);
+            Span<byte> buffer = stackalloc byte[4];
+            _ = stream.Read(buffer);
             if (bigEndian)
             {
-                Array.Reverse(buffer);
+                buffer.Reverse();
             }
 
-            return BitConverter.ToInt32(buffer, 0);
+            return BitConverter.ToInt32(buffer.ToArray(), 0);
         }
 
         public static uint ReadUInt32(this Stream stream, bool bigEndian = false)
         {
-            var buffer = new byte[sizeof(uint)];
-            stream.Read(buffer);
+            Span<byte> buffer = stackalloc byte[4];
+            _ = stream.Read(buffer);
             if (bigEndian)
             {
-                Array.Reverse(buffer);
+                buffer.Reverse();
             }
 
-            return BitConverter.ToUInt32(buffer, 0);
+            return BitConverter.ToUInt32(buffer.ToArray(), 0);
         }
 
         public static long ReadInt64(this Stream stream, bool bigEndian = false)
         {
-            var buffer = new byte[sizeof(long)];
-            stream.Read(buffer);
+            Span<byte> buffer = stackalloc byte[8];
+            _ = stream.Read(buffer);
             if (bigEndian)
             {
-                Array.Reverse(buffer);
+                buffer.Reverse();
             }
 
-            return BitConverter.ToInt64(buffer, 0);
+            return BitConverter.ToInt64(buffer.ToArray(), 0);
         }
 
         public static ulong ReadUInt64(this Stream stream, bool bigEndian = false)
         {
-            var buffer = new byte[sizeof(ulong)];
-            stream.Read(buffer);
+            Span<byte> buffer = stackalloc byte[8];
+            _ = stream.Read(buffer);
             if (bigEndian)
             {
-                Array.Reverse(buffer);
+                buffer.Reverse();
             }
 
-            return BitConverter.ToUInt64(buffer, 0);
+            return BitConverter.ToUInt64(buffer.ToArray(), 0);
         }
 
         public static double ReadFloat(this Stream stream, bool bigEndian = false)
@@ -104,32 +104,43 @@ namespace Elskom.Generic.Libs.UnluacNET.IO
 
         public static float ReadSingle(this Stream stream, bool bigEndian = false)
         {
-            var buffer = new byte[sizeof(float)];
-            stream.Read(buffer);
+            Span<byte> buffer = stackalloc byte[4];
+            _ = stream.Read(buffer);
             if (bigEndian)
             {
-                Array.Reverse(buffer);
+                buffer.Reverse();
             }
 
-            return BitConverter.ToSingle(buffer, 0);
+            return BitConverter.ToSingle(buffer.ToArray(), 0);
         }
 
         public static double ReadDouble(this Stream stream, bool bigEndian = false)
         {
-            var buffer = new byte[sizeof(double)];
-            stream.Read(buffer);
+            Span<byte> buffer = stackalloc byte[8];
+            _ = stream.Read(buffer);
             if (bigEndian)
             {
-                Array.Reverse(buffer);
+                buffer.Reverse();
             }
 
-            return BitConverter.ToDouble(buffer, 0);
+            return BitConverter.ToDouble(buffer.ToArray(), 0);
         }
 
-        internal static int Read(this Stream stream, byte[] buffer)
+        private static int Read(this Stream stream, Span<byte> buffer)
         {
-            _ = stream.Read(buffer, 0, buffer.Length);
-            return (buffer != null) ? 1 : -1;
+            var cnt = 0;
+            while (cnt < buffer.Length)
+            {
+                buffer[cnt] = (byte)stream.ReadByte();
+                if (buffer[cnt] is unchecked((byte)-1))
+                {
+                    break;
+                }
+
+                cnt++;
+            }
+
+            return cnt;
         }
     }
 }

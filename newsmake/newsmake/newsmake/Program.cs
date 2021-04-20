@@ -8,6 +8,7 @@ namespace Newsmake
     using System;
     using System.Collections.Generic;
     using System.CommandLine;
+    using System.CommandLine.Help;
     using System.CommandLine.Invocation;
     using System.CommandLine.IO;
     using System.Globalization;
@@ -24,11 +25,12 @@ namespace Newsmake
         [MiniDump(Text = "Please send a copy of {0} to https://github.com/Elskom/Sdk/issues by making an issue and attaching the log(s) and mini-dump(s).", DumpType = MinidumpTypes.ValidTypeFlags)]
         internal static async Task<int> Main(string[] args)
         {
-            MiniDump.DumpMessage += MiniDump_DumpMessage;
-            _ = Assembly.GetEntryAssembly().EntryPoint.GetCustomAttributes<MiniDumpAttribute>(false);
+            MiniDumpAttribute.DumpMessage += MiniDump_DumpMessage;
+            _ = Assembly.GetEntryAssembly()?.EntryPoint!.GetCustomAttributes<MiniDumpAttribute>(false);
             GitInformation.ApplyAssemblyAttributes(typeof(Program).Assembly);
             var cmd = new RootCommand
             {
+                new Option(new[] { "--help", "help" }, "Shows the help message for the program."),
                 new Option("--version", "Shows the version of this command-line program."),
                 new Command("build", "builds a changelog or news file from any *.master file in the current or sub directory.")
                 {
@@ -54,7 +56,7 @@ namespace Newsmake
             return await cmd.InvokeAsync(args);
         }
 
-        internal static int GlobalCommandHandler(bool version, IConsole console)
+        internal static int GlobalCommandHandler(bool help, bool version, InvocationContext ctx, IConsole console)
         {
             var inst = GitInformation.GetAssemblyInstance(typeof(Program));
             if (!inst.IsMain || inst.IsDirty)
@@ -64,7 +66,13 @@ namespace Newsmake
 
             if (version)
             {
-                console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, newsmakeResources.Resources.CommandParser_ShowHelp_Version, Assembly.GetEntryAssembly().GetName().Version));
+                console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, newsmakeResources.Resources.CommandParser_ShowHelp_Version, Assembly.GetEntryAssembly()?.GetName().Version));
+            }
+
+            if (help)
+            {
+                var helpBuilder = new HelpBuilder(console);
+                helpBuilder.Write(ctx.ParseResult.CommandResult.Command);
             }
 
             return 0;
@@ -78,208 +86,209 @@ namespace Newsmake
                 console.Out.WriteLine(newsmakeResources.Resources.Commands_Potentially_Unstable_Build);
             }
 
-            var ext = ".master";
-            var project_name = string.Empty;
-            var outputfile_name = string.Empty;
-            var tabs = true;
-            var devmode = false;
-            var delete_files = true;
-            var first_import = true;
-            var found_master_file = false;
-            var output_format_md = false;
-            var section_data = new List<string>();
-            foreach (var p in Directory.GetFiles(Directory.GetCurrentDirectory(), "*", SearchOption.AllDirectories))
+            try
             {
-                if (p.EndsWith(ext, StringComparison.Ordinal))
+                var ext = ".master";
+                var project_name = string.Empty;
+                var outputfile_name = string.Empty;
+                var tabs = true;
+                var devmode = false;
+                var delete_files = true;
+                var first_import = true;
+                var found_master_file = false;
+                var output_format_md = false;
+                var section_data = new List<string>();
+                foreach (var p in Directory.GetFiles(Directory.GetCurrentDirectory(), "*", SearchOption.AllDirectories))
                 {
-                    found_master_file = true;
-                    console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, newsmakeResources.Resources.Commands_BuildCommand_Processing, p));
-
-                    // set the current directory to p.
-                    Directory.SetCurrentDirectory(new FileInfo(p).Directory.FullName);
-                    var master_file = File.ReadAllLines(p);
-                    for (var i = 0; i < master_file.Length; i++)
+                    if (p.EndsWith(ext, StringComparison.Ordinal))
                     {
-                        // a hack to make this all work as intended.
-                        var line = master_file[i];
-                        if (!line.Contains("# ", StringComparison.Ordinal))
-                        {
-                            do
-                            {
-                                // get environment variable name.
-                                // find the "$(" and make a substring then find the first ")"
-                                var env_open = line.IndexOf("$(", StringComparison.Ordinal);
-                                var env_close = line.IndexOf(")", StringComparison.Ordinal);
-                                if (env_open != env_close)
-                                {
-                                    var envvar = line[(env_open + 2)..env_close];
+                        found_master_file = true;
+                        console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, newsmakeResources.Resources.Commands_BuildCommand_Processing, p));
 
-                                    // a hack to resolve the current working directory manually...
-                                    var envvalue = envvar.Equals("CD", StringComparison.OrdinalIgnoreCase)
-                                        ? $"{Directory.GetCurrentDirectory().Replace("\\", "/", StringComparison.Ordinal)}/"
-                                        : Environment.GetEnvironmentVariable(envvar);
-                                    if (envvalue != null)
+                        // set the current directory to p.
+                        Directory.SetCurrentDirectory(new FileInfo(p).Directory.FullName);
+                        var master_file = File.ReadAllLines(p);
+                        for (var i = 0; i < master_file.Length; i++)
+                        {
+                            // a hack to make this all work as intended.
+                            var line = master_file[i];
+                            if (!line.Contains("# ", StringComparison.Ordinal))
+                            {
+                                do
+                                {
+                                    // get environment variable name.
+                                    // find the "$(" and make a substring then find the first ")"
+                                    var env_open = line.IndexOf("$(", StringComparison.Ordinal);
+                                    var env_close = line.IndexOf(")", StringComparison.Ordinal);
+                                    if (env_open != env_close)
                                     {
-                                        line = line.Replace(line[env_open..(env_close + 1)], envvalue, StringComparison.Ordinal);
+                                        var envvar = line[(env_open + 2)..env_close];
+
+                                        // a hack to resolve the current working directory manually...
+                                        var envvalue = envvar.Equals("CD", StringComparison.OrdinalIgnoreCase)
+                                            ? $"{Directory.GetCurrentDirectory().Replace("\\", "/", StringComparison.Ordinal)}/"
+                                            : Environment.GetEnvironmentVariable(envvar);
+                                        if (envvalue != null)
+                                        {
+                                            line = line.Replace(line[env_open..(env_close + 1)], envvalue, StringComparison.Ordinal);
+                                        }
+                                        else
+                                        {
+                                            console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__Environment_variable_does_not_exist);
+                                            return 1;
+                                        }
+                                    }
+                                }
+                                while (line.Contains("$(", StringComparison.Ordinal));
+
+                                if (line.Contains("projname = \"", StringComparison.Ordinal))
+                                {
+                                    project_name = line;
+                                    project_name = project_name.Replace(project_name.Substring(0, 12), string.Empty, StringComparison.Ordinal);
+                                    project_name = project_name.Replace(project_name.Substring(project_name.Length - 1, 1), string.Empty, StringComparison.Ordinal);
+                                }
+                                else if (!line.Contains("projname = \"", StringComparison.Ordinal) && string.IsNullOrEmpty(project_name))
+                                {
+                                    console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__Project_name_not_set);
+                                    return 1;
+                                }
+                                else if (line.Contains("devmode = ", StringComparison.Ordinal))
+                                {
+                                    devmode = line.Equals("devmode = true", StringComparison.Ordinal);
+                                }
+                                else if (line.Contains("genfilename = \"", StringComparison.Ordinal))
+                                {
+                                    outputfile_name = line;
+                                    outputfile_name = outputfile_name.Replace(outputfile_name.Substring(0, 15), string.Empty, StringComparison.Ordinal);
+                                    outputfile_name = outputfile_name.Replace(outputfile_name.Substring(outputfile_name.Length - 1, 1), string.Empty, StringComparison.Ordinal);
+                                }
+                                else if (!line.Contains("genfilename = \"", StringComparison.Ordinal) && string.IsNullOrEmpty(outputfile_name))
+                                {
+                                    console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__generated_output_file_name_not_set);
+                                    return 1;
+                                }
+                                else if (line.Contains("tabs = ", StringComparison.Ordinal))
+                                {
+                                    tabs = line.Equals("tabs = true", StringComparison.Ordinal);
+                                }
+                                else if (line.Contains("deletechunkentryfiles = ", StringComparison.Ordinal))
+                                {
+                                    delete_files = !devmode && line.Equals("deletechunkentryfiles = true", StringComparison.Ordinal);
+                                }
+                                else if (line.Contains("outputasmd = ", StringComparison.Ordinal))
+                                {
+                                    output_format_md = line.Equals("outputasmd = true", StringComparison.Ordinal);
+                                }
+                                else if (line.Contains("import \"", StringComparison.Ordinal))
+                                {
+                                    var imported_folder = line;
+                                    imported_folder = imported_folder.Replace(imported_folder.Substring(0, 8), string.Empty, StringComparison.Ordinal);
+                                    imported_folder = imported_folder.Replace(imported_folder.Substring(imported_folder.Length - 1, 1), string.Empty, StringComparison.Ordinal);
+                                    var section_string = new StringBuilder();
+                                    if (first_import)
+                                    {
+                                        _ = section_string.Append(output_format_md ? "Whats new in v" : "                          Whats new in v");
+                                        _ = section_string.Append(imported_folder);
+                                        _ = section_string.Append("\n==============================================================================\n");
+                                        first_import = false;
                                     }
                                     else
                                     {
-                                        console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__Environment_variable_does_not_exist);
-                                        return 1;
-                                    }
-                                }
-                            }
-                            while (line.Contains("$(", StringComparison.Ordinal));
-
-                            if (line.Contains("projname = \"", StringComparison.Ordinal))
-                            {
-                                project_name = line;
-                                project_name = project_name.Replace(project_name.Substring(0, 12), string.Empty, StringComparison.Ordinal);
-                                project_name = project_name.Replace(project_name.Substring(project_name.Length - 1, 1), string.Empty, StringComparison.Ordinal);
-                            }
-                            else if (!line.Contains("projname = \"", StringComparison.Ordinal) && string.IsNullOrEmpty(project_name))
-                            {
-                                console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__Project_name_not_set);
-                                return 1;
-                            }
-                            else if (line.Contains("devmode = ", StringComparison.Ordinal))
-                            {
-                                devmode = line.Equals("devmode = true", StringComparison.Ordinal);
-                            }
-                            else if (line.Contains("genfilename = \"", StringComparison.Ordinal))
-                            {
-                                outputfile_name = line;
-                                outputfile_name = outputfile_name.Replace(outputfile_name.Substring(0, 15), string.Empty, StringComparison.Ordinal);
-                                outputfile_name = outputfile_name.Replace(outputfile_name.Substring(outputfile_name.Length - 1, 1), string.Empty, StringComparison.Ordinal);
-                            }
-                            else if (!line.Contains("genfilename = \"", StringComparison.Ordinal) && string.IsNullOrEmpty(outputfile_name))
-                            {
-                                console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__generated_output_file_name_not_set);
-                                return 1;
-                            }
-                            else if (line.Contains("tabs = ", StringComparison.Ordinal))
-                            {
-                                tabs = line.Equals("tabs = true", StringComparison.Ordinal);
-                            }
-                            else if (line.Contains("deletechunkentryfiles = ", StringComparison.Ordinal))
-                            {
-                                delete_files = !devmode && line.Equals("deletechunkentryfiles = true", StringComparison.Ordinal);
-                            }
-                            else if (line.Contains("outputasmd = ", StringComparison.Ordinal))
-                            {
-                                output_format_md = line.Equals("outputasmd = true", StringComparison.Ordinal);
-                            }
-                            else if (line.Contains("import \"", StringComparison.Ordinal))
-                            {
-                                var imported_folder = line;
-                                imported_folder = imported_folder.Replace(imported_folder.Substring(0, 8), string.Empty, StringComparison.Ordinal);
-                                imported_folder = imported_folder.Replace(imported_folder.Substring(imported_folder.Length - 1, 1), string.Empty, StringComparison.Ordinal);
-                                var section_string = string.Empty;
-                                if (first_import)
-                                {
-                                    section_string = output_format_md ? "Whats new in v" : "                          Whats new in v";
-                                    section_string += imported_folder;
-                                    section_string += "\n==============================================================================\n";
-                                    first_import = false;
-                                }
-                                else
-                                {
-                                    if (!output_format_md)
-                                    {
-                                        // if the section divider is not here the resulting markdown
-                                        // would look like trash.
-                                        section_string =
-                                          "\n==============================================================================\n";
-                                        section_string += "                             ";
-                                    }
-
-                                    section_string += project_name;
-                                    section_string += " v";
-                                    section_string += imported_folder;
-                                    section_string += "\n==============================================================================\n";
-                                }
-
-                                var section_text = new StringBuilder();
-                                if (Directory.Exists($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}"))
-                                {
-                                    foreach (var imported_path in
-                                      Directory.GetFiles($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}", "*", SearchOption.AllDirectories))
-                                    {
-                                        var temp = new StringBuilder();
-                                        _ = temp.Append(!output_format_md ? tabs ? "\t+ " : "    + " : "+ ");
-                                        var entry_lines = File.ReadAllLines(imported_path);
-                                        foreach (var entry_line in entry_lines)
+                                        if (!output_format_md)
                                         {
-                                            temp.Append(entry_line);
+                                            // if the section divider is not here the resulting markdown
+                                            // would look like trash.
+                                            _ = section_string.Append(
+                                                "\n==============================================================================\n");
+                                            _ = section_string.Append("                             ");
                                         }
 
-                                        var temp2 = temp.ToString();
-                                        Formatline(ref temp2, tabs, output_format_md);
-                                        _ = temp.Clear();
-                                        _ = temp.Append(temp2);
-                                        _ = temp.Append('\n');
-                                        section_text.Append(temp);
+                                        _ = section_string.AppendFormat("{0} v{1}", project_name, imported_folder);
+                                        _ = section_string.Append("\n==============================================================================\n");
                                     }
-                                }
 
-                                if (delete_files && !string.IsNullOrEmpty(section_text.ToString()))
-                                {
-                                    // save section text and then delete the folder.
-                                    using (var section_file = File.OpenWrite($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}.section"))
+                                    var section_text = new StringBuilder();
+                                    if (Directory.Exists($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}"))
                                     {
-                                        section_file.Write(Encoding.UTF8.GetBytes(section_text.ToString()), 0, Encoding.UTF8.GetByteCount(section_text.ToString()));
+                                        foreach (var imported_path in
+                                            Directory.GetFiles($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}", "*", SearchOption.AllDirectories))
+                                        {
+                                            var temp = new StringBuilder();
+                                            _ = temp.Append(!output_format_md ? tabs ? "\t+ " : "    + " : "+ ");
+                                            var entry_lines = File.ReadAllLines(imported_path);
+                                            foreach (var entry_line in entry_lines)
+                                            {
+                                                temp.Append(entry_line);
+                                            }
+
+                                            var temp2 = temp.ToString();
+                                            Formatline(ref temp2, tabs, output_format_md);
+                                            _ = temp.Clear();
+                                            _ = temp.Append(temp2);
+                                            _ = temp.Append('\n');
+                                            section_text.Append(temp);
+                                        }
                                     }
 
-                                    foreach (var imported_path in Directory.GetFiles($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}", "*", SearchOption.AllDirectories))
+                                    if (delete_files && !string.IsNullOrEmpty(section_text.ToString()))
                                     {
-                                        File.Delete(imported_path);
+                                        // save section text and then delete the folder.
+                                        File.WriteAllText($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}.section", section_text.ToString());
+                                        foreach (var imported_path in Directory.GetFiles($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}", "*", SearchOption.AllDirectories))
+                                        {
+                                            File.Delete(imported_path);
+                                        }
+
+                                        Directory.Delete($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}");
                                     }
 
-                                    Directory.Delete($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}");
-                                }
+                                    if (section_text.Length == 0 && File.Exists($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}.section"))
+                                    {
+                                        // load saved *.section file.
+                                        section_text.Append(File.ReadAllText($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}.section"));
+                                    }
 
-                                if (section_text.Length == 0 && File.Exists($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}.section"))
-                                {
-                                    // load saved *.section file.
-                                    section_text.Append(File.ReadAllText($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{imported_folder}.section"));
+                                    section_string.Append(section_text);
+                                    section_data.Add(section_string.ToString());
                                 }
-
-                                section_string += section_text;
-                                section_data.Add(section_string);
                             }
                         }
-                    }
 
-                    if (!string.IsNullOrEmpty(outputfile_name))
-                    {
-                        var finfo = new FileInfo(outputfile_name);
-                        if (!finfo.Directory.Exists)
+                        if (!string.IsNullOrEmpty(outputfile_name))
                         {
-                            finfo.Directory.Create();
+                            var finfo = new FileInfo(outputfile_name);
+                            if (!finfo.Directory.Exists)
+                            {
+                                finfo.Directory.Create();
+                            }
+
+                            var output = new StringBuilder();
+                            section_data.ForEach(x => _ = output.Append(x));
+                            File.WriteAllText(outputfile_name, output.ToString());
+                            console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, newsmakeResources.Resources.Commands_BuildCommand_Successfully_Generated, outputfile_name));
+
+                            // clear leaking any specific information to other *.master file configurations that should not be present.
+                            project_name = string.Empty;
+                            outputfile_name = string.Empty;
+                            tabs = true;
+                            devmode = false;
+                            delete_files = true;
+                            first_import = true;
+                            output_format_md = false;
+                            section_data.Clear();
                         }
-
-                        var output = new StringBuilder();
-                        section_data.ForEach((x) => _ = output.Append(x));
-                        File.WriteAllText(outputfile_name, output.ToString());
-                        console.Out.WriteLine(string.Format(CultureInfo.InvariantCulture, newsmakeResources.Resources.Commands_BuildCommand_Successfully_Generated, outputfile_name));
-
-                        // clear leaking any specific information to other *.master file configurations that should not be present.
-                        project_name = string.Empty;
-                        outputfile_name = string.Empty;
-                        tabs = true;
-                        devmode = false;
-                        delete_files = true;
-                        first_import = true;
-                        output_format_md = false;
-                        section_data.Clear();
                     }
                 }
-            }
 
-            if (!found_master_file)
+                if (!found_master_file)
+                {
+                    console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__no___master_file_found);
+                    return 1;
+                }
+            }
+            catch (Exception ex)
             {
-                console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__no___master_file_found);
-                return 1;
+                return MiniDumpAttribute.DumpException(ex, false);
             }
 
             return 0;
@@ -304,7 +313,7 @@ namespace Newsmake
                     if (p.EndsWith(ext, StringComparison.Ordinal))
                     {
                         var fi = new FileInfo(p);
-                        path = fi.Directory.FullName;
+                        path = fi.Directory?.FullName;
                         lines = File.ReadAllLines(p);
                         masterfile = p;
                         break;
@@ -334,7 +343,8 @@ namespace Newsmake
                         {
                             break;
                         }
-                        else if (line.Contains($"import \"{release}\"", StringComparison.Ordinal))
+
+                        if (line.Contains($"import \"{release}\"", StringComparison.Ordinal))
                         {
                             console.Error.WriteLine($"Fatal: The import of the release '{release}' already exists in the *.master file.");
                             return 1;
@@ -368,64 +378,57 @@ namespace Newsmake
                 console.Out.WriteLine(newsmakeResources.Resources.Commands_Potentially_Unstable_Build);
             }
 
-            var ext = ".master";
-            var path = string.Empty;
-            foreach (var p in Directory.GetFiles(Directory.GetCurrentDirectory(), "*", SearchOption.AllDirectories))
+            try
             {
-                if (p.EndsWith(ext, StringComparison.Ordinal))
+                var ext = ".master";
+                var path = string.Empty;
+                foreach (var p in Directory.GetFiles(Directory.GetCurrentDirectory(), "*", SearchOption.AllDirectories))
                 {
-                    var fi = new FileInfo(p);
-                    path = fi.Directory.FullName;
-                    break;
+                    if (p.EndsWith(ext, StringComparison.Ordinal))
+                    {
+                        var fi = new FileInfo(p);
+                        path = fi.Directory?.FullName;
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(path))
+                {
+                    console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__no___master_file_found);
+                    return 1;
+                }
+
+                foreach (var p in Directory.GetDirectories(path))
+                {
+                    var currentFile = "item000";
+                    var files = Directory.GetFiles(p);
+                    foreach (var file in files)
+                    {
+                        currentFile = file;
+                    }
+
+                    var fileCountStr = files.Length switch
+                    {
+                        < 10 and > -1 => $"00{files.Length}",
+                        > 99 and < 1000 => $"{files.Length}",
+                        > 9 => $"0{files.Length}",
+                        _ => throw new InvalidOperationException(),
+                    };
+                    var newfileCount = files.Length + 1;
+                    var newfileCountStr = newfileCount switch
+                    {
+                        < 10 and > -1 => $"00{newfileCount}",
+                        > 99 and < 1000 => $"{newfileCount}",
+                        > 9 => $"0{newfileCount}",
+                        _ => throw new InvalidOperationException(),
+                    };
+                    var newFile = $"{currentFile.Replace($"item{fileCountStr}", $"item{newfileCountStr}", StringComparison.Ordinal)}";
+                    File.WriteAllText(newFile, content);
                 }
             }
-
-            if (string.IsNullOrEmpty(path))
+            catch (Exception ex)
             {
-                console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__no___master_file_found);
-                return 1;
-            }
-
-            foreach (var p in Directory.GetDirectories(path))
-            {
-                var currentFile = "item000";
-                var files = Directory.GetFiles(p);
-                foreach (var file in files)
-                {
-                    currentFile = file;
-                }
-
-                var fileCountStr = string.Empty;
-                if (files.Length < 10)
-                {
-                    fileCountStr = $"00{files.Length}";
-                }
-                else if (files.Length > 9)
-                {
-                    fileCountStr = $"0{files.Length}";
-                }
-                else if (files.Length > 99)
-                {
-                    fileCountStr = $"{files.Length}";
-                }
-
-                var newfileCount = files.Length + 1;
-                var newfileCountStr = string.Empty;
-                if (newfileCount < 10)
-                {
-                    newfileCountStr = $"00{newfileCount}";
-                }
-                else if (newfileCount > 9)
-                {
-                    newfileCountStr = $"0{newfileCount}";
-                }
-                else if (newfileCount > 99)
-                {
-                    newfileCountStr = $"{newfileCount}";
-                }
-
-                var newFile = $"{currentFile.Replace($"item{fileCountStr}", $"item{newfileCountStr}", StringComparison.Ordinal)}";
-                File.WriteAllText(newFile, content);
+                return MiniDumpAttribute.DumpException(ex, false);
             }
 
             return 0;
@@ -439,80 +442,87 @@ namespace Newsmake
                 console.Out.WriteLine(newsmakeResources.Resources.Commands_Potentially_Unstable_Build);
             }
 
-            var ext = ".master";
-            var tabs = true;
-            var output_format_md = false;
-            var found = false;
-            foreach (var p in Directory.GetFiles(Directory.GetCurrentDirectory(), "*", SearchOption.AllDirectories))
+            try
             {
-                if (p.EndsWith(ext, StringComparison.Ordinal))
+                var ext = ".master";
+                var tabs = true;
+                var output_format_md = false;
+                var found = false;
+                foreach (var p in Directory.GetFiles(Directory.GetCurrentDirectory(), "*", SearchOption.AllDirectories))
                 {
-                    found = true;
-                    var fi = new FileInfo(p);
-                    var master_file = File.ReadAllLines(p);
-                    for (var i = 0; i < master_file.Length; i++)
+                    if (p.EndsWith(ext, StringComparison.Ordinal))
                     {
-                        // a hack to make this all work as intended.
-                        var line = master_file[i];
-                        if (!line.Contains("# ", StringComparison.Ordinal))
+                        found = true;
+                        var fi = new FileInfo(p);
+                        var master_file = File.ReadAllLines(p);
+                        for (var i = 0; i < master_file.Length; i++)
                         {
-                            if (line.Contains("tabs = ", StringComparison.Ordinal))
+                            // a hack to make this all work as intended.
+                            var line = master_file[i];
+                            if (!line.Contains("# ", StringComparison.Ordinal))
                             {
-                                tabs = line.Equals("tabs = true", StringComparison.Ordinal);
-                            }
-                            else if (line.Contains("outputasmd = ", StringComparison.Ordinal))
-                            {
-                                output_format_md = line.Equals("outputasmd = true", StringComparison.Ordinal);
-                            }
-                            else if (line.Contains("import \"", StringComparison.Ordinal))
-                            {
-                                var imported_folder = line;
-                                imported_folder = imported_folder.Replace(imported_folder.Substring(0, 8), string.Empty, StringComparison.Ordinal);
-                                imported_folder = imported_folder.Replace(imported_folder.Substring(imported_folder.Length - 1, 1), string.Empty, StringComparison.Ordinal);
-                                var section_text = new StringBuilder();
-                                if (Directory.Exists($"{fi.Directory.FullName}{Path.DirectorySeparatorChar}{imported_folder}"))
+                                if (line.Contains("tabs = ", StringComparison.Ordinal))
                                 {
-                                    foreach (var imported_path in
-                                      Directory.GetFiles($"{fi.Directory.FullName}{Path.DirectorySeparatorChar}{imported_folder}", "*", SearchOption.AllDirectories))
+                                    tabs = line.Equals("tabs = true", StringComparison.Ordinal);
+                                }
+                                else if (line.Contains("outputasmd = ", StringComparison.Ordinal))
+                                {
+                                    output_format_md = line.Equals("outputasmd = true", StringComparison.Ordinal);
+                                }
+                                else if (line.Contains("import \"", StringComparison.Ordinal))
+                                {
+                                    var imported_folder = line;
+                                    imported_folder = imported_folder.Replace(imported_folder.Substring(0, 8), string.Empty, StringComparison.Ordinal);
+                                    imported_folder = imported_folder.Replace(imported_folder.Substring(imported_folder.Length - 1, 1), string.Empty, StringComparison.Ordinal);
+                                    var section_text = new StringBuilder();
+                                    if (Directory.Exists($"{fi.Directory?.FullName}{Path.DirectorySeparatorChar}{imported_folder}"))
                                     {
-                                        var temp = new StringBuilder();
-                                        _ = temp.Append(!output_format_md ? tabs ? "\t+ " : "    + " : "+ ");
-                                        var entry_lines = File.ReadAllLines(imported_path);
-                                        foreach (var entry_line in entry_lines)
+                                        foreach (var imported_path in
+                                            Directory.GetFiles($"{fi.Directory?.FullName}{Path.DirectorySeparatorChar}{imported_folder}", "*", SearchOption.AllDirectories))
                                         {
-                                            _ = temp.Append(entry_line);
+                                            var temp = new StringBuilder();
+                                            _ = temp.Append(!output_format_md ? tabs ? "\t+ " : "    + " : "+ ");
+                                            var entry_lines = File.ReadAllLines(imported_path);
+                                            foreach (var entry_line in entry_lines)
+                                            {
+                                                _ = temp.Append(entry_line);
+                                            }
+
+                                            var temp2 = temp.ToString();
+                                            Formatline(ref temp2, tabs, output_format_md);
+                                            _ = temp.Clear();
+                                            _ = temp.Append(temp2);
+                                            _ = temp.Append('\n');
+                                            section_text.Append(temp);
+                                        }
+                                    }
+
+                                    if (!string.IsNullOrEmpty(section_text.ToString()))
+                                    {
+                                        // save section text and then delete the folder.
+                                        File.WriteAllText($"{fi.Directory?.FullName}{Path.DirectorySeparatorChar}{imported_folder}.section", section_text.ToString());
+                                        foreach (var imported_path in Directory.GetFiles($"{fi.Directory?.FullName}{Path.DirectorySeparatorChar}{imported_folder}", "*", SearchOption.AllDirectories))
+                                        {
+                                            File.Delete(imported_path);
                                         }
 
-                                        var temp2 = temp.ToString();
-                                        Formatline(ref temp2, tabs, output_format_md);
-                                        _ = temp.Clear();
-                                        _ = temp.Append(temp2);
-                                        _ = temp.Append('\n');
-                                        section_text.Append(temp);
+                                        Directory.Delete($"{fi.Directory?.FullName}{Path.DirectorySeparatorChar}{imported_folder}");
                                     }
-                                }
-
-                                if (!string.IsNullOrEmpty(section_text.ToString()))
-                                {
-                                    // save section text and then delete the folder.
-                                    File.WriteAllText($"{fi.Directory.FullName}{Path.DirectorySeparatorChar}{imported_folder}.section", section_text.ToString());
-                                    foreach (var imported_path in Directory.GetFiles($"{fi.Directory.FullName}{Path.DirectorySeparatorChar}{imported_folder}", "*", SearchOption.AllDirectories))
-                                    {
-                                        File.Delete(imported_path);
-                                    }
-
-                                    Directory.Delete($"{fi.Directory.FullName}{Path.DirectorySeparatorChar}{imported_folder}");
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            if (!found)
+                if (!found)
+                {
+                    console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__no___master_file_found);
+                    return 1;
+                }
+            }
+            catch (Exception ex)
             {
-                console.Error.WriteLine(newsmakeResources.Resources.Commands_BuildCommand_Fatal__no___master_file_found);
-                return 1;
+                return MiniDumpAttribute.DumpException(ex, false);
             }
 
             return 0;
@@ -551,7 +561,7 @@ namespace Newsmake
 
                 var sub_s = input.Substring(pos, input.Length - pos > indent_line_length ? indent_line_length : input.Length - pos);
                 var last_space = sub_s.LastIndexOf(' ');
-                if (last_space == 0 || last_space == int.MaxValue || pos + indent_line_length >= input.Length)
+                if (last_space is 0 || last_space is int.MaxValue || pos + indent_line_length >= input.Length)
                 {
                     last_space = sub_s.Length;
                 }
@@ -568,7 +578,7 @@ namespace Newsmake
                     break;
                 }
 
-                _ = output.Append('\n' + indent);
+                _ = output.Append($"\n{indent}");
                 indent_line_length = line_length - tab_length;
             }
 
@@ -577,9 +587,8 @@ namespace Newsmake
 
         private static Command WithHandler(this Command command, string name)
         {
-            var flags = BindingFlags.NonPublic | BindingFlags.Static;
-            var method = typeof(Program).GetMethod(name, flags);
-            if (method == null)
+            var method = typeof(Program).GetMethod(name, BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly);
+            if (method is null)
             {
                 return command;
             }
@@ -593,7 +602,7 @@ namespace Newsmake
             Console.WriteLine($"{e.Caption}: {e.Text}");
             if (!e.Text.StartsWith("Mini-dumping failed with Code: ", StringComparison.Ordinal))
             {
-                Environment.Exit(1);
+                e.ExitCode = 1;
             }
         }
     }

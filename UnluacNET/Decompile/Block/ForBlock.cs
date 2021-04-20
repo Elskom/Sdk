@@ -19,7 +19,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         {
             this.m_register = register;
             this.m_r = r;
-            this.m_statements = new List<Statement>(end - begin + 1);
+            this.m_statements = new(end - begin + 1);
         }
 
         public override bool Breakable => true;

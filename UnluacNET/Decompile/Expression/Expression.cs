@@ -22,7 +22,7 @@ namespace Elskom.Generic.Libs.UnluacNET
         public static readonly int ASSOCIATIVITY_NONE = 0;
         public static readonly int ASSOCIATIVITY_LEFT = 1;
         public static readonly int ASSOCIATIVITY_RIGHT = 2;
-        public static readonly Expression NIL = new ConstantExpression(new Constant(LNil.NIL), -1);
+        public static readonly Expression NIL = new ConstantExpression(new(LNil.NIL), -1);
 
         protected Expression(int precedence)
             => this.Precedence = precedence;

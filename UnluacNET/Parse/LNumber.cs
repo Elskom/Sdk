@@ -16,7 +16,7 @@ namespace Elskom.Generic.Libs.UnluacNET
             => new LIntNumber(number);
 
         public override bool Equals(object obj)
-            => obj is LNumber number && this.Value == number.Value;
+            => obj is LNumber number && this.Value.Equals(number.Value);
 
         public override int GetHashCode()
             => throw new NotImplementedException();

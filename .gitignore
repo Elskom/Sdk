@@ -9,5 +9,9 @@ obj
 .idea/
 # not needed anymore, kept locally just in case however.
 XmlAbstraction/
-GitAssemblyInfo.cs
 *.binlog
+GitInfo.json
+
+# opening Finder on mac inside the repository creates these.
+.DS_Store
+*.user

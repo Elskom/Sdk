@@ -13,7 +13,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public AlwaysLoop(LFunction function, int begin, int end)
             : base(function, begin, end)
-            => this.m_statements = new List<Statement>();
+            => this.m_statements = new();
 
         public override bool Breakable => true;
 

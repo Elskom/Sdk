@@ -35,7 +35,7 @@ namespace Elskom.Generic.Libs.UnluacNET
                     output.Print(";");
                 }
 
-                if (!(statement is IfThenElseBlock))
+                if (statement is not IfThenElseBlock)
                 {
                     output.PrintLine();
                 }

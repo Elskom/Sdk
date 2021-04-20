@@ -50,11 +50,11 @@ namespace Elskom.Generic.Libs.UnluacNET
         private bool IsMethodCall
             => this.m_function.IsMemberAccess &&
                this.m_arguments.Length > 0 &&
-               (this.m_function.GetTable() == this.m_arguments[0]);
+               this.m_function.GetTable() == this.m_arguments[0];
 
         public override void Print(Output output)
         {
-            var args = new List<Expression>(this.m_arguments.Length);
+            List<Expression> args = new(this.m_arguments.Length);
             var obj = this.IsMethodCall ? this.m_function.GetTable() : this.m_function;
             if (obj.IsClosure || obj.IsConstant)
             {

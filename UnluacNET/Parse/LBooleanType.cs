@@ -6,6 +6,7 @@
 namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
 
     public class LBooleanType : BObjectType<LBoolean>
@@ -13,20 +14,18 @@ namespace Elskom.Generic.Libs.UnluacNET
         public override LBoolean Parse(Stream stream, BHeader header)
         {
             var value = stream.ReadByte();
-            if ((value & 0xFFFFFFFE) != 0)
+            if ((value & 0xFFFFFFFE) is not 0)
             {
                 throw new InvalidOperationException();
             }
-            else
-            {
-                var boolean = (value == 0) ? LBoolean.LFALSE : LBoolean.LTRUE;
-                if (header.Debug)
-                {
-                    Console.WriteLine("-- parsed <boolean> " + boolean);
-                }
 
-                return boolean;
+            var boolean = value is 0 ? LBoolean.LFALSE : LBoolean.LTRUE;
+            if (header.Debug)
+            {
+                Debug.WriteLine($"-- parsed <boolean> {boolean}");
             }
+
+            return boolean;
         }
     }
 }

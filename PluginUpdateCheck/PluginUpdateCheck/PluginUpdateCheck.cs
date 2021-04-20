@@ -12,6 +12,7 @@ namespace Elskom.Generic.Libs
     using System.IO.Compression;
     using System.Linq;
     using System.Net.Http;
+    using System.Reflection;
     using System.Xml.Linq;
     using Elskom.Generic.Libs.Properties;
     using Microsoft.Extensions.DependencyInjection;
@@ -46,7 +47,7 @@ namespace Elskom.Generic.Libs
             {
                 if (!string.Equals(this.InstalledVersion, this.CurrentVersion, StringComparison.Ordinal) && !string.IsNullOrEmpty(this.InstalledVersion))
                 {
-                    MessageEvent?.Invoke(this, new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_ShowMessage_Update_for_plugin_is_availible, this.CurrentVersion, this.PluginName), Resources.PluginUpdateCheck_ShowMessage_New_plugin_update, ErrorLevel.Info));
+                    MessageEvent?.Invoke(this, new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_ShowMessage_Update_for_plugin_is_availible, this.CurrentVersion, this.PluginName), Resources.PluginUpdateCheck_ShowMessage_New_plugin_update, ErrorLevel.Info));
                     return true;
                 }
 
@@ -91,26 +92,23 @@ namespace Elskom.Generic.Libs
         {
             _ = pluginURLs ?? throw new ArgumentNullException(nameof(pluginURLs));
             _ = pluginTypes ?? throw new ArgumentNullException(nameof(pluginTypes));
-            var pluginUpdateChecks = new List<PluginUpdateCheck>();
+            List<PluginUpdateCheck> pluginUpdateChecks = new();
 
             // fixup the github urls (if needed).
             for (var i = 0; i < pluginURLs.Length; i++)
             {
-#if !NETFRAMEWORK
-                pluginURLs[i] = pluginURLs[i].Replace(
+                var arg0 = ReplaceStr(
+                    pluginURLs[i],
                     "https://github.com/",
                     "https://raw.githubusercontent.com/",
-                    StringComparison.Ordinal) + (
-                pluginURLs[i].EndsWith("/", StringComparison.Ordinal) ? "master/plugins.xml" : "/master/plugins.xml");
-#else
-                pluginURLs[i] = pluginURLs[i].Replace(
-                    "https://github.com/",
-                    "https://raw.githubusercontent.com/") + (
-                pluginURLs[i].EndsWith("/", StringComparison.Ordinal) ? "master/plugins.xml" : "/master/plugins.xml");
-#endif
+                    StringComparison.Ordinal);
+                var arg1 = pluginURLs[i].EndsWith("/", StringComparison.Ordinal)
+                    ? "master/plugins.xml"
+                    : "/master/plugins.xml";
+                pluginURLs[i] = $"{arg0}{arg1}";
             }
 
-            PluginUrls ??= new List<string>();
+            PluginUrls ??= new();
             foreach (var pluginURL in pluginURLs)
             {
                 if (!PluginUrls.Contains(pluginURL))
@@ -130,13 +128,13 @@ namespace Elskom.Generic.Libs
                                 {
                                     found = true;
                                     var installedVersion = pluginType.Assembly.GetName().Version.ToString();
-                                    var pluginUpdateCheck = new PluginUpdateCheck(serviceprovider)
+                                    PluginUpdateCheck pluginUpdateCheck = new(serviceprovider)
                                     {
                                         CurrentVersion = currentVersion,
                                         InstalledVersion = installedVersion,
                                         PluginName = pluginName,
-                                        DownloadUrl = new Uri($"{element.Attribute("DownloadUrl").Value}/{currentVersion}/"),
-                                        DownloadFiles = element.Descendants("DownloadFile").Select(y => y.Attribute("Name").Value).ToList(),
+                                        DownloadUrl = new($"{element.Attribute("DownloadUrl").Value}/{currentVersion}/"),
+                                        DownloadFiles = element.Descendants("DownloadFile").Select(y => y.Attribute("Name")?.Value).ToList(),
                                     };
                                     pluginUpdateChecks.Add(pluginUpdateCheck);
                                 }
@@ -144,13 +142,13 @@ namespace Elskom.Generic.Libs
 
                             if (!found)
                             {
-                                var pluginUpdateCheck = new PluginUpdateCheck(serviceprovider)
+                                PluginUpdateCheck pluginUpdateCheck = new(serviceprovider)
                                 {
                                     CurrentVersion = currentVersion,
                                     InstalledVersion = string.Empty,
                                     PluginName = pluginName,
-                                    DownloadUrl = new Uri($"{element.Attribute("DownloadUrl").Value}/{currentVersion}/"),
-                                    DownloadFiles = element.Descendants("DownloadFile").Select(y => y.Attribute("Name").Value).ToList(),
+                                    DownloadUrl = new($"{element.Attribute("DownloadUrl").Value}/{currentVersion}/"),
+                                    DownloadFiles = element.Descendants("DownloadFile").Select(y => y.Attribute("Name")?.Value).ToList(),
                                 };
                                 pluginUpdateChecks.Add(pluginUpdateCheck);
                             }
@@ -158,7 +156,7 @@ namespace Elskom.Generic.Libs
                     }
                     catch (HttpRequestException ex)
                     {
-                        MessageEvent?.Invoke(typeof(PluginUpdateCheck), new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_CheckForUpdates_Failed_to_download_the_plugins_sources_list_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
+                        MessageEvent?.Invoke(typeof(PluginUpdateCheck), new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_CheckForUpdates_Failed_to_download_the_plugins_sources_list_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
                     }
                 }
 
@@ -193,9 +191,9 @@ namespace Elskom.Generic.Libs
                 {
                     var path = $"{Environment.CurrentDirectory}{Path.DirectorySeparatorChar}plugins{Path.DirectorySeparatorChar}{downloadFile}";
                     using (var fs = File.Create(path))
-                    using (var response = this.serviceProvider.GetService<HttpClient>().GetStreamAsync($"{this.DownloadUrl}{downloadFile}").GetAwaiter().GetResult())
+                    using (var response = this.serviceProvider.GetService<HttpClient>()?.GetStreamAsync($"{this.DownloadUrl}{downloadFile}").GetAwaiter().GetResult())
                     {
-                        response.CopyTo(fs);
+                        response?.CopyTo(fs);
                     }
 
                     if (saveToZip)
@@ -218,7 +216,7 @@ namespace Elskom.Generic.Libs
                 }
                 catch (HttpRequestException ex)
                 {
-                    MessageEvent?.Invoke(this, new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_Install_Failed_to_install_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
+                    MessageEvent?.Invoke(this, new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_Install_Failed_to_install_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
                 }
             }
 
@@ -271,10 +269,22 @@ namespace Elskom.Generic.Libs
             }
             catch (Exception ex)
             {
-                MessageEvent?.Invoke(this, new MessageEventArgs(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_Uninstall_Failed_to_uninstall_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
+                MessageEvent?.Invoke(this, new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_Uninstall_Failed_to_uninstall_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
             }
 
             return false;
+        }
+
+        private static string ReplaceStr(string str1, string str2, string str3, StringComparison comp)
+        {
+            var args = new object[] { str2, str3, comp };
+            var method = typeof(string).GetMethod(
+                "Replace",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly,
+                null,
+                Type.GetTypeArray(args),
+                null);
+            return method is not null ? (string)method.Invoke(str1, args) : str1.Replace(str2, str3);
         }
 
         private void Dispose(bool disposing)

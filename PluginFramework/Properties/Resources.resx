@@ -120,7 +120,31 @@
   <data name="Error" xml:space="preserve">
     <value>Error!</value>
   </data>
-  <data name="KOMManager_Unpacking_KOM_file_failed" xml:space="preserve">
+  <data name="KOMManager_Unpacking_KOM_File_Failed" xml:space="preserve">
     <value>Unpacking this KOM file failed.</value>
+  </data>
+  <data name="ExecutionManager_Cannot_Find_x2_exe" xml:space="preserve">
+    <value>Can't find '{0}{1}data{1}x2.exe'. Make sure the File Exists and try to Test your mods Again!</value>
+  </data>
+  <data name="ExecutionManager_ElsDir_Not_Set" xml:space="preserve">
+    <value>The Elsword Directory Setting is not set. Make sure to Set your Elsword Directory Setting and try to {0} Again!</value>
+  </data>
+  <data name="ExecutionManager_Cannot_Find_elsword_exe" xml:space="preserve">
+    <value>Can't find '{0}{1}elsword.exe'. Make sure the File Exists and try to update Elsword Again!</value>
+  </data>
+  <data name="KOMManager_Unkown_KOM_Version" xml:space="preserve">
+    <value>Unknown KOM version Detected. Please send this KOM file to the Els_kom Developers for inspection.</value>
+  </data>
+  <data name="KOMManager_Plugin_No_Unpacker_Function" xml:space="preserve">
+    <value>The KOM V{0} plugin does not implement an unpacker function yet. Although it should.</value>
+  </data>
+  <data name="KOMManager_Packing_KOM_File_Failed" xml:space="preserve">
+    <value>Packing an folder to a KOM file failed.</value>
+  </data>
+  <data name="KOMManager_Plugin_No_Packer_Function" xml:space="preserve">
+    <value>The KOM V{0} plugin does not implement an packer function yet. Although it should.</value>
+  </data>
+  <data name="KOMManager_Folder_Version_Check_Error" xml:space="preserve">
+    <value>An error occured while checking the folder version to use for packing the KOM.</value>
   </data>
 </root>

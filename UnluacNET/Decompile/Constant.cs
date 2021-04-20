@@ -7,6 +7,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using System.Text;
 
     public class Constant
@@ -87,17 +88,17 @@ namespace Elskom.Generic.Libs.UnluacNET
             }
             else
             {
-                throw new ArgumentException("Illegal constant type: " + constant.ToString());
+                throw new ArgumentException($"Illegal constant type: {constant}");
             }
         }
 
-        public bool IsBoolean => this.m_type == CONST_BOOL;
+        public bool IsBoolean => this.m_type is CONST_BOOL;
 
         public bool IsIdentifier
         {
             get
             {
-                if (!this.IsString || this.m_string.Length == 0 || m_reservedWords.Contains(this.m_string))
+                if (!this.IsString || this.m_string.Length is 0 || m_reservedWords.Contains(this.m_string))
                 {
                     return false;
                 }
@@ -132,11 +133,11 @@ namespace Elskom.Generic.Libs.UnluacNET
             }
         }
 
-        public bool IsNil => this.m_type == CONST_NIL;
+        public bool IsNil => this.m_type is CONST_NIL;
 
-        public bool IsNumber => this.m_type == CONST_NUMBER;
+        public bool IsNumber => this.m_type is CONST_NUMBER;
 
-        public bool IsString => this.m_type == CONST_STRING;
+        public bool IsString => this.m_type is CONST_STRING;
 
         public int AsInteger()
             => !this.IsInteger ? throw new InvalidOperationException() : (int)this.m_number.Value;
@@ -176,23 +177,19 @@ namespace Elskom.Generic.Libs.UnluacNET
                         {
                             newLines++;
                         }
-                        else if ((c <= 31 && c != '\t') || c >= 127)
+                        else if (c is (<= (char)31 and not '\t') or >= (char)127)
                         {
                             unprinttable++;
                         }
                     }
 
-                    if (unprinttable == 0 && !this.m_string.Contains("[[") &&
-                        (newLines > 1 || newLines == 1) && this.m_string.IndexOf('\n') != this.m_string.Length - 1)
+                    if (unprinttable is 0 && !this.m_string.Contains("[[") &&
+                        (newLines > 1 || newLines is 1) && this.m_string.IndexOf('\n') != this.m_string.Length - 1)
                     {
                         var pipe = 0;
                         var pipeString = new StringBuilder();
                         pipeString.Append("]]");
-#if !NETFRAMEWORK && !NETCOREAPP2_0
-                        while (this.m_string.Contains(pipeString.ToString(), StringComparison.InvariantCulture))
-#else
-                        while (this.m_string.Contains(pipeString.ToString()))
-#endif
+                        while (ContainsStr(this.m_string, pipeString.ToString(), StringComparison.InvariantCulture))
                         {
                             pipe++;
                             pipeString.Clear();
@@ -235,10 +232,10 @@ namespace Elskom.Generic.Libs.UnluacNET
                         };
                         foreach (var c in this.m_string)
                         {
-                            if (c <= 31 || c >= 127)
+                            if (c is <= (char)31 or >= (char)127)
                             {
                                 var cx = (int)c;
-                                if (cx >= 7 && cx <= 13)
+                                if (cx is >= 7 and <= 13)
                                 {
                                     output.Print(chars[cx - 7]);
                                 }
@@ -278,6 +275,21 @@ namespace Elskom.Generic.Libs.UnluacNET
                 default:
                     throw new InvalidOperationException();
             }
+        }
+
+        private static bool ContainsStr(string str1, string str2, StringComparison comp)
+        {
+            List<object> args1 = new();
+            args1.Add(str2);
+            args1.Add(comp);
+            var args = args1.ToArray();
+            var method = typeof(string).GetMethod(
+                "Contains",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly,
+                null,
+                Type.GetTypeArray(args),
+                null);
+            return (bool?)method?.Invoke(str1, args) ?? str1.Contains(str2);
         }
     }
 }

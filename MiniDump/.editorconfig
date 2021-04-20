@@ -159,3 +159,9 @@ dotnet_diagnostic.S101.severity = none
 
 # S2346: Flags enumerations zero-value members should be named "None"
 dotnet_diagnostic.S2346.severity = none
+
+# REFL003: The member does not exist.
+dotnet_diagnostic.REFL003.severity = silent
+
+# S3869: "SafeHandle.DangerousGetHandle" should not be called
+dotnet_diagnostic.S3869.severity = none

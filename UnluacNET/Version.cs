@@ -5,30 +5,53 @@
 
 namespace Elskom.Generic.Libs.UnluacNET
 {
-    public abstract class Version
+    using System;
+
+    public class Version
     {
-        public static readonly Version LUA51 = new Version51();
-        public static readonly Version LUA52 = new Version52();
-        protected int m_versionNumber;
+        public static readonly Version LUA51 = new(0x51);
+        public static readonly Version LUA52 = new(0x52);
+        protected readonly int versionNumber;
 
         protected Version(int versionNumber)
-            => this.m_versionNumber = versionNumber;
+        {
+            this.versionNumber = versionNumber;
+            this.HasHeaderTail = this.versionNumber is not 0x51;
+            this.OuterBlockScopeAdjustment = this.versionNumber switch
+            {
+                0x51 => -1,
+                0x52 => 0,
+                _ => throw new ArgumentOutOfRangeException(nameof(versionNumber)),
+            };
+            this.TForTarget = this.versionNumber switch
+            {
+                0x51 => Op.TFORLOOP,
+                0x52 => Op.TFORCALL,
+                _ => throw new ArgumentOutOfRangeException(nameof(versionNumber)),
+            };
+            this.UsesInlineUpvalueDeclaritions = this.versionNumber is 0x51;
+            this.UsesOldLoadNilEncoding = this.versionNumber is 0x51;
+        }
 
-        public abstract bool HasHeaderTail { get; }
+        public bool HasHeaderTail { get; }
 
-        public abstract int OuterBlockScopeAdjustment { get; }
+        public int OuterBlockScopeAdjustment { get; }
 
-        public abstract Op TForTarget { get; }
+        public Op TForTarget { get; }
 
-        public abstract bool UsesInlineUpvalueDeclaritions { get; }
+        public bool UsesInlineUpvalueDeclaritions { get; }
 
-        public abstract bool UsesOldLoadNilEncoding { get; }
+        public bool UsesOldLoadNilEncoding { get; }
 
-        public abstract LFunctionType GetLFunctionType();
+        public LFunctionType GetLFunctionType()
+            => this.versionNumber is 0x51 ? LFunctionType.TYPE51 : LFunctionType.TYPE52;
 
-        public abstract bool IsBreakableLoopEnd(Op op);
+        public bool IsBreakableLoopEnd(Op op)
+            => this.versionNumber is 0x51
+                ? op is Op.JMP or Op.FORLOOP
+                : op is Op.JMP or Op.FORLOOP or Op.TFORLOOP;
 
         public OpcodeMap GetOpcodeMap()
-            => new(this.m_versionNumber);
+            => new(this.versionNumber);
     }
 }

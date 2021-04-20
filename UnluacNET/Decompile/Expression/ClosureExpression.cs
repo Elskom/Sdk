@@ -38,14 +38,14 @@ namespace Elskom.Generic.Libs.UnluacNET
 
         public override void Print(Output output)
         {
-            var d = new Decompiler(this.m_function);
+            Decompiler d = new(this.m_function);
             output.Print("function");
             this.PrintMain(output, d, true);
         }
 
         public override void PrintClosure(Output output, Target name)
         {
-            var d = new Decompiler(this.m_function);
+            Decompiler d = new(this.m_function);
             output.Print("function ");
             if (this.m_function.NumParams >= 1 && d.DeclList[0].Name.Equals("self") &&
                 name is TableTarget)
@@ -76,7 +76,7 @@ namespace Elskom.Generic.Libs.UnluacNET
 
             if ((this.m_function.VarArg & 1) == 1)
             {
-                output.Print((this.m_function.NumParams > start) ? ", ..." : "...");
+                output.Print(this.m_function.NumParams > start ? ", ..." : "...");
             }
 
             output.Print(")");

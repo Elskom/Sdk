@@ -4,6 +4,7 @@
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <TargetFramework>net5.0</TargetFramework>
     <Version>1.0.0</Version>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -15,13 +16,14 @@
     <PackageTags>GitBuildInformation;SettingsFile;zlib;BlowFish;Unluac;ZipAssembly;ReleasePackaging;MessageManager;GenericPluginLoader;MiniDump;PluginFramework;PluginUpdateCheck;GitBuildInfo</PackageTags>
     <Copyright>Copyright (c) 2018-2021</Copyright>
     <Description>Elskom SDK for development of Els_kom plugins and for Els_kom itself. Also contains libs that can be used for other projects as well.</Description>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="../CommonPackages.props" />
     <None Include="../Sdk/Sdk.props" Pack="true" PackagePath="Sdk" />
     <None Include="../Sdk/Sdk.targets" Pack="true" PackagePath="Sdk" />
-    <None Include="../Sdk/GitBuildInfo.Task.targets" Pack="true" PackagePath="Sdk" />
   </ItemGroup>
 
 </Project>

@@ -30,11 +30,11 @@ namespace Elskom.Generic.Libs.UnluacNET
             => this.LeftGroup || this.m_left.BeginsWithParen;
 
         protected bool LeftGroup
-            => (this.Precedence > this.m_left.Precedence) ||
+            => this.Precedence > this.m_left.Precedence ||
             (this.Precedence == this.m_left.Precedence && this.m_associativity == ASSOCIATIVITY_RIGHT);
 
         protected bool RightGroup
-            => (this.Precedence > this.m_right.Precedence) ||
+            => this.Precedence > this.m_right.Precedence ||
             (this.Precedence == this.m_right.Precedence && this.m_associativity == ASSOCIATIVITY_LEFT);
 
         public override void Print(Output output)
