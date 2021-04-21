@@ -52,7 +52,7 @@
     <PackageReference Include="PluginUpdateCheck" IsImplicitlyDefined="true" Version="*-*" />
     <PackageReference Include="Elskom.PluginFramework" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' == 'Windows_NT'" />
     <!-- needs .NET Framework 4.7.1+. -->
-    <PackageReference Include="MiniDump" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="MiniDump" IsImplicitlyDefined="true" Version="-*" />
     <PackageReference Include="SettingsFile" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' != 'Windows_NT'" />
     <PackageReference Include="zlib.managed" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' != 'Windows_NT'" />
   </ItemGroup>
