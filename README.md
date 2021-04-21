@@ -31,6 +31,7 @@ All of the project files to help with building plugins for Els_kom as well as fo
 [![GitHub issues-opened](https://img.shields.io/github/issues/Elskom/Sdk.svg)](https://GitHub.com/Elskom/Sdk/issues?q=is%3Aissue+is%3Aopened)
 [![GitHub issues-closed](https://img.shields.io/github/issues-closed/Elskom/Sdk.svg)](https://GitHub.com/Elskom/Sdk/issues?q=is%3Aissue+is%3Aclosed)
 [![GitHub pulls-opened](https://img.shields.io/github/issues-pr/Elskom/Sdk.svg)](https://github.com/Elskom/Sdk/pulls?q=is%3Aopen+is%3Apr)
+[![Github pulls-pending](https://img.shields.io/github/issues-search/Elskom/Sdk?label=pending%20pull%20requests&query=is%3Aopen+status%3Apending+is%3apr&color=lightgray)](https://github.com/Elskom/Sdk/pulls?q=is%3Aopen+status%3Apending+is%3Apr)
 [![Github pulls-passing](https://img.shields.io/github/issues-search/Elskom/Sdk?label=passing%20pull%20requests&query=is%3Aopen+status%3Asuccess+is%3Apr&color=limegreen)](https://github.com/Elskom/Sdk/pulls?q=is%3Aopen+status%3Asuccess+is%3Apr)
 [![Github pulls-failing](https://img.shields.io/github/issues-search/Elskom/Sdk?label=failing%20pull%20requests&query=is%3Aopen+status%3Afailure+is%3Apr&color=red)](https://github.com/Elskom/Sdk/pulls?q=is%3Aopen+status%3Afailure+is%3Apr)
 [![GitHub pulls-merged](https://img.shields.io/github/issues-search/Elskom/Sdk?label=merged%20pull%20requests&query=is%3Apr%20is%3Aclosed%20is%3Amerged&color=darkviolet)](https://github.com/Elskom/Sdk/pulls?q=is%3Apr+is%3Aclosed+is%3Amerged)
