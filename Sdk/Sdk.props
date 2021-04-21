@@ -43,7 +43,7 @@
 
   <ItemGroup Condition="'$(ElskomSdkBuild)' == ''">
     <PackageReference Include="BlowFish" IsImplicitlyDefined="true" Version="*-*" />
-    <PackageReference Include="MessageManager" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseWindowsForms)' == 'true' AND '$(OS)' == 'Windows_NT'" />
+    <PackageReference Include="MessageManager" IsImplicitlyDefined="true" Version="-*" Condition="'$(UseWindowsForms)' == 'true' AND '$(OS)' == 'Windows_NT'" />
     <PackageReference Include="UnluacNET" IsImplicitlyDefined="true" Version="*-*" />
     <!-- needs .NET Framework 4.5+. -->
     <PackageReference Include="GenericPluginLoader" IsImplicitlyDefined="true" Version="*-*" />
