@@ -46,10 +46,7 @@ Note: all of my other nuget packages are combined into the Elskom.Sdk package al
 News / changelog making tool.
 
 To build:
-
-```ps
-dotnet build
-```
+It's built with the rest of the projects using ``dotnet build``.
 
 To install:
 
