@@ -15,3 +15,6 @@ GitInfo.json
 # opening Finder on mac inside the repository creates these.
 .DS_Store
 *.user
+
+# exclude security scanning results.
+results.sarif
