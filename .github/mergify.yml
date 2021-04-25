@@ -14,83 +14,11 @@ pull_request_rules:
 
   - name: Add automerge label
     conditions:
-      - check-success=SecurityScan
+      - check-success=Codacy Security Scan
       - -draft
       - -closed
       - -label=automerge
-      - author=dependabot[bot]
-    actions:
-      label:
-        add:
-          - automerge
-
-  - name: Add automerge label
-    conditions:
-      - check-success=SecurityScan
-      - -draft
-      - -closed
-      - -label=automerge
-      - author=dependabot-preview[bot]
-    actions:
-      label:
-        add:
-          - automerge
-
-  - name: Add automerge label
-    conditions:
-      - check-success=SecurityScan
-      - -draft
-      - -closed
-      - -label=automerge
-      - author=AraHaan
-    actions:
-      label:
-        add:
-          - automerge
-
-  - name: Add automerge label
-    conditions:
-      - check-success=SecurityScan
-      - -draft
-      - -closed
-      - -label=automerge
-      - author=CatGirlsAreLife
-    actions:
-      label:
-        add:
-          - automerge
-
-  - name: Add automerge label
-    conditions:
-      - check-success=SecurityScan
-      - -draft
-      - -closed
-      - -label=automerge
-      - author=JunichiSama
-    actions:
-      label:
-        add:
-          - automerge
-
-  - name: Add automerge label
-    conditions:
-      - check-success=SecurityScan
-      - -draft
-      - -closed
-      - -label=automerge
-      - author=xioke
-    actions:
-      label:
-        add:
-          - automerge
-
-  - name: Add automerge label
-    conditions:
-      - check-success=SecurityScan
-      - -draft
-      - -closed
-      - -label=automerge
-      - author=Elskom-gitsync
+      - author~=^(AraHaan|CatGirlsAreLife|JunichiSama|xioke|Elskom-gitsync|dependabot(|-preview)\[bot\])$
     actions:
       label:
         add:
@@ -147,7 +75,7 @@ pull_request_rules:
       - base=main
       - label=automerge
       - check-success=build
-      - check-success=SecurityScan
+      - check-success=Codacy Security Scan
       - check-success=Codacy Static Code Analysis
       - check-success=Checkov
       - check-success=Jacksonlinter
@@ -156,12 +84,12 @@ pull_request_rules:
       - check-success=DCO
       - check-success=WIP
     actions:
-      merge:
-        strict: smart+fasttrack
-        strict_method: rebase
-        method: squash
       comment:
         message: This pull request is about to be automerged.
       review:
         type: APPROVE
         message: Automatically approving since automerge label was found.
+      merge:
+        strict: smart+fasttrack
+        strict_method: rebase
+        method: squash
