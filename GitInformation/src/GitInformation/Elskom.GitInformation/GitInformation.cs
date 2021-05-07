@@ -87,6 +87,14 @@ namespace Elskom.Generic.Libs
         public bool IsMain => this.Branchname.Equals("main", StringComparison.Ordinal);
 
         /// <summary>
+        /// Gets a value indicating whether refs point to a stable tag release.
+        /// </summary>
+        /// <value>
+        /// A value indicating whether refs point to a stable tag release.
+        /// </value>
+        public bool IsTag => this.Headdesc.StartsWith("refs/tags", StringComparison.Ordinal);
+
+        /// <summary>
         /// Applies the <see cref="Attribute"/>s that the specified <see cref="Assembly"/> contains.
         /// </summary>
         /// <param name="assembly">
@@ -94,7 +102,7 @@ namespace Elskom.Generic.Libs
         /// </param>
         public static void ApplyAssemblyAttributes(Assembly assembly)
         {
-            if (assembly == null)
+            if (assembly is null)
             {
                 throw new ArgumentNullException(nameof(assembly));
             }
@@ -119,7 +127,7 @@ namespace Elskom.Generic.Libs
         /// or <see langword="null"/>.
         /// </returns>
         public static GitInformation GetAssemblyInstance(Type assemblyType)
-            => assemblyType == null
+            => assemblyType is null
             ? throw new ArgumentNullException(nameof(assemblyType))
             : GetAssemblyInstance(assemblyType.Assembly);
 

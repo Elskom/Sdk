@@ -35,13 +35,13 @@ namespace Elskom.Generic.Libs
         /// </exception>
         public GitInformationAttribute(string headdesc, string commit, string branchname, Type assemblyType)
         {
-            if (assemblyType == null)
+            if (assemblyType is null)
             {
                 throw new ArgumentNullException(nameof(assemblyType));
             }
 
             GitInformation.ApplyAssemblyAttributes(typeof(GitInformation).Assembly);
-            if (GitInformation.GetAssemblyInstance(assemblyType.Assembly) == null)
+            if (GitInformation.GetAssemblyInstance(assemblyType.Assembly) is null)
             {
                 _ = new GitInformation(headdesc, commit, branchname, assemblyType.Assembly);
             }
