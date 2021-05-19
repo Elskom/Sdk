@@ -24,7 +24,7 @@ All of the project files to help with building plugins for Els_kom as well as fo
 # Build Status
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/602ea77e56864263b58c05c7beaadf5f)](https://app.codacy.com/gh/Elskom/Sdk?utm_source=github.com&utm_medium=referral&utm_content=Elskom/Sdk&utm_campaign=Badge_Grade_Settings)
-![Build Status](https://github.com/Elskom/Sdk/workflows/.NET%20Core%20%28build%20%26%20publish%20pre-release%29/badge.svg)
+![Build Status](https://github.com/Elskom/Sdk/workflows/.NET%20Core%20%28build%20%29/badge.svg)
 ![Build Status](https://github.com/Elskom/Sdk/workflows/.NET%20Core%20%28build%20%26%20publish%20release%29/badge.svg)
 [![GitHub release](https://img.shields.io/github/release/Elskom/Sdk.svg)](https://GitHub.com/Elskom/Sdk/releases/)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Elskom/Sdk)](https://github.com/Elskom/Sdk)
@@ -39,7 +39,7 @@ All of the project files to help with building plugins for Els_kom as well as fo
 [![GitHub contributors](https://img.shields.io/github/contributors/Elskom/Sdk.svg)](https://GitHub.com/Elskom/Sdk/graphs/contributors/)
 ![Commit activity](https://img.shields.io/github/commit-activity/y/Elskom/Sdk)
 
-Note: all of my other nuget packages are combined into the Elskom.Sdk package all other packages except the ones from this repository are deprecated.
+Note: all of my other nuget packages are provided with the Elskom.Sdk package all other packages except the ones from this repository and it's submodules are deprecated.
 
 # newsmake Information
 
