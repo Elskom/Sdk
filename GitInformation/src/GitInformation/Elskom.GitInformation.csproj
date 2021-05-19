@@ -35,6 +35,7 @@
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <UseSystemMemory>true</UseSystemMemory>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

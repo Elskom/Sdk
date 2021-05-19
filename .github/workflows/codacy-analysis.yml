@@ -21,15 +21,16 @@ jobs:
     steps:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout code
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@main
         with:
           # we need the submodule to zlib.managed.
           submodules: recursive
 
       - name: .NET core build
-        uses: actions/setup-dotnet@v1.8.0
+        uses: actions/setup-dotnet@main
         with:
-          dotnet-version: 6.0.100-preview.3.21202.5
+          dotnet-version: '6.0.x'
+          include-prerelease: true
 
       - name: Restore
         run: dotnet restore
@@ -37,11 +38,9 @@ jobs:
 
       # Execute Codacy Analysis CLI and generate a SARIF output with the security issues identified during the analysis
       - name: Run Codacy Analysis CLI
-        uses: codacy/codacy-analysis-cli-action@3.0.2
+        uses: codacy/codacy-analysis-cli-action@master
         with:
-          # Check https://github.com/codacy/codacy-analysis-cli#project-token to get your project token from your Codacy repository
-          # You can also omit the token and run the tools that support default configurations
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          api-token: ${{ secrets.CODACY_API_TOKEN }}
           verbose: true
           output: results.sarif
           format: sarif
@@ -53,6 +52,6 @@ jobs:
 
       # Upload the SARIF file generated in the previous step
       - name: Upload SARIF results file
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@main
         with:
           sarif_file: results.sarif
