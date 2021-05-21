@@ -32,49 +32,49 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Gets or sets the icon to use.
         /// </summary>
-        [JsonPropertyName("WindowIcon")]
+        [JsonPropertyName(nameof(WindowIcon))]
         public int WindowIcon { get; set; }
 
         /// <summary>
         /// Gets or sets the Elsword install directory.
         /// </summary>
-        [JsonPropertyName("ElsDir")]
+        [JsonPropertyName(nameof(ElsDir))]
         public string ElsDir { get; set; }
 
         /// <summary>
         /// Gets or sets whether to show the icon in tray, in taskbar, or both when Elsword is not running.
         /// </summary>
-        [JsonPropertyName("IconWhileElsNotRunning")]
+        [JsonPropertyName(nameof(IconWhileElsNotRunning))]
         public int IconWhileElsNotRunning { get; set; }
 
         /// <summary>
         /// Gets or sets whether to show the icon in tray, in taskbar, or both when Elsword is running.
         /// </summary>
-        [JsonPropertyName("IconWhileElsRunning")]
+        [JsonPropertyName(nameof(IconWhileElsRunning))]
         public int IconWhileElsRunning { get; set; }
 
         /// <summary>
         /// Gets or sets whether to save installed plugins to a zip file or not.
         /// </summary>
-        [JsonPropertyName("SaveToZip")]
+        [JsonPropertyName(nameof(SaveToZip))]
         public int SaveToZip { get; set; }
 
         /// <summary>
         /// Gets or sets whether to show test messages or not.
         /// </summary>
-        [JsonPropertyName("ShowTestMessages")]
+        [JsonPropertyName(nameof(ShowTestMessages))]
         public int ShowTestMessages { get; set; }
 
         /// <summary>
         /// Gets or sets whether to use notifications or not.
         /// </summary>
-        [JsonPropertyName("UseNotifications")]
+        [JsonPropertyName(nameof(UseNotifications))]
         public int UseNotifications { get; set; }
 
         /// <summary>
         /// Gets the sources to use to install plugins from.
         /// </summary>
-        [JsonPropertyName("Sources")]
+        [JsonPropertyName(nameof(Sources))]
         public string[] Sources { get; private set; }
 
         /// <summary>
