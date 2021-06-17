@@ -1,0 +1,50 @@
+<Project>
+
+  <ItemGroup>
+    <!-- Only add these analyzers when installed as an Sdk package from nuget. -->
+    <PackageReference Include="SecurityCodeScan.VS2019" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="IDisposableAnalyzers" IsImplicitlyDefined="true" Version="*-*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="ReflectionAnalyzers" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <!-- We need the source generator we created. -->
+    <PackageReference Include="GitBuildInfo.SourceGenerator" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- We need to reference System.Net.Http on .NET Framework targets. -->
+    <Reference Include="System.Net.Http" IsImplicitlyDefined="true" Condition="$(TargetFramework.StartsWith('net4')) AND '$(ElskomSdkBuild)' == ''" />
+    <PackageReference Include="System.Resources.Extensions" IsImplicitlyDefined="true" Version="*-*" Condition="$(TargetFramework.StartsWith('net4')) AND ('$(UseWindowsForms)' == 'true' OR '$(UseWPF)' == 'true') AND '$(OS)' == 'Windows_NT' AND '$(ElskomSdkBuild)' == ''" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(ElskomSdkBuild)' == ''">
+    <PackageReference Include="BlowFish" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="MessageManager" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseWindowsForms)' == 'true' AND '$(OS)' == 'Windows_NT'" />
+    <PackageReference Include="UnluacNET" IsImplicitlyDefined="true" Version="*-*" />
+    <!-- needs .NET Framework 4.5+. -->
+    <PackageReference Include="GenericPluginLoader" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="ReleasePackaging" IsImplicitlyDefined="true" Version="*-*" />
+    <!-- needs .NET Framework 4.6.1+. -->
+    <PackageReference Include="PluginUpdateCheck" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="Elskom.PluginFramework" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' == 'Windows_NT'" />
+    <!-- needs .NET Framework 4.7.1+. -->
+    <PackageReference Include="MiniDump" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="SettingsFile" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' != 'Windows_NT'" />
+    <PackageReference Include="zlib.managed" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' != 'Windows_NT'" />
+  </ItemGroup>
+
+</Project>

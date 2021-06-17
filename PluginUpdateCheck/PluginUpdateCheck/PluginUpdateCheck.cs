@@ -97,14 +97,13 @@ namespace Elskom.Generic.Libs
             // fixup the github urls (if needed).
             for (var i = 0; i < pluginURLs.Length; i++)
             {
-                var arg0 = ReplaceStr(
-                    pluginURLs[i],
+                var arg0 = pluginURLs[i].ReplaceStr(
                     "https://github.com/",
                     "https://raw.githubusercontent.com/",
                     StringComparison.Ordinal);
                 var arg1 = pluginURLs[i].EndsWith("/", StringComparison.Ordinal)
-                    ? "master/plugins.xml"
-                    : "/master/plugins.xml";
+                    ? "main/plugins.xml"
+                    : "/main/plugins.xml";
                 pluginURLs[i] = $"{arg0}{arg1}";
             }
 
@@ -273,18 +272,6 @@ namespace Elskom.Generic.Libs
             }
 
             return false;
-        }
-
-        private static string ReplaceStr(string str1, string str2, string str3, StringComparison comp)
-        {
-            var args = new object[] { str2, str3, comp };
-            var method = typeof(string).GetMethod(
-                "Replace",
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly,
-                null,
-                Type.GetTypeArray(args),
-                null);
-            return method is not null ? (string)method.Invoke(str1, args) : str1.Replace(str2, str3);
         }
 
         private void Dispose(bool disposing)

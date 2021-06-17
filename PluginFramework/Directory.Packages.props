@@ -1,0 +1,10 @@
+<Project>
+
+  <ItemGroup>
+    <ProjectReference Include="../zlib.managed/zlib.managed.csproj" />
+    <ProjectReference Include="../SettingsFile/SettingsFile.csproj" />
+  </ItemGroup>
+
+  <Import Project="../Directory.Packages.props" />
+
+</Project>

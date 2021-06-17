@@ -22,31 +22,22 @@ namespace Elskom.Generic.Libs
         public static List<T> CreateInstancesFromInterface<T>(this AssemblyLoadContext context, string dllFile, string pdbFile)
         {
             List<T> instances = new();
-            if (File.Exists(dllFile))
+            try
             {
-                try
-                {
-                    var asmFile = File.ReadAllBytes(dllFile);
-
-                    // We need to handle the case where the pdb does not exist and where the
-                    // symbols might actually be embedded inside the dll instead or simply does
-                    // not exist yet.
-                    var pdbBytes = Debugger.IsAttached && File.Exists(pdbFile)
-                        ? File.ReadAllBytes(pdbFile) : null;
-                    using MemoryStream ms1 = new(asmFile);
-                    MemoryStream? ms2 = Debugger.IsAttached && pdbBytes is not null ? new(pdbBytes) : null;
-                    instances.AddRange(context.CreateInstancesFromInterface<T>(ms1, ms2));
-                    ms2?.Dispose();
-                }
-                catch (BadImageFormatException)
-                {
-                    // ignore the error (this would cause the end of
-                    // the function to return an empty list).
-                }
-                catch (FileLoadException)
-                {
-                    instances.AddRange(CreateInstancesFromInterface<T>(context.LoadFromAssemblyPath(dllFile)));
-                }
+                var asmFiles = OpenAssemblyFiles(dllFile, pdbFile);
+                using MemoryStream ms1 = new(asmFiles.AsmBytes!);
+                MemoryStream? ms2 = Debugger.IsAttached && asmFiles.PdbBytes is not null ? new(asmFiles.PdbBytes) : null;
+                instances.AddRange(context.CreateInstancesFromInterface<T>(ms1, ms2));
+                ms2?.Dispose();
+            }
+            catch (BadImageFormatException)
+            {
+                // ignore the error (this would cause the end of
+                // the function to return an empty list).
+            }
+            catch (FileLoadException)
+            {
+                instances.AddRange(CreateInstancesFromInterface<T>(context.LoadFromAssemblyPath(dllFile)));
             }
 
             return instances;
@@ -58,36 +49,33 @@ namespace Elskom.Generic.Libs
         public static List<T> CreateInstancesFromInterface<T>(this AppDomain domain, string dllFile, string pdbFile)
         {
             List<T> instances = new();
-            if (File.Exists(dllFile))
+            try
+            {
+                var asmFiles = OpenAssemblyFiles(dllFile, pdbFile);
+                instances.AddRange(domain.CreateInstancesFromInterface<T>(asmFiles.AsmBytes!, asmFiles.PdbBytes));
+            }
+            catch (BadImageFormatException)
+            {
+                // ignore the error (this would cause the end of
+                // the function to return an empty list).
+            }
+            catch (FileLoadException)
             {
                 try
                 {
-                    var asmFile = File.ReadAllBytes(dllFile);
-
-                    // We need to handle the case where the pdb does not exist and where the
-                    // symbols might actually be embedded inside the dll instead or simply does
-                    // not exist yet.
-                    var pdbBytes = Debugger.IsAttached && File.Exists(pdbFile)
-                        ? File.ReadAllBytes(pdbFile) : null;
-                    instances.AddRange(domain.CreateInstancesFromInterface<T>(asmFile, pdbBytes));
+                    instances.AddRange(
+                        CreateInstancesFromInterface<T>(domain.Load(AssemblyName.GetAssemblyName(dllFile))));
                 }
-                catch (BadImageFormatException)
+                catch (Exception)
                 {
                     // ignore the error (this would cause the end of
                     // the function to return an empty list).
                 }
-                catch (FileLoadException)
-                {
-                    try
-                    {
-                        instances.AddRange(CreateInstancesFromInterface<T>(domain.Load(AssemblyName.GetAssemblyName(dllFile))));
-                    }
-                    catch (Exception)
-                    {
-                        // ignore the error (this would cause the end of
-                        // the function to return an empty list).
-                    }
-                }
+            }
+            catch (ArgumentNullException)
+            {
+                // ignore the error (this would cause the end of
+                // the function to return an empty list).
             }
 
             return instances;
@@ -153,5 +141,22 @@ namespace Elskom.Generic.Libs
             }
         }
 #endif
+
+        private static (byte[]? AsmBytes, byte[]? PdbBytes) OpenAssemblyFiles(string dllFile, string pdbFile)
+        {
+            if (File.Exists(dllFile))
+            {
+                var asmBytes = File.ReadAllBytes(dllFile);
+
+                // We need to handle the case where the pdb does not exist and where the
+                // symbols might actually be embedded inside the dll instead or simply does
+                // not exist yet.
+                var pdbBytes = Debugger.IsAttached && File.Exists(pdbFile)
+                    ? File.ReadAllBytes(pdbFile) : null;
+                return (asmBytes, pdbBytes);
+            }
+
+            return (null, null);
+        }
     }
 }

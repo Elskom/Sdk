@@ -1,0 +1,17 @@
+<Project>
+
+  <ItemGroup>
+    <None Remove="stylecop.json" />
+    <AdditionalFiles Include="stylecop.json" />
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>BlowFish,PublicKey=$(SnkPublicKey)</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>PluginUpdateCheck,PublicKey=$(SnkPublicKey)</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>ReleasePackaging,PublicKey=$(SnkPublicKey)</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>
