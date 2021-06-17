@@ -1,0 +1,33 @@
+<Project>
+
+  <PropertyGroup>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+    <AssemblyName>ZipAssembly</AssemblyName>
+    <PackageTags>ZipAssembly</PackageTags>
+    <Description>A .NET library for loading assemblies from zip files.</Description>
+    <PackageReleaseNotes>Removed the ability to force load pdbs as it was not needed. Also loads each plugin into a AppDomain passed into the ZipLoader on .NET Standard builds, while using AssemblyLoadContexts for .NET 5 or newer builds and the class is now sealed while the ZipSymbolsLoadException class was removed.</PackageReleaseNotes>
+    <Version>2.0.0</Version>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <NoWarn>$(NoWarn);NU5104;NU5118</NoWarn>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <!-- <IncludeSymbols>true</IncludeSymbols> -->
+    <!-- Optional: Include source code in the symbol package (.snupkg) -->
+    <!-- <IncludeSource>true</IncludeSource> -->
+    <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
+    <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <GitBuildInfoAssemblyType>ZipAssembly</GitBuildInfoAssemblyType>
+  </PropertyGroup>
+
+  <Import Project="../Directory.Build.props" />
+
+</Project>

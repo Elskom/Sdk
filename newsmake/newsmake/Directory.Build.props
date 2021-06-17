@@ -1,0 +1,39 @@
+<Project>
+
+  <Import Project="../../Directory.Build.props" />
+
+  <PropertyGroup>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <OutputType>Exe</OutputType>
+    <PackAsTool>true</PackAsTool>
+    <AssemblyName>newsmake</AssemblyName>
+    <PackageTags>newsmake</PackageTags>
+    <Description>News / changelog making tool.</Description>
+    <PackageReleaseNotes>Actually fixed the substring bug which caused crashes, also moved to System.CommandLine for cli options.</PackageReleaseNotes>
+    <Version>1.0.5</Version>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <NoWarn>$(NoWarn);NU5118;NU1603</NoWarn>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <!-- <IncludeSymbols>true</IncludeSymbols> -->
+    <!-- Optional: Include source code in the symbol package (.snupkg) -->
+    <!-- <IncludeSource>true</IncludeSource> -->
+    <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
+    <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
+    <UseCommandLine>true</UseCommandLine>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\</PackageOutputPath>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <GitBuildInfoAssemblyType>Newsmake.Program</GitBuildInfoAssemblyType>
+  </PropertyGroup>
+
+</Project>

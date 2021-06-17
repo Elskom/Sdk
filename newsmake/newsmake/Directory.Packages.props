@@ -1,0 +1,9 @@
+<Project>
+
+  <ItemGroup>
+    <ProjectReference Include="../../MiniDump/MiniDump.csproj" />
+  </ItemGroup>
+
+  <Import Project="../../Directory.Packages.props" />
+
+</Project>

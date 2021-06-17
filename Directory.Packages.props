@@ -1,0 +1,24 @@
+<Project>
+
+  <!--
+      Import the Sdk.props from this project to simplify this file and the setups on all
+      the other projects (set defaults that would normally not be set).
+  -->
+  <Import Project="./Sdk/Sdk.Packages.props" />
+
+  <ItemGroup>
+    <!-- SourceLink -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- Common .NET Dependency packages. -->
+    <!-- For Span/ReadOnlySpan. -->
+    <PackageReference Include="System.Memory" Version="*-*" IsImplicitlyDefined="true" Condition="'$(UseSystemMemory)' != '' AND '$(UseSystemMemory)' == 'true'" />
+    <!-- for the command line. -->
+    <PackageReference Include="System.CommandLine" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
+    <!-- for Json file loading and reading/writing. -->
+    <PackageReference Include="System.Text.Json" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseJsonPackage)' != '' AND '$(UseJsonPackage)' == 'true'" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseDependencyInjection)' != '' AND '$(UseDependencyInjection)' == 'true'" />
+  </ItemGroup>
+
+</Project>

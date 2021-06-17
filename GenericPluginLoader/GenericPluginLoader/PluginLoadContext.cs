@@ -31,8 +31,7 @@ namespace Elskom.Generic.Libs
         {
             var isLoadedToDefaultContext = new Func<string, bool>(static name =>
             {
-                return Default.Assemblies.Any(assembly =>
-                    assembly.FullName is not null && assembly.FullName.Equals(name, StringComparison.Ordinal));
+                return Default.Assemblies.Any(assembly => assembly.FullName is not null && assembly.FullName.Equals(name, StringComparison.Ordinal));
             });
             var getFromDefaultContext = new Func<string, Assembly?>(static name =>
             {

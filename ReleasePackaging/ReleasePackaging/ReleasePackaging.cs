@@ -32,20 +32,20 @@ namespace Elskom.Generic.Libs
             if (args[1].StartsWith(".\\", StringComparison.OrdinalIgnoreCase))
             {
                 // Replace spaces with periods.
-                outfilename = ReplaceStr(args[1], " ", ".", StringComparison.OrdinalIgnoreCase);
-                args[1] = ReplaceStr(outfilename, ".\\", $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase);
+                outfilename = args[1].ReplaceStr(" ", ".", StringComparison.OrdinalIgnoreCase);
+                args[1] = outfilename.ReplaceStr(".\\", $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase);
             }
             else if (args[1].StartsWith("./", StringComparison.OrdinalIgnoreCase))
             {
                 // Replace spaces with periods.
-                outfilename = ReplaceStr(args[1], " ", ".", StringComparison.OrdinalIgnoreCase);
-                args[1] = ReplaceStr(outfilename, "./", $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase);
+                outfilename = args[1].ReplaceStr(" ", ".", StringComparison.OrdinalIgnoreCase);
+                args[1] = outfilename.ReplaceStr("./", $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase);
             }
             else
             {
                 // Replace spaces with periods.
-                outfilename = ReplaceStr(args[1], " ", ".", StringComparison.OrdinalIgnoreCase);
-                args[1] = $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{ReplaceStr(outfilename, ".", string.Empty, StringComparison.OrdinalIgnoreCase)}";
+                outfilename = args[1].ReplaceStr(" ", ".", StringComparison.OrdinalIgnoreCase);
+                args[1] = $"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{outfilename.ReplaceStr(".", string.Empty, StringComparison.OrdinalIgnoreCase)}";
             }
 
             if (args[0].Equals("-p", StringComparison.Ordinal))
@@ -97,18 +97,6 @@ namespace Elskom.Generic.Libs
             }
 
             return fileInfos.ToArray();
-        }
-
-        private static string ReplaceStr(string str1, string str2, string str3, StringComparison comp)
-        {
-            var args = new object[] { str2, str3, comp };
-            var method = typeof(string).GetMethod(
-                "Replace",
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly,
-                null,
-                Type.GetTypeArray(args),
-                null);
-            return method is not null ? (string)method.Invoke(str1, args) : str1.Replace(str2, str3);
         }
     }
 }

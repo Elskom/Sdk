@@ -1,0 +1,32 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- suppress message when using the .NET Preview SDKs. -->
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+    <ElskomSdkBuild>true</ElskomSdkBuild>
+    <ElskomSdkSkipImplicitPackages>true</ElskomSdkSkipImplicitPackages>
+    <!--
+        Sorry, we have to disable the warning for adding the reference assemblies to the package without adding them to the nuspec.
+        This is because of the fact that if we use the methods to add them that does add them to the nuspec, then the folder paths
+        would be added automatically to the project which is not intended at all or even wanted. As such for now the only way to
+        fix that is to disable package analysis for now.
+    -->
+    <NoPackageAnalysis Condition="'$(PublishReferenceAssemblies)' == 'true'">true</NoPackageAnalysis>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath>
+    <Company>Els_kom org.</Company>
+    <Authors>Els_kom org.</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Elskom/Sdk/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Elskom/Sdk/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Copyright>Copyright (c) 2018-2021</Copyright>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!--
+      Import the Sdk.props from this project to simplify this file and the setups on all
+      the other projects (set defaults that would normally not be set).
+  -->
+  <Import Project="./Sdk/Sdk.props" />
+
+</Project>
