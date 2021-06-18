@@ -2,10 +2,6 @@
 
   <ItemGroup>
     <!-- Only add these analyzers when installed as an Sdk package from nuget. -->
-    <PackageReference Include="SecurityCodeScan.VS2019" IsImplicitlyDefined="true" Version="*-*">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="SonarAnalyzer.CSharp" IsImplicitlyDefined="true" Version="*-*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
