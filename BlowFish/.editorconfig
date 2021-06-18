@@ -143,7 +143,3 @@ csharp_space_between_square_brackets = false
 # Wrapping preferences
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
-
-
-# SCS0013: Potential usage of weak AES mode.
-dotnet_diagnostic.SCS0013.severity = none
