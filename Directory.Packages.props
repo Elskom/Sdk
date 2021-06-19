@@ -12,8 +12,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <!-- Common .NET Dependency packages. -->
-    <!-- For Span/ReadOnlySpan. -->
-    <PackageReference Include="System.Memory" Version="*-*" IsImplicitlyDefined="true" Condition="'$(UseSystemMemory)' != '' AND '$(UseSystemMemory)' == 'true'" />
     <!-- for the command line. -->
     <PackageReference Include="System.CommandLine" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
     <!-- for Json file loading and reading/writing. -->
