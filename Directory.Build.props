@@ -12,7 +12,7 @@
         fix that is to disable package analysis for now.
     -->
     <NoPackageAnalysis Condition="'$(PublishReferenceAssemblies)' == 'true'">true</NoPackageAnalysis>
-    <PackageOutputPath>$(MSBuildThisFileDirectory)..\artifacts\</PackageOutputPath>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)artifacts\</PackageOutputPath>
     <Company>Els_kom org.</Company>
     <Authors>Els_kom org.</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
