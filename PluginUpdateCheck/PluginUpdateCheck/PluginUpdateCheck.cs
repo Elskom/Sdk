@@ -12,20 +12,19 @@ namespace Elskom.Generic.Libs
     using System.IO.Compression;
     using System.Linq;
     using System.Net.Http;
-    using System.Reflection;
     using System.Xml.Linq;
     using Elskom.Generic.Libs.Properties;
-    using Microsoft.Extensions.DependencyInjection;
+    using IDisposableGenerator;
 
     /// <summary>
     /// A generic plugin update checker.
     /// </summary>
-    public sealed class PluginUpdateCheck : IDisposable
+    [GenerateDispose(false)]
+    public sealed partial class PluginUpdateCheck
     {
-        private readonly ServiceProvider serviceProvider;
-        private bool disposedValue;
+        private readonly IServiceProvider serviceProvider;
 
-        internal PluginUpdateCheck(ServiceProvider serviceprovider)
+        internal PluginUpdateCheck(IServiceProvider serviceprovider)
             => this.serviceProvider = serviceprovider;
 
         /// <summary>
@@ -58,26 +57,31 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Gets the plugin name this instance is pointing to.
         /// </summary>
+        [SetNullOnDispose]
         public string PluginName { get; private set; }
 
         /// <summary>
         /// Gets the current version of the plugin that is pointed to by this instance.
         /// </summary>
+        [SetNullOnDispose]
         public string CurrentVersion { get; private set; }
 
         /// <summary>
         /// Gets the installed version of the plugin that is pointed to by this instance.
         /// </summary>
+        [SetNullOnDispose]
         public string InstalledVersion { get; private set; }
 
         /// <summary>
         /// Gets the url to download the files to the plugin from.
         /// </summary>
+        [SetNullOnDispose]
         public Uri DownloadUrl { get; private set; }
 
         /// <summary>
         /// Gets the files to the plugin to download.
         /// </summary>
+        [SetNullOnDispose]
         public List<string> DownloadFiles { get; private set; }
 
         /// <summary>
@@ -85,10 +89,10 @@ namespace Elskom.Generic.Libs
         /// </summary>
         /// <param name="pluginURLs">The repository urls to the plugins.</param>
         /// <param name="pluginTypes">A list of types to the plugins to check for updates to.</param>
-        /// <param name="serviceprovider">The <see cref="ServiceProvider"/> to use.</param>
+        /// <param name="serviceprovider">The <see cref="IServiceProvider"/> to use.</param>
         /// <returns>A list of <see cref="PluginUpdateCheck"/> instances representing the plugins that needs updating or are to be installed.</returns>
         // catches the plugin urls and uses that cache to detect added urls, and only appends those to the list.
-        public static List<PluginUpdateCheck> CheckForUpdates(string[] pluginURLs, List<Type> pluginTypes, ServiceProvider serviceprovider)
+        public static List<PluginUpdateCheck> CheckForUpdates(string[] pluginURLs, List<Type> pluginTypes, IServiceProvider serviceprovider)
         {
             _ = pluginURLs ?? throw new ArgumentNullException(nameof(pluginURLs));
             _ = pluginTypes ?? throw new ArgumentNullException(nameof(pluginTypes));
@@ -114,7 +118,7 @@ namespace Elskom.Generic.Libs
                 {
                     try
                     {
-                        var doc = XDocument.Parse(serviceprovider.GetService<HttpClient>().GetStringAsync(pluginURL).GetAwaiter().GetResult());
+                        var doc = XDocument.Parse(((HttpClient)serviceprovider.GetService(typeof(HttpClient)))?.GetStringAsync(pluginURL).GetAwaiter().GetResult());
                         var elements = doc.Root.Elements("Plugin");
                         foreach (var element in elements)
                         {
@@ -167,19 +171,13 @@ namespace Elskom.Generic.Libs
         }
 
         /// <summary>
-        /// Cleans up the resources used by <see cref="PluginUpdateCheck"/>.
-        /// </summary>
-        public void Dispose()
-            => this.Dispose(true);
-
-        /// <summary>
         /// Installs the files to the plugin pointed to by this instance.
         /// </summary>
         /// <param name="saveToZip">A bool indicating if the file should be installed to a zip file instead of a folder.</param>
         /// <returns>A bool indicating if anything changed.</returns>
         public bool Install(bool saveToZip)
         {
-            if (this.disposedValue)
+            if (this.isDisposed)
             {
                 throw new ObjectDisposedException(nameof(PluginUpdateCheck));
             }
@@ -190,7 +188,7 @@ namespace Elskom.Generic.Libs
                 {
                     var path = $"{Environment.CurrentDirectory}{Path.DirectorySeparatorChar}plugins{Path.DirectorySeparatorChar}{downloadFile}";
                     using (var fs = File.Create(path))
-                    using (var response = this.serviceProvider.GetService<HttpClient>()?.GetStreamAsync($"{this.DownloadUrl}{downloadFile}").GetAwaiter().GetResult())
+                    using (var response = ((HttpClient)this.serviceProvider.GetService(typeof(HttpClient)))?.GetStreamAsync($"{this.DownloadUrl}{downloadFile}").GetAwaiter().GetResult())
                     {
                         response?.CopyTo(fs);
                     }
@@ -229,7 +227,7 @@ namespace Elskom.Generic.Libs
         /// <returns>A bool indicating if anything changed.</returns>
         public bool Uninstall(bool saveToZip)
         {
-            if (this.disposedValue)
+            if (this.isDisposed)
             {
                 throw new ObjectDisposedException(nameof(PluginUpdateCheck));
             }
@@ -274,19 +272,8 @@ namespace Elskom.Generic.Libs
             return false;
         }
 
-        private void Dispose(bool disposing)
-        {
-            if (!this.disposedValue && disposing)
-            {
-                // prevent any leaks from this.
-                this.PluginName = null;
-                this.CurrentVersion = null;
-                this.InstalledVersion = null;
-                this.DownloadUrl = null;
-                this.DownloadFiles.Clear();
-                this.DownloadFiles = null;
-                this.disposedValue = true;
-            }
-        }
+        [CallOnDispose]
+        private void ClearDownloadFiles()
+            => this.DownloadFiles.Clear();
     }
 }
