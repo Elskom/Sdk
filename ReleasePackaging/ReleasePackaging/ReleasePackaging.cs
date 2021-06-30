@@ -10,7 +10,7 @@ namespace Elskom.Generic.Libs
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
-    using System.Reflection;
+    using Elskom.Generic.Libs.Properties;
 
     /// <summary>
     /// Handles application's release packaging command line.
@@ -50,7 +50,7 @@ namespace Elskom.Generic.Libs
 
             if (args[0].Equals("-p", StringComparison.Ordinal))
             {
-                Console.WriteLine($"Writing build files and debug symbol files to {outfilename}.");
+                Console.WriteLine(Resources.ReleasePackaging_Write_output, outfilename);
                 if (File.Exists(args[1]))
                 {
                     File.Delete(args[1]);

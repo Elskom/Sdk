@@ -15,6 +15,7 @@ namespace Elskom.Generic.Libs
     using System.Runtime.Loader;
 #endif
     using System.Runtime.Serialization;
+    using Elskom.Generic.Libs.Properties;
 
     /// <summary>
     /// Load assemblies from a zip file.
@@ -81,23 +82,23 @@ namespace Elskom.Generic.Libs
         {
             if (string.IsNullOrWhiteSpace(zipFileName))
             {
-                throw new ArgumentException($"{nameof(zipFileName)} is not allowed to be empty.", nameof(zipFileName));
+                throw new ArgumentException(string.Format(Resources.ZipAssembly_not_allowed_to_be_empty!, nameof(zipFileName)), nameof(zipFileName));
             }
 
             if (!File.Exists(zipFileName))
             {
-                throw new ArgumentException($"{nameof(zipFileName)} does not exist.", nameof(zipFileName));
+                throw new ArgumentException(string.Format(Resources.ZipAssembly_does_not_exist!, nameof(zipFileName)), nameof(zipFileName));
             }
 
             if (string.IsNullOrWhiteSpace(assemblyName))
             {
-                throw new ArgumentException($"{nameof(assemblyName)} is not allowed to be empty.", nameof(assemblyName));
+                throw new ArgumentException(string.Format(Resources.ZipAssembly_not_allowed_to_be_empty!, nameof(assemblyName)), nameof(assemblyName));
             }
 
             if (!assemblyName.EndsWith(".dll", StringComparison.Ordinal))
             {
                 // setting pdbFileName fails or makes unpredicted/unwanted things if this is not checked
-                throw new ArgumentException($"{nameof(assemblyName)} must end with '.dll' to be a valid assembly name.", nameof(assemblyName));
+                throw new ArgumentException(string.Format(Resources.ZipAssembly_must_end_with_dll!, nameof(assemblyName)), nameof(assemblyName));
             }
 
             // check if the assembly is in the zip file.
@@ -121,8 +122,7 @@ namespace Elskom.Generic.Libs
 
             if (!found)
             {
-                throw new ZipAssemblyLoadException(
-                    "Assembly specified to load in ZipFile not found.");
+                throw new ZipAssemblyLoadException(Resources.ZipAssembly_Assembly_specified_not_found);
             }
 
             // always load pdb when debugging (automatically loaded when embedded however).
