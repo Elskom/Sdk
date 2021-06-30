@@ -7,6 +7,7 @@
     <None Remove="readme.md" />
     <None Remove="stylecop.json" />
     <AdditionalFiles Include="stylecop.json" />
+    <AdditionalFiles Include="Properties/Resources.resx" />
   </ItemGroup>
 
 </Project>

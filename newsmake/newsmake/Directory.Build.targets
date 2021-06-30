@@ -5,15 +5,7 @@
     <EmbeddedResource Remove="test\**" />
     <None Remove="test\**" />
     <AdditionalFiles Include="../stylecop.json" />
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+    <AdditionalFiles Include="Properties\Resources.resx" />
   </ItemGroup>
 
 </Project>

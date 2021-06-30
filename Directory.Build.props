@@ -21,6 +21,9 @@
     <RepositoryType>git</RepositoryType>
     <Copyright>Copyright (c) 2018-2021</Copyright>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <RootNamespace>Elskom.Generic.Libs</RootNamespace>
+    <!-- <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>SourceGenerated</CompilerGeneratedFilesOutputPath> -->
   </PropertyGroup>
 
   <!--

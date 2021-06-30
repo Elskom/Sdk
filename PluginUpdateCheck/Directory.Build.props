@@ -22,7 +22,6 @@
     <!-- <IncludeSource>true</IncludeSource> -->
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
-    <RootNamespace>Elskom.Generic.Libs</RootNamespace>
     <UseDependencyInjection>true</UseDependencyInjection>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>

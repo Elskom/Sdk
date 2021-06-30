@@ -18,7 +18,7 @@ namespace Newsmake
     using System.Text;
     using System.Threading.Tasks;
     using Elskom.Generic.Libs;
-    using newsmakeResources = newsmake.Properties;
+    using newsmakeResources = Elskom.Generic.Libs.Properties;
 
     internal static class Program
     {
@@ -599,7 +599,7 @@ namespace Newsmake
 
         private static void MiniDump_DumpMessage(object sender, MessageEventArgs e)
         {
-            Console.WriteLine($"{e.Caption}: {e.Text}");
+            Console.WriteLine($@"{e.Caption}: {e.Text}");
             if (!e.Text.StartsWith("Mini-dumping failed with Code: ", StringComparison.Ordinal))
             {
                 e.ExitCode = 1;
