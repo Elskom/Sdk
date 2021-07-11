@@ -16,7 +16,6 @@
     <PackageReference Include="System.CommandLine" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseCommandLine)' != '' AND '$(UseCommandLine)' == 'true'" />
     <!-- for Json file loading and reading/writing. -->
     <PackageReference Include="System.Text.Json" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseJsonPackage)' != '' AND '$(UseJsonPackage)' == 'true'" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseDependencyInjection)' != '' AND '$(UseDependencyInjection)' == 'true'" />
     <PackageReference Include="Microsoft.CodeAnalysis.ResxSourceGenerator" Version="*-*">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

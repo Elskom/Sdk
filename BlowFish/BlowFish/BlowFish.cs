@@ -13,24 +13,33 @@ namespace Elskom.Generic.Libs
     using System.Security.Cryptography;
     using System.Text;
     using Elskom.Generic.Libs.Properties;
+    using IDisposableGenerator;
 
     /// <summary>
     /// Blowfish encryption class.
     /// </summary>
-    public sealed class BlowFish : IDisposable
+    [GenerateDispose(false)]
+    public sealed partial class BlowFish
     {
+        [DisposeField(false)]
         private RNGCryptoServiceProvider randomSource = new();
 
         // SBLOCKS
+        [SetNullOnDispose]
         private uint[] bfS0;
+        [SetNullOnDispose]
         private uint[] bfS1;
+        [SetNullOnDispose]
         private uint[] bfS2;
+        [SetNullOnDispose]
         private uint[] bfS3;
+        [SetNullOnDispose]
         private uint[] bfP;
 
         // HALF-BLOCKS
         private uint xlPar;
         private uint xrPar;
+        [SetNullOnDispose]
         private byte[] initVector;
         private bool iVSet;
 
@@ -61,14 +70,6 @@ namespace Elskom.Generic.Libs
 
             this.SetupKey(cipherKey);
         }
-
-        /// <summary>
-        /// Gets a value indicating whether this object is disposed or not.
-        /// </summary>
-        /// <value>
-        /// A value indicating whether this object is disposed or not.
-        /// </value>
-        public bool IsDisposed { get; private set; }
 
         /// <summary>
         /// Gets or sets initialization vector for CBC mode.
@@ -231,12 +232,6 @@ namespace Elskom.Generic.Libs
                 CipherMode.ECB => this.Decrypt_ECB(cipherText),
                 CipherMode.CBC or CipherMode.CFB or CipherMode.CTS or CipherMode.OFB or _ => null,
             };
-
-        /// <summary>
-        /// Cleans up the Blowfish items.
-        /// </summary>
-        public void Dispose()
-            => this.Dispose(true);
 
         /// <summary>
         /// Creates and sets a random initialization vector.
@@ -729,28 +724,6 @@ namespace Elskom.Generic.Libs
             var x2 = x1 + this.bfS3[WordByte3(b)];
             var x3 = x2 ^ this.bfP[n];
             return x3 ^ a;
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (!this.IsDisposed)
-            {
-                if (disposing)
-                {
-                    this.randomSource.Dispose();
-                    this.randomSource = null;
-
-                    // do not leak these arrays either.
-                    this.bfS0 = null;
-                    this.bfS1 = null;
-                    this.bfS2 = null;
-                    this.bfS3 = null;
-                    this.bfP = null;
-                    this.initVector = null;
-                }
-
-                this.IsDisposed = true;
-            }
         }
     }
 }
