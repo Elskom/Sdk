@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Elskom.Common.csproj" />
-    <PackageReference Include="IDisposableGenerator" Version="*-*">
+    <PackageReference Include="IDisposableGenerator" Version="-*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; compile; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
