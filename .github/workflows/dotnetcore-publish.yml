@@ -18,11 +18,8 @@ jobs:
         # we need the submodule to zlib.managed.
         submodules: recursive
 
-    - name: .NET core build
-      uses: actions/setup-dotnet@main
-      with:
-        dotnet-version: '6.0.x'
-        include-prerelease: true
+    - name: Install latest .NET SDK
+      uses: Elskom/setup-latest-dotnet@main
 
     - name: Restore, Build, and pack
       uses: Elskom/build-dotnet@main
