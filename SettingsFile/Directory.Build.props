@@ -9,8 +9,6 @@
     <Version>2.0.0</Version>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);NU5104;NU5118</NoWarn>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
@@ -24,8 +22,6 @@
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <UseJsonPackage>true</UseJsonPackage>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
     <GitBuildInfoAssemblyType>SettingsFile</GitBuildInfoAssemblyType>
   </PropertyGroup>
 

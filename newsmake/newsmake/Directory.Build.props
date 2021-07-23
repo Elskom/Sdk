@@ -15,8 +15,6 @@
     <Version>1.0.5</Version>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);NU5118;NU1603</NoWarn>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -29,9 +27,6 @@
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <UseCommandLine>true</UseCommandLine>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <PackageOutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\</PackageOutputPath>
     <GitBuildInfoAssemblyType>Newsmake.Program</GitBuildInfoAssemblyType>
   </PropertyGroup>
 
