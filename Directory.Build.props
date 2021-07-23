@@ -24,6 +24,7 @@
     <RootNamespace>Elskom.Generic.Libs</RootNamespace>
     <!-- <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>SourceGenerated</CompilerGeneratedFilesOutputPath> -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <!--
