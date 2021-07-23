@@ -4,7 +4,9 @@
     <Compile Remove="test\**" />
     <EmbeddedResource Remove="test\**" />
     <None Remove="test\**" />
-    <AdditionalFiles Include="../stylecop.json" />
+    <AdditionalFiles Include="../../stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
     <AdditionalFiles Include="Properties\Resources.resx" />
   </ItemGroup>
 

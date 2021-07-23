@@ -1,7 +1,7 @@
 ﻿// Copyright (c) 2018-2021, Els_kom org.
 // https://github.com/Elskom/
 // All rights reserved.
-// license: GPL, see LICENSE for more details.
+// license: MIT, see LICENSE for more details.
 
 namespace Newsmake
 {

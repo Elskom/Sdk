@@ -6,7 +6,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Elskom.Common</AssemblyName>
     <PackageTags>Elskom.Common</PackageTags>
-    <Copyright>Copyright (c) 2021</Copyright>
     <Description>A c# library that stores all the common things in the Elskom SDK.</Description>
     <PackageReleaseNotes>Initial Release.</PackageReleaseNotes>
     <Version>1.0.0</Version>
