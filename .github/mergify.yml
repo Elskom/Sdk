@@ -16,6 +16,7 @@ pull_request_rules:
       - check-success=Codacy Security Scan
       - -draft
       - -closed
+      - -conflict
       - -label=automerge
       - author~=^(AraHaan|CatGirlsAreLife|JunichiSama|xioke|Elskom-gitsync|dependabot(|-preview)\[bot\])$
     actions:
@@ -63,6 +64,15 @@ pull_request_rules:
     actions:
       comment:
         message: This PR is WIP, when you complete the work remember to unset the WIP state in the title of this PR.
+
+  - name: Automatic message on conflict
+    conditions:
+      - -draft
+      - conflict
+    actions:
+      comment:
+        message: |
+          This PR is conflicted :sob:.
 
   - name: Automatic merge when automerge label added
     conditions:
