@@ -10,8 +10,6 @@
     <Description>Lua 5.1 decompiler based on 'unluac' by tehtmi.</Description>
     <Copyright>Original UnluacNET Copyright © 2014 Mark Ludwig, tehtmi, Copyright © 2020-2021</Copyright>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
     <PackageTags>Unluac</PackageTags>
     <NeutralLanguage>en-US</NeutralLanguage>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
@@ -24,8 +22,6 @@
     <!-- <IncludeSource>true</IncludeSource> -->
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
     <NoWarn>1591</NoWarn>
     <NoWarn Condition="'$(Configuration)' == 'Debug'">$(NoWarn), 0659</NoWarn>
     <GitBuildInfoAssemblyType>Elskom.Generic.Libs.UnluacNET.Decompiler</GitBuildInfoAssemblyType>

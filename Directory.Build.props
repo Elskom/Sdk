@@ -22,6 +22,10 @@
     <Copyright>Copyright (c) 2018-2021</Copyright>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <RootNamespace>Elskom.Generic.Libs</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)Elskom.snk</AssemblyOriginatorKeyFile>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
     <!-- <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>SourceGenerated</CompilerGeneratedFilesOutputPath> -->
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

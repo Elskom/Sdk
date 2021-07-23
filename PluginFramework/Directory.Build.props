@@ -11,8 +11,6 @@
     <Version>1.0.2</Version>
     <NeutralLanguage>en-US</NeutralLanguage>
     <NoWarn>$(NoWarn);NU5104;NU5118</NoWarn>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Elskom.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -24,8 +22,6 @@
     <!-- <IncludeSource>true</IncludeSource> -->
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <DefineConstants Condition="'$(Configuration)' == 'Release'">TRACE</DefineConstants>
     <GitBuildInfoAssemblyType>KOMManager</GitBuildInfoAssemblyType>
