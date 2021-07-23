@@ -32,7 +32,6 @@
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\..\artifacts\</PackageOutputPath>
-    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <GitBuildInfoAssemblyType>Newsmake.Program</GitBuildInfoAssemblyType>
   </PropertyGroup>
 

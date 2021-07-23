@@ -3,7 +3,6 @@
   <ItemGroup>
     <None Remove=".git" />
     <None Remove=".gitignore" />
-    <None Remove="LICENSE" />
     <None Remove="readme.md" />
     <AdditionalFiles Include="../stylecop.json">
       <Link>stylecop.json</Link>
