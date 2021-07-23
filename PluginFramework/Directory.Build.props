@@ -1,5 +1,7 @@
 <Project>
 
+  <Import Project="../Directory.Build.props" />
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Elskom.PluginFramework</AssemblyName>
@@ -27,8 +29,7 @@
     <Optimize>false</Optimize>
     <DefineConstants Condition="'$(Configuration)' == 'Release'">TRACE</DefineConstants>
     <GitBuildInfoAssemblyType>KOMManager</GitBuildInfoAssemblyType>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
-
-  <Import Project="../Directory.Build.props" />
 
 </Project>

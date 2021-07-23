@@ -1,5 +1,7 @@
 <Project>
 
+  <Import Project="../Directory.Build.props" />
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyTitle>Unluac.NET</AssemblyTitle>
@@ -27,8 +29,7 @@
     <NoWarn>1591</NoWarn>
     <NoWarn Condition="'$(Configuration)' == 'Debug'">$(NoWarn), 0659</NoWarn>
     <GitBuildInfoAssemblyType>Elskom.Generic.Libs.UnluacNET.Decompiler</GitBuildInfoAssemblyType>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
-
-  <Import Project="../Directory.Build.props" />
 
 </Project>
