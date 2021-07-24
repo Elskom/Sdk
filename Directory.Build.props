@@ -29,6 +29,7 @@
     <!-- <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <CompilerGeneratedFilesOutputPath>SourceGenerated</CompilerGeneratedFilesOutputPath> -->
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ProduceReferenceAssemblyInOutDir>true</ProduceReferenceAssemblyInOutDir>
   </PropertyGroup>
 
   <!--
