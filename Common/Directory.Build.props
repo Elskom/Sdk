@@ -22,7 +22,6 @@
     <!-- <IncludeSource>true</IncludeSource> -->
     <!-- <IncludeBuildOutput>true</IncludeBuildOutput> -->
     <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
-    <SnkPublicKey>0024000004800000940000000602000000240000525341310004000001000100bd92841e5ad5805edc6b90c3102ae676cc9a694e2c16cf827fa0fbd36fc3ec7aca9475b0d32f8b574aa01f2fffcdc3c92684531ddf215a76d5878fb433ab41c3b4ac7c96c86c87eb4dc71646ec00880fdecd576ccbbe92c3093de976e8e30af00e14df9ca1458cafa5f71dee161394c5bb9904b8075c75229812c457bcc745d5</SnkPublicKey>
     <GitBuildInfoAssemblyType>MessageEventArgs</GitBuildInfoAssemblyType>
   </PropertyGroup>
 
