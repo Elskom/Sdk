@@ -3,17 +3,16 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
-{
-    using System.IO;
+namespace Elskom.Generic.Libs.UnluacNET;
 
-    public class LUpvalueType : BObjectType<LUpvalue>
-    {
-        public override LUpvalue Parse(Stream stream, BHeader header)
-            => new()
-            {
-                InStack = stream.ReadByte() != 0,
-                Index = stream.ReadByte(),
-            };
-    }
+using System.IO;
+
+public class LUpvalueType : BObjectType<LUpvalue>
+{
+    public override LUpvalue Parse(Stream stream, BHeader header)
+        => new()
+        {
+            InStack = stream.ReadByte() != 0,
+            Index = stream.ReadByte(),
+        };
 }

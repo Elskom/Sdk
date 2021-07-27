@@ -3,80 +3,81 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs
+namespace Elskom.Generic.Libs;
+
+using System;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
+using Microsoft.Diagnostics.NETCore.Client;
+
+internal static class MiniDump
 {
-    using System;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.IO;
-    using System.Text;
-    using Microsoft.Diagnostics.NETCore.Client;
-
-    internal static class MiniDump
+    internal static int ExceptionEventHandlerCode(Exception e, bool threadException)
     {
-        internal static int ExceptionEventHandlerCode(Exception e, bool threadException)
+        var exceptionData = PrintExceptions(e);
+
+        // do not dump or close if in a debugger.
+        if (!Debugger.IsAttached)
         {
-            var exceptionData = PrintExceptions(e);
-
-            // do not dump or close if in a debugger.
-            if (!Debugger.IsAttached)
+            if (!MiniDumpAttribute.ForceClose)
             {
-                if (!MiniDumpAttribute.ForceClose)
-                {
-                    MiniDumpAttribute.ForceClose = true;
-                }
-
-                if (string.IsNullOrEmpty(MiniDumpAttribute.CurrentInstance.DumpLogFileName))
-                {
-                    MiniDumpAttribute.CurrentInstance.DumpLogFileName = SettingsFile.ErrorLogPath;
-                }
-
-                if (string.IsNullOrEmpty(MiniDumpAttribute.CurrentInstance.DumpFileName))
-                {
-                    MiniDumpAttribute.CurrentInstance.DumpFileName = SettingsFile.MiniDumpPath;
-                }
-
-                File.WriteAllText(MiniDumpAttribute.CurrentInstance.DumpLogFileName, exceptionData);
-                var diagnosticsClient = new DiagnosticsClient(SettingsFile.ThisProcessId);
-                MessageEventArgs args;
-                try
-                {
-                    diagnosticsClient.WriteDump(MiniDumpAttribute.CurrentInstance.DumpType, MiniDumpAttribute.CurrentInstance.DumpFileName);
-                    args = new(
-                        string.Format(
-                            CultureInfo.InvariantCulture,
-                            MiniDumpAttribute.CurrentInstance.Text,
-                            MiniDumpAttribute.CurrentInstance.DumpLogFileName),
-                        threadException ? MiniDumpAttribute.CurrentInstance.ThreadExceptionTitle : MiniDumpAttribute.CurrentInstance.ExceptionTitle,
-                        ErrorLevel.Error);
-                }
-                catch (ServerErrorException ex)
-                {
-                    args = new(
-                        ex.Message,
-                        threadException ? MiniDumpAttribute.CurrentInstance.ThreadExceptionTitle : MiniDumpAttribute.CurrentInstance.ExceptionTitle,
-                        ErrorLevel.Error);
-                }
-
-                MiniDumpAttribute.InvokeDumpMessage(args);
-                return args.ExitCode;
+                MiniDumpAttribute.ForceClose = true;
             }
 
-            return 1;
-        }
-
-        private static string PrintExceptions(Exception exception)
-        {
-            StringBuilder sb = new();
-            sb.AppendLine($"{exception.GetType()}: {exception.Message}{Environment.NewLine}{exception.StackTrace}");
-            var currException = exception.InnerException;
-            while (currException is not null)
+            if (string.IsNullOrEmpty(MiniDumpAttribute.CurrentInstance.DumpLogFileName))
             {
-                sb.AppendLine($"{currException.GetType()}: {currException.Message}{Environment.NewLine}{currException.StackTrace}");
-                currException = currException.InnerException;
+                MiniDumpAttribute.CurrentInstance.DumpLogFileName = SettingsFile.ErrorLogPath;
             }
 
-            return sb.ToString();
+            if (string.IsNullOrEmpty(MiniDumpAttribute.CurrentInstance.DumpFileName))
+            {
+                MiniDumpAttribute.CurrentInstance.DumpFileName = SettingsFile.MiniDumpPath;
+            }
+
+            File.WriteAllText(MiniDumpAttribute.CurrentInstance.DumpLogFileName, exceptionData);
+            var diagnosticsClient = new DiagnosticsClient(SettingsFile.ThisProcessId);
+            MessageEventArgs args;
+            try
+            {
+                diagnosticsClient.WriteDump(MiniDumpAttribute.CurrentInstance.DumpType, MiniDumpAttribute.CurrentInstance.DumpFileName);
+                args = new(
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        MiniDumpAttribute.CurrentInstance.Text,
+                        MiniDumpAttribute.CurrentInstance.DumpLogFileName),
+                    threadException ? MiniDumpAttribute.CurrentInstance.ThreadExceptionTitle : MiniDumpAttribute.CurrentInstance.ExceptionTitle,
+                    ErrorLevel.Error);
+            }
+            catch (ServerErrorException ex)
+            {
+                args = new(
+                    ex.Message,
+                    threadException ? MiniDumpAttribute.CurrentInstance.ThreadExceptionTitle : MiniDumpAttribute.CurrentInstance.ExceptionTitle,
+                    ErrorLevel.Error);
+            }
+
+            MiniDumpAttribute.InvokeDumpMessage(args);
+            return args.ExitCode;
         }
+
+        return 1;
+    }
+
+    private static string PrintExceptions(Exception exception)
+    {
+        StringBuilder sb = new();
+        sb.AppendLine($"{exception.GetType()}: {exception.Message}{Environment.NewLine}{exception.StackTrace}");
+        var currException = exception.InnerException;
+        while (currException is not null)
+        {
+            sb.AppendLine($"{currException.GetType()}: {currException.Message}{Environment.NewLine}{currException.StackTrace}");
+            currException = currException.InnerException;
+        }
+
+        return sb.ToString();
     }
 }

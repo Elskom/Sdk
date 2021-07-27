@@ -3,36 +3,35 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+public class Declaration
 {
-    public class Declaration
+    public Declaration(LLocal local)
     {
-        public Declaration(LLocal local)
-        {
-            this.Name = local.ToString();
-            this.Begin = local.Start;
-            this.End = local.End;
-        }
-
-        public Declaration(string name, int begin, int end)
-        {
-            this.Name = name;
-            this.Begin = begin;
-            this.End = end;
-        }
-
-        public string Name { get; private set; }
-
-        public int Begin { get; private set; }
-
-        public int End { get; private set; }
-
-        public int Register { get; set; }
-
-        // Whether this is an invisible for-loop book-keeping variable.
-        internal bool ForLoop { get; set; }
-
-        // Whether this is an explicit for-loop declared variable.
-        internal bool ForLoopExplicit { get; set; }
+        this.Name = local.ToString();
+        this.Begin = local.Start;
+        this.End = local.End;
     }
+
+    public Declaration(string name, int begin, int end)
+    {
+        this.Name = name;
+        this.Begin = begin;
+        this.End = end;
+    }
+
+    public string Name { get; private set; }
+
+    public int Begin { get; private set; }
+
+    public int End { get; private set; }
+
+    public int Register { get; set; }
+
+    // Whether this is an invisible for-loop book-keeping variable.
+    internal bool ForLoop { get; set; }
+
+    // Whether this is an explicit for-loop declared variable.
+    internal bool ForLoopExplicit { get; set; }
 }

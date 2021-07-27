@@ -3,39 +3,38 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System.Collections.Generic;
+
+public class AlwaysLoop : Block
 {
-    using System.Collections.Generic;
+    private readonly List<Statement> m_statements;
 
-    public class AlwaysLoop : Block
+    public AlwaysLoop(LFunction function, int begin, int end)
+        : base(function, begin, end)
+        => this.m_statements = new();
+
+    public override bool Breakable => true;
+
+    public override bool IsContainer => true;
+
+    public override bool IsUnprotected => true;
+
+    public override int ScopeEnd => this.End - 2;
+
+    public override int GetLoopback()
+        => this.Begin;
+
+    public override void AddStatement(Statement statement)
+        => this.m_statements.Add(statement);
+
+    public override void Print(Output output)
     {
-        private readonly List<Statement> m_statements;
-
-        public AlwaysLoop(LFunction function, int begin, int end)
-            : base(function, begin, end)
-            => this.m_statements = new();
-
-        public override bool Breakable => true;
-
-        public override bool IsContainer => true;
-
-        public override bool IsUnprotected => true;
-
-        public override int ScopeEnd => this.End - 2;
-
-        public override int GetLoopback()
-            => this.Begin;
-
-        public override void AddStatement(Statement statement)
-            => this.m_statements.Add(statement);
-
-        public override void Print(Output output)
-        {
-            output.PrintLine("while true do");
-            output.IncreaseIndent();
-            PrintSequence(output, this.m_statements);
-            output.DecreaseIndent();
-            output.Print("end");
-        }
+        output.PrintLine("while true do");
+        output.IncreaseIndent();
+        PrintSequence(output, this.m_statements);
+        output.DecreaseIndent();
+        output.Print("end");
     }
 }

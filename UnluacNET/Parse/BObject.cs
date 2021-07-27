@@ -3,9 +3,8 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+public abstract class BObject
 {
-    public abstract class BObject
-    {
-    }
 }

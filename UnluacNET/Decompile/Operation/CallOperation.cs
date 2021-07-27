@@ -3,17 +3,16 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+public class CallOperation : Operation
 {
-    public class CallOperation : Operation
-    {
-        private readonly FunctionCall m_call;
+    private readonly FunctionCall m_call;
 
-        public CallOperation(int line, FunctionCall call)
-            : base(line)
-            => this.m_call = call;
+    public CallOperation(int line, FunctionCall call)
+        : base(line)
+        => this.m_call = call;
 
-        public override Statement Process(Registers r, Block block)
-            => new FunctionCallStatement(this.m_call);
-    }
+    public override Statement Process(Registers r, Block block)
+        => new FunctionCallStatement(this.m_call);
 }

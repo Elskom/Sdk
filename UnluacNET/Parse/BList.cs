@@ -3,27 +3,26 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System.Collections.Generic;
+using System.Linq;
+
+public class BList<T> : BObject
+    where T : BObject
 {
-    using System.Collections.Generic;
-    using System.Linq;
+    private readonly List<T> m_values;
 
-    public class BList<T> : BObject
-        where T : BObject
+    public BList(BInteger length, List<T> values)
     {
-        private readonly List<T> m_values;
-
-        public BList(BInteger length, List<T> values)
-        {
-            this.Length = length;
-            this.m_values = values;
-        }
-
-        public BInteger Length { get; private set; }
-
-        public T this[int index] => this.m_values[index];
-
-        public T[] AsArray()
-            => this.m_values.AsParallel().ToArray();
+        this.Length = length;
+        this.m_values = values;
     }
+
+    public BInteger Length { get; private set; }
+
+    public T this[int index] => this.m_values[index];
+
+    public T[] AsArray()
+        => this.m_values.AsParallel().ToArray();
 }

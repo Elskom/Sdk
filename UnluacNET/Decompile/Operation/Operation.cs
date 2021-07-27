@@ -3,15 +3,14 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+public abstract class Operation
 {
-    public abstract class Operation
-    {
-        protected Operation(int line)
-            => this.Line = line;
+    protected Operation(int line)
+        => this.Line = line;
 
-        public int Line { get; private set; }
+    public int Line { get; private set; }
 
-        public abstract Statement Process(Registers r, Block block);
-    }
+    public abstract Statement Process(Registers r, Block block);
 }

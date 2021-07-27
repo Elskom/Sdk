@@ -188,3 +188,6 @@ dotnet_diagnostic.SA1312.severity = none
 
 # S2696: Instance members should not write to "static" fields
 dotnet_diagnostic.S2696.severity = none
+
+# S3903: Move '%s' into a named namespace.
+dotnet_diagnostic.S3903.severity = none

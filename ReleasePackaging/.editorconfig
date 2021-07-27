@@ -146,3 +146,6 @@ csharp_preserve_single_line_statements = true
 
 # CA1307: Specify StringComparison
 dotnet_diagnostic.CA1307.severity = warning
+
+# S3903: Move '%s' into a named namespace.
+dotnet_diagnostic.S3903.severity = none

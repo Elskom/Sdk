@@ -3,38 +3,37 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System;
+
+public class LUpvalue : BObject
 {
-    using System;
+    public int Index { get; set; }
 
-    public class LUpvalue : BObject
+    public bool InStack { get; set; }
+
+    public string Name { get; set; }
+
+    public override bool Equals(object obj)
     {
-        public int Index { get; set; }
-
-        public bool InStack { get; set; }
-
-        public string Name { get; set; }
-
-        public override bool Equals(object obj)
+        if (obj is LUpvalue upVal)
         {
-            if (obj is LUpvalue upVal)
+            if (!(this.InStack == upVal.InStack && this.Index == upVal.Index))
             {
-                if (!(this.InStack == upVal.InStack && this.Index == upVal.Index))
-                {
-                    return false;
-                }
-                else if (this.Name == upVal.Name)
-                {
-                    return true;
-                }
-
-                return this.Name != null && this.Name == upVal.Name;
+                return false;
+            }
+            else if (this.Name == upVal.Name)
+            {
+                return true;
             }
 
-            return false;
+            return this.Name != null && this.Name == upVal.Name;
         }
 
-        public override int GetHashCode()
-            => throw new NotImplementedException();
+        return false;
     }
+
+    public override int GetHashCode()
+        => throw new NotImplementedException();
 }

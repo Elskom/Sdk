@@ -3,7 +3,7 @@
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" Condition="'$(UsingMicrosoftNETSdk)' == ''" />
 
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>preview</LangVersion>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>preview</AnalysisLevel>

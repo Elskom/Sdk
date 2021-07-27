@@ -149,3 +149,6 @@ dotnet_diagnostic.CA1307.severity = warning
 
 # CA1303: Do not pass literals as localized parameters
 dotnet_diagnostic.CA1303.severity = warning
+
+# S3903: Move '%s' into a named namespace.
+dotnet_diagnostic.S3903.severity = none

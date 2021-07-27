@@ -152,3 +152,6 @@ dotnet_diagnostic.CA1303.severity = warning
 
 # CA1305: Specify IFormatProvider
 dotnet_diagnostic.CA1305.severity = warning
+
+# S3903: Move '%s' into a named namespace.
+dotnet_diagnostic.S3903.severity = none

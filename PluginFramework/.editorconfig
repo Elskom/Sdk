@@ -146,3 +146,6 @@ csharp_preserve_single_line_statements = true
 
 # S101: Types should be named in PascalCase
 dotnet_diagnostic.S101.severity = none
+
+# S3903: Move '%s' into a named namespace.
+dotnet_diagnostic.S3903.severity = none

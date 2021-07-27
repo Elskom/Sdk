@@ -3,48 +3,47 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System;
+using System.Collections.Generic;
+
+public class Return : Statement
 {
-    using System;
-    using System.Collections.Generic;
+    private readonly Expression[] values;
 
-    public class Return : Statement
+    public Return()
+        => this.values = Array.Empty<Expression>();
+
+    public Return(Expression value)
+        => this.values = new[]
+        {
+            value,
+        };
+
+    public Return(Expression[] values)
+        => this.values = values;
+
+    public override void Print(Output output)
     {
-        private readonly Expression[] values;
+        output.Print("do ");
+        this.PrintTail(output);
+        output.Print(" end");
+    }
 
-        public Return()
-            => this.values = Array.Empty<Expression>();
-
-        public Return(Expression value)
-            => this.values = new[]
-            {
-                value,
-            };
-
-        public Return(Expression[] values)
-            => this.values = values;
-
-        public override void Print(Output output)
+    public override void PrintTail(Output output)
+    {
+        output.Print("return");
+        if (this.values.Length > 0)
         {
-            output.Print("do ");
-            this.PrintTail(output);
-            output.Print(" end");
-        }
-
-        public override void PrintTail(Output output)
-        {
-            output.Print("return");
-            if (this.values.Length > 0)
+            output.Print(" ");
+            var rtns = new List<Expression>(this.values.Length);
+            foreach (var value in this.values)
             {
-                output.Print(" ");
-                var rtns = new List<Expression>(this.values.Length);
-                foreach (var value in this.values)
-                {
-                    rtns.Add(value);
-                }
-
-                Expression.PrintSequence(output, rtns, false, true);
+                rtns.Add(value);
             }
+
+            Expression.PrintSequence(output, rtns, false, true);
         }
     }
 }

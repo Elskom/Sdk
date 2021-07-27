@@ -3,22 +3,21 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System;
+
+public class LNil : LObject
 {
-    using System;
+    public static readonly LNil NIL = new();
 
-    public class LNil : LObject
+    private LNil()
     {
-        public static readonly LNil NIL = new();
-
-        private LNil()
-        {
-        }
-
-        public override bool Equals(object obj)
-            => this == obj;
-
-        public override int GetHashCode()
-            => throw new NotImplementedException();
     }
+
+    public override bool Equals(object obj)
+        => this == obj;
+
+    public override int GetHashCode()
+        => throw new NotImplementedException();
 }
