@@ -7,6 +7,9 @@
     <AdditionalFiles Include="../stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>MiniDump,PublicKey=$(SnkPublicKey)</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 
 </Project>

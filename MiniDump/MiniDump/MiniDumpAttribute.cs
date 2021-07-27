@@ -6,6 +6,7 @@
 namespace Elskom.Generic.Libs
 {
     using System;
+    using Microsoft.Diagnostics.NETCore.Client;
 
     // maybe something like this could be added to the framework.
     // do not use this attribute for anything but classes, the assembly, or the Main() method.
@@ -62,7 +63,7 @@ namespace Elskom.Generic.Libs
         /// <summary>
         /// Gets or sets the mini-dump type.
         /// </summary>
-        public MinidumpTypes DumpType { get; set; }
+        public DumpType DumpType { get; set; }
 
         /// <summary>
         /// Gets or sets the title of the unhandled exception messagebox.
