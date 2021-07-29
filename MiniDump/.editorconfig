@@ -144,24 +144,8 @@ csharp_space_between_square_brackets = false
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
 
-
 # CA1305: Specify IFormatProvider
 dotnet_diagnostic.CA1305.severity = warning
 
 # CA1303: Do not pass literals as localized parameters
 dotnet_diagnostic.CA1303.severity = warning
-
-# S4220: Events should have proper arguments
-dotnet_diagnostic.S4220.severity = none
-
-# S101: Types should be named in PascalCase
-dotnet_diagnostic.S101.severity = none
-
-# S2346: Flags enumerations zero-value members should be named "None"
-dotnet_diagnostic.S2346.severity = none
-
-# REFL003: The member does not exist.
-dotnet_diagnostic.REFL003.severity = silent
-
-# S3869: "SafeHandle.DangerousGetHandle" should not be called
-dotnet_diagnostic.S3869.severity = none

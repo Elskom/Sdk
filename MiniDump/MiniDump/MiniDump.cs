@@ -38,15 +38,27 @@ namespace Elskom.Generic.Libs
 
                 File.WriteAllText(MiniDumpAttribute.CurrentInstance.DumpLogFileName, exceptionData);
                 var diagnosticsClient = new DiagnosticsClient(SettingsFile.ThisProcessId);
-                diagnosticsClient.WriteDump(MiniDumpAttribute.CurrentInstance.DumpType, MiniDumpAttribute.CurrentInstance.DumpFileName);
-                MessageEventArgs args = new(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        MiniDumpAttribute.CurrentInstance.Text,
-                        MiniDumpAttribute.CurrentInstance.DumpLogFileName),
-                    threadException ? MiniDumpAttribute.CurrentInstance.ThreadExceptionTitle : MiniDumpAttribute.CurrentInstance.ExceptionTitle,
-                    ErrorLevel.Error);
-                MiniDumpAttribute.InvokeDumpMessage(typeof(MiniDump), args);
+                MessageEventArgs args;
+                try
+                {
+                    diagnosticsClient.WriteDump(MiniDumpAttribute.CurrentInstance.DumpType, MiniDumpAttribute.CurrentInstance.DumpFileName);
+                    args = new(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            MiniDumpAttribute.CurrentInstance.Text,
+                            MiniDumpAttribute.CurrentInstance.DumpLogFileName),
+                        threadException ? MiniDumpAttribute.CurrentInstance.ThreadExceptionTitle : MiniDumpAttribute.CurrentInstance.ExceptionTitle,
+                        ErrorLevel.Error);
+                }
+                catch (ServerErrorException ex)
+                {
+                    args = new(
+                        ex.Message,
+                        threadException ? MiniDumpAttribute.CurrentInstance.ThreadExceptionTitle : MiniDumpAttribute.CurrentInstance.ExceptionTitle,
+                        ErrorLevel.Error);
+                }
+
+                MiniDumpAttribute.InvokeDumpMessage(args);
                 return args.ExitCode;
             }
 

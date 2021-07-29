@@ -143,13 +143,3 @@ csharp_space_between_square_brackets = false
 # Wrapping preferences
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
-
-
-# S4070: Non-flags enums should not be marked with "FlagsAttribute"
-dotnet_diagnostic.S4070.severity = none
-
-# S2346: Flags enumerations zero-value members should be named "None"
-dotnet_diagnostic.S2346.severity = none
-
-# S2344: Enumeration type names should not have "Flags" or "Enum" suffixes
-dotnet_diagnostic.S2344.severity = none

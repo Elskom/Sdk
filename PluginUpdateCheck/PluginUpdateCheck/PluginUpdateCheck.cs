@@ -46,7 +46,7 @@ namespace Elskom.Generic.Libs
             {
                 if (!string.Equals(this.InstalledVersion, this.CurrentVersion, StringComparison.Ordinal) && !string.IsNullOrEmpty(this.InstalledVersion))
                 {
-                    MessageEvent?.Invoke(this, new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_ShowMessage_Update_for_plugin_is_availible, this.CurrentVersion, this.PluginName), Resources.PluginUpdateCheck_ShowMessage_New_plugin_update, ErrorLevel.Info));
+                    MessageEvent?.Invoke(null, new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_ShowMessage_Update_for_plugin_is_availible, this.CurrentVersion, this.PluginName), Resources.PluginUpdateCheck_ShowMessage_New_plugin_update, ErrorLevel.Info));
                     return true;
                 }
 
@@ -159,7 +159,7 @@ namespace Elskom.Generic.Libs
                     }
                     catch (HttpRequestException ex)
                     {
-                        MessageEvent?.Invoke(typeof(PluginUpdateCheck), new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_CheckForUpdates_Failed_to_download_the_plugins_sources_list_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
+                        MessageEvent?.Invoke(null, new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_CheckForUpdates_Failed_to_download_the_plugins_sources_list_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
                     }
                 }
 
@@ -213,7 +213,7 @@ namespace Elskom.Generic.Libs
                 }
                 catch (HttpRequestException ex)
                 {
-                    MessageEvent?.Invoke(this, new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_Install_Failed_to_install_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
+                    MessageEvent?.Invoke(null, new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_Install_Failed_to_install_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
                 }
             }
 
@@ -266,7 +266,7 @@ namespace Elskom.Generic.Libs
             }
             catch (Exception ex)
             {
-                MessageEvent?.Invoke(this, new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_Uninstall_Failed_to_uninstall_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
+                MessageEvent?.Invoke(null, new(string.Format(CultureInfo.InvariantCulture, Resources.PluginUpdateCheck_Uninstall_Failed_to_uninstall_the_selected_plugin_Reason, Environment.NewLine, ex.Message), Resources.PluginUpdateCheck_CheckForUpdates_Error, ErrorLevel.Error));
             }
 
             return false;

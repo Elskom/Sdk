@@ -144,12 +144,8 @@ csharp_space_between_square_brackets = false
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
 
-
 # CA1307: Specify StringComparison
 dotnet_diagnostic.CA1307.severity = warning
 
 # CA1303: Do not pass literals as localized parameters
 dotnet_diagnostic.CA1303.severity = warning
-
-# S3358: Ternary operators should not be nested
-dotnet_diagnostic.S3358.severity = none
