@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../SettingsFile/SettingsFile.csproj" />
-    <PackageReference Include="Microsoft.Diagnostics.NetCore.Client" Version="*-*" />
+    <PackageReference Include="Microsoft.Diagnostics.NetCore.Client" Version="-*" />
   </ItemGroup>
 
   <Import Project="../Directory.Packages.props" />
