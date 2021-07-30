@@ -144,7 +144,6 @@ csharp_space_between_square_brackets = false
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
 
-
 # CA1307: Specify StringComparison
 dotnet_diagnostic.CA1307.severity = warning
 
@@ -153,6 +152,3 @@ dotnet_diagnostic.CA1303.severity = warning
 
 # CA1305: Specify IFormatProvider
 dotnet_diagnostic.CA1305.severity = warning
-
-# S4220: Events should have proper arguments
-dotnet_diagnostic.S4220.severity = none

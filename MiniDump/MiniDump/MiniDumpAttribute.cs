@@ -98,7 +98,7 @@ namespace Elskom.Generic.Libs
         public static int DumpException(Exception exception, bool threadException)
             => MiniDump.ExceptionEventHandlerCode(exception, threadException);
 
-        internal static void InvokeDumpMessage(object sender, MessageEventArgs e)
-            => DumpMessage?.Invoke(sender, e);
+        internal static void InvokeDumpMessage(MessageEventArgs e)
+            => DumpMessage?.Invoke(null, e);
     }
 }

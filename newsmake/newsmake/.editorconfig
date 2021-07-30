@@ -143,10 +143,3 @@ csharp_space_between_square_brackets = false
 # Wrapping preferences
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
-
-
-# S3358: Ternary operators should not be nested
-dotnet_diagnostic.S3358.severity = none
-
-# S3011: Reflection should not be used to increase accessibility of classes, methods, or fields
-dotnet_diagnostic.S3011.severity = none

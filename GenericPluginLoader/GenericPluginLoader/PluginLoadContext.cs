@@ -44,22 +44,24 @@ namespace Elskom.Generic.Libs
             }
 
             var assemblyPath = this.resolver.ResolveAssemblyToPath(assemblyName);
-            return assemblyPath is not null
-                ? this.LoadFromAssemblyPath(assemblyPath)
-                : !File.Exists($"{AppContext.BaseDirectory}{assemblyName.Name}.dll")
-                ? null
-                : this.LoadFromAssemblyPath($"{AppContext.BaseDirectory}{assemblyName.Name}.dll");
+            return (assemblyPath is not null, !File.Exists($"{AppContext.BaseDirectory}{assemblyName.Name}.dll")) switch
+            {
+                (false, true) => null,
+                (false, false) => this.LoadFromAssemblyPath($"{AppContext.BaseDirectory}{assemblyName.Name}.dll"),
+                _ => this.LoadFromAssemblyPath(assemblyPath!),
+            };
         }
 
         /// <inheritdoc/>
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
         {
             var libraryPath = this.resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
-            return libraryPath is not null
-                ? this.LoadUnmanagedDllFromPath(libraryPath)
-                : !File.Exists($"{AppContext.BaseDirectory}{unmanagedDllName}.dll")
-                ? IntPtr.Zero
-                : this.LoadUnmanagedDllFromPath($"{AppContext.BaseDirectory}{unmanagedDllName}.dll");
+            return (libraryPath is not null, !File.Exists($"{AppContext.BaseDirectory}{unmanagedDllName}.dll")) switch
+            {
+                (false, true) => IntPtr.Zero,
+                (false, false) => this.LoadUnmanagedDllFromPath($"{AppContext.BaseDirectory}{unmanagedDllName}.dll"),
+                _ => this.LoadUnmanagedDllFromPath(libraryPath!),
+            };
         }
     }
 }

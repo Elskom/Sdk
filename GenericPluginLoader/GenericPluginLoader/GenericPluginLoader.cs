@@ -67,10 +67,10 @@ namespace Elskom.Generic.Libs
         /// </returns>
         public ICollection<T> LoadPlugins(string path, bool saveToZip)
         {
-            string[]? dllFileNames = null;
+            List<string>? dllFileNames = null;
             if (Directory.Exists(path))
             {
-                dllFileNames = Directory.GetFiles(path, "*.dll");
+                dllFileNames = Directory.EnumerateFiles(path, "*.dll").ToList();
             }
 
             // try to load from a zip as well if plugins are installed in both places.
@@ -85,13 +85,13 @@ namespace Elskom.Generic.Libs
                     foreach (var dllFile in dllFileNames)
                     {
 #if NET5_0_OR_GREATER
-                        PluginLoadContext context = new($"Plugin#{dllFileNames.ToList().IndexOf(dllFile)}", path);
+                        PluginLoadContext context = new($"Plugin#{dllFileNames.IndexOf(dllFile)}", path);
                         var instances = context.CreateInstancesFromInterface<T>(
                             dllFile,
                             dllFile.Replace(".dll", ".pdb", StringComparison.InvariantCulture));
                         context.UnloadIfNoInstances(instances);
 #else
-                        var domain = AppDomain.CreateDomain($"Plugin#{dllFileNames.ToList().IndexOf(dllFile)}");
+                        var domain = AppDomain.CreateDomain($"Plugin#{dllFileNames.IndexOf(dllFile)}");
                         domain.AssemblyResolve += this.Domain_AssemblyResolve;
                         var instances = domain.CreateInstancesFromInterface<T>(dllFile, dllFile.Replace(".dll", ".pdb"));
                         domain.UnloadIfNoInstances(instances);

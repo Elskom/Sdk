@@ -177,7 +177,7 @@ namespace Elskom.Generic.Libs
                                 Resources.KOMManager_Unpacking_KOM_File_Failed,
                                 Resources.Error,
                                 ErrorLevel.Error);
-                            InvokeMessageEvent(typeof(KOMManager), args);
+                            InvokeMessageEvent(args);
                         }
                         catch (NotImplementedException)
                         {
@@ -187,7 +187,7 @@ namespace Elskom.Generic.Libs
                                     komplugin.SupportedKOMVersion),
                                 Resources.Error,
                                 ErrorLevel.Error);
-                            InvokeMessageEvent(typeof(KOMManager), args);
+                            InvokeMessageEvent(args);
                         }
                     }
                 }
@@ -197,7 +197,7 @@ namespace Elskom.Generic.Libs
                         Resources.KOMManager_Unkown_KOM_Version,
                         Resources.Error,
                         ErrorLevel.Error);
-                    InvokeMessageEvent(typeof(KOMManager), args);
+                    InvokeMessageEvent(args);
                 }
             }
 
@@ -247,7 +247,7 @@ namespace Elskom.Generic.Libs
                                     Resources.KOMManager_Packing_KOM_File_Failed,
                                     Resources.Error,
                                     ErrorLevel.Error);
-                                InvokeMessageEvent(typeof(KOMManager), args);
+                                InvokeMessageEvent(args);
                             }
                             catch (NotImplementedException)
                             {
@@ -262,7 +262,7 @@ namespace Elskom.Generic.Libs
                                         komplugin.SupportedKOMVersion),
                                     Resources.Error,
                                     ErrorLevel.Error);
-                                InvokeMessageEvent(typeof(KOMManager), args);
+                                InvokeMessageEvent(args);
                             }
                         }
                     }
@@ -272,7 +272,7 @@ namespace Elskom.Generic.Libs
                             Resources.KOMManager_Folder_Version_Check_Error,
                             Resources.Error,
                             ErrorLevel.Error);
-                        InvokeMessageEvent(typeof(KOMManager), args);
+                        InvokeMessageEvent(args);
                     }
                 }
                 else
@@ -281,7 +281,7 @@ namespace Elskom.Generic.Libs
                         Resources.KOMManager_Unkown_KOM_Version,
                         Resources.Error,
                         ErrorLevel.Error);
-                    InvokeMessageEvent(typeof(KOMManager), args);
+                    InvokeMessageEvent(args);
                 }
             }
 
@@ -418,8 +418,8 @@ namespace Elskom.Generic.Libs
             return result;
         }
 
-        internal static void InvokeMessageEvent(object sender, MessageEventArgs e)
-            => MessageEvent?.Invoke(sender, e);
+        internal static void InvokeMessageEvent(MessageEventArgs e)
+            => MessageEvent?.Invoke(null, e);
 
         private static void MoveOriginalKomFiles(string fileName, string origFileDir, string destFileDir)
         {

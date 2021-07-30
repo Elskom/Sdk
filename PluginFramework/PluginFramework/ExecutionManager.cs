@@ -79,7 +79,7 @@ namespace Elskom.Generic.Libs
                                 Path.DirectorySeparatorChar),
                             Resources.Error,
                             ErrorLevel.Error);
-                        KOMManager.InvokeMessageEvent(typeof(ExecutionManager), args);
+                        KOMManager.InvokeMessageEvent(args);
                         ProcessExtensions.Executing = false;
                     }
                 }
@@ -91,7 +91,7 @@ namespace Elskom.Generic.Libs
                             "Test your mods"),
                         Resources.Error,
                         ErrorLevel.Error);
-                    KOMManager.InvokeMessageEvent(typeof(ExecutionManager), args);
+                    KOMManager.InvokeMessageEvent(args);
                     ProcessExtensions.Executing = false;
                 }
             }
@@ -103,7 +103,7 @@ namespace Elskom.Generic.Libs
                         "Test your mods"),
                     Resources.Error,
                     ErrorLevel.Error);
-                KOMManager.InvokeMessageEvent(typeof(ExecutionManager), args);
+                KOMManager.InvokeMessageEvent(args);
                 ProcessExtensions.Executing = false;
             }
         }
@@ -172,7 +172,7 @@ namespace Elskom.Generic.Libs
                                     Path.DirectorySeparatorChar),
                                 Resources.Error,
                                 ErrorLevel.Error);
-                            KOMManager.InvokeMessageEvent(typeof(ExecutionManager), args);
+                            KOMManager.InvokeMessageEvent(args);
                             ProcessExtensions.Executing = false;
                         }
                     }
@@ -185,7 +185,7 @@ namespace Elskom.Generic.Libs
                             "update Elsword"),
                         Resources.Error,
                         ErrorLevel.Error);
-                    KOMManager.InvokeMessageEvent(typeof(ExecutionManager), args);
+                    KOMManager.InvokeMessageEvent(args);
                     ProcessExtensions.Executing = false;
                 }
             }
@@ -197,7 +197,7 @@ namespace Elskom.Generic.Libs
                         "update Elsword"),
                     Resources.Error,
                     ErrorLevel.Error);
-                KOMManager.InvokeMessageEvent(typeof(ExecutionManager), args);
+                KOMManager.InvokeMessageEvent(args);
                 ProcessExtensions.Executing = false;
             }
         }
