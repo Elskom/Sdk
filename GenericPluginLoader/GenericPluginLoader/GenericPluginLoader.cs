@@ -28,7 +28,7 @@ public class GenericPluginLoader<T>
     /// <summary>
     /// Triggers when the Plugin Loader has a message to send to the application.
     /// </summary>
-    public static event EventHandler<MessageEventArgs>? PluginLoaderMessage;
+    public static event MessageEventHandler? PluginLoaderMessage;
 
 #if NET5_0_OR_GREATER
     /// <summary>

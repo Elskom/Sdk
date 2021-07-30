@@ -24,7 +24,7 @@ public static class KOMManager
     /// <summary>
     /// The event to which allows getting the message to do stuff with.
     /// </summary>
-    public static event EventHandler<MessageEventArgs> MessageEvent;
+    public static event MessageEventHandler MessageEvent;
 
     /// <summary>
     /// Gets a value indicating whether the current state on packing KOM files.

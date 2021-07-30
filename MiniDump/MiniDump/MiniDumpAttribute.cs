@@ -40,7 +40,7 @@ public sealed class MiniDumpAttribute : Attribute
     /// <summary>
     /// Occurs when a mini-dump is generated or fails.
     /// </summary>
-    public static event EventHandler<MessageEventArgs> DumpMessage;
+    public static event MessageEventHandler DumpMessage;
 
     /// <summary>
     /// Gets the current instance of this attribute.

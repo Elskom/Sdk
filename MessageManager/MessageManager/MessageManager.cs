@@ -15,7 +15,7 @@ public static class MessageManager
     /// <summary>
     /// Occurs when the ShowError(), ShowInfo(), or ShowWarning() methods is told to use Notifications.
     /// </summary>
-    public static event EventHandler<NotificationEventArgs> Notification;
+    public static event NotificationEventHandler Notification;
 
     /// <summary>
     /// Shows an MessageBox that is for an Question.

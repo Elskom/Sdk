@@ -30,7 +30,7 @@ public sealed partial class PluginUpdateCheck
     /// <summary>
     /// Event that fires when a new message should show up.
     /// </summary>
-    public static event EventHandler<MessageEventArgs> MessageEvent;
+    public static event MessageEventHandler MessageEvent;
 
     /// <summary>
     /// Gets the plugin urls used in all instances.
