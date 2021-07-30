@@ -3,48 +3,47 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System;
+
+public class TableReference : Expression
 {
-    using System;
+    private readonly Expression m_table;
+    private readonly Expression m_index;
 
-    public class TableReference : Expression
+    public TableReference(Expression table, Expression index)
+        : base(PRECEDENCE_ATOMIC)
     {
-        private readonly Expression m_table;
-        private readonly Expression m_index;
+        this.m_table = table;
+        this.m_index = index;
+    }
 
-        public TableReference(Expression table, Expression index)
-            : base(PRECEDENCE_ATOMIC)
+    public override int ConstantIndex => Math.Max(this.m_table.ConstantIndex, this.m_index.ConstantIndex);
+
+    public override bool IsDotChain => this.m_index.IsIdentifier && this.m_table.IsDotChain;
+
+    public override bool IsMemberAccess => this.m_index.IsIdentifier;
+
+    public override string GetField()
+        => this.m_index.AsName();
+
+    public override Expression GetTable()
+        => this.m_table;
+
+    public override void Print(Output output)
+    {
+        this.m_table.Print(output);
+        if (this.m_index.IsIdentifier)
         {
-            this.m_table = table;
-            this.m_index = index;
+            output.Print(".");
+            output.Print(this.m_index.AsName());
         }
-
-        public override int ConstantIndex => Math.Max(this.m_table.ConstantIndex, this.m_index.ConstantIndex);
-
-        public override bool IsDotChain => this.m_index.IsIdentifier && this.m_table.IsDotChain;
-
-        public override bool IsMemberAccess => this.m_index.IsIdentifier;
-
-        public override string GetField()
-            => this.m_index.AsName();
-
-        public override Expression GetTable()
-            => this.m_table;
-
-        public override void Print(Output output)
+        else
         {
-            this.m_table.Print(output);
-            if (this.m_index.IsIdentifier)
-            {
-                output.Print(".");
-                output.Print(this.m_index.AsName());
-            }
-            else
-            {
-                output.Print("[");
-                this.m_index.Print(output);
-                output.Print("]");
-            }
+            output.Print("[");
+            this.m_index.Print(output);
+            output.Print("]");
         }
     }
 }

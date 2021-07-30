@@ -3,22 +3,21 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System;
+using System.Collections.Generic;
+
+public abstract class LObject : BObject, IEqualityComparer<LObject>
 {
-    using System;
-    using System.Collections.Generic;
+    public abstract new bool Equals(object obj);
 
-    public abstract class LObject : BObject, IEqualityComparer<LObject>
-    {
-        public abstract new bool Equals(object obj);
+    public virtual string DeRef()
+        => throw new NotImplementedException();
 
-        public virtual string DeRef()
-            => throw new NotImplementedException();
+    public bool Equals(LObject x, LObject y)
+        => x.Equals(y);
 
-        public bool Equals(LObject x, LObject y)
-            => x.Equals(y);
-
-        public int GetHashCode(LObject obj)
-            => throw new NotImplementedException();
-    }
+    public int GetHashCode(LObject obj)
+        => throw new NotImplementedException();
 }

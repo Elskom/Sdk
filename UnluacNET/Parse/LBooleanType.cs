@@ -3,29 +3,28 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System;
+using System.Diagnostics;
+using System.IO;
+
+public class LBooleanType : BObjectType<LBoolean>
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-
-    public class LBooleanType : BObjectType<LBoolean>
+    public override LBoolean Parse(Stream stream, BHeader header)
     {
-        public override LBoolean Parse(Stream stream, BHeader header)
+        var value = stream.ReadByte();
+        if ((value & 0xFFFFFFFE) is not 0)
         {
-            var value = stream.ReadByte();
-            if ((value & 0xFFFFFFFE) is not 0)
-            {
-                throw new InvalidOperationException();
-            }
-
-            var boolean = value is 0 ? LBoolean.LFALSE : LBoolean.LTRUE;
-            if (header.Debug)
-            {
-                Debug.WriteLine($"-- parsed <boolean> {boolean}");
-            }
-
-            return boolean;
+            throw new InvalidOperationException();
         }
+
+        var boolean = value is 0 ? LBoolean.LFALSE : LBoolean.LTRUE;
+        if (header.Debug)
+        {
+            Debug.WriteLine($"-- parsed <boolean> {boolean}");
+        }
+
+        return boolean;
     }
 }

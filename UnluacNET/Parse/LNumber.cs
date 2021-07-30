@@ -3,22 +3,21 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System;
+
+public abstract class LNumber : LObject
 {
-    using System;
+    // TODO: problem solution for this issue (???)
+    public abstract double Value { get; }
 
-    public abstract class LNumber : LObject
-    {
-        // TODO: problem solution for this issue (???)
-        public abstract double Value { get; }
+    public static LNumber MakeInteger(int number)
+        => new LIntNumber(number);
 
-        public static LNumber MakeInteger(int number)
-            => new LIntNumber(number);
+    public override bool Equals(object obj)
+        => obj is LNumber number && this.Value.Equals(number.Value);
 
-        public override bool Equals(object obj)
-            => obj is LNumber number && this.Value.Equals(number.Value);
-
-        public override int GetHashCode()
-            => throw new NotImplementedException();
-    }
+    public override int GetHashCode()
+        => throw new NotImplementedException();
 }

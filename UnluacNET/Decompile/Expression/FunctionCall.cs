@@ -3,98 +3,97 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System;
+using System.Collections.Generic;
+
+public class FunctionCall : Expression
 {
-    using System;
-    using System.Collections.Generic;
+    private readonly Expression m_function;
+    private readonly Expression[] m_arguments;
+    private readonly bool m_multiple;
 
-    public class FunctionCall : Expression
+    public FunctionCall(Expression function, Expression[] arguments, bool multiple)
+        : base(PRECEDENCE_ATOMIC)
     {
-        private readonly Expression m_function;
-        private readonly Expression[] m_arguments;
-        private readonly bool m_multiple;
+        this.m_function = function;
+        this.m_arguments = arguments;
+        this.m_multiple = multiple;
+    }
 
-        public FunctionCall(Expression function, Expression[] arguments, bool multiple)
-            : base(PRECEDENCE_ATOMIC)
+    public override bool BeginsWithParen
+    {
+        get
         {
-            this.m_function = function;
-            this.m_arguments = arguments;
-            this.m_multiple = multiple;
-        }
-
-        public override bool BeginsWithParen
-        {
-            get
-            {
-                var obj = this.IsMethodCall ? this.m_function.GetTable() : this.m_function;
-                return obj.IsClosure || obj.IsConstant || obj.BeginsWithParen;
-            }
-        }
-
-        public override int ConstantIndex
-        {
-            get
-            {
-                var index = this.m_function.ConstantIndex;
-                foreach (var argument in this.m_arguments)
-                {
-                    index = Math.Max(argument.ConstantIndex, index);
-                }
-
-                return index;
-            }
-        }
-
-        public override bool IsMultiple => this.m_multiple;
-
-        private bool IsMethodCall
-            => this.m_function.IsMemberAccess &&
-               this.m_arguments.Length > 0 &&
-               this.m_function.GetTable() == this.m_arguments[0];
-
-        public override void Print(Output output)
-        {
-            List<Expression> args = new(this.m_arguments.Length);
             var obj = this.IsMethodCall ? this.m_function.GetTable() : this.m_function;
-            if (obj.IsClosure || obj.IsConstant)
+            return obj.IsClosure || obj.IsConstant || obj.BeginsWithParen;
+        }
+    }
+
+    public override int ConstantIndex
+    {
+        get
+        {
+            var index = this.m_function.ConstantIndex;
+            foreach (var argument in this.m_arguments)
             {
-                output.Print("(");
-                obj.Print(output);
-                output.Print(")");
-            }
-            else
-            {
-                obj.Print(output);
+                index = Math.Max(argument.ConstantIndex, index);
             }
 
-            if (this.IsMethodCall)
-            {
-                output.Print(":");
-                output.Print(this.m_function.GetField());
-            }
+            return index;
+        }
+    }
 
-            for (var i = this.IsMethodCall ? 1 : 0; i < this.m_arguments.Length; i++)
-            {
-                args.Add(this.m_arguments[i]);
-            }
+    public override bool IsMultiple => this.m_multiple;
 
+    private bool IsMethodCall
+        => this.m_function.IsMemberAccess &&
+           this.m_arguments.Length > 0 &&
+           this.m_function.GetTable() == this.m_arguments[0];
+
+    public override void Print(Output output)
+    {
+        List<Expression> args = new(this.m_arguments.Length);
+        var obj = this.IsMethodCall ? this.m_function.GetTable() : this.m_function;
+        if (obj.IsClosure || obj.IsConstant)
+        {
             output.Print("(");
-            PrintSequence(output, args, false, true);
+            obj.Print(output);
             output.Print(")");
         }
-
-        public override void PrintMultiple(Output output)
+        else
         {
-            if (!this.m_multiple)
-            {
-                output.Print("(");
-            }
+            obj.Print(output);
+        }
 
-            this.Print(output);
-            if (!this.m_multiple)
-            {
-                output.Print(")");
-            }
+        if (this.IsMethodCall)
+        {
+            output.Print(":");
+            output.Print(this.m_function.GetField());
+        }
+
+        for (var i = this.IsMethodCall ? 1 : 0; i < this.m_arguments.Length; i++)
+        {
+            args.Add(this.m_arguments[i]);
+        }
+
+        output.Print("(");
+        PrintSequence(output, args, false, true);
+        output.Print(")");
+    }
+
+    public override void PrintMultiple(Output output)
+    {
+        if (!this.m_multiple)
+        {
+            output.Print("(");
+        }
+
+        this.Print(output);
+        if (!this.m_multiple)
+        {
+            output.Print(")");
         }
     }
 }

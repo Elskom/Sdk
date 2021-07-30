@@ -3,21 +3,20 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System;
+
+public class GlobalTarget : Target
 {
-    using System;
+    private readonly string m_name;
 
-    public class GlobalTarget : Target
-    {
-        private readonly string m_name;
+    public GlobalTarget(string name)
+        => this.m_name = name;
 
-        public GlobalTarget(string name)
-            => this.m_name = name;
+    public override void Print(Output output)
+        => output.Print(this.m_name);
 
-        public override void Print(Output output)
-            => output.Print(this.m_name);
-
-        public override void PrintMethod(Output output)
-            => throw new InvalidOperationException();
-    }
+    public override void PrintMethod(Output output)
+        => throw new InvalidOperationException();
 }

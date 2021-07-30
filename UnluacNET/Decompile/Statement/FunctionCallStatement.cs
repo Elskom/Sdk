@@ -3,18 +3,17 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+public class FunctionCallStatement : Statement
 {
-    public class FunctionCallStatement : Statement
-    {
-        private readonly FunctionCall m_call;
+    private readonly FunctionCall m_call;
 
-        public FunctionCallStatement(FunctionCall call)
-            => this.m_call = call;
+    public FunctionCallStatement(FunctionCall call)
+        => this.m_call = call;
 
-        public override bool BeginsWithParen => this.m_call.BeginsWithParen;
+    public override bool BeginsWithParen => this.m_call.BeginsWithParen;
 
-        public override void Print(Output output)
-            => this.m_call.Print(output);
-    }
+    public override void Print(Output output)
+        => this.m_call.Print(output);
 }

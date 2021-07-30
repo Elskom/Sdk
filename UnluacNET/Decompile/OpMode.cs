@@ -3,12 +3,11 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+public enum OpMode
 {
-    public enum OpMode
-    {
-        iABC,
-        iABx,
-        iAsBx,
-    }
+    iABC,
+    iABx,
+    iAsBx,
 }

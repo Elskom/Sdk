@@ -3,32 +3,31 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System.Diagnostics;
+using System.IO;
+
+public class BSizeTType : BObjectType<BSizeT>
 {
-    using System.Diagnostics;
-    using System.IO;
+    private readonly BIntegerType integerType;
 
-    public class BSizeTType : BObjectType<BSizeT>
+    public BSizeTType(int sizeTSize)
     {
-        private readonly BIntegerType integerType;
+        this.SizeTSize = sizeTSize;
+        this.integerType = new(sizeTSize);
+    }
 
-        public BSizeTType(int sizeTSize)
+    public int SizeTSize { get; }
+
+    public override BSizeT Parse(Stream stream, BHeader header)
+    {
+        BSizeT value = new(this.integerType.RawParse(stream, header));
+        if (header.Debug)
         {
-            this.SizeTSize = sizeTSize;
-            this.integerType = new(sizeTSize);
+            Debug.WriteLine($"-- parsed <size_t> {value.AsInteger()}");
         }
 
-        public int SizeTSize { get; }
-
-        public override BSizeT Parse(Stream stream, BHeader header)
-        {
-            BSizeT value = new(this.integerType.RawParse(stream, header));
-            if (header.Debug)
-            {
-                Debug.WriteLine($"-- parsed <size_t> {value.AsInteger()}");
-            }
-
-            return value;
-        }
+        return value;
     }
 }

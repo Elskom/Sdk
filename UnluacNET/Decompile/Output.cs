@@ -3,63 +3,62 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System;
+using System.IO;
+
+public class Output
 {
-    using System;
-    using System.IO;
+    private readonly TextWriter m_writer;
 
-    public class Output
+    public Output()
+        : this(Console.Out)
     {
-        private readonly TextWriter m_writer;
+    }
 
-        public Output()
-            : this(Console.Out)
+    public Output(TextWriter writer)
+        => this.m_writer = writer;
+
+    public int IndentationLevel { get; set; }
+
+    public int Position { get; private set; }
+
+    public void IncreaseIndent()
+        => this.IndentationLevel += 2;
+
+    public void DecreaseIndent()
+        => this.IndentationLevel -= 2;
+
+    public void Print(string str)
+    {
+        this.Start();
+        this.m_writer.Write(str);
+        this.Position += str.Length;
+    }
+
+    public void PrintLine()
+    {
+        this.Start();
+        this.m_writer.WriteLine();
+        this.Position = 0;
+    }
+
+    public void PrintLine(string str)
+    {
+        this.Start();
+        this.m_writer.WriteLine(str);
+        this.Position = 0;
+    }
+
+    private void Start()
+    {
+        if (this.Position == 0)
         {
-        }
-
-        public Output(TextWriter writer)
-            => this.m_writer = writer;
-
-        public int IndentationLevel { get; set; }
-
-        public int Position { get; private set; }
-
-        public void IncreaseIndent()
-            => this.IndentationLevel += 2;
-
-        public void DecreaseIndent()
-            => this.IndentationLevel -= 2;
-
-        public void Print(string str)
-        {
-            this.Start();
-            this.m_writer.Write(str);
-            this.Position += str.Length;
-        }
-
-        public void PrintLine()
-        {
-            this.Start();
-            this.m_writer.WriteLine();
-            this.Position = 0;
-        }
-
-        public void PrintLine(string str)
-        {
-            this.Start();
-            this.m_writer.WriteLine(str);
-            this.Position = 0;
-        }
-
-        private void Start()
-        {
-            if (this.Position == 0)
+            for (var i = this.IndentationLevel; i != 0; i--)
             {
-                for (var i = this.IndentationLevel; i != 0; i--)
-                {
-                    this.m_writer.Write(" ");
-                    this.Position++;
-                }
+                this.m_writer.Write(" ");
+                this.Position++;
             }
         }
     }

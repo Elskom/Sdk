@@ -3,17 +3,16 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+public enum OpcodeFormat
 {
-    public enum OpcodeFormat
-    {
-        A,
-        A_B,
-        A_C,
-        A_B_C,
-        A_Bx,
-        A_sBx,
-        Ax,
-        sBx,
-    }
+    A,
+    A_B,
+    A_C,
+    A_B_C,
+    A_Bx,
+    A_sBx,
+    Ax,
+    sBx,
 }

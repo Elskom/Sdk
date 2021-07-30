@@ -3,28 +3,27 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+public enum OpArgMask
 {
-    public enum OpArgMask
-    {
-        /// <summary>
-        /// Argument is not used.
-        /// </summary>
-        OpArgN,
+    /// <summary>
+    /// Argument is not used.
+    /// </summary>
+    OpArgN,
 
-        /// <summary>
-        /// Argument is used.
-        /// </summary>
-        OpArgU,
+    /// <summary>
+    /// Argument is used.
+    /// </summary>
+    OpArgU,
 
-        /// <summary>
-        /// Argument is a register or a jump offset.
-        /// </summary>
-        OpArgR,
+    /// <summary>
+    /// Argument is a register or a jump offset.
+    /// </summary>
+    OpArgR,
 
-        /// <summary>
-        /// Argument is a constant or register/constant.
-        /// </summary>
-        OpArgK,
-    }
+    /// <summary>
+    /// Argument is a constant or register/constant.
+    /// </summary>
+    OpArgK,
 }

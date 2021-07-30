@@ -3,25 +3,24 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System.Collections.Generic;
+using System.IO;
+
+public abstract class BObjectType<T> : BObject
+    where T : BObject
 {
-    using System.Collections.Generic;
-    using System.IO;
+    public abstract T Parse(Stream stream, BHeader header);
 
-    public abstract class BObjectType<T> : BObject
-        where T : BObject
+    public BList<T> ParseList(Stream stream, BHeader header)
     {
-        public abstract T Parse(Stream stream, BHeader header);
-
-        public BList<T> ParseList(Stream stream, BHeader header)
+        var length = header.Integer.Parse(stream, header);
+        List<T> values = new();
+        length.Iterate(() =>
         {
-            var length = header.Integer.Parse(stream, header);
-            List<T> values = new();
-            length.Iterate(() =>
-            {
-                values.Add(this.Parse(stream, header));
-            });
-            return new(length, values);
-        }
+            values.Add(this.Parse(stream, header));
+        });
+        return new(length, values);
     }
 }

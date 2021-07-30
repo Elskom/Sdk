@@ -3,21 +3,20 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+using System;
+
+public class UpvalueTarget : Target
 {
-    using System;
+    private readonly string m_name;
 
-    public class UpvalueTarget : Target
-    {
-        private readonly string m_name;
+    public UpvalueTarget(string name)
+        => this.m_name = name;
 
-        public UpvalueTarget(string name)
-            => this.m_name = name;
+    public override void Print(Output output)
+        => output.Print(this.m_name);
 
-        public override void Print(Output output)
-            => output.Print(this.m_name);
-
-        public override void PrintMethod(Output output)
-            => throw new InvalidOperationException();
-    }
+    public override void PrintMethod(Output output)
+        => throw new InvalidOperationException();
 }

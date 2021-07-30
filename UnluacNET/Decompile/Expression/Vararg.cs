@@ -3,24 +3,23 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Elskom.Generic.Libs.UnluacNET
+namespace Elskom.Generic.Libs.UnluacNET;
+
+public class Vararg : Expression
 {
-    public class Vararg : Expression
-    {
-        private readonly bool m_multiple;
+    private readonly bool m_multiple;
 
-        public Vararg(bool multiple)
-            : base(PRECEDENCE_ATOMIC)
-            => this.m_multiple = multiple;
+    public Vararg(bool multiple)
+        : base(PRECEDENCE_ATOMIC)
+        => this.m_multiple = multiple;
 
-        public override int ConstantIndex => -1;
+    public override int ConstantIndex => -1;
 
-        public override bool IsMultiple => this.m_multiple;
+    public override bool IsMultiple => this.m_multiple;
 
-        public override void Print(Output output)
-            => output.Print(this.m_multiple ? "..." : "(...)");
+    public override void Print(Output output)
+        => output.Print(this.m_multiple ? "..." : "(...)");
 
-        public override void PrintMultiple(Output output)
-            => output.Print(this.m_multiple ? "..." : "(...)");
-    }
+    public override void PrintMultiple(Output output)
+        => output.Print(this.m_multiple ? "..." : "(...)");
 }
