@@ -5,10 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System.Diagnostics;
-using System.IO;
-using Elskom.Generic.Libs.Properties;
-
 /// <summary>
 /// Class that allows executing Elsword directly or it's launcher.
 /// </summary>

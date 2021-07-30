@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public abstract class Target
 {
     public virtual bool IsFunctionName => true;

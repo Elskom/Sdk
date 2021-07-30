@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-using System.Collections.Generic;
-
 public abstract class LObject : BObject, IEqualityComparer<LObject>
 {
     public abstract new bool Equals(object obj);

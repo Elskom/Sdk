@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class UpvalueTarget : Target
 {
     private readonly string m_name;

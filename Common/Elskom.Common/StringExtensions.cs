@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Reflection;
-
 internal static class StringExtensions
 {
     public static string ReplaceStr(this string str1, string str2, string str3, StringComparison comp)

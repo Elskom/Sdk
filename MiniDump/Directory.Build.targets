@@ -7,6 +7,14 @@
     <AdditionalFiles Include="../stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
+    <Import Include="System" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Globalization" />
+    <Import Include="System.IO" />
+    <Import Include="System.Reflection" />
+    <Import Include="System.Runtime.InteropServices" />
+    <Import Include="System.Text" />
+    <Import Include="Microsoft.Diagnostics.NETCore.Client" />
   </ItemGroup>
 
 </Project>

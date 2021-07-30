@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-using System.Collections.Generic;
-
 public class TableLiteral : Expression
 {
     private readonly List<Entry> m_entries;

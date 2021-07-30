@@ -3,15 +3,9 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-namespace Newsmake;
+global using newsmakeResources = Elskom.Generic.Libs.Properties;
 
-using System;
-using System.CommandLine;
-using System.CommandLine.Invocation;
-using System.Reflection;
-using System.Threading.Tasks;
-using Elskom.Generic.Libs;
-using Microsoft.Diagnostics.NETCore.Client;
+namespace Newsmake;
 
 internal static class Program
 {

@@ -5,10 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.Diagnostics;
-using System.IO;
-using Elskom.Generic.Libs.UnluacNET.IO;
-
 public class LFunctionType : BObjectType<LFunction>
 {
     public static readonly LFunctionType TYPE51 = new();

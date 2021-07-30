@@ -146,3 +146,6 @@ csharp_preserve_single_line_statements = true
 
 # S3903: Move '%s' into a named namespace.
 dotnet_diagnostic.S3903.severity = none
+
+# SA1200: Using directive should appear within a namespace declaration (bug)
+dotnet_diagnostic.SA1200.severity = none

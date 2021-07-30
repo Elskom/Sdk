@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-
 /// <summary>
 /// Interface for Els_kom plugins for some optional add-ons to internal workings.
 ///

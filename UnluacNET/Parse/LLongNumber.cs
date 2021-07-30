@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class LLongNumber : LNumber
 {
     public LLongNumber(long number)

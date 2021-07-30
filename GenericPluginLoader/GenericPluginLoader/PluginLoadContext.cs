@@ -6,12 +6,6 @@
 #if NET5_0_OR_GREATER
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Loader;
-
 /// <inheritdoc/>
 public class PluginLoadContext : AssemblyLoadContext
 {

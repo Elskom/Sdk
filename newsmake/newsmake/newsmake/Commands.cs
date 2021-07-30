@@ -5,20 +5,6 @@
 
 namespace Newsmake;
 
-using System;
-using System.Collections.Generic;
-using System.CommandLine;
-using System.CommandLine.Help;
-using System.CommandLine.Invocation;
-using System.CommandLine.IO;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using Elskom.Generic.Libs;
-using newsmakeResources = Elskom.Generic.Libs.Properties;
-
 internal class Commands
 {
     protected Commands()

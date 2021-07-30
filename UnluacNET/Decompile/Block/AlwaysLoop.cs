@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.Collections.Generic;
-
 public class AlwaysLoop : Block
 {
     private readonly List<Statement> m_statements;

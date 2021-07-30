@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.Collections.Generic;
-using System.Linq;
-
 public class BList<T> : BObject
     where T : BObject
 {

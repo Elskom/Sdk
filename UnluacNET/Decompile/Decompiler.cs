@@ -5,10 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 public class Decompiler
 {
     private static Stack<Branch> m_backup;

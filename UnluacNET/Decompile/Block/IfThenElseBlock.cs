@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.Collections.Generic;
-
 public class IfThenElseBlock : Block
 {
     private readonly Branch m_branch;

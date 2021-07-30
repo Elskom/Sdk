@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class CompareBlock : Block
 {
     public CompareBlock(LFunction function, int begin, int end, int target, Branch branch)

@@ -5,10 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Diagnostics;
-using System.Text;
-
 /// <summary>
 /// A extension class for extensions to <see cref="Process"/>.
 /// </summary>

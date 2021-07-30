@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.Collections.Generic;
-
 public abstract class Statement
 {
     public string Comment { get; set; }

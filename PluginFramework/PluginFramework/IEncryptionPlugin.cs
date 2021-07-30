@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System.IO;
-
 /// <summary>
 /// Interface for Els_kom kom entry Encryption and Decryption plugins (Version 1.5.0.0 or newer).
 ///

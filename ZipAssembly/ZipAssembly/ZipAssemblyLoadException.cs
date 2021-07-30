@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Runtime.Serialization;
-
 /// <summary>
 /// A exception that is raised when the
 /// assembly cannot be loaded from a zip file.

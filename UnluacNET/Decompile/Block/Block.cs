@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public abstract class Block : Statement, IComparable<Block>
 {
     protected Block(LFunction function, int begin, int end)

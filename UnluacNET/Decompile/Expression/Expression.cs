@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-using System.Collections.Generic;
-
 public abstract class Expression
 {
     public static readonly int PRECEDENCE_OR = 1;

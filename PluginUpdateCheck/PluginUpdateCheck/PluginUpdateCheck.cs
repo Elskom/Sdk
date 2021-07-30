@@ -5,17 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Net.Http;
-using System.Xml.Linq;
-using Elskom.Generic.Libs.Properties;
-using IDisposableGenerator;
-
 /// <summary>
 /// A generic plugin update checker.
 /// </summary>

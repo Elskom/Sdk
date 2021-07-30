@@ -5,10 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-using System.Diagnostics;
-using System.IO;
-
 public class LConstantType : BObjectType<LObject>
 {
     public override LObject Parse(Stream stream, BHeader header)

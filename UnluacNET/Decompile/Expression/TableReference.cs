@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class TableReference : Expression
 {
     private readonly Expression m_table;

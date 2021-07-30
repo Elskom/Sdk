@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.Collections.Generic;
-
 public class Assignment : Statement
 {
     private readonly List<Target> m_targets = new(5);

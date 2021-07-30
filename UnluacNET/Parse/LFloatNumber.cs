@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class LFloatNumber : LNumber
 {
     public LFloatNumber(float number)

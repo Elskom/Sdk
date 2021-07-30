@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class LDoubleNumber : LNumber
 {
     public LDoubleNumber(double number)

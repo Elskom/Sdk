@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-using System.Collections.Generic;
-
 public class DoEndBlock : Block
 {
     private readonly List<Statement> m_statements;

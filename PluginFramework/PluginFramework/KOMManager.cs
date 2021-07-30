@@ -5,13 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Xml.Linq;
-using Elskom.Generic.Libs.Properties;
-
 /// <summary>
 /// Class that allows managing kom Files.
 /// </summary>

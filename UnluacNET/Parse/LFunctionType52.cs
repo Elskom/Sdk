@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.IO;
-
 public class LFunctionType52 : LFunctionType
 {
     protected override void ParseDebug(Stream stream, BHeader header, LFunctionParseState s)

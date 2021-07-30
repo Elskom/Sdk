@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public abstract class LNumber : LObject
 {
     // TODO: problem solution for this issue (???)

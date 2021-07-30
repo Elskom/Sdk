@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.IO;
-
 /// <summary>
 /// A extension class for extensions to <see cref="MemoryStream"/>.
 /// </summary>

@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.Collections.Generic;
-
 public class WhileBlock : Block
 {
     private readonly Branch m_branch;

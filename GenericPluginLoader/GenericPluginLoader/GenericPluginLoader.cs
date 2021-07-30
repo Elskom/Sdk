@@ -10,15 +10,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-#if !NET5_0_OR_GREATER
-using System.Reflection;
-#endif
-
 /// <summary>
 /// A generic loader for plugins.
 /// </summary>

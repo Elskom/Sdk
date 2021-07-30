@@ -5,17 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-#if NET5_0_OR_GREATER
-using System.Runtime.Loader;
-#endif
-
 internal static class RuntimeExtensions
 {
 #if NET5_0_OR_GREATER
