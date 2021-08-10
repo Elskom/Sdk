@@ -5,13 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using Elskom.Generic.Libs.Properties;
-
 /// <summary>
 /// Handles application's release packaging command line.
 /// </summary>

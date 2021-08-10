@@ -10,6 +10,12 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>MiniDump,PublicKey=$(SnkPublicKey)</_Parameter1>
     </AssemblyAttribute>
+    <Import Include="System" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.IO" />
+    <Import Include="System.Runtime.InteropServices" />
+    <Import Include="System.Text.Json" />
+    <Import Include="System.Text.Json.Serialization" />
   </ItemGroup>
 
 </Project>

@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class LBoolean : LObject
 {
     public static readonly LBoolean LTRUE = new() { Value = true, };

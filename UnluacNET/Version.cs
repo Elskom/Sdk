@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class Version
 {
     public static readonly Version LUA51 = new(0x51);

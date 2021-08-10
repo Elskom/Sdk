@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class AssignNode : Branch
 {
     private Expression m_expression;

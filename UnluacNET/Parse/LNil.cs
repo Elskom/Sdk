@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class LNil : LObject
 {
     public static readonly LNil NIL = new();

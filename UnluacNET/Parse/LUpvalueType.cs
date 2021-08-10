@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.IO;
-
 public class LUpvalueType : BObjectType<LUpvalue>
 {
     public override LUpvalue Parse(Stream stream, BHeader header)

@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-
 /// <summary>
 /// Event that holds the message text and the caption.
 /// </summary>

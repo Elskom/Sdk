@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class BinaryExpression : Expression
 {
     private readonly string m_op;

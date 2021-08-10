@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class LIntNumber : LNumber
 {
     public LIntNumber(int number)

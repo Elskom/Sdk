@@ -7,6 +7,14 @@
     <AdditionalFiles Include="../stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
+    <Import Include="System" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.IO" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Reflection" />
+    <Import Include="System.Text" />
+    <Import Include="Elskom.Generic.Libs.UnluacNET.IO" />
   </ItemGroup>
 
 </Project>

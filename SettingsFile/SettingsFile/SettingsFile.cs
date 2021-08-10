@@ -5,11 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-
 /// <summary>
 /// A class that handles the settings for any application.
 /// </summary>

@@ -5,15 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using Microsoft.Diagnostics.NETCore.Client;
-
 internal static class MiniDump
 {
     internal static int ExceptionEventHandlerCode(Exception e, bool threadException)

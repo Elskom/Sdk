@@ -5,10 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-using System.Diagnostics;
-using System.IO;
-
 public class LBooleanType : BObjectType<LBoolean>
 {
     public override LBoolean Parse(Stream stream, BHeader header)

@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using Microsoft.Diagnostics.NETCore.Client;
-
 // maybe something like this could be added to the framework.
 // do not use this attribute for anything but classes, the assembly, or the Main() method.
 

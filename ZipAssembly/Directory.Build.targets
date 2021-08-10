@@ -7,6 +7,15 @@
       <Link>stylecop.json</Link>
     </AdditionalFiles>
     <AdditionalFiles Include="Properties\Resources.resx" />
+    <Import Include="System" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.IO" />
+    <Import Include="System.IO.Compression" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Reflection" />
+    <Import Include="System.Runtime.Loader" Condition="'$(TargetFramework)' == 'net5.0'"/>
+    <Import Include="System.Runtime.Serialization" />
+    <Import Include="Elskom.Generic.Libs.Properties" />
   </ItemGroup>
 
 </Project>

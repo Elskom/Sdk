@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET.IO;
 
-using System;
-using System.IO;
-
 public static class StreamExtensions
 {
     public static char ReadChar(this Stream stream)

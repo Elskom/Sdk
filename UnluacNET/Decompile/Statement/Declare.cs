@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.Collections.Generic;
-
 public class Declare : Statement
 {
     private readonly List<Declaration> m_decls;

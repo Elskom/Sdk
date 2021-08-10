@@ -5,16 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using Elskom.Generic.Libs.Properties;
-using IDisposableGenerator;
-
 /// <summary>
 /// Blowfish encryption class.
 /// </summary>

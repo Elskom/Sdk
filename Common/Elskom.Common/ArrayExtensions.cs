@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-
 internal static class ArrayExtensions
 {
     internal static byte[] Remove(this byte[] bytes, byte item)

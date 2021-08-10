@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-
 /// <summary>
 /// A generic MessageBox manager.
 /// </summary>

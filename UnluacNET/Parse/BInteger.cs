@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class BInteger : BObject
 {
     private static readonly long MAX_INT = int.MaxValue;

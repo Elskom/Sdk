@@ -5,18 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Reflection;
-#if NET5_0_OR_GREATER
-using System.Runtime.Loader;
-#endif
-using System.Runtime.Serialization;
-using Elskom.Generic.Libs.Properties;
-
 /// <summary>
 /// Load assemblies from a zip file.
 /// </summary>

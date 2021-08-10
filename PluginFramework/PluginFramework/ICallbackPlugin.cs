@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System;
-
 /// <summary>
 /// Interface for Els_kom Test Mods callback plugins.
 /// </summary>

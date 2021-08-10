@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs;
 
-using System.Collections.Generic;
-
 /// <summary>
 /// This Class holds all the KOM entry Information.
 /// </summary>

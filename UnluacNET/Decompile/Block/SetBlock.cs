@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-using System.Diagnostics;
-
 public class SetBlock : Block
 {
     private readonly bool m_empty;

@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.Diagnostics;
-using System.IO;
-
 public class BSizeTType : BObjectType<BSizeT>
 {
     private readonly BIntegerType integerType;

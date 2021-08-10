@@ -5,8 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-
 public class Break : Block
 {
     public Break(LFunction function, int line, int target)

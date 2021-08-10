@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System.Collections.Generic;
-using System.IO;
-
 public abstract class BObjectType<T> : BObject
     where T : BObject
 {

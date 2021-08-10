@@ -5,10 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-using System.IO;
-using Elskom.Generic.Libs.UnluacNET.IO;
-
 public class BHeader
 {
     private static readonly int Signature = 0x61754C1B; // '\x1B\Lua'

@@ -5,9 +5,6 @@
 
 namespace Elskom.Generic.Libs.UnluacNET;
 
-using System;
-using System.Collections.Generic;
-
 public class TForBlock : Block
 {
     private readonly int m_register;
