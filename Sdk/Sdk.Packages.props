@@ -28,19 +28,22 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(ElskomSdkBuild)' == ''">
+    <!-- Dependencies outside of Elskom/Sdk repository. -->
+    <PackageReference Include="Elskom.GitInformation" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="zlib.managed" IsImplicitlyDefined="true" Version="*-*" />
+    <!-- Dependency of every project inside of the Elskom/Sdk repository. -->
+    <PackageReference Include="Elskom.Common" IsImplicitlyDefined="true" Version="*-*" />
+    <!-- All the projects that use the above Dependencies in the Elskom/Sdk repository. -->
     <PackageReference Include="BlowFish" IsImplicitlyDefined="true" Version="*-*" />
-    <PackageReference Include="MessageManager" IsImplicitlyDefined="true" Version="*-*" Condition="'$(UseWindowsForms)' == 'true' AND '$(OS)' == 'Windows_NT'" />
-    <PackageReference Include="UnluacNET" IsImplicitlyDefined="true" Version="*-*" />
-    <!-- needs .NET Framework 4.5+. -->
     <PackageReference Include="GenericPluginLoader" IsImplicitlyDefined="true" Version="*-*" />
-    <PackageReference Include="ReleasePackaging" IsImplicitlyDefined="true" Version="*-*" />
-    <!-- needs .NET Framework 4.6.1+. -->
-    <PackageReference Include="PluginUpdateCheck" IsImplicitlyDefined="true" Version="*-*" />
-    <PackageReference Include="Elskom.PluginFramework" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' == 'Windows_NT'" />
-    <!-- needs .NET Framework 4.7.1+. -->
+    <PackageReference Include="MessageManager" IsImplicitlyDefined="true" Version="*-*" />
     <PackageReference Include="MiniDump" IsImplicitlyDefined="true" Version="*-*" />
-    <PackageReference Include="SettingsFile" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' != 'Windows_NT'" />
-    <PackageReference Include="zlib.managed" IsImplicitlyDefined="true" Version="*-*" Condition="'$(OS)' != 'Windows_NT'" />
+    <PackageReference Include="Elskom.PluginFramework" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="PluginUpdateCheck" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="ReleasePackaging" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="SettingsFile" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="UnluacNET" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="ZipAssembly" IsImplicitlyDefined="true" Version="*-*" />
   </ItemGroup>
 
 </Project>
