@@ -24,6 +24,48 @@ public static class ExecutionManager
 
     private static string ElsDir { get; set; }
 
+    private static ProcessStartOptions GameStartOptions { get; }
+        = new ProcessStartOptions
+        {
+            WaitForProcessExit = true,
+        }.WithStartInformation(
+            $"{ElsDir}\\data\\x2.exe",
+            "pxk19slammsu286nfha02kpqnf729ck",
+            false,
+            false,
+            false,
+            false,
+            ProcessWindowStyle.Normal,
+            $"{ElsDir}\\data\\");
+
+    private static ProcessStartOptions VoidLauncherStartOptions { get; }
+        = new ProcessStartOptions
+        {
+            WaitForProcessExit = true,
+        }.WithStartInformation(
+            $"{ElsDir}\\voidels.exe",
+            string.Empty,
+            false,
+            false,
+            false,
+            false,
+            ProcessWindowStyle.Normal,
+            ElsDir);
+
+    private static ProcessStartOptions LauncherStartOptions { get; }
+        = new ProcessStartOptions
+        {
+            WaitForProcessExit = true,
+        }.WithStartInformation(
+            $"{ElsDir}\\elsword.exe",
+            string.Empty,
+            false,
+            false,
+            false,
+            false,
+            ProcessWindowStyle.Normal,
+            ElsDir);
+
     /// <summary>
     /// Gets if Els_kom.exe is already Running. If So, Helps with Closing any new Instances.
     /// </summary>
@@ -41,55 +83,30 @@ public static class ExecutionManager
     /// </summary>
     public static void RunElswordDirectly()
     {
-        if (File.Exists(SettingsFile.SettingsPath))
+        SettingsFile.SettingsJson = SettingsFile.SettingsJson.ReopenFile();
+        ElsDir = SettingsFile.SettingsJson.ElsDir;
+        if (!string.IsNullOrEmpty(ElsDir))
         {
-            SettingsFile.SettingsJson = SettingsFile.SettingsJson.ReopenFile();
-            ElsDir = SettingsFile.SettingsJson.ElsDir;
-            if (ElsDir.Length > 0)
+            RunningElswordDirectly = true;
+            GameStartOptions.StartInfo.FileName = $"{ElsDir}\\data\\x2.exe";
+            GameStartOptions.StartInfo.WorkingDirectory = $"{ElsDir}\\data\\";
+            try
             {
-                if (File.Exists($"{ElsDir}\\data\\x2.exe"))
-                {
-                    RunningElswordDirectly = true;
-                    using (Process proc = new())
-                    {
-                        _ = proc.Shell(
-                            $"{ElsDir}\\data\\x2.exe",
-                            "pxk19slammsu286nfha02kpqnf729ck",
-                            false,
-                            false,
-                            false,
-                            false,
-                            ProcessWindowStyle.Normal,
-                            $"{ElsDir}\\data\\",
-                            true);
-                    }
-
-                    RunningElswordDirectly = false;
-                }
-                else
-                {
-                    MessageEventArgs args = new(
-                        string.Format(
-                            Resources.ExecutionManager_Cannot_Find_x2_exe,
-                            ElsDir,
-                            Path.DirectorySeparatorChar),
-                        Resources.Error,
-                        ErrorLevel.Error);
-                    KOMManager.InvokeMessageEvent(args);
-                    ProcessExtensions.Executing = false;
-                }
+                _ = GameStartOptions.Start();
             }
-            else
+            catch (FileNotFoundException)
             {
                 MessageEventArgs args = new(
                     string.Format(
-                        Resources.ExecutionManager_ElsDir_Not_Set,
-                        "Test your mods"),
+                        Resources.ExecutionManager_Cannot_Find_x2_exe,
+                        ElsDir,
+                        Path.DirectorySeparatorChar),
                     Resources.Error,
                     ErrorLevel.Error);
                 KOMManager.InvokeMessageEvent(args);
-                ProcessExtensions.Executing = false;
             }
+
+            RunningElswordDirectly = false;
         }
         else
         {
@@ -100,7 +117,6 @@ public static class ExecutionManager
                 Resources.Error,
                 ErrorLevel.Error);
             KOMManager.InvokeMessageEvent(args);
-            ProcessExtensions.Executing = false;
         }
     }
 
@@ -113,77 +129,39 @@ public static class ExecutionManager
     {
         // for the sake of sanity and the need to disable the pack, unpack, and test mods
         // buttons in UI while updating game.
-        if (File.Exists(SettingsFile.SettingsPath))
+        SettingsFile.SettingsJson = SettingsFile.SettingsJson.ReopenFile();
+        ElsDir = SettingsFile.SettingsJson.ElsDir;
+        if (!string.IsNullOrEmpty(ElsDir))
         {
-            SettingsFile.SettingsJson = SettingsFile.SettingsJson.ReopenFile();
-            ElsDir = SettingsFile.SettingsJson.ElsDir;
-            if (ElsDir.Length > 0)
+            RunningElsword = true;
+            VoidLauncherStartOptions.StartInfo.FileName = $"{ElsDir}\\voidels.exe";
+            VoidLauncherStartOptions.StartInfo.WorkingDirectory = ElsDir;
+            try
             {
-                if (File.Exists($"{ElsDir}\\voidels.exe"))
+                VoidLauncherStartOptions.Start();
+            }
+            catch (FileNotFoundException)
+            {
+                LauncherStartOptions.StartInfo.FileName = $"{ElsDir}\\elsword.exe";
+                LauncherStartOptions.StartInfo.WorkingDirectory = ElsDir;
+                try
                 {
-                    RunningElsword = true;
-                    using (Process proc = new())
-                    {
-                        _ = proc.Shell(
-                            $"{ElsDir}\\voidels.exe",
-                            string.Empty,
-                            false,
-                            false,
-                            false,
-                            false,
-                            ProcessWindowStyle.Normal,
+                    LauncherStartOptions.Start();
+                }
+                catch (FileNotFoundException)
+                {
+                    MessageEventArgs args = new(
+                        string.Format(
+                            Resources.ExecutionManager_Cannot_Find_elsword_exe,
                             ElsDir,
-                            true);
-                    }
-
-                    RunningElsword = false;
-                }
-                else
-                {
-                    if (File.Exists($"{ElsDir}\\elsword.exe"))
-                    {
-                        RunningElsword = true;
-                        using (Process proc = new())
-                        {
-                            _ = proc.Shell(
-                                $"{ElsDir}\\elsword.exe",
-                                string.Empty,
-                                false,
-                                false,
-                                false,
-                                false,
-                                ProcessWindowStyle.Normal,
-                                ElsDir,
-                                true);
-                        }
-
-                        RunningElsword = false;
-                    }
-                    else
-                    {
-                        MessageEventArgs args = new(
-                            string.Format(
-                                Resources.ExecutionManager_Cannot_Find_elsword_exe,
-                                ElsDir,
-                                Path.DirectorySeparatorChar),
-                            Resources.Error,
-                            ErrorLevel.Error);
-                        KOMManager.InvokeMessageEvent(args);
-                        ProcessExtensions.Executing = false;
-                    }
+                            Path.DirectorySeparatorChar),
+                        Resources.Error,
+                        ErrorLevel.Error);
+                    KOMManager.InvokeMessageEvent(args);
                 }
             }
-            else
-            {
-                MessageEventArgs args = new(
-                    string.Format(
-                        Resources.ExecutionManager_ElsDir_Not_Set,
-                        "update Elsword"),
-                    Resources.Error,
-                    ErrorLevel.Error);
-                KOMManager.InvokeMessageEvent(args);
-                ProcessExtensions.Executing = false;
-            }
+
+            RunningElsword = false;
         }
         else
         {
@@ -194,7 +172,6 @@ public static class ExecutionManager
                 Resources.Error,
                 ErrorLevel.Error);
             KOMManager.InvokeMessageEvent(args);
-            ProcessExtensions.Executing = false;
         }
     }
 }
