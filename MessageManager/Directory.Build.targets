@@ -7,7 +7,7 @@
     <AdditionalFiles Include="../stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
-    <Import Include="System" />
+    <Using Include="System" />
   </ItemGroup>
 
 </Project>

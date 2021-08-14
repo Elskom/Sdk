@@ -8,16 +8,16 @@
       <Link>stylecop.json</Link>
     </AdditionalFiles>
     <AdditionalFiles Include="Properties\Resources.resx" />
-    <Import Include="System" />
-    <Import Include="System.Collections.Generic" />
-    <Import Include="System.Globalization" />
-    <Import Include="System.IO" />
-    <Import Include="System.IO.Compression" />
-    <Import Include="System.Linq" />
-    <Import Include="System.Net.Http" />
-    <Import Include="System.Xml.Linq" />
-    <Import Include="Elskom.Generic.Libs.Properties" />
-    <Import Include="IDisposableGenerator" />
+    <Using Include="System" />
+    <Using Include="System.Collections.Generic" />
+    <Using Include="System.Globalization" />
+    <Using Include="System.IO" />
+    <Using Include="System.IO.Compression" />
+    <Using Include="System.Linq" />
+    <Using Include="System.Net.Http" />
+    <Using Include="System.Xml.Linq" />
+    <Using Include="Elskom.Generic.Libs.Properties" />
+    <Using Include="IDisposableGenerator" />
   </ItemGroup>
 
 </Project>
