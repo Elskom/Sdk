@@ -3,8 +3,6 @@
 // All rights reserved.
 // license: MIT, see LICENSE for more details.
 
-global using newsmakeResources = Elskom.Generic.Libs.Properties;
-
 namespace Newsmake;
 
 internal static class Program

@@ -8,13 +8,13 @@
       <Link>stylecop.json</Link>
     </AdditionalFiles>
     <AdditionalFiles Include="Properties\Resources.resx" />
-    <Import Include="System" />
-    <Import Include="System.Collections.Generic" />
-    <Import Include="System.Diagnostics" />
-    <Import Include="System.IO" />
-    <Import Include="System.Text" />
-    <Import Include="System.Xml.Linq" />
-    <Import Include="Elskom.Generic.Libs.Properties" />
+    <Using Include="System" />
+    <Using Include="System.Collections.Generic" />
+    <Using Include="System.Diagnostics" />
+    <Using Include="System.IO" />
+    <Using Include="System.Text" />
+    <Using Include="System.Xml.Linq" />
+    <Using Include="Elskom.Generic.Libs.Properties" />
   </ItemGroup>
 
 </Project>

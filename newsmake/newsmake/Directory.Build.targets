@@ -8,20 +8,21 @@
       <Link>stylecop.json</Link>
     </AdditionalFiles>
     <AdditionalFiles Include="Properties\Resources.resx" />
-    <Import Include="System" />
-    <Import Include="System.Collections.Generic" />
-    <Import Include="System.CommandLine" />
-    <Import Include="System.CommandLine.Help" />
-    <Import Include="System.CommandLine.Invocation" />
-    <Import Include="System.CommandLine.IO" />
-    <Import Include="System.Globalization" />
-    <Import Include="System.IO" />
-    <Import Include="System.Linq" />
-    <Import Include="System.Reflection" />
-    <Import Include="System.Text" />
-    <Import Include="System.Threading.Tasks" />
-    <Import Include="Elskom.Generic.Libs" />
-    <Import Include="Microsoft.Diagnostics.NETCore.Client" />
+    <Using Include="System" />
+    <Using Include="System.Collections.Generic" />
+    <Using Include="System.CommandLine" />
+    <Using Include="System.CommandLine.Help" />
+    <Using Include="System.CommandLine.Invocation" />
+    <Using Include="System.CommandLine.IO" />
+    <Using Include="System.Globalization" />
+    <Using Include="System.IO" />
+    <Using Include="System.Linq" />
+    <Using Include="System.Reflection" />
+    <Using Include="System.Text" />
+    <Using Include="System.Threading.Tasks" />
+    <Using Include="Elskom.Generic.Libs" />
+    <Using Include="Microsoft.Diagnostics.NETCore.Client" />
+    <Using Include="Elskom.Generic.Libs.Properties" Alias="newsmakeResources" />
   </ItemGroup>
 
 </Project>

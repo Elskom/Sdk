@@ -7,15 +7,15 @@
     <AdditionalFiles Include="../stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
-    <Import Include="System" />
-    <Import Include="System.Collections.Generic" />
-    <Import Include="System.Diagnostics" />
-    <Import Include="System.IO" />
-    <Import Include="System.IO.Compression" />
-    <Import Include="System.Linq" />
-    <Import Include="System.Reflection" />
-    <Import Include="System.Text" />
-    <Import Include="System.Runtime.Loader" Condition="'$(TargetFramework)' == 'net5.0'" />
+    <Using Include="System" />
+    <Using Include="System.Collections.Generic" />
+    <Using Include="System.Diagnostics" />
+    <Using Include="System.IO" />
+    <Using Include="System.IO.Compression" />
+    <Using Include="System.Linq" />
+    <Using Include="System.Reflection" />
+    <Using Include="System.Text" />
+    <Using Include="System.Runtime.Loader" Condition="'$(TargetFramework)' == 'net5.0'" />
   </ItemGroup>
 
 </Project>

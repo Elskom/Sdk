@@ -13,8 +13,8 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>ReleasePackaging,PublicKey=$(SnkPublicKey)</_Parameter1>
     </AssemblyAttribute>
-    <Import Include="System" />
-    <Import Include="System.Reflection" />
+    <Using Include="System" />
+    <Using Include="System.Reflection" />
   </ItemGroup>
 
 </Project>
