@@ -17,6 +17,9 @@ public class JsonSettings
     {
         this.ElsDir = string.Empty;
         this.Sources = Array.Empty<string>();
+        this.SaveToZip = default;
+        this.ShowTestMessages = default;
+        this.UseNotifications = default;
 
         // default these to -1 to loop them back to their default value in Els_kom.
         this.WindowIcon = -1;
@@ -76,10 +79,26 @@ public class JsonSettings
     /// Deserializes the input json data to the target type for the settings file.
     /// </summary>
     /// <param name="json">The json data to Deserialize.</param>
+    /// <returns>The target type instance for the settings file.</returns>
+    public static JsonSettings Deserialize(string json)
+        => Deserialize(json, null);
+
+    /// <summary>
+    /// Deserializes the input json data to the target type for the settings file.
+    /// </summary>
+    /// <param name="json">The json data to Deserialize.</param>
     /// <param name="options">The options to deserialize with.</param>
     /// <returns>The target type instance for the settings file.</returns>
-    public static JsonSettings Deserialize(string json, JsonSerializerOptions options = null)
+    public static JsonSettings Deserialize(string json, JsonSerializerOptions options)
         => JsonSerializer.Deserialize<JsonSettings>(json, options);
+
+    /// <summary>
+    /// Serializes the input type instance to a json string.
+    /// </summary>
+    /// <param name="value">The object for which holds the data to the input type instance.</param>
+    /// <returns>The json string to the input type instance's data.</returns>
+    public static string Serialize(JsonSettings value)
+        => Serialize(value, null);
 
     /// <summary>
     /// Serializes the input type instance to a json string.
@@ -87,7 +106,7 @@ public class JsonSettings
     /// <param name="value">The object for which holds the data to the input type instance.</param>
     /// <param name="options">The options to serialize with.</param>
     /// <returns>The json string to the input type instance's data.</returns>
-    public static string Serialize(JsonSettings value, JsonSerializerOptions options = null)
+    public static string Serialize(JsonSettings value, JsonSerializerOptions options)
     {
         options ??= new()
         {
@@ -120,5 +139,23 @@ public class JsonSettings
     /// Saves the data in this instance to file.
     /// </summary>
     public void Save()
-        => File.WriteAllText(SettingsFile.SettingsPath, Serialize(this));
+    {
+        // trap default instance values and return.
+        if (this is
+            {
+                ElsDir: "" or null,
+                Sources: { },
+                SaveToZip: 0,
+                ShowTestMessages: 0,
+                UseNotifications: 0,
+                WindowIcon: -1,
+                IconWhileElsNotRunning: -1,
+                IconWhileElsRunning: -1,
+            })
+        {
+            return;
+        }
+
+        File.WriteAllText(SettingsFile.SettingsPath, Serialize(this));
+    }
 }
