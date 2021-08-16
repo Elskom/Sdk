@@ -43,7 +43,7 @@
     <PackageReference Include="ReleasePackaging" IsImplicitlyDefined="true" Version="*-*" />
     <PackageReference Include="SettingsFile" IsImplicitlyDefined="true" Version="*-*" />
     <PackageReference Include="UnluacNET" IsImplicitlyDefined="true" Version="*-*" />
-    <PackageReference Include="ZipAssembly" IsImplicitlyDefined="true" Version="*-*" />
+    <PackageReference Include="ZipAssembly" IsImplicitlyDefined="true" Version="-*" />
   </ItemGroup>
 
 </Project>
