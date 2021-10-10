@@ -1,8 +1,0 @@
-<!--
-    Intentionally left blank so no packages would get
-    automatically added to this project.
-
-    This is because this is only meant to package the Sdk
-    and the files within should automatically reference them.
--->
-<Project />

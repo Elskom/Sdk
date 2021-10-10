@@ -1,9 +1,0 @@
-<Project>
-
-  <ItemGroup>
-    <PackageReference Include="Elskom.GitInformation" IsImplicitlyDefined="true" Version="*-*" />
-  </ItemGroup>
-
-  <Import Project="../Directory.Packages.props" />
-
-</Project>

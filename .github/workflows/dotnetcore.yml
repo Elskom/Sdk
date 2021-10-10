@@ -11,9 +11,6 @@ jobs:
       DOTNET_NOLOGO: true
     steps:
     - uses: actions/checkout@main
-      with:
-        # we need the submodule to zlib.managed.
-        submodules: recursive
 
     - name: Install latest .NET SDK
       uses: Elskom/setup-latest-dotnet@main

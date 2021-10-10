@@ -8,8 +8,45 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>preview</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <GenerateResourceUsePreserializedResources Condition="$(TargetFramework.StartsWith('net4')) AND ('$(UseWindowsForms)' == 'true' OR '$(UseWPF)' == 'true')">true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)Sdk.Packages.props" Condition="'$(ElskomSdkSkipImplicitPackages)' == ''" />
+  <ItemGroup Condition="'$(ElskomSdkSkipImplicitPackages)' == ''">
+    <!-- Only add these analyzers when installed as an Sdk package from nuget. -->
+    <PackageReference Include="SonarAnalyzer.CSharp" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="IDisposableAnalyzers" IsImplicitlyDefined="true" Version="*-*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- <PackageReference Include="ReflectionAnalyzers" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference> -->
+    <!-- We need the source generator we created. -->
+    <PackageReference Include="GitBuildInfo.SourceGenerator" IsImplicitlyDefined="true" Version="*-*">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(DisableImplicitFrameworkReferences)' != 'true' AND '$(ElskomSdkDisableImplicitFrameworkReference)' == ''">
+    <PackageReference Include="System.Resources.Extensions" IsImplicitlyDefined="true" Version="*-*" Condition="$(TargetFramework.StartsWith('net4')) AND ('$(UseWindowsForms)' == 'true' OR '$(UseWPF)' == 'true') AND '$(OS)' == 'Windows_NT'" />
+    <!-- The libraries within the runtime pack are within the Elskom/runtime repository. -->
+    <!-- TargetFramework="netstandard2.0;net5.0" -->
+    <KnownFrameworkReference Include="Elskom.Sdk.App"
+                             TargetFramework="net6.0"
+                             RuntimeFrameworkName="Elskom.Sdk.App"
+                             DefaultRuntimeFrameworkVersion="$(ElskomSdkFrameworkVersion)"
+                             LatestRuntimeFrameworkVersion="$(ElskomSdkFrameworkVersion)"
+                             TargetingPackName="Elskom.Sdk.App.Ref"
+                             TargetingPackVersion="$(ElskomSdkFrameworkVersion)" />
+    <FrameworkReference Include="Elskom.Sdk.App" />
+  </ItemGroup>
 
 </Project>
