@@ -14,6 +14,9 @@
     <RepositoryType>git</RepositoryType>
     <Copyright>Copyright (c) 2018-2021</Copyright>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <IsTagBuild Condition="$(GITHUB_REF.StartsWith('refs/tags/'))">true</IsTagBuild>
+    <VersionSuffix Condition="'$(IsTagBuild)' == '' AND '$(GITHUB_ACTIONS)' == ''">-dev</VersionSuffix>
+    <VersionSuffix Condition="'$(IsTagBuild)' == '' AND '$(GITHUB_ACTIONS)' == 'true'">-preview.$(GITHUB_RUN_NUMBER).$(BUILD_RERUN_COUNT)</VersionSuffix>
   </PropertyGroup>
 
 </Project>

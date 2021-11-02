@@ -11,6 +11,8 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
       DOTNET_NOLOGO: true
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      BUILD_RERUN_COUNT: ${{ github.run_attempt }}
     steps:
     - uses: actions/checkout@main
 
@@ -21,3 +23,4 @@ jobs:
       uses: Elskom/build-dotnet@main
       with:
         TEST: false
+        PACK: true
