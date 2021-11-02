@@ -8,7 +8,6 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>preview</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <GenerateResourceUsePreserializedResources Condition="$(TargetFramework.StartsWith('net4')) AND ('$(UseWindowsForms)' == 'true' OR '$(UseWPF)' == 'true')">true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(ElskomSdkSkipImplicitPackages)' == ''">
