@@ -24,3 +24,4 @@ jobs:
       with:
         TEST: false
         PACK: true
+        PUSH: true
