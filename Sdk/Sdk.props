@@ -2,7 +2,12 @@
 
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" Condition="'$(UsingMicrosoftNETSdk)' == ''" />
 
+  <ItemGroup Condition="'$(UsingElskomSdk)' == ''">
+    <Warning Text="Elskom.Sdk is already imported." />
+  </ItemGroup>
+
   <PropertyGroup>
+    <UsingElskomSdk Condition="'$(UsingElskomSdk)' == ''">true</UsingElskomSdk>
     <LangVersion>preview</LangVersion>
     <EnforceCodeStyleInBuild Condition="'$(ProduceOnlyReferenceAssembly)' == ''">true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
