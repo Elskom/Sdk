@@ -1,7 +1,16 @@
 <Project>
 
   <ItemGroup>
+    <ProjectReference Include="../GenerateRuntimeProps.Tasks/GenerateRuntimeProps.Tasks.csproj" ReferenceOutputAssembly="false" />
     <None Include="../Sdk/*" Pack="true" PackagePath="Sdk" />
   </ItemGroup>
+
+  <Target Name="GenerateSdkRuntimeProps" BeforeTargets="GenerateNuspec">
+    <GenerateRuntimePropsTask FileName="../Sdk/Sdk.Runtime.props" PackageName="Elskom.Sdk.App" />
+  </Target>
+
+  <UsingTask
+          TaskName="GenerateRuntimeProps.GenerateRuntimePropsTask"
+          AssemblyFile="../GenerateRuntimeProps.Tasks/bin/$(Configuration)/$(TargetFramework)/GenerateRuntimeProps.Tasks.dll" />
 
 </Project>

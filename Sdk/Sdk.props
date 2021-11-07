@@ -34,8 +34,9 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(DisableImplicitFrameworkReferences)' != 'true' AND ('$(ElskomSdkDisableImplicitFrameworkReference)' != 'true' OR '$(ElskomSdkDisableImplicitFrameworkReference)' == '')">
-    <PackageReference Include="System.Resources.Extensions" IsImplicitlyDefined="true" Version="*-*" Condition="$(TargetFramework.StartsWith('net4')) AND ('$(UseWindowsForms)' == 'true' OR '$(UseWPF)' == 'true') AND '$(OS)' == 'Windows_NT'" />
+  <Import Project="Sdk.Runtime.props" />
+
+  <ItemGroup>
     <!-- The libraries within the runtime pack are within the Elskom/runtime repository. -->
     <KnownFrameworkReference Include="Elskom.Sdk.App"
                              TargetFramework="net6.0"
@@ -44,11 +45,10 @@
                              LatestRuntimeFrameworkVersion="$(ElskomSdkFrameworkVersion)"
                              TargetingPackName="Elskom.Sdk.App.Ref"
                              TargetingPackVersion="$(ElskomSdkFrameworkVersion)" />
-    <FrameworkReference Include="Elskom.Sdk.App" />
   </ItemGroup>
 
-  <ItemGroup Condition="('$(DisableImplicitFrameworkReferences)' == 'true' OR '$(ElskomSdkDisableImplicitFrameworkReference)' == 'true') AND '$(ElskomSdkDevBuild)' == ''">
-    <PackageReference Include="Elskom.Sdk.App.Ref" IsImplicitlyDefined="true" Version="*-*" />
+  <ItemGroup Condition="'$(DisableImplicitFrameworkReferences)' != 'true' AND ('$(ElskomSdkDisableImplicitFrameworkReference)' != 'true' OR '$(ElskomSdkDisableImplicitFrameworkReference)' == '')">
+    <FrameworkReference Include="Elskom.Sdk.App" IsImplicitlyDefined="true" />
   </ItemGroup>
 
 </Project>
