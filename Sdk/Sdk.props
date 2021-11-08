@@ -45,10 +45,10 @@
                              LatestRuntimeFrameworkVersion="$(ElskomSdkFrameworkVersion)"
                              TargetingPackName="Elskom.Sdk.App.Ref"
                              TargetingPackVersion="$(ElskomSdkFrameworkVersion)" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(DisableImplicitFrameworkReferences)' != 'true' AND ('$(ElskomSdkDisableImplicitFrameworkReference)' != 'true' OR '$(ElskomSdkDisableImplicitFrameworkReference)' == '')">
-    <FrameworkReference Include="Elskom.Sdk.App" IsImplicitlyDefined="true" />
+    <FrameworkReference
+            Include="Elskom.Sdk.App"
+            IsImplicitlyDefined="true"
+            Condition="'$(DisableImplicitFrameworkReferences)' != 'true' AND ('$(ElskomSdkDisableImplicitFrameworkReference)' != 'true' OR '$(ElskomSdkDisableImplicitFrameworkReference)' == '')" />
   </ItemGroup>
 
 </Project>

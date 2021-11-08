@@ -4,6 +4,7 @@
     <ProjectReference Include="../GenerateRuntimeProps.Tasks/GenerateRuntimeProps.Tasks.csproj" ReferenceOutputAssembly="false" />
     <None Include="../Sdk/Sdk.props" Pack="true" PackagePath="Sdk" />
     <None Include="../Sdk/Sdk.Runtime.props" Pack="true" PackagePath="Sdk" />
+    <None Include="../Sdk/Sdk.targets" Pack="true" PackagePath="Sdk" />
   </ItemGroup>
 
   <Target Name="GenerateSdkRuntimeProps" BeforeTargets="GenerateNuspec">
