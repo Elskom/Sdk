@@ -1,5 +1,20 @@
 <Project>
 
-  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition="'$(UsingMicrosoftNETSdk)' == ''" />
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <ItemGroup>
+    <!-- The libraries within the runtime pack are within the Elskom/runtime repository. -->
+    <KnownFrameworkReference Include="Elskom.Sdk.App"
+                             TargetFramework="net6.0"
+                             RuntimeFrameworkName="Elskom.Sdk.App"
+                             DefaultRuntimeFrameworkVersion="$(ElskomSdkFrameworkVersion)"
+                             LatestRuntimeFrameworkVersion="$(ElskomSdkFrameworkVersion)"
+                             TargetingPackName="Elskom.Sdk.App.Ref"
+                             TargetingPackVersion="$(ElskomSdkFrameworkVersion)" />
+    <FrameworkReference
+            Include="Elskom.Sdk.App"
+            IsImplicitlyDefined="true"
+            Condition="'$(DisableImplicitFrameworkReferences)' != 'true' AND ('$(ElskomSdkDisableImplicitFrameworkReference)' != 'true' OR '$(ElskomSdkDisableImplicitFrameworkReference)' == '')" />
+  </ItemGroup>
 
 </Project>
