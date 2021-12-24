@@ -1,6 +1,6 @@
 <Project>
 
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+  <Sdk Name="Microsoft.NET.Sdk" Condition="'$(UsingMicrosoftNETSdk)' == ''" />
 
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
@@ -29,7 +29,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference> -->
     <!-- Generate code for resx files. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.ResxSourceGenerator" Version="*-*" Condition="'$(ProduceOnlyReferenceAssembly)' == ''">
+    <PackageReference Include="Microsoft.CodeAnalysis.ResxSourceGenerator" IsImplicitlyDefined="true" Version="*-*" Condition="'$(ProduceOnlyReferenceAssembly)' == ''">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <!-- We need the source generator we created. -->

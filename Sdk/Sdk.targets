@@ -1,7 +1,5 @@
 <Project>
 
-  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
-
   <ItemGroup>
     <!-- The libraries within the runtime pack are within the Elskom/runtime repository. -->
     <KnownFrameworkReference Include="Elskom.Sdk.App"
@@ -14,7 +12,7 @@
     <FrameworkReference
             Include="Microsoft.AspNetCore.App"
             IsImplicitlyDefined="true"
-            Condition="'$(DisableImplicitFrameworkReferences)' != 'true'" />
+            Condition="'$(DisableImplicitFrameworkReferences)' != 'true' AND ('$(ElskomSdkDisableImplicitFrameworkReference)' != 'true' OR '$(ElskomSdkDisableImplicitFrameworkReference)' == '')" />
     <FrameworkReference
             Include="Elskom.Sdk.App"
             IsImplicitlyDefined="true"
