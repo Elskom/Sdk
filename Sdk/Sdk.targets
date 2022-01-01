@@ -10,10 +10,6 @@
                              TargetingPackName="Elskom.Sdk.App.Ref"
                              TargetingPackVersion="$(ElskomSdkFrameworkVersion)" />
     <FrameworkReference
-            Include="Microsoft.AspNetCore.App"
-            IsImplicitlyDefined="true"
-            Condition="'$(DisableImplicitFrameworkReferences)' != 'true' AND ('$(ElskomSdkDisableImplicitFrameworkReference)' != 'true' OR '$(ElskomSdkDisableImplicitFrameworkReference)' == '')" />
-    <FrameworkReference
             Include="Elskom.Sdk.App"
             IsImplicitlyDefined="true"
             Condition="'$(DisableImplicitFrameworkReferences)' != 'true' AND ('$(ElskomSdkDisableImplicitFrameworkReference)' != 'true' OR '$(ElskomSdkDisableImplicitFrameworkReference)' == '')" />
