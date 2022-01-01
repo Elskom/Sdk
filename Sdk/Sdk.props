@@ -12,28 +12,54 @@
 
   <ItemGroup Condition="'$(ElskomSdkSkipImplicitPackages)' == ''">
     <!-- Only add these analyzers when installed as an Sdk package from nuget. -->
-    <PackageReference Include="SonarAnalyzer.CSharp" IsImplicitlyDefined="true" Version="*-*">
+    <PackageReference
+            Include="SonarAnalyzer.CSharp"
+            IsImplicitlyDefined="true"
+            Version="*-*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" IsImplicitlyDefined="true" Version="*-*">
+    <PackageReference
+            Include="StyleCop.Analyzers"
+            IsImplicitlyDefined="true"
+            Version="*-*">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="IDisposableAnalyzers" IsImplicitlyDefined="true" Version="*-*">
+    <PackageReference
+            Include="IDisposableAnalyzers"
+            IsImplicitlyDefined="true"
+            Version="*-*">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <!-- <PackageReference Include="ReflectionAnalyzers" IsImplicitlyDefined="true" Version="*-*" Condition="'$(ProduceOnlyReferenceAssembly)' == ''">
+    <!--
+    <PackageReference
+            Include="ReflectionAnalyzers"
+            IsImplicitlyDefined="true"
+            Version="*-*"
+            Condition="'$(ProduceOnlyReferenceAssembly)' == ''">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference> -->
-    <!-- Generate code for resx files. -->
-    <PackageReference Include="Microsoft.CodeAnalysis.ResxSourceGenerator" IsImplicitlyDefined="true" Version="*-*" Condition="'$(ProduceOnlyReferenceAssembly)' == ''">
+    <!--
+        Generate code for resx files.
+        But not for code that targers WindowsDesktop as that needs a source generator
+        that supports binary resources in resx files.
+    -->
+    <PackageReference
+            Include="Microsoft.CodeAnalysis.ResxSourceGenerator"
+            IsImplicitlyDefined="true"
+            Version="*-*"
+            Condition="'$(ProduceOnlyReferenceAssembly)' == '' AND '$(UseWPF)' != 'true' AND '$(UseWindowsForms)' != 'true'">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <!-- We need the source generator we created. -->
-    <PackageReference Include="GitBuildInfo.SourceGenerator" IsImplicitlyDefined="true" Version="*-*" Condition="'$(ProduceOnlyReferenceAssembly)' == ''">
+    <PackageReference
+            Include="GitBuildInfo.SourceGenerator"
+            IsImplicitlyDefined="true"
+            Version="*-*"
+            Condition="'$(ProduceOnlyReferenceAssembly)' == ''">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
