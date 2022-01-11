@@ -44,7 +44,7 @@
     </PackageReference> -->
     <!--
         Generate code for resx files.
-        But not for code that targers WindowsDesktop as that needs a source generator
+        But not for code that targets WindowsDesktop as that needs a source generator
         that supports binary resources in resx files.
     -->
     <PackageReference
@@ -54,6 +54,27 @@
             Condition="'$(ProduceOnlyReferenceAssembly)' == '' AND '$(UseWPF)' != 'true' AND '$(UseWindowsForms)' != 'true'">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <!--
+        For WindowsDesktop targeting applications, we need to use a special source generator that supports binary resource
+        files that are a part of the resx file.
+    -->
+    <PackageReference
+            Include="Meziantou.Framework.ResxSourceGenerator"
+            IsImplicitlyDefined="true"
+            Version="*-*"
+            Condition="'$(ProduceOnlyReferenceAssembly)' == '' AND ('$(UseWPF)' == 'true' OR '$(UseWindowsForms)' == 'true')">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- Implicitly include Properties/Resources.resx file for source generation. -->
+    <AdditionalFiles
+            Include="Properties\Resources.resx"
+            Condition="Exists('Properties\Resources.resx')" />
+    <!-- Update implicitly included Properties/Resources.resx file for source generation when it exists inside of a WindowsDesktop application. -->
+    <AdditionalFiles
+            Update="Properties\Resources.resx"
+            Condition="Exists('Properties\Resources.resx') AND ('$(UseWPF)' == 'true' OR '$(UseWindowsForms)' == 'true')"
+            Namespace="$(RootNamespace).Properties"
+            ClassName="Resources" />
     <!-- We need the source generator we created. -->
     <PackageReference
             Include="GitBuildInfo.SourceGenerator"
