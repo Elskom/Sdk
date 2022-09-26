@@ -1,5 +1,7 @@
 <Project>
 
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition="'$(ElskomSdkMicrosoftNETSdkImported)' == 'true'" />
+
   <ItemGroup>
     <!-- The libraries within the runtime pack are within the Elskom/runtime repository. -->
     <KnownFrameworkReference Include="Elskom.Sdk.App"
