@@ -1,6 +1,10 @@
 <Project>
 
-  <Sdk Name="Microsoft.NET.Sdk" Condition="'$(UsingMicrosoftNETSdk)' == ''" />
+  <PropertyGroup Condition="'$(UsingMicrosoftNETSdk)' == ''">
+    <ElskomSdkMicrosoftNETSdkImported>true</ElskomSdkMicrosoftNETSdkImported>
+  </PropertyGroup>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="'$(UsingMicrosoftNETSdk)' == ''" />
 
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
