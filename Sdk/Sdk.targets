@@ -10,7 +10,10 @@
                              DefaultRuntimeFrameworkVersion="$(ElskomSdkFrameworkVersion)"
                              LatestRuntimeFrameworkVersion="$(ElskomSdkFrameworkVersion)"
                              TargetingPackName="Elskom.Sdk.App.Ref"
-                             TargetingPackVersion="$(ElskomSdkFrameworkVersion)" />
+                             TargetingPackVersion="$(ElskomSdkFrameworkVersion)"
+                             RuntimePackNamePatterns="Elskom.Sdk.App.Runtime.**RID**"
+                             RuntimePackRuntimeIdentifiers="win-x86;win-x64;win-arm64;linux-x64;linux-arm;linux-arm64;osx-x64;osx-arm64"
+                             IsTrimmable="true" />
     <FrameworkReference
             Include="Elskom.Sdk.App"
             IsImplicitlyDefined="true"
