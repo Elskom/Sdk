@@ -12,7 +12,6 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>preview</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <ElskomSdkFrameworkVersion Condition="'$(ElskomSdkFrameworkVersion)' == ''">6.0.0</ElskomSdkFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(ElskomSdkSkipImplicitPackages)' == ''">
