@@ -1,24 +1,30 @@
-<Project>
+<Project TreatAsLocalProperty="ElskomSdkTasksAssembly" InitialTargets="AddElskomKnownFrameworkReference">
 
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition="'$(ElskomSdkMicrosoftNETSdkImported)' == 'true'" />
 
-  <ItemGroup>
+  <PropertyGroup>
+    <ElskomSdkTasksAssembly>$(MSBuildThisFileDirectory)/../tasks/netstandard2.0/Elskom.Sdk.Tasks.dll</ElskomSdkTasksAssembly>
+  </PropertyGroup>
+
+  <UsingTask
+             TaskName="Elskom.Sdk.Tasks.AddElskomSdkKnownFrameworkReference"
+             AssemblyFile="$(ElskomSdkTasksAssembly)" />
+  <UsingTask
+             TaskName="Elskom.Sdk.Tasks.AddElskomSdkFrameworkReference"
+             AssemblyFile="$(ElskomSdkTasksAssembly)" />
+
+  <Target Name="AddElskomKnownFrameworkReference">
     <!-- The libraries within the runtime pack are within the Elskom/runtime repository. -->
-    <KnownFrameworkReference Include="Elskom.Sdk.App"
-                             TargetFramework="net6.0"
-                             RuntimeFrameworkName="Elskom.Sdk.App"
-                             DefaultRuntimeFrameworkVersion="$(ElskomSdkFrameworkVersion)"
-                             LatestRuntimeFrameworkVersion="$(ElskomSdkFrameworkVersion)"
-                             TargetingPackName="Elskom.Sdk.App.Ref"
-                             TargetingPackVersion="$(ElskomSdkFrameworkVersion)"
-                             RuntimePackNamePatterns="Elskom.Sdk.App.Runtime.**RID**"
-                             RuntimePackRuntimeIdentifiers="win-x86;win-x64;win-arm64;linux-x64;linux-arm;linux-arm64;osx-x64;osx-arm64"
-                             IsTrimmable="true"
-                             Condition="'$(ElskomSdkFrameworkVersion)' != ''" />
-    <FrameworkReference
-            Include="Elskom.Sdk.App"
-            IsImplicitlyDefined="true"
-            Condition="'$(DisableImplicitFrameworkReferences)' != 'true' AND ('$(ElskomSdkDisableImplicitFrameworkReference)' != 'true' OR '$(ElskomSdkDisableImplicitFrameworkReference)' == '')" />
-  </ItemGroup>
+    <AddElskomSdkKnownFrameworkReference>
+      <Output TaskParameter="KnownFrameworkReferences" ItemName="KnownFrameworkReference" />
+    </AddElskomSdkKnownFrameworkReference>
+  </Target>
+
+  <Target Name="ResolveElskomSharedFramework" AfterTargets="BeforeBuild">
+    <AddElskomSdkFrameworkReference
+      DisableImplicitReference="$(ElskomSdkDisableImplicitFrameworkReference)">
+      <Output TaskParameter="FrameworkReferences" ItemName="FrameworkReference" />
+    </AddElskomSdkFrameworkReference>
+  </Target>
 
 </Project>
