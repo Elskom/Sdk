@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://github.com/Elskom/Sdk/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Elskom/Sdk/</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Copyright>Copyright (c) 2018-2021</Copyright>
+    <Copyright>Copyright (c) 2018-2022</Copyright>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <IsTagBuild Condition="$(GITHUB_REF.StartsWith('refs/tags/'))">true</IsTagBuild>
     <VersionSuffix Condition="'$(IsTagBuild)' == '' AND '$(GITHUB_ACTIONS)' == ''">-dev</VersionSuffix>
