@@ -7,6 +7,8 @@
     <LangVersion>latest</LangVersion>
     <Version>6.0.0</Version>
     <IsPackable>false</IsPackable>
+    <DebugType>embedded</DebugType>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>

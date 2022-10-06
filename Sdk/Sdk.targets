@@ -9,9 +9,6 @@
   <UsingTask
              TaskName="Elskom.Sdk.Tasks.AddElskomSdkKnownFrameworkReference"
              AssemblyFile="$(ElskomSdkTasksAssembly)" />
-  <UsingTask
-             TaskName="Elskom.Sdk.Tasks.AddElskomSdkFrameworkReference"
-             AssemblyFile="$(ElskomSdkTasksAssembly)" />
 
   <Target Name="AddElskomKnownFrameworkReference">
     <!-- The libraries within the runtime pack are within the Elskom/runtime repository. -->
@@ -20,11 +17,11 @@
     </AddElskomSdkKnownFrameworkReference>
   </Target>
 
-  <Target Name="ResolveElskomSharedFramework" AfterTargets="BeforeBuild">
-    <AddElskomSdkFrameworkReference
-      DisableImplicitReference="$(ElskomSdkDisableImplicitFrameworkReference)">
-      <Output TaskParameter="FrameworkReferences" ItemName="FrameworkReference" />
-    </AddElskomSdkFrameworkReference>
-  </Target>
+  <ItemGroup>
+    <FrameworkReference
+                        Include="Elskom.Sdk.App"
+                        IsImplicitlyDefined="true"
+                        Condition="'$(ElskomSdkDisableImplicitFrameworkReference)' != 'true'" />
+  </ItemGroup>
 
 </Project>

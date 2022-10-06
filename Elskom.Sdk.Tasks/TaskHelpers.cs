@@ -28,15 +28,12 @@ internal static class TaskHelpers
         return knownFrameworkReference;
     }
 
-    internal static ITaskItem AddFrameworkReference()
-        => new TaskItem("Elskom.Sdk.App");
-
     internal static ITaskItem[] ReturnItemOrEmpty(bool add, ITaskItem item)
-    => add switch
-    {
-        true => new[] { item, },
-        false => Array.Empty<ITaskItem>()
-    };
+        => add switch
+        {
+            true => new[] { item, },
+            false => Array.Empty<ITaskItem>()
+        };
 
     private static string GetInstalledDotNetSdkRuntimePackVersion(string packName)
     {
