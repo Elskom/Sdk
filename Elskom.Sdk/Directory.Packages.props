@@ -1,0 +1,7 @@
+﻿<Project>
+
+  <ItemGroup>
+    <ProjectReference Include="../Elskom.Sdk.Tasks/Elskom.Sdk.Tasks.csproj" />
+  </ItemGroup>
+
+</Project>

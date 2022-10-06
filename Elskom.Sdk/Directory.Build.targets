@@ -2,6 +2,8 @@
 
   <ItemGroup>
     <None Include="../Sdk/*" Pack="true" PackagePath="Sdk" />
+    <None Include="../Elskom.Sdk.Tasks/bin/$(Configuration)/netstandard2.0/Elskom.Sdk.Tasks.dll"
+          Pack="true" PackagePath="tasks/netstandard2.0" />
   </ItemGroup>
 
 </Project>

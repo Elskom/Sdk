@@ -12,6 +12,11 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>preview</AnalysisLevel>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <!--
+        When DisableImplicitFrameworkReferences is true and ElskomSdkDisableImplicitFrameworkReference
+        is not set, then set it to true by default.
+    -->
+    <ElskomSdkDisableImplicitFrameworkReference Condition="'$(DisableImplicitFrameworkReferences)' == 'true' AND '$(ElskomSdkDisableImplicitFrameworkReference)' == ''">true</ElskomSdkDisableImplicitFrameworkReference>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(ElskomSdkSkipImplicitPackages)' == ''">
