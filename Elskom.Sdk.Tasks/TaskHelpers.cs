@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 internal static class TaskHelpers
 {
-    internal static ITaskItem? AddKnownFrameworkReference()
+    internal static ITaskItem[]? AddKnownFrameworkReference()
     {
         var installedRuntimeVersion = GetInstalledDotNetSdkRuntimePackVersion("Elskom.Sdk.App");
         if (installedRuntimeVersion is null or "")
@@ -15,23 +15,33 @@ internal static class TaskHelpers
             return null;
         }
 
-        var knownFrameworkReference = new TaskItem("Elskom.Sdk.App");
-        knownFrameworkReference.SetMetadata("TargetFramework", "net6.0");
-        knownFrameworkReference.SetMetadata("RuntimeFrameworkName", "Elskom.Sdk.App");
-        knownFrameworkReference.SetMetadata("DefaultRuntimeFrameworkVersion", installedRuntimeVersion);
-        knownFrameworkReference.SetMetadata("LatestRuntimeFrameworkVersion", installedRuntimeVersion);
-        knownFrameworkReference.SetMetadata("TargetingPackName", "Elskom.Sdk.App.Ref");
-        knownFrameworkReference.SetMetadata("TargetingPackVersion", installedRuntimeVersion);
-        knownFrameworkReference.SetMetadata("RuntimePackNamePatterns", "Elskom.Sdk.App.Runtime.**RID**");
-        knownFrameworkReference.SetMetadata("RuntimePackRuntimeIdentifiers", "win-x86;win-x64;win-arm64;linux-x64;linux-arm;linux-arm64;osx-x64;osx-arm64");
-        knownFrameworkReference.SetMetadata("IsTrimmable", "true");
-        return knownFrameworkReference;
+        var knownFrameworkReference1 = new TaskItem("Elskom.Sdk.App");
+        knownFrameworkReference1.SetMetadata("TargetFramework", "net6.0");
+        knownFrameworkReference1.SetMetadata("RuntimeFrameworkName", "Elskom.Sdk.App");
+        knownFrameworkReference1.SetMetadata("DefaultRuntimeFrameworkVersion", installedRuntimeVersion);
+        knownFrameworkReference1.SetMetadata("LatestRuntimeFrameworkVersion", installedRuntimeVersion);
+        knownFrameworkReference1.SetMetadata("TargetingPackName", "Elskom.Sdk.App.Ref");
+        knownFrameworkReference1.SetMetadata("TargetingPackVersion", installedRuntimeVersion);
+        knownFrameworkReference1.SetMetadata("RuntimePackNamePatterns", "Elskom.Sdk.App.Runtime.**RID**");
+        knownFrameworkReference1.SetMetadata("RuntimePackRuntimeIdentifiers", "win-x86;win-x64;win-arm64;linux-x64;linux-arm;linux-arm64;osx-x64;osx-arm64");
+        knownFrameworkReference1.SetMetadata("IsTrimmable", "true");
+        var knownFrameworkReference2 = new TaskItem("Elskom.Sdk.App");
+        knownFrameworkReference2.SetMetadata("TargetFramework", "net7.0");
+        knownFrameworkReference2.SetMetadata("RuntimeFrameworkName", "Elskom.Sdk.App");
+        knownFrameworkReference2.SetMetadata("DefaultRuntimeFrameworkVersion", installedRuntimeVersion);
+        knownFrameworkReference2.SetMetadata("LatestRuntimeFrameworkVersion", installedRuntimeVersion);
+        knownFrameworkReference2.SetMetadata("TargetingPackName", "Elskom.Sdk.App.Ref");
+        knownFrameworkReference2.SetMetadata("TargetingPackVersion", installedRuntimeVersion);
+        knownFrameworkReference2.SetMetadata("RuntimePackNamePatterns", "Elskom.Sdk.App.Runtime.**RID**");
+        knownFrameworkReference2.SetMetadata("RuntimePackRuntimeIdentifiers", "win-x86;win-x64;win-arm64;linux-x64;linux-arm;linux-arm64;osx-x64;osx-arm64");
+        knownFrameworkReference2.SetMetadata("IsTrimmable", "true");
+        return new[] { knownFrameworkReference1, knownFrameworkReference2 };
     }
 
-    internal static ITaskItem[] ReturnItemOrEmpty(bool add, ITaskItem item)
+    internal static ITaskItem[] ReturnItemOrEmpty(bool add, ITaskItem[] items)
         => add switch
         {
-            true => new[] { item, },
+            true => items, // new[] { item, },
             false => Array.Empty<ITaskItem>()
         };
 

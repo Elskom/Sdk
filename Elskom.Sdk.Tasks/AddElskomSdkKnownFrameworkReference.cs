@@ -11,7 +11,7 @@ public class AddElskomSdkKnownFrameworkReference : Task
     public override bool Execute()
     {
         var knownFrameworkReference = TaskHelpers.AddKnownFrameworkReference();
-        KnownFrameworkReferences = TaskHelpers.ReturnItemOrEmpty(
+        this.KnownFrameworkReferences = TaskHelpers.ReturnItemOrEmpty(
             knownFrameworkReference is not null,
             knownFrameworkReference!);
         return true;

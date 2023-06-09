@@ -4,11 +4,12 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Version>6.0.3</Version>
+    <Version>6.0.4</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <PackageTags>GitBuildInformation;SettingsFile;zlib;BlowFish;Unluac;ZipAssembly;ReleasePackaging;MessageManager;GenericPluginLoader;MiniDump;PluginFramework;PluginUpdateCheck;GitBuildInfo</PackageTags>
     <Description>Elskom SDK for development of Els_kom plugins and for Els_kom itself. Also contains libs that can be used for other projects as well.</Description>
+    <PackageReleaseNotes>Fixed issue where SDK might not add a known framework reference for projects that target the .NET 7 runtime.</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>
