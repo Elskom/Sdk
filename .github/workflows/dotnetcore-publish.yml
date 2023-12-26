@@ -19,6 +19,9 @@ jobs:
 
     - name: Install latest .NET SDK
       uses: Elskom/setup-latest-dotnet@main
+      with:
+        SDK_VERSION: '8.0.100'
+        RUNTIME_VERSIONS: ''
 
     - name: Restore, Build, and pack
       uses: Elskom/build-dotnet@main
