@@ -12,7 +12,7 @@
 
   <Target Name="AddElskomKnownFrameworkReference">
     <!-- The libraries within the runtime pack are within the Elskom/runtime repository. -->
-    <AddElskomSdkKnownFrameworkReference>
+    <AddElskomSdkKnownFrameworkReference SharedFrameworkVersion="$(ElskomSdkFrameworkVersion)">
       <Output TaskParameter="KnownFrameworkReferences" ItemName="KnownFrameworkReference" />
     </AddElskomSdkKnownFrameworkReference>
   </Target>
